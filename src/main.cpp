@@ -34,7 +34,7 @@ CrossPointState* appState;
 
 // Power button timing
 // Time required to confirm boot from sleep
-constexpr unsigned long POWER_BUTTON_WAKEUP_MS = 1500;
+constexpr unsigned long POWER_BUTTON_WAKEUP_MS = 1000;
 // Time required to enter sleep mode
 constexpr unsigned long POWER_BUTTON_SLEEP_MS = 1000;
 
@@ -65,9 +65,15 @@ void enterNewScreen(Screen* screen) {
 
 // Verify long press on wake-up from deep sleep
 void verifyWakeupLongPress() {
-  const auto input = getInput();
+  // Give the user up to 1000ms to start holding the power button, and must hold for POWER_BUTTON_WAKEUP_MS
+  const auto start = millis();
+  auto input = getInput();
+  while (input.button != POWER && millis() - start < 1000) {
+    delay(50);
+    input = getInput();
+  }
 
-  if (input.button == POWER && input.pressTime > POWER_BUTTON_WAKEUP_MS) {
+  if (input.button != POWER || input.pressTime < POWER_BUTTON_WAKEUP_MS) {
     // Button released too early. Returning to sleep.
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
     esp_deep_sleep_enable_gpio_wakeup(1ULL << BTN_GPIO3, ESP_GPIO_WAKEUP_GPIO_LOW);
@@ -80,7 +86,7 @@ void enterDeepSleep() {
   enterNewScreen(new FullScreenMessageScreen(renderer, "Sleeping", true, false, true));
 
   Serial.println("Power button released after a long press. Entering deep sleep.");
-  delay(2000);  // Allow Serial buffer to empty and display to update
+  delay(1000);  // Allow Serial buffer to empty and display to update
 
   // Enable Wakeup on LOW (button press)
   esp_deep_sleep_enable_gpio_wakeup(1ULL << BTN_GPIO3, ESP_GPIO_WAKEUP_GPIO_LOW);
@@ -122,14 +128,7 @@ void onGoHome() { enterNewScreen(new FileSelectionScreen(renderer, onSelectEpubF
 
 void setup() {
   setupInputPinModes();
-
-  // Check if boot was triggered by the Power Button (Deep Sleep Wakeup)
-  // If triggered by RST pin or Battery insertion, this will be false, allowing
-  // normal boot.
-  if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_GPIO) {
-    verifyWakeupLongPress();
-  }
-
+  verifyWakeupLongPress();
   setupSerial();
 
   // Initialize pins
