@@ -159,7 +159,7 @@ void EpubReaderScreen::renderPage() {
 void EpubReaderScreen::renderStatusBar() const {
   const auto pageWidth = renderer->getPageWidth();
 
-  std::string progress = std::to_string(currentPage + 1) + " / " + std::to_string(section->pageCount);
+  std::string progress = std::to_string(section->currentPage + 1) + " / " + std::to_string(section->pageCount);
   const auto progressTextWidth = renderer->getSmallTextWidth(progress.c_str());
   renderer->drawSmallText(pageWidth - progressTextWidth, 765, progress.c_str());
 
