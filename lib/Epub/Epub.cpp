@@ -3,7 +3,6 @@
 #include <HardwareSerial.h>
 #include <SD.h>
 #include <ZipFile.h>
-#include <tinyxml2.h>
 
 #include <map>
 
@@ -162,14 +161,14 @@ bool Epub::parseContentOpf(ZipFile& zip, std::string& content_opf_file) {
   return true;
 }
 
-bool Epub::parseTocNcxFile(ZipFile& zip) {
+bool Epub::parseTocNcxFile(const ZipFile& zip) {
   // the ncx file should have been specified in the content.opf file
   if (tocNcxItem.empty()) {
     Serial.println("No ncx file specified");
     return false;
   }
 
-  auto ncxData = zip.readTextFileToMemory(tocNcxItem.c_str());
+  const auto ncxData = zip.readTextFileToMemory(tocNcxItem.c_str());
   if (!ncxData) {
     Serial.printf("Could not find %s\n", tocNcxItem.c_str());
     return false;
@@ -177,7 +176,7 @@ bool Epub::parseTocNcxFile(ZipFile& zip) {
 
   // Parse the Toc contents
   tinyxml2::XMLDocument doc;
-  auto result = doc.Parse(ncxData);
+  const auto result = doc.Parse(ncxData);
   free(ncxData);
 
   if (result != tinyxml2::XML_SUCCESS) {
@@ -185,27 +184,30 @@ bool Epub::parseTocNcxFile(ZipFile& zip) {
     return false;
   }
 
-  auto ncx = doc.FirstChildElement("ncx");
+  const auto ncx = doc.FirstChildElement("ncx");
   if (!ncx) {
     Serial.println("Could not find first child ncx in toc");
     return false;
   }
 
-  auto navMap = ncx->FirstChildElement("navMap");
+  const auto navMap = ncx->FirstChildElement("navMap");
   if (!navMap) {
     Serial.println("Could not find navMap child in ncx");
     return false;
   }
 
-  auto navPoint = navMap->FirstChildElement("navPoint");
+  recursivelyParseNavMap(navMap->FirstChildElement("navPoint"));
+  return true;
+}
 
+void Epub::recursivelyParseNavMap(tinyxml2::XMLElement* element) {
   // Fills toc map
-  while (navPoint) {
-    std::string navTitle = navPoint->FirstChildElement("navLabel")->FirstChildElement("text")->FirstChild()->Value();
-    auto content = navPoint->FirstChildElement("content");
+  while (element) {
+    std::string navTitle = element->FirstChildElement("navLabel")->FirstChildElement("text")->FirstChild()->Value();
+    const auto content = element->FirstChildElement("content");
     std::string href = contentBasePath + content->Attribute("src");
     // split the href on the # to get the href and the anchor
-    size_t pos = href.find('#');
+    const size_t pos = href.find('#');
     std::string anchor;
 
     if (pos != std::string::npos) {
@@ -214,10 +216,13 @@ bool Epub::parseTocNcxFile(ZipFile& zip) {
     }
 
     toc.emplace_back(navTitle, href, anchor, 0);
-    navPoint = navPoint->NextSiblingElement("navPoint");
-  }
 
-  return true;
+    tinyxml2::XMLElement* nestedNavPoint = element->FirstChildElement("navPoint");
+    if (nestedNavPoint) {
+      recursivelyParseNavMap(nestedNavPoint);
+    }
+    element = element->NextSiblingElement("navPoint");
+  }
 }
 
 // load in the meta data for the epub file
