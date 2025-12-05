@@ -5,6 +5,7 @@
 
 #include "Battery.h"
 
+constexpr int PAGES_PER_REFRESH = 10;
 constexpr unsigned long SKIP_CHAPTER_MS = 700;
 
 void EpubReaderScreen::taskTrampoline(void* param) {
@@ -159,7 +160,13 @@ void EpubReaderScreen::renderPage() {
   renderer->clearScreen();
   section->renderPage();
   renderStatusBar();
-  renderer->flushDisplay();
+  if (pagesUntilFullRefresh <= 1) {
+    renderer->flushDisplay(false);
+    pagesUntilFullRefresh = PAGES_PER_REFRESH;
+  } else {
+    renderer->flushDisplay();
+    pagesUntilFullRefresh--;
+  }
 
   File f = SD.open((epub->getCachePath() + "/progress.bin").c_str(), FILE_WRITE);
   uint8_t data[4];
@@ -176,20 +183,20 @@ void EpubReaderScreen::renderPage() {
 void EpubReaderScreen::renderStatusBar() const {
   const auto pageWidth = renderer->getPageWidth();
 
-  std::string progress = std::to_string(section->currentPage + 1) + " / " + std::to_string(section->pageCount);
+  const std::string progress = std::to_string(section->currentPage + 1) + " / " + std::to_string(section->pageCount);
   const auto progressTextWidth = renderer->getSmallTextWidth(progress.c_str());
   renderer->drawSmallText(pageWidth - progressTextWidth, 765, progress.c_str());
 
   const uint16_t percentage = battery.readPercentage();
-  auto percentageText = std::to_string(percentage) + "%";
+  const auto percentageText = std::to_string(percentage) + "%";
   const auto percentageTextWidth = renderer->getSmallTextWidth(percentageText.c_str());
   renderer->drawSmallText(20, 765, percentageText.c_str());
 
   // 1 column on left, 2 columns on right, 5 columns of battery body
   constexpr int batteryWidth = 15;
   constexpr int batteryHeight = 10;
-  const int x = 0;
-  const int y = 772;
+  constexpr int x = 0;
+  constexpr int y = 772;
 
   // Top line
   renderer->drawLine(x, y, x + batteryWidth - 4, y, 1);

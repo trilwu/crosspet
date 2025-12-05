@@ -14,6 +14,7 @@ class EpubReaderScreen final : public Screen {
   SemaphoreHandle_t sectionMutex = nullptr;
   int currentSpineIndex = 0;
   int nextPageNumber = 0;
+  int pagesUntilFullRefresh = 0;
   bool updateRequired = false;
   const std::function<void()> onGoHome;
 
