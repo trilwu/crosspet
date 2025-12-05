@@ -29,15 +29,15 @@ Button getPressedButton() {
   return NONE;
 }
 
-Input getInput(const bool skipWait) {
+Input getInput(const long maxHoldMs) {
   const Button button = getPressedButton();
   if (button == NONE) return {NONE, 0};
 
-  if (skipWait) {
-    return {button, 0};
-  }
-
   const auto start = millis();
-  while (getPressedButton() == button) delay(50);
-  return {button, millis() - start};
+  unsigned long held = 0;
+  while (getPressedButton() == button && (maxHoldMs < 0 || held < maxHoldMs)) {
+    delay(50);
+    held = millis() - start;
+  }
+  return {button, held};
 }

@@ -25,4 +25,4 @@ struct Input {
 
 void setupInputPinModes();
 Button getPressedButton();
-Input getInput(bool skipWait = false);
+Input getInput(long maxHoldMs = -1);

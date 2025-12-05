@@ -67,10 +67,10 @@ void enterNewScreen(Screen* screen) {
 void verifyWakeupLongPress() {
   // Give the user up to 1000ms to start holding the power button, and must hold for POWER_BUTTON_WAKEUP_MS
   const auto start = millis();
-  auto input = getInput();
+  auto input = getInput(POWER_BUTTON_WAKEUP_MS);
   while (input.button != POWER && millis() - start < 1000) {
     delay(50);
-    input = getInput();
+    input = getInput(POWER_BUTTON_WAKEUP_MS);
   }
 
   if (input.button != POWER || input.pressTime < POWER_BUTTON_WAKEUP_MS) {
@@ -78,6 +78,12 @@ void verifyWakeupLongPress() {
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
     esp_deep_sleep_enable_gpio_wakeup(1ULL << BTN_GPIO3, ESP_GPIO_WAKEUP_GPIO_LOW);
     esp_deep_sleep_start();
+  }
+}
+
+void waitForNoButton() {
+  while (getInput().button != NONE) {
+    delay(50);
   }
 }
 
@@ -95,20 +101,6 @@ void enterDeepSleep() {
 
   // Enter Deep Sleep
   esp_deep_sleep_start();
-}
-
-void setupSerial() {
-  Serial.begin(115200);
-  // Wait for serial monitor
-  const unsigned long start = millis();
-  while (!Serial && (millis() - start) < 3000) {
-    delay(10);
-  }
-
-  if (Serial) {
-    // delay for monitor to start reading
-    delay(1000);
-  }
 }
 
 void onGoHome();
@@ -129,7 +121,8 @@ void onGoHome() { enterNewScreen(new FileSelectionScreen(renderer, onSelectEpubF
 void setup() {
   setupInputPinModes();
   verifyWakeupLongPress();
-  setupSerial();
+  Serial.begin(115200);
+  Serial.println("Booting...");
 
   // Initialize pins
   pinMode(BAT_GPIO0, INPUT);
@@ -154,11 +147,16 @@ void setup() {
     Epub* epub = loadEpub(appState->openEpubPath);
     if (epub) {
       enterNewScreen(new EpubReaderScreen(renderer, epub, onGoHome));
+      // Ensure we're not still holding the power button before leaving setup
+      waitForNoButton();
       return;
     }
   }
 
   enterNewScreen(new FileSelectionScreen(renderer, onSelectEpubFile));
+
+  // Ensure we're not still holding the power button before leaving setup
+  waitForNoButton();
 }
 
 void loop() {
