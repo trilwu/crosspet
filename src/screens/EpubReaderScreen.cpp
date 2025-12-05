@@ -14,6 +14,10 @@ void EpubReaderScreen::taskTrampoline(void* param) {
 }
 
 void EpubReaderScreen::onEnter() {
+  if (!epub) {
+    return;
+  }
+
   sectionMutex = xSemaphoreCreateMutex();
 
   epub->setupCacheDir();
@@ -42,10 +46,16 @@ void EpubReaderScreen::onEnter() {
 
 void EpubReaderScreen::onExit() {
   xSemaphoreTake(sectionMutex, portMAX_DELAY);
-  vTaskDelete(displayTaskHandle);
+  if (displayTaskHandle) {
+    vTaskDelete(displayTaskHandle);
+    displayTaskHandle = nullptr;
+  }
   vSemaphoreDelete(sectionMutex);
-  displayTaskHandle = nullptr;
   sectionMutex = nullptr;
+  delete section;
+  section = nullptr;
+  delete epub;
+  epub = nullptr;
 }
 
 void EpubReaderScreen::handleInput(const Input input) {
@@ -141,7 +151,7 @@ void EpubReaderScreen::renderPage() {
       section->setupCacheDir();
       if (!section->persistPageDataToSD()) {
         Serial.println("Failed to persist page data to SD");
-        free(section);
+        delete section;
         section = nullptr;
         xSemaphoreGive(sectionMutex);
         return;

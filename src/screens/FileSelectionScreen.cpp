@@ -32,6 +32,7 @@ void FileSelectionScreen::loadFiles() {
 void FileSelectionScreen::onEnter() {
   basepath = "/";
   loadFiles();
+  selectorIndex = 0;
 
   // Trigger first update
   updateRequired = true;
@@ -45,8 +46,11 @@ void FileSelectionScreen::onEnter() {
 }
 
 void FileSelectionScreen::onExit() {
-  vTaskDelete(displayTaskHandle);
-  displayTaskHandle = nullptr;
+  if (displayTaskHandle) {
+    vTaskDelete(displayTaskHandle);
+    displayTaskHandle = nullptr;
+  }
+  files.clear();
 }
 
 void FileSelectionScreen::handleInput(const Input input) {

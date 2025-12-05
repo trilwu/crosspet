@@ -51,7 +51,7 @@ Epub* loadEpub(const std::string& path) {
   }
 
   Serial.println("Failed to load epub");
-  free(epub);
+  delete epub;
   return nullptr;
 }
 
@@ -122,6 +122,8 @@ void onSelectEpubFile(const std::string& path) {
   } else {
     exitScreen();
     enterNewScreen(new FullScreenMessageScreen(renderer, "Failed to load epub", REGULAR, false, false));
+    delay(2000);
+    onGoHome();
   }
 }
 
