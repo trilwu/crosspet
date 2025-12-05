@@ -123,6 +123,20 @@ void EpubReaderScreen::renderPage() {
     section = new Section(epub, currentSpineIndex, renderer);
     if (!section->hasCache()) {
       Serial.println("Cache not found, building...");
+
+      {
+        const int textWidth = renderer->getTextWidth("Indexing...");
+        constexpr int margin = 20;
+        const int x = (renderer->getPageWidth() - textWidth - margin * 2) / 2;
+        constexpr int y = 50;
+        const int w = textWidth + margin * 2;
+        const int h = renderer->getLineHeight() + margin * 2;
+        renderer->fillRect(x, y, w, h, 0);
+        renderer->drawText(x + margin, y + margin, "Indexing...");
+        renderer->drawRect(x + 5, y + 5, w - 10, h - 10, 1);
+        renderer->flushArea(x - 20, y - 20, w + 40, h + 40);
+      }
+
       section->setupCacheDir();
       if (!section->persistPageDataToSD()) {
         Serial.println("Failed to persist page data to SD");

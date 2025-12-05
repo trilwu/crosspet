@@ -89,7 +89,7 @@ void EpdFontRenderer<Renderable>::renderChar(const uint32_t cp, int* x, const in
   if (font->data->compressed) {
     auto* tmpBitmap = static_cast<uint8_t*>(malloc(bitmapSize));
     if (tmpBitmap == nullptr && bitmapSize) {
-      // ESP_LOGE("font", "malloc failed.");
+      Serial.println("Failed to allocate memory for decompression buffer");
       return;
     }
 

@@ -120,9 +120,8 @@ void EpdRenderer::clearScreen(const bool black) const {
 
 void EpdRenderer::flushDisplay(const bool partialUpdate) const { display->display(partialUpdate); }
 
-void EpdRenderer::flushArea(int x, int y, int width, int height) const {
-  // TODO: Fix
-  display->display(true);
+void EpdRenderer::flushArea(const int x, const int y, const int width, const int height) const {
+  display->displayWindow(x, y, width, height);
 }
 
 int EpdRenderer::getPageWidth() const { return display->width() - marginLeft - marginRight; }
