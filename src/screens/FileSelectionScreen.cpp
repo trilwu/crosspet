@@ -8,26 +8,30 @@ void FileSelectionScreen::taskTrampoline(void* param) {
   self->displayTaskLoop();
 }
 
-void FileSelectionScreen::onEnter() {
+void FileSelectionScreen::loadFiles() {
   files.clear();
-  auto root = SD.open("/");
-  File file;
-  while ((file = root.openNextFile())) {
-    if (file.isDirectory()) {
-      file.close();
-      continue;
-    }
-
+  selectorIndex = 0;
+  auto root = SD.open(basepath.c_str());
+  for (File file = root.openNextFile(); file; file = root.openNextFile()) {
     auto filename = std::string(file.name());
-    if (filename.substr(filename.length() - 5) != ".epub" || filename[0] == '.') {
+    if (filename[0] == '.') {
       file.close();
       continue;
     }
 
-    files.emplace_back(filename);
+    if (file.isDirectory()) {
+      files.emplace_back(filename + "/");
+    } else if (filename.substr(filename.length() - 5) == ".epub") {
+      files.emplace_back(filename);
+    }
     file.close();
   }
   root.close();
+}
+
+void FileSelectionScreen::onEnter() {
+  basepath = "/";
+  loadFiles();
 
   // Trigger first update
   updateRequired = true;
@@ -53,8 +57,23 @@ void FileSelectionScreen::handleInput(const Input input) {
     selectorIndex = (selectorIndex + files.size() - 1) % files.size();
     updateRequired = true;
   } else if (input.button == CONFIRM) {
-    Serial.printf("Selected file: %s\n", files[selectorIndex].c_str());
-    onSelect("/" + files[selectorIndex]);
+    if (files.empty()) {
+      return;
+    }
+
+    if (files[selectorIndex].back() == '/') {
+      if (basepath.back() != '/') basepath += "/";
+      basepath += files[selectorIndex].substr(0, files[selectorIndex].length() - 1);
+      loadFiles();
+      updateRequired = true;
+    } else {
+      onSelect(basepath + files[selectorIndex]);
+    }
+  } else if (input.button == BACK && basepath != "/") {
+    basepath = basepath.substr(0, basepath.rfind('/'));
+    if (basepath.empty()) basepath = "/";
+    loadFiles();
+    updateRequired = true;
   }
 }
 
@@ -75,12 +94,16 @@ void FileSelectionScreen::render() const {
   const auto titleWidth = renderer->getTextWidth("CrossPoint Reader", true);
   renderer->drawText((pageWidth - titleWidth) / 2, 0, "CrossPoint Reader", true);
 
-  // Draw selection
-  renderer->fillRect(0, 50 + selectorIndex * 20 + 2, pageWidth - 1, 20, 1);
+  if (files.empty()) {
+    renderer->drawSmallText(50, 50, "No EPUBs found");
+  } else {
+    // Draw selection
+    renderer->fillRect(0, 50 + selectorIndex * 20 + 2, pageWidth - 1, 20, 1);
 
-  for (size_t i = 0; i < files.size(); i++) {
-    const auto file = files[i];
-    renderer->drawSmallText(50, 50 + i * 20, file.c_str(), i == selectorIndex ? 0 : 1);
+    for (size_t i = 0; i < files.size(); i++) {
+      const auto file = files[i];
+      renderer->drawSmallText(50, 50 + i * 20, file.c_str(), i == selectorIndex ? 0 : 1);
+    }
   }
 
   renderer->flushDisplay();
