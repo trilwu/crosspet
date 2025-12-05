@@ -18,7 +18,7 @@ void EpubReaderScreen::onEnter() {
     return;
   }
 
-  sectionMutex = xSemaphoreCreateMutex();
+  renderingMutex = xSemaphoreCreateMutex();
 
   epub->setupCacheDir();
 
@@ -45,13 +45,14 @@ void EpubReaderScreen::onEnter() {
 }
 
 void EpubReaderScreen::onExit() {
-  xSemaphoreTake(sectionMutex, portMAX_DELAY);
+  // Wait until not rendering to delete task to avoid killing mid-instruction to EPD
+  xSemaphoreTake(renderingMutex, portMAX_DELAY);
   if (displayTaskHandle) {
     vTaskDelete(displayTaskHandle);
     displayTaskHandle = nullptr;
   }
-  vSemaphoreDelete(sectionMutex);
-  sectionMutex = nullptr;
+  vSemaphoreDelete(renderingMutex);
+  renderingMutex = nullptr;
   delete section;
   section = nullptr;
   delete epub;
@@ -82,23 +83,25 @@ void EpubReaderScreen::handleInput(const Input input) {
       if (section->currentPage > 0) {
         section->currentPage--;
       } else {
-        xSemaphoreTake(sectionMutex, portMAX_DELAY);
+        // We don't want to delete the section mid-render, so grab the semaphore
+        xSemaphoreTake(renderingMutex, portMAX_DELAY);
         nextPageNumber = UINT16_MAX;
         currentSpineIndex--;
         delete section;
         section = nullptr;
-        xSemaphoreGive(sectionMutex);
+        xSemaphoreGive(renderingMutex);
       }
     } else if (input.button == VOLUME_DOWN || input.button == RIGHT) {
       if (section->currentPage < section->pageCount - 1) {
         section->currentPage++;
       } else {
-        xSemaphoreTake(sectionMutex, portMAX_DELAY);
+        // We don't want to delete the section mid-render, so grab the semaphore
+        xSemaphoreTake(renderingMutex, portMAX_DELAY);
         nextPageNumber = 0;
         currentSpineIndex++;
         delete section;
         section = nullptr;
-        xSemaphoreGive(sectionMutex);
+        xSemaphoreGive(renderingMutex);
       }
     }
 
@@ -112,7 +115,9 @@ void EpubReaderScreen::displayTaskLoop() {
   while (true) {
     if (updateRequired) {
       updateRequired = false;
+      xSemaphoreTake(renderingMutex, portMAX_DELAY);
       renderPage();
+      xSemaphoreGive(renderingMutex);
     }
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }
@@ -127,7 +132,6 @@ void EpubReaderScreen::renderPage() {
     currentSpineIndex = 0;
   }
 
-  xSemaphoreTake(sectionMutex, portMAX_DELAY);
   if (!section) {
     const auto filepath = epub->getSpineItem(currentSpineIndex);
     Serial.printf("Loading file: %s, index: %d\n", filepath.c_str(), currentSpineIndex);
@@ -153,7 +157,6 @@ void EpubReaderScreen::renderPage() {
         Serial.println("Failed to persist page data to SD");
         delete section;
         section = nullptr;
-        xSemaphoreGive(sectionMutex);
         return;
       }
     } else {
@@ -186,8 +189,6 @@ void EpubReaderScreen::renderPage() {
   data[3] = (section->currentPage >> 8) & 0xFF;
   f.write(data, 4);
   f.close();
-
-  xSemaphoreGive(sectionMutex);
 }
 
 void EpubReaderScreen::renderStatusBar() const {

@@ -30,6 +30,8 @@ void FileSelectionScreen::loadFiles() {
 }
 
 void FileSelectionScreen::onEnter() {
+  renderingMutex = xSemaphoreCreateMutex();
+
   basepath = "/";
   loadFiles();
   selectorIndex = 0;
@@ -46,10 +48,14 @@ void FileSelectionScreen::onEnter() {
 }
 
 void FileSelectionScreen::onExit() {
+  // Wait until not rendering to delete task to avoid killing mid-instruction to EPD
+  xSemaphoreTake(renderingMutex, portMAX_DELAY);
   if (displayTaskHandle) {
     vTaskDelete(displayTaskHandle);
     displayTaskHandle = nullptr;
   }
+  vSemaphoreDelete(renderingMutex);
+  renderingMutex = nullptr;
   files.clear();
 }
 
@@ -85,7 +91,9 @@ void FileSelectionScreen::displayTaskLoop() {
   while (true) {
     if (updateRequired) {
       updateRequired = false;
+      xSemaphoreTake(renderingMutex, portMAX_DELAY);
       render();
+      xSemaphoreGive(renderingMutex);
     }
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }

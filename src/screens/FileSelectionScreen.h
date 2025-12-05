@@ -1,6 +1,7 @@
 #pragma once
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <freertos/semphr.h>
 
 #include <functional>
 #include <string>
@@ -10,6 +11,7 @@
 
 class FileSelectionScreen final : public Screen {
   TaskHandle_t displayTaskHandle = nullptr;
+  SemaphoreHandle_t renderingMutex = nullptr;
   std::string basepath = "/";
   std::vector<std::string> files;
   int selectorIndex = 0;

@@ -11,7 +11,7 @@ class EpubReaderScreen final : public Screen {
   Epub* epub;
   Section* section = nullptr;
   TaskHandle_t displayTaskHandle = nullptr;
-  SemaphoreHandle_t sectionMutex = nullptr;
+  SemaphoreHandle_t renderingMutex = nullptr;
   int currentSpineIndex = 0;
   int nextPageNumber = 0;
   int pagesUntilFullRefresh = 0;
