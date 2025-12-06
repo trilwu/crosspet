@@ -7,6 +7,9 @@
 
 #include "EpubHtmlParserSlim.h"
 #include "Page.h"
+#include "Serialization.h"
+
+constexpr uint8_t SECTION_FILE_VERSION = 2;
 
 void Section::onPageComplete(const Page* page) {
   Serial.printf("Page %d complete - free mem: %lu\n", pageCount, ESP.getFreeHeap());
@@ -21,7 +24,14 @@ void Section::onPageComplete(const Page* page) {
   delete page;
 }
 
-bool Section::hasCache() {
+void Section::writeCacheMetadata() const {
+  std::ofstream outputFile(("/sd" + cachePath + "/section.bin").c_str());
+  serialization::writePod(outputFile, SECTION_FILE_VERSION);
+  serialization::writePod(outputFile, pageCount);
+  outputFile.close();
+}
+
+bool Section::loadCacheMetadata() {
   if (!SD.exists(cachePath.c_str())) {
     return false;
   }
@@ -31,14 +41,18 @@ bool Section::hasCache() {
     return false;
   }
 
-  File sectionFile = SD.open(sectionFilePath.c_str(), FILE_READ);
-  uint8_t pageCountBytes[2] = {0, 0};
-  sectionFile.read(pageCountBytes, 2);
-  sectionFile.close();
-
-  pageCount = pageCountBytes[0] + (pageCountBytes[1] << 8);
+  std::ifstream inputFile(("/sd" + sectionFilePath).c_str());
+  uint8_t version;
+  serialization::readPod(inputFile, version);
+  if (version != SECTION_FILE_VERSION) {
+    inputFile.close();
+    SD.remove(sectionFilePath.c_str());
+    Serial.printf("Section state file: Unknown version %u\n", version);
+    return false;
+  }
+  serialization::readPod(inputFile, pageCount);
+  inputFile.close();
   Serial.printf("Loaded cache: %d pages\n", pageCount);
-
   return true;
 }
 
@@ -86,16 +100,12 @@ bool Section::persistPageDataToSD() {
     return false;
   }
 
-  File sectionFile = SD.open((cachePath + "/section.bin").c_str(), FILE_WRITE, true);
-  const uint8_t pageCountBytes[2] = {static_cast<uint8_t>(pageCount & 0xFF),
-                                     static_cast<uint8_t>((pageCount >> 8) & 0xFF)};
-  sectionFile.write(pageCountBytes, 2);
-  sectionFile.close();
+  writeCacheMetadata();
 
   return true;
 }
 
-void Section::renderPage() {
+void Section::renderPage() const {
   if (0 <= currentPage && currentPage < pageCount) {
     const auto filePath = "/sd" + cachePath + "/page_" + std::to_string(currentPage) + ".bin";
     std::ifstream inputFile(filePath);

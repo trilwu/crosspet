@@ -148,7 +148,7 @@ void EpubReaderScreen::renderPage() {
     const auto filepath = epub->getSpineItem(currentSpineIndex);
     Serial.printf("Loading file: %s, index: %d\n", filepath.c_str(), currentSpineIndex);
     section = new Section(epub, currentSpineIndex, renderer);
-    if (!section->hasCache()) {
+    if (!section->loadCacheMetadata()) {
       Serial.println("Cache not found, building...");
 
       {

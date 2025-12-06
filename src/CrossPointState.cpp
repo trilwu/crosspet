@@ -6,12 +6,12 @@
 
 #include <fstream>
 
-constexpr uint8_t STATE_VERSION = 1;
+constexpr uint8_t STATE_FILE_VERSION = 1;
 constexpr char STATE_FILE[] = "/sd/.crosspoint/state.bin";
 
 bool CrossPointState::saveToFile() const {
   std::ofstream outputFile(STATE_FILE);
-  serialization::writePod(outputFile, STATE_VERSION);
+  serialization::writePod(outputFile, STATE_FILE_VERSION);
   serialization::writeString(outputFile, openEpubPath);
   outputFile.close();
   return true;
@@ -22,7 +22,7 @@ bool CrossPointState::loadFromFile() {
 
   uint8_t version;
   serialization::readPod(inputFile, version);
-  if (version != STATE_VERSION) {
+  if (version != STATE_FILE_VERSION) {
     Serial.printf("CrossPointState: Unknown version %u\n", version);
     inputFile.close();
     return false;

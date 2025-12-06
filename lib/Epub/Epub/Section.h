@@ -21,9 +21,10 @@ class Section {
     cachePath = epub->getCachePath() + "/" + std::to_string(spineIndex);
   }
   ~Section() = default;
-  bool hasCache();
+  void writeCacheMetadata() const;
+  bool loadCacheMetadata();
   void setupCacheDir() const;
   void clearCache() const;
   bool persistPageDataToSD();
-  void renderPage();
+  void renderPage() const;
 };
