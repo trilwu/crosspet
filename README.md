@@ -6,10 +6,7 @@ Built using **PlatformIO** and targeting the **ESP32-C3** microcontroller.
 CrossPoint Reader is a purpose-built firmware designed to be a drop-in, fully open-source replacement for the official 
 Xteink firmware. It aims to match or improve upon the standard EPUB reading experience.
 
-// TODO include some images
-
-I look at the [**diy-esp32-epub-reader** by atomic14](https://github.com/atomic14/diy-esp32-epub-reader) project a lot 
-when making CrossPoint and a handful of lessons and some direct source code comes directly from that repo.
+![](./docs/cover.jpg)
 
 ## Motivation
 
@@ -129,3 +126,6 @@ Contributions are very welcome!
 ---
 
 CrossPoint Reader is **not affiliated with Xteink or any manufacturer of the X4 hardware**.
+
+Huge shoutout to [**diy-esp32-epub-reader** by atomic14](https://github.com/atomic14/diy-esp32-epub-reader), which was a project I took a lot of inspiration from as I
+was making CrossPoint.
