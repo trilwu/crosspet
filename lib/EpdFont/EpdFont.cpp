@@ -5,7 +5,6 @@
 inline int min(const int a, const int b) { return a < b ? a : b; }
 inline int max(const int a, const int b) { return a < b ? b : a; }
 
-// TODO: Text properties??
 void EpdFont::getTextBounds(const char* string, const int startX, const int startY, int* minX, int* minY, int* maxX,
                             int* maxY) const {
   *minX = startX;

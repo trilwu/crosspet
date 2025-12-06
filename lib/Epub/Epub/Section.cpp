@@ -12,8 +12,6 @@ void Section::onPageComplete(const Page* page) {
   Serial.printf("Page %d complete\n", pageCount);
 
   const auto filePath = cachePath + "/page_" + std::to_string(pageCount) + ".bin";
-  // TODO can this be removed?
-  SD.open(filePath.c_str(), FILE_WRITE).close();
 
   std::ofstream outputFile("/sd" + filePath);
   page->serialize(outputFile);

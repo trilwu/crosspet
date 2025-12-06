@@ -205,7 +205,7 @@ void loop() {
   delay(10);
 
   static unsigned long lastMemPrint = 0;
-  if (Serial && millis() - lastMemPrint >= 2000) {
+  if (Serial && millis() - lastMemPrint >= 5000) {
     Serial.printf("[%lu] Memory - Free: %d bytes, Total: %d bytes, Min Free: %d bytes\n", millis(), ESP.getFreeHeap(),
                   ESP.getHeapSize(), ESP.getMinFreeHeap());
     lastMemPrint = millis();
