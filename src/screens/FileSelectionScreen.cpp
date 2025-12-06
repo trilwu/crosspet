@@ -70,8 +70,8 @@ void FileSelectionScreen::handleInput() {
       return;
     }
 
+    if (basepath.back() != '/') basepath += "/";
     if (files[selectorIndex].back() == '/') {
-      if (basepath.back() != '/') basepath += "/";
       basepath += files[selectorIndex].substr(0, files[selectorIndex].length() - 1);
       loadFiles();
       updateRequired = true;

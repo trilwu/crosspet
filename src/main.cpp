@@ -43,7 +43,7 @@ constexpr unsigned long POWER_BUTTON_SLEEP_MS = 1000;
 
 Epub* loadEpub(const std::string& path) {
   if (!SD.exists(path.c_str())) {
-    Serial.println("File does not exist");
+    Serial.printf("File does not exist: %s\n", path.c_str());
     return nullptr;
   }
 
