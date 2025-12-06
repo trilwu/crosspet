@@ -6,13 +6,13 @@
 
 /// Font data stored PER GLYPH
 typedef struct {
-  uint8_t width;            ///< Bitmap dimensions in pixels
-  uint8_t height;           ///< Bitmap dimensions in pixels
-  uint8_t advanceX;         ///< Distance to advance cursor (x axis)
-  int16_t left;             ///< X dist from cursor pos to UL corner
-  int16_t top;              ///< Y dist from cursor pos to UL corner
-  uint16_t compressedSize;  ///< Size of the zlib-compressed font data.
-  uint32_t dataOffset;      ///< Pointer into EpdFont->bitmap
+  uint8_t width;        ///< Bitmap dimensions in pixels
+  uint8_t height;       ///< Bitmap dimensions in pixels
+  uint8_t advanceX;     ///< Distance to advance cursor (x axis)
+  int16_t left;         ///< X dist from cursor pos to UL corner
+  int16_t top;          ///< Y dist from cursor pos to UL corner
+  uint16_t dataLength;  ///< Size of the font data.
+  uint32_t dataOffset;  ///< Pointer into EpdFont->bitmap
 } EpdGlyph;
 
 /// Glyph interval structure
@@ -28,7 +28,6 @@ typedef struct {
   const EpdGlyph* glyph;                ///< Glyph array
   const EpdUnicodeInterval* intervals;  ///< Valid unicode intervals for this font
   uint32_t intervalCount;               ///< Number of unicode intervals.
-  bool compressed;                      ///< Does this font use compressed glyph bitmaps?
   uint8_t advanceY;                     ///< Newline distance (y axis)
   int ascender;                         ///< Maximal height of a glyph above the base line
   int descender;                        ///< Maximal height of a glyph below the base line
