@@ -8,10 +8,11 @@ enum PageElementTag : uint8_t {
 // represents something that has been added to a page
 class PageElement {
  public:
+  int xPos;
   int yPos;
-  explicit PageElement(const int yPos) : yPos(yPos) {}
+  explicit PageElement(const int xPos, const int yPos) : xPos(xPos), yPos(yPos) {}
   virtual ~PageElement() = default;
-  virtual void render(EpdRenderer& renderer) = 0;
+  virtual void render(GfxRenderer& renderer, int fontId) = 0;
   virtual void serialize(std::ostream& os) = 0;
 };
 
@@ -20,24 +21,24 @@ class PageLine final : public PageElement {
   const TextBlock* block;
 
  public:
-  PageLine(const TextBlock* block, const int yPos) : PageElement(yPos), block(block) {}
+  PageLine(const TextBlock* block, const int xPos, const int yPos) : PageElement(xPos, yPos), block(block) {}
   ~PageLine() override { delete block; }
-  void render(EpdRenderer& renderer) override;
+  void render(GfxRenderer& renderer, int fontId) override;
   void serialize(std::ostream& os) override;
   static PageLine* deserialize(std::istream& is);
 };
 
 class Page {
  public:
-  int nextY = 0;
-  // the list of block index and line numbers on this page
-  std::vector<PageElement*> elements;
-  void render(EpdRenderer& renderer) const;
   ~Page() {
     for (const auto element : elements) {
       delete element;
     }
   }
+
+  // the list of block index and line numbers on this page
+  std::vector<PageElement*> elements;
+  void render(GfxRenderer& renderer, int fontId) const;
   void serialize(std::ostream& os) const;
   static Page* deserialize(std::istream& is);
 };

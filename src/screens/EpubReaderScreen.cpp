@@ -1,13 +1,19 @@
 #include "EpubReaderScreen.h"
 
-#include <EpdRenderer.h>
 #include <Epub/Page.h>
+#include <GfxRenderer.h>
 #include <SD.h>
 
 #include "Battery.h"
+#include "config.h"
 
 constexpr int PAGES_PER_REFRESH = 15;
 constexpr unsigned long SKIP_CHAPTER_MS = 700;
+constexpr float lineCompression = 0.95f;
+constexpr int marginTop = 11;
+constexpr int marginRight = 10;
+constexpr int marginBottom = 30;
+constexpr int marginLeft = 10;
 
 void EpubReaderScreen::taskTrampoline(void* param) {
   auto* self = static_cast<EpubReaderScreen*>(param);
@@ -150,26 +156,28 @@ void EpubReaderScreen::renderScreen() {
     const auto filepath = epub->getSpineItem(currentSpineIndex);
     Serial.printf("Loading file: %s, index: %d\n", filepath.c_str(), currentSpineIndex);
     section = new Section(epub, currentSpineIndex, renderer);
-    if (!section->loadCacheMetadata()) {
+    if (!section->loadCacheMetadata(READER_FONT_ID, lineCompression, marginTop, marginRight, marginBottom,
+                                    marginLeft)) {
       Serial.println("Cache not found, building...");
 
       {
-        const int textWidth = renderer.getTextWidth("Indexing...");
+        const int textWidth = renderer.getTextWidth(READER_FONT_ID, "Indexing...");
         constexpr int margin = 20;
-        const int x = (renderer.getPageWidth() - textWidth - margin * 2) / 2;
+        const int x = (GfxRenderer::getScreenWidth() - textWidth - margin * 2) / 2;
         constexpr int y = 50;
         const int w = textWidth + margin * 2;
-        const int h = renderer.getLineHeight() + margin * 2;
+        const int h = renderer.getLineHeight(READER_FONT_ID) + margin * 2;
         renderer.swapBuffers();
         renderer.fillRect(x, y, w, h, 0);
-        renderer.drawText(x + margin, y + margin, "Indexing...");
+        renderer.drawText(READER_FONT_ID, x + margin, y + margin, "Indexing...");
         renderer.drawRect(x + 5, y + 5, w - 10, h - 10);
-        renderer.flushDisplay(EInkDisplay::HALF_REFRESH);
+        renderer.displayBuffer(EInkDisplay::HALF_REFRESH);
         pagesUntilFullRefresh = 0;
       }
 
       section->setupCacheDir();
-      if (!section->persistPageDataToSD()) {
+      if (!section->persistPageDataToSD(READER_FONT_ID, lineCompression, marginTop, marginRight, marginBottom,
+                                        marginLeft)) {
         Serial.println("Failed to persist page data to SD");
         delete section;
         section = nullptr;
@@ -190,19 +198,19 @@ void EpubReaderScreen::renderScreen() {
 
   if (section->pageCount == 0) {
     Serial.println("No pages to render");
-    const int width = renderer.getTextWidth("Empty chapter", BOLD);
-    renderer.drawText((renderer.getPageWidth() - width) / 2, 300, "Empty chapter", true, BOLD);
+    const int width = renderer.getTextWidth(READER_FONT_ID, "Empty chapter", BOLD);
+    renderer.drawText(READER_FONT_ID, (GfxRenderer::getScreenWidth() - width) / 2, 300, "Empty chapter", true, BOLD);
     renderStatusBar();
-    renderer.flushDisplay();
+    renderer.displayBuffer();
     return;
   }
 
   if (section->currentPage < 0 || section->currentPage >= section->pageCount) {
     Serial.printf("Page out of bounds: %d (max %d)\n", section->currentPage, section->pageCount);
-    const int width = renderer.getTextWidth("Out of bounds", BOLD);
-    renderer.drawText((renderer.getPageWidth() - width) / 2, 300, "Out of bounds", true, BOLD);
+    const int width = renderer.getTextWidth(READER_FONT_ID, "Out of bounds", BOLD);
+    renderer.drawText(READER_FONT_ID, (GfxRenderer::getScreenWidth() - width) / 2, 300, "Out of bounds", true, BOLD);
     renderStatusBar();
-    renderer.flushDisplay();
+    renderer.displayBuffer();
     return;
   }
 
@@ -221,52 +229,54 @@ void EpubReaderScreen::renderScreen() {
 }
 
 void EpubReaderScreen::renderContents(const Page* p) {
-  p->render(renderer);
+  p->render(renderer, READER_FONT_ID);
   renderStatusBar();
   if (pagesUntilFullRefresh <= 1) {
-    renderer.flushDisplay(EInkDisplay::HALF_REFRESH);
+    renderer.displayBuffer(EInkDisplay::HALF_REFRESH);
     pagesUntilFullRefresh = PAGES_PER_REFRESH;
   } else {
-    renderer.flushDisplay();
+    renderer.displayBuffer();
     pagesUntilFullRefresh--;
   }
 
   // grayscale rendering
+  // TODO: Only do this if font supports it
   {
     renderer.clearScreen(0x00);
-    renderer.setFontRendererMode(GRAYSCALE_LSB);
-    p->render(renderer);
+    renderer.setFontRenderMode(GfxRenderer::GRAYSCALE_LSB);
+    p->render(renderer, READER_FONT_ID);
     renderer.copyGrayscaleLsbBuffers();
 
     // Render and copy to MSB buffer
     renderer.clearScreen(0x00);
-    renderer.setFontRendererMode(GRAYSCALE_MSB);
-    p->render(renderer);
+    renderer.setFontRenderMode(GfxRenderer::GRAYSCALE_MSB);
+    p->render(renderer, READER_FONT_ID);
     renderer.copyGrayscaleMsbBuffers();
 
     // display grayscale part
     renderer.displayGrayBuffer();
-    renderer.setFontRendererMode(BW);
+    renderer.setFontRenderMode(GfxRenderer::BW);
   }
 }
 
 void EpubReaderScreen::renderStatusBar() const {
-  const auto pageWidth = renderer.getPageWidth();
-
+  // Right aligned text for progress counter
   const std::string progress = std::to_string(section->currentPage + 1) + " / " + std::to_string(section->pageCount);
-  const auto progressTextWidth = renderer.getSmallTextWidth(progress.c_str());
-  renderer.drawSmallText(pageWidth - progressTextWidth, 765, progress.c_str());
+  const auto progressTextWidth = renderer.getTextWidth(SMALL_FONT_ID, progress.c_str());
+  renderer.drawText(SMALL_FONT_ID, GfxRenderer::getScreenWidth() - marginRight - progressTextWidth, 776,
+                    progress.c_str());
 
+  // Left aligned battery icon and percentage
   const uint16_t percentage = battery.readPercentage();
   const auto percentageText = std::to_string(percentage) + "%";
-  const auto percentageTextWidth = renderer.getSmallTextWidth(percentageText.c_str());
-  renderer.drawSmallText(20, 765, percentageText.c_str());
+  const auto percentageTextWidth = renderer.getTextWidth(SMALL_FONT_ID, percentageText.c_str());
+  renderer.drawText(SMALL_FONT_ID, 20 + marginLeft, 776, percentageText.c_str());
 
   // 1 column on left, 2 columns on right, 5 columns of battery body
   constexpr int batteryWidth = 15;
   constexpr int batteryHeight = 10;
-  constexpr int x = 0;
-  constexpr int y = 772;
+  constexpr int x = marginLeft;
+  constexpr int y = 783;
 
   // Top line
   renderer.drawLine(x, y, x + batteryWidth - 4, y);
@@ -287,17 +297,18 @@ void EpubReaderScreen::renderStatusBar() const {
   }
   renderer.fillRect(x + 1, y + 1, filledWidth, batteryHeight - 2);
 
+  // Centered chatper title text
   // Page width minus existing content with 30px padding on each side
-  const int leftMargin = 20 + percentageTextWidth + 30;
-  const int rightMargin = progressTextWidth + 30;
-  const int availableTextWidth = pageWidth - leftMargin - rightMargin;
+  const int titleMarginLeft = 20 + percentageTextWidth + 30 + marginLeft;
+  const int titleMarginRight = progressTextWidth + 30 + marginRight;
+  const int availableTextWidth = GfxRenderer::getScreenWidth() - titleMarginLeft - titleMarginRight;
   const auto tocItem = epub->getTocItem(epub->getTocIndexForSpineIndex(currentSpineIndex));
   auto title = tocItem.title;
-  int titleWidth = renderer.getSmallTextWidth(title.c_str());
+  int titleWidth = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
   while (titleWidth > availableTextWidth) {
     title = title.substr(0, title.length() - 8) + "...";
-    titleWidth = renderer.getSmallTextWidth(title.c_str());
+    titleWidth = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
   }
 
-  renderer.drawSmallText(leftMargin + (availableTextWidth - titleWidth) / 2, 765, title.c_str());
+  renderer.drawText(SMALL_FONT_ID, titleMarginLeft + (availableTextWidth - titleWidth) / 2, 777, title.c_str());
 }

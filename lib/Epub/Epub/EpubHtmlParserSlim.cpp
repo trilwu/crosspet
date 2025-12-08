@@ -1,6 +1,6 @@
 #include "EpubHtmlParserSlim.h"
 
-#include <EpdRenderer.h>
+#include <GfxRenderer.h>
 #include <HardwareSerial.h>
 #include <expat.h>
 
@@ -133,7 +133,7 @@ void XMLCALL EpubHtmlParserSlim::characterData(void* userData, const XML_Char* s
     }
 
     // If we're about to run out of space, then cut the word off and start a new one
-    if (self->partWordBufferIndex >= PART_WORD_BUFFER_SIZE - 2) {
+    if (self->partWordBufferIndex >= MAX_WORD_SIZE) {
       self->partWordBuffer[self->partWordBufferIndex] = '\0';
       self->currentTextBlock->addWord(replaceHtmlEntities(self->partWordBuffer), self->boldUntilDepth < self->depth,
                                       self->italicUntilDepth < self->depth);
@@ -257,28 +257,30 @@ void EpubHtmlParserSlim::makePages() {
 
   if (!currentPage) {
     currentPage = new Page();
+    currentPageNextY = marginTop;
   }
 
-  const int lineHeight = renderer.getLineHeight();
-  const int pageHeight = renderer.getPageHeight();
+  const int lineHeight = renderer.getLineHeight(fontId) * lineCompression;
+  const int pageHeight = GfxRenderer::getScreenHeight() - marginTop - marginBottom;
 
   // Long running task, make sure to let other things happen
   vTaskDelay(1);
 
   if (currentTextBlock->getType() == TEXT_BLOCK) {
-    const auto lines = currentTextBlock->splitIntoLines(renderer);
+    const auto lines = currentTextBlock->splitIntoLines(renderer, fontId, marginLeft + marginRight);
 
     for (const auto line : lines) {
-      if (currentPage->nextY + lineHeight > pageHeight) {
+      if (currentPageNextY + lineHeight > pageHeight) {
         completePageFn(currentPage);
         currentPage = new Page();
+        currentPageNextY = marginTop;
       }
 
-      currentPage->elements.push_back(new PageLine(line, currentPage->nextY));
-      currentPage->nextY += lineHeight;
+      currentPage->elements.push_back(new PageLine(line, marginLeft, currentPageNextY));
+      currentPageNextY += lineHeight;
     }
     // add some extra line between blocks
-    currentPage->nextY += lineHeight / 2;
+    currentPageNextY += lineHeight / 2;
   }
   // TODO: Image block support
   // if (block->getType() == BlockType::IMAGE_BLOCK) {

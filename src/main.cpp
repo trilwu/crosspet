@@ -1,13 +1,21 @@
 #include <Arduino.h>
 #include <EInkDisplay.h>
-#include <EpdRenderer.h>
 #include <Epub.h>
+#include <GfxRenderer.h>
 #include <InputManager.h>
 #include <SD.h>
 #include <SPI.h>
 
 #include "Battery.h"
 #include "CrossPointState.h"
+#include "builtinFonts/babyblue.h"
+#include "builtinFonts/bookerly_2b.h"
+#include "builtinFonts/bookerly_bold_2b.h"
+#include "builtinFonts/bookerly_bold_italic_2b.h"
+#include "builtinFonts/bookerly_italic_2b.h"
+#include "builtinFonts/ubuntu_10.h"
+#include "builtinFonts/ubuntu_bold_10.h"
+#include "config.h"
 #include "screens/BootLogoScreen.h"
 #include "screens/EpubReaderScreen.h"
 #include "screens/FileSelectionScreen.h"
@@ -30,9 +38,23 @@
 
 EInkDisplay einkDisplay(EPD_SCLK, EPD_MOSI, EPD_CS, EPD_DC, EPD_RST, EPD_BUSY);
 InputManager inputManager;
-EpdRenderer renderer(einkDisplay);
+GfxRenderer renderer(einkDisplay);
 Screen* currentScreen;
 CrossPointState appState;
+
+// Fonts
+EpdFont bookerlyFont(&bookerly_2b);
+EpdFont bookerlyBoldFont(&bookerly_bold_2b);
+EpdFont bookerlyItalicFont(&bookerly_italic_2b);
+EpdFont bookerlyBoldItalicFont(&bookerly_bold_italic_2b);
+EpdFontFamily bookerlyFontFamily(&bookerlyFont, &bookerlyBoldFont, &bookerlyItalicFont, &bookerlyBoldItalicFont);
+
+EpdFont smallFont(&babyblue);
+EpdFontFamily smallFontFamily(&smallFont);
+
+EpdFont ubuntu10Font(&ubuntu_10);
+EpdFont ubuntuBold10Font(&ubuntu_bold_10);
+EpdFontFamily ubuntuFontFamily(&ubuntu10Font, &ubuntuBold10Font);
 
 // Power button timing
 // Time required to confirm boot from sleep
@@ -141,7 +163,8 @@ void onSelectEpubFile(const std::string& path) {
     enterNewScreen(new EpubReaderScreen(renderer, inputManager, epub, onGoHome));
   } else {
     exitScreen();
-    enterNewScreen(new FullScreenMessageScreen(renderer, inputManager, "Failed to load epub", REGULAR, EInkDisplay::HALF_REFRESH));
+    enterNewScreen(
+        new FullScreenMessageScreen(renderer, inputManager, "Failed to load epub", REGULAR, EInkDisplay::HALF_REFRESH));
     delay(2000);
     onGoHome();
   }
@@ -171,6 +194,11 @@ void setup() {
   // Initialize display
   einkDisplay.begin();
   Serial.println("Display initialized");
+
+  renderer.insertFont(READER_FONT_ID, bookerlyFontFamily);
+  renderer.insertFont(UI_FONT_ID, ubuntuFontFamily);
+  renderer.insertFont(SMALL_FONT_ID, smallFontFamily);
+  Serial.println("Fonts loaded");
 
   exitScreen();
   enterNewScreen(new BootLogoScreen(renderer, inputManager));

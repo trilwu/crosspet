@@ -21,11 +21,11 @@ class EpubReaderScreen final : public Screen {
   static void taskTrampoline(void* param);
   [[noreturn]] void displayTaskLoop();
   void renderScreen();
-  void renderContents(const Page *p);
+  void renderContents(const Page* p);
   void renderStatusBar() const;
 
  public:
-  explicit EpubReaderScreen(EpdRenderer& renderer, InputManager& inputManager, Epub* epub,
+  explicit EpubReaderScreen(GfxRenderer& renderer, InputManager& inputManager, Epub* epub,
                             const std::function<void()>& onGoHome)
       : Screen(renderer, inputManager), epub(epub), onGoHome(onGoHome) {}
   void onEnter() override;

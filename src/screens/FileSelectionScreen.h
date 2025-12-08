@@ -24,7 +24,7 @@ class FileSelectionScreen final : public Screen {
   void loadFiles();
 
  public:
-  explicit FileSelectionScreen(EpdRenderer& renderer, InputManager& inputManager,
+  explicit FileSelectionScreen(GfxRenderer& renderer, InputManager& inputManager,
                                const std::function<void(const std::string&)>& onSelect)
       : Screen(renderer, inputManager), onSelect(onSelect) {}
   void onEnter() override;

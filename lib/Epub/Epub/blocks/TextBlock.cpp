@@ -1,6 +1,6 @@
 #include "TextBlock.h"
 
-#include <EpdRenderer.h>
+#include <GfxRenderer.h>
 #include <Serialization.h>
 
 void TextBlock::addWord(const std::string& word, const bool is_bold, const bool is_italic) {
@@ -10,10 +10,11 @@ void TextBlock::addWord(const std::string& word, const bool is_bold, const bool 
   wordStyles.push_back((is_bold ? BOLD_SPAN : 0) | (is_italic ? ITALIC_SPAN : 0));
 }
 
-std::list<TextBlock*> TextBlock::splitIntoLines(const EpdRenderer& renderer) {
+std::list<TextBlock*> TextBlock::splitIntoLines(const GfxRenderer& renderer, const int fontId,
+                                                const int horizontalMargin) {
   const int totalWordCount = words.size();
-  const int pageWidth = renderer.getPageWidth();
-  const int spaceWidth = renderer.getSpaceWidth();
+  const int pageWidth = GfxRenderer::getScreenWidth() - horizontalMargin;
+  const int spaceWidth = renderer.getSpaceWidth(fontId);
 
   words.shrink_to_fit();
   wordStyles.shrink_to_fit();
@@ -21,7 +22,7 @@ std::list<TextBlock*> TextBlock::splitIntoLines(const EpdRenderer& renderer) {
 
   // measure each word
   uint16_t wordWidths[totalWordCount];
-  for (int i = 0; i < words.size(); i++) {
+  for (int i = 0; i < totalWordCount; i++) {
     // measure the word
     EpdFontStyle fontStyle = REGULAR;
     if (wordStyles[i] & BOLD_SPAN) {
@@ -33,7 +34,7 @@ std::list<TextBlock*> TextBlock::splitIntoLines(const EpdRenderer& renderer) {
     } else if (wordStyles[i] & ITALIC_SPAN) {
       fontStyle = ITALIC;
     }
-    const int width = renderer.getTextWidth(words[i].c_str(), fontStyle);
+    const int width = renderer.getTextWidth(fontId, words[i].c_str(), fontStyle);
     wordWidths[i] = width;
   }
 
@@ -154,7 +155,7 @@ std::list<TextBlock*> TextBlock::splitIntoLines(const EpdRenderer& renderer) {
   return lines;
 }
 
-void TextBlock::render(const EpdRenderer& renderer, const int x, const int y) const {
+void TextBlock::render(const GfxRenderer& renderer, const int fontId, const int x, const int y) const {
   for (int i = 0; i < words.size(); i++) {
     // render the word
     EpdFontStyle fontStyle = REGULAR;
@@ -165,7 +166,7 @@ void TextBlock::render(const EpdRenderer& renderer, const int x, const int y) co
     } else if (wordStyles[i] & ITALIC_SPAN) {
       fontStyle = ITALIC;
     }
-    renderer.drawText(x + wordXpos[i], y, words[i].c_str(), true, fontStyle);
+    renderer.drawText(fontId, x + wordXpos[i], y, words[i].c_str(), true, fontStyle);
   }
 }
 

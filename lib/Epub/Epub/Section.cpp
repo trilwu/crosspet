@@ -1,6 +1,6 @@
 #include "Section.h"
 
-#include <EpdRenderer.h>
+#include <GfxRenderer.h>
 #include <SD.h>
 
 #include <fstream>
@@ -9,7 +9,7 @@
 #include "Page.h"
 #include "Serialization.h"
 
-constexpr uint8_t SECTION_FILE_VERSION = 2;
+constexpr uint8_t SECTION_FILE_VERSION = 3;
 
 void Section::onPageComplete(const Page* page) {
   Serial.printf("Page %d complete - free mem: %lu\n", pageCount, ESP.getFreeHeap());
@@ -24,14 +24,22 @@ void Section::onPageComplete(const Page* page) {
   delete page;
 }
 
-void Section::writeCacheMetadata() const {
+void Section::writeCacheMetadata(const int fontId, const float lineCompression, const int marginTop,
+                                 const int marginRight, const int marginBottom, const int marginLeft) const {
   std::ofstream outputFile(("/sd" + cachePath + "/section.bin").c_str());
   serialization::writePod(outputFile, SECTION_FILE_VERSION);
+  serialization::writePod(outputFile, fontId);
+  serialization::writePod(outputFile, lineCompression);
+  serialization::writePod(outputFile, marginTop);
+  serialization::writePod(outputFile, marginRight);
+  serialization::writePod(outputFile, marginBottom);
+  serialization::writePod(outputFile, marginLeft);
   serialization::writePod(outputFile, pageCount);
   outputFile.close();
 }
 
-bool Section::loadCacheMetadata() {
+bool Section::loadCacheMetadata(const int fontId, const float lineCompression, const int marginTop,
+                                const int marginRight, const int marginBottom, const int marginLeft) {
   if (!SD.exists(cachePath.c_str())) {
     return false;
   }
@@ -42,14 +50,36 @@ bool Section::loadCacheMetadata() {
   }
 
   std::ifstream inputFile(("/sd" + sectionFilePath).c_str());
-  uint8_t version;
-  serialization::readPod(inputFile, version);
-  if (version != SECTION_FILE_VERSION) {
-    inputFile.close();
-    SD.remove(sectionFilePath.c_str());
-    Serial.printf("Section state file: Unknown version %u\n", version);
-    return false;
+
+  // Match parameters
+  {
+    uint8_t version;
+    serialization::readPod(inputFile, version);
+    if (version != SECTION_FILE_VERSION) {
+      inputFile.close();
+      clearCache();
+      Serial.printf("Section state file: Unknown version %u\n", version);
+      return false;
+    }
+
+    int fileFontId, fileMarginTop, fileMarginRight, fileMarginBottom, fileMarginLeft;
+    float fileLineCompression;
+    serialization::readPod(inputFile, fileFontId);
+    serialization::readPod(inputFile, fileLineCompression);
+    serialization::readPod(inputFile, fileMarginTop);
+    serialization::readPod(inputFile, fileMarginRight);
+    serialization::readPod(inputFile, fileMarginBottom);
+    serialization::readPod(inputFile, fileMarginLeft);
+
+    if (fontId != fileFontId || lineCompression != fileLineCompression || marginTop != fileMarginTop ||
+        marginRight != fileMarginRight || marginBottom != fileMarginBottom || marginLeft != fileMarginLeft) {
+      inputFile.close();
+      clearCache();
+      Serial.println("Section state file: Parameters do not match, ignoring");
+      return false;
+    }
   }
+
   serialization::readPod(inputFile, pageCount);
   inputFile.close();
   Serial.printf("Loaded cache: %d pages\n", pageCount);
@@ -63,7 +93,8 @@ void Section::setupCacheDir() const {
 
 void Section::clearCache() const { SD.rmdir(cachePath.c_str()); }
 
-bool Section::persistPageDataToSD() {
+bool Section::persistPageDataToSD(const int fontId, const float lineCompression, const int marginTop,
+                                  const int marginRight, const int marginBottom, const int marginLeft) {
   const auto localPath = epub->getSpineItem(spineIndex);
 
   // TODO: Should we get rid of this file all together?
@@ -83,8 +114,8 @@ bool Section::persistPageDataToSD() {
 
   const auto sdTmpHtmlPath = "/sd" + tmpHtmlPath;
 
-  auto visitor =
-      EpubHtmlParserSlim(sdTmpHtmlPath.c_str(), renderer, [this](const Page* page) { this->onPageComplete(page); });
+  auto visitor = EpubHtmlParserSlim(sdTmpHtmlPath.c_str(), renderer, fontId, lineCompression, marginTop, marginRight,
+                                    marginBottom, marginLeft, [this](const Page* page) { this->onPageComplete(page); });
   success = visitor.parseAndBuildPages();
 
   SD.remove(tmpHtmlPath.c_str());
@@ -93,7 +124,7 @@ bool Section::persistPageDataToSD() {
     return false;
   }
 
-  writeCacheMetadata();
+  writeCacheMetadata(fontId, lineCompression, marginTop, marginRight, marginBottom, marginLeft);
 
   return true;
 }

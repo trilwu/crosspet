@@ -40,10 +40,10 @@ class TextBlock final : public Block {
   void setStyle(const BLOCK_STYLE style) { this->style = style; }
   BLOCK_STYLE getStyle() const { return style; }
   bool isEmpty() override { return words.empty(); }
-  void layout(EpdRenderer& renderer) override {};
+  void layout(GfxRenderer& renderer) override {};
   // given a renderer works out where to break the words into lines
-  std::list<TextBlock*> splitIntoLines(const EpdRenderer& renderer);
-  void render(const EpdRenderer& renderer, int x, int y) const;
+  std::list<TextBlock*> splitIntoLines(const GfxRenderer& renderer, int fontId, int horizontalMargin);
+  void render(const GfxRenderer& renderer, int fontId, int x, int y) const;
   BlockType getType() override { return TEXT_BLOCK; }
   void serialize(std::ostream& os) const;
   static TextBlock* deserialize(std::istream& is);

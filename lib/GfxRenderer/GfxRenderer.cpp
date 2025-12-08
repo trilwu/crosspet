@@ -1,0 +1,222 @@
+#include "GfxRenderer.h"
+
+#include <Utf8.h>
+
+void GfxRenderer::insertFont(const int fontId, EpdFontFamily font) { fontMap.insert({fontId, font}); }
+
+void GfxRenderer::drawPixel(const int x, const int y, const bool state) const {
+  uint8_t* frameBuffer = einkDisplay.getFrameBuffer();
+
+  // Early return if no framebuffer is set
+  if (!frameBuffer) {
+    Serial.printf("!!No framebuffer\n");
+    return;
+  }
+
+  // Rotate coordinates: portrait (480x800) -> landscape (800x480)
+  // Rotation: 90 degrees clockwise
+  const int rotatedX = y;
+  const int rotatedY = EInkDisplay::DISPLAY_HEIGHT - 1 - x;
+
+  // Bounds checking (portrait: 480x800)
+  if (rotatedX < 0 || rotatedX >= EInkDisplay::DISPLAY_WIDTH || rotatedY < 0 ||
+      rotatedY >= EInkDisplay::DISPLAY_HEIGHT) {
+    Serial.printf("!! Outside range (%d, %d)\n", x, y);
+    return;
+  }
+
+  // Calculate byte position and bit position
+  const uint16_t byteIndex = rotatedY * EInkDisplay::DISPLAY_WIDTH_BYTES + (rotatedX / 8);
+  const uint8_t bitPosition = 7 - (rotatedX % 8);  // MSB first
+
+  if (state) {
+    frameBuffer[byteIndex] &= ~(1 << bitPosition);  // Clear bit
+  } else {
+    frameBuffer[byteIndex] |= 1 << bitPosition;  // Set bit
+  }
+}
+
+int GfxRenderer::getTextWidth(const int fontId, const char* text, const EpdFontStyle style) const {
+  if (fontMap.count(fontId) == 0) {
+    Serial.printf("Font %d not found\n", fontId);
+    return 0;
+  }
+
+  int w = 0, h = 0;
+  fontMap.at(fontId).getTextDimensions(text, &w, &h, style);
+  return w;
+}
+
+void GfxRenderer::drawText(const int fontId, const int x, const int y, const char* text, const bool black,
+                           const EpdFontStyle style) const {
+  const int yPos = y + getLineHeight(fontId);
+  int xpos = x;
+
+  // cannot draw a NULL / empty string
+  if (text == nullptr || *text == '\0') {
+    return;
+  }
+
+  if (fontMap.count(fontId) == 0) {
+    Serial.printf("Font %d not found\n", fontId);
+    return;
+  }
+  const auto font = fontMap.at(fontId);
+
+  // no printable characters
+  if (!font.hasPrintableChars(text, style)) {
+    return;
+  }
+
+  uint32_t cp;
+  while ((cp = utf8NextCodepoint(reinterpret_cast<const uint8_t**>(&text)))) {
+    renderChar(font, cp, &xpos, &yPos, black, style);
+  }
+}
+
+void GfxRenderer::drawLine(int x1, int y1, int x2, int y2, const bool state) const {
+  if (x1 == x2) {
+    if (y2 < y1) {
+      std::swap(y1, y2);
+    }
+    for (int y = y1; y <= y2; y++) {
+      drawPixel(x1, y, state);
+    }
+  } else if (y1 == y2) {
+    if (x2 < x1) {
+      std::swap(x1, x2);
+    }
+    for (int x = x1; x <= x2; x++) {
+      drawPixel(x, y1, state);
+    }
+  } else {
+    // TODO: Implement
+    Serial.println("Line drawing not supported");
+  }
+}
+
+void GfxRenderer::drawRect(const int x, const int y, const int width, const int height, const bool state) const {
+  drawLine(x, y, x + width - 1, y, state);
+  drawLine(x + width - 1, y, x + width - 1, y + height - 1, state);
+  drawLine(x + width - 1, y + height - 1, x, y + height - 1, state);
+  drawLine(x, y, x, y + height - 1, state);
+}
+
+void GfxRenderer::fillRect(const int x, const int y, const int width, const int height, const bool state) const {
+  for (int fillY = y; fillY < y + height; fillY++) {
+    drawLine(x, fillY, x + width - 1, fillY, state);
+  }
+}
+
+void GfxRenderer::drawImage(const uint8_t bitmap[], const int x, const int y, const int width, const int height) const {
+  einkDisplay.drawImage(bitmap, x, y, width, height);
+}
+
+void GfxRenderer::clearScreen(const uint8_t color) const { einkDisplay.clearScreen(color); }
+
+void GfxRenderer::invertScreen() const {
+  uint8_t* buffer = einkDisplay.getFrameBuffer();
+  for (int i = 0; i < EInkDisplay::BUFFER_SIZE; i++) {
+    buffer[i] = ~buffer[i];
+  }
+}
+
+void GfxRenderer::displayBuffer(const EInkDisplay::RefreshMode refreshMode) const {
+  einkDisplay.displayBuffer(refreshMode);
+}
+
+// TODO: Support partial window update
+// void GfxRenderer::flushArea(const int x, const int y, const int width, const int height) const {
+//   const int rotatedX = y;
+//   const int rotatedY = EInkDisplay::DISPLAY_HEIGHT - 1 - x;
+//
+//   einkDisplay.displayBuffer(EInkDisplay::FAST_REFRESH, rotatedX, rotatedY, height, width);
+// }
+
+// Note: Internal driver treats screen in command orientation, this library treats in portrait orientation
+int GfxRenderer::getScreenWidth() { return EInkDisplay::DISPLAY_HEIGHT; }
+int GfxRenderer::getScreenHeight() { return EInkDisplay::DISPLAY_WIDTH; }
+
+int GfxRenderer::getSpaceWidth(const int fontId) const {
+  if (fontMap.count(fontId) == 0) {
+    Serial.printf("Font %d not found\n", fontId);
+    return 0;
+  }
+
+  return fontMap.at(fontId).getGlyph(' ', REGULAR)->advanceX;
+}
+
+int GfxRenderer::getLineHeight(const int fontId) const {
+  if (fontMap.count(fontId) == 0) {
+    Serial.printf("Font %d not found\n", fontId);
+    return 0;
+  }
+
+  return fontMap.at(fontId).getData(REGULAR)->advanceY;
+}
+
+void GfxRenderer::swapBuffers() const { einkDisplay.swapBuffers(); }
+
+void GfxRenderer::copyGrayscaleLsbBuffers() const { einkDisplay.copyGrayscaleLsbBuffers(einkDisplay.getFrameBuffer()); }
+
+void GfxRenderer::copyGrayscaleMsbBuffers() const { einkDisplay.copyGrayscaleMsbBuffers(einkDisplay.getFrameBuffer()); }
+
+void GfxRenderer::displayGrayBuffer() const { einkDisplay.displayGrayBuffer(); }
+
+void GfxRenderer::renderChar(const EpdFontFamily& fontFamily, const uint32_t cp, int* x, const int* y,
+                             const bool pixelState, const EpdFontStyle style) const {
+  const EpdGlyph* glyph = fontFamily.getGlyph(cp, style);
+  if (!glyph) {
+    // TODO: Replace with fallback glyph property?
+    glyph = fontFamily.getGlyph('?', style);
+  }
+
+  // no glyph?
+  if (!glyph) {
+    Serial.printf("No glyph for codepoint %d\n", cp);
+    return;
+  }
+
+  const int is2Bit = fontFamily.getData(style)->is2Bit;
+  const uint32_t offset = glyph->dataOffset;
+  const uint8_t width = glyph->width;
+  const uint8_t height = glyph->height;
+  const int left = glyph->left;
+
+  const uint8_t* bitmap = nullptr;
+  bitmap = &fontFamily.getData(style)->bitmap[offset];
+
+  if (bitmap != nullptr) {
+    for (int glyphY = 0; glyphY < height; glyphY++) {
+      const int screenY = *y - glyph->top + glyphY;
+      for (int glyphX = 0; glyphX < width; glyphX++) {
+        const int pixelPosition = glyphY * width + glyphX;
+        const int screenX = *x + left + glyphX;
+
+        if (is2Bit) {
+          const uint8_t byte = bitmap[pixelPosition / 4];
+          const uint8_t bit_index = (3 - pixelPosition % 4) * 2;
+
+          const uint8_t val = (byte >> bit_index) & 0x3;
+          if (fontRenderMode == BW && val > 0) {
+            drawPixel(screenX, screenY, pixelState);
+          } else if (fontRenderMode == GRAYSCALE_MSB && val == 1) {
+            // TODO: Not sure how this anti-aliasing goes on black backgrounds
+            drawPixel(screenX, screenY, false);
+          } else if (fontRenderMode == GRAYSCALE_LSB && val == 2) {
+            drawPixel(screenX, screenY, false);
+          }
+        } else {
+          const uint8_t byte = bitmap[pixelPosition / 8];
+          const uint8_t bit_index = 7 - (pixelPosition % 8);
+
+          if ((byte >> bit_index) & 1) {
+            drawPixel(screenX, screenY, pixelState);
+          }
+        }
+      }
+    }
+  }
+
+  *x += glyph->advanceX;
+}

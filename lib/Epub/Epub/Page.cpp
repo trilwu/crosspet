@@ -3,9 +3,12 @@
 #include <HardwareSerial.h>
 #include <Serialization.h>
 
-void PageLine::render(EpdRenderer& renderer) { block->render(renderer, 0, yPos); }
+constexpr uint8_t PAGE_FILE_VERSION = 1;
+
+void PageLine::render(GfxRenderer& renderer, const int fontId) { block->render(renderer, fontId, xPos, yPos); }
 
 void PageLine::serialize(std::ostream& os) {
+  serialization::writePod(os, xPos);
   serialization::writePod(os, yPos);
 
   // serialize TextBlock pointed to by PageLine
@@ -13,23 +16,25 @@ void PageLine::serialize(std::ostream& os) {
 }
 
 PageLine* PageLine::deserialize(std::istream& is) {
+  int32_t xPos;
   int32_t yPos;
+  serialization::readPod(is, xPos);
   serialization::readPod(is, yPos);
 
   const auto tb = TextBlock::deserialize(is);
-  return new PageLine(tb, yPos);
+  return new PageLine(tb, xPos, yPos);
 }
 
-void Page::render(EpdRenderer& renderer) const {
+void Page::render(GfxRenderer& renderer, const int fontId) const {
   const auto start = millis();
   for (const auto element : elements) {
-    element->render(renderer);
+    element->render(renderer, fontId);
   }
   Serial.printf("Rendered page elements (%u) in %dms\n", elements.size(), millis() - start);
 }
 
 void Page::serialize(std::ostream& os) const {
-  serialization::writePod(os, nextY);
+  serialization::writePod(os, PAGE_FILE_VERSION);
 
   const uint32_t count = elements.size();
   serialization::writePod(os, count);
@@ -42,9 +47,14 @@ void Page::serialize(std::ostream& os) const {
 }
 
 Page* Page::deserialize(std::istream& is) {
-  auto* page = new Page();
+  uint8_t version;
+  serialization::readPod(is, version);
+  if (version != PAGE_FILE_VERSION) {
+    Serial.printf("Page: Unknown version %u\n", version);
+    return nullptr;
+  }
 
-  serialization::readPod(is, page->nextY);
+  auto* page = new Page();
 
   uint32_t count;
   serialization::readPod(is, count);

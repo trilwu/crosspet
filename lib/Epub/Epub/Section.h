@@ -2,29 +2,32 @@
 #include "Epub.h"
 
 class Page;
-class EpdRenderer;
+class GfxRenderer;
 
 class Section {
   Epub* epub;
   const int spineIndex;
-  EpdRenderer& renderer;
+  GfxRenderer& renderer;
   std::string cachePath;
 
+  void writeCacheMetadata(int fontId, float lineCompression, int marginTop, int marginRight, int marginBottom,
+                          int marginLeft) const;
   void onPageComplete(const Page* page);
 
  public:
   int pageCount = 0;
   int currentPage = 0;
 
-  explicit Section(Epub* epub, const int spineIndex, EpdRenderer& renderer)
+  explicit Section(Epub* epub, const int spineIndex, GfxRenderer& renderer)
       : epub(epub), spineIndex(spineIndex), renderer(renderer) {
     cachePath = epub->getCachePath() + "/" + std::to_string(spineIndex);
   }
   ~Section() = default;
-  void writeCacheMetadata() const;
-  bool loadCacheMetadata();
+  bool loadCacheMetadata(int fontId, float lineCompression, int marginTop, int marginRight, int marginBottom,
+                         int marginLeft);
   void setupCacheDir() const;
   void clearCache() const;
-  bool persistPageDataToSD();
+  bool persistPageDataToSD(int fontId, float lineCompression, int marginTop, int marginRight, int marginBottom,
+                           int marginLeft);
   Page* loadPageFromSD() const;
 };

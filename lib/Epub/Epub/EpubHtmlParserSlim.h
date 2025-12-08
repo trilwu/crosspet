@@ -1,30 +1,38 @@
 #pragma once
 
 #include <expat.h>
-#include <limits.h>
 
+#include <climits>
 #include <functional>
 
 #include "blocks/TextBlock.h"
 
 class Page;
-class EpdRenderer;
+class GfxRenderer;
 
-#define PART_WORD_BUFFER_SIZE 200
+#define MAX_WORD_SIZE 200
 
 class EpubHtmlParserSlim {
   const char* filepath;
-  EpdRenderer& renderer;
+  GfxRenderer& renderer;
   std::function<void(Page*)> completePageFn;
   int depth = 0;
   int skipUntilDepth = INT_MAX;
   int boldUntilDepth = INT_MAX;
   int italicUntilDepth = INT_MAX;
-  // If we encounter words longer than this, but this is pretty large
-  char partWordBuffer[PART_WORD_BUFFER_SIZE] = {};
+  // buffer for building up words from characters, will auto break if longer than this
+  // leave one char at end for null pointer
+  char partWordBuffer[MAX_WORD_SIZE + 1] = {};
   int partWordBufferIndex = 0;
   TextBlock* currentTextBlock = nullptr;
   Page* currentPage = nullptr;
+  int currentPageNextY = 0;
+  int fontId;
+  float lineCompression;
+  int marginTop;
+  int marginRight;
+  int marginBottom;
+  int marginLeft;
 
   void startNewTextBlock(BLOCK_STYLE style);
   void makePages();
@@ -34,9 +42,19 @@ class EpubHtmlParserSlim {
   static void XMLCALL endElement(void* userData, const XML_Char* name);
 
  public:
-  explicit EpubHtmlParserSlim(const char* filepath, EpdRenderer& renderer,
+  explicit EpubHtmlParserSlim(const char* filepath, GfxRenderer& renderer, const int fontId,
+                              const float lineCompression, const int marginTop, const int marginRight,
+                              const int marginBottom, const int marginLeft,
                               const std::function<void(Page*)>& completePageFn)
-      : filepath(filepath), renderer(renderer), completePageFn(completePageFn) {}
+      : filepath(filepath),
+        renderer(renderer),
+        fontId(fontId),
+        lineCompression(lineCompression),
+        marginTop(marginTop),
+        marginRight(marginRight),
+        marginBottom(marginBottom),
+        marginLeft(marginLeft),
+        completePageFn(completePageFn) {}
   ~EpubHtmlParserSlim() = default;
   bool parseAndBuildPages();
 };

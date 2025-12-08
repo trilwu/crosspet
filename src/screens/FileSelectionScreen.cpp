@@ -1,7 +1,9 @@
 #include "FileSelectionScreen.h"
 
-#include <EpdRenderer.h>
+#include <GfxRenderer.h>
 #include <SD.h>
+
+#include "config.h"
 
 void sortFileList(std::vector<std::string>& strs) {
   std::sort(begin(strs), end(strs), [](const std::string& str1, const std::string& str2) {
@@ -118,21 +120,21 @@ void FileSelectionScreen::displayTaskLoop() {
 void FileSelectionScreen::render() const {
   renderer.clearScreen();
 
-  const auto pageWidth = renderer.getPageWidth();
-  const auto titleWidth = renderer.getTextWidth("CrossPoint Reader", BOLD);
-  renderer.drawText((pageWidth - titleWidth) / 2, 0, "CrossPoint Reader", true, BOLD);
+  const auto pageWidth = GfxRenderer::getScreenWidth();
+  const auto titleWidth = renderer.getTextWidth(READER_FONT_ID, "CrossPoint Reader", BOLD);
+  renderer.drawText(READER_FONT_ID, (pageWidth - titleWidth) / 2, 10, "CrossPoint Reader", true, BOLD);
 
   if (files.empty()) {
-    renderer.drawUiText(10, 50, "No EPUBs found");
+    renderer.drawText(UI_FONT_ID, 20, 60, "No EPUBs found");
   } else {
     // Draw selection
-    renderer.fillRect(0, 50 + selectorIndex * 30 + 2, pageWidth - 1, 30);
+    renderer.fillRect(0, 60 + selectorIndex * 30 + 2, pageWidth - 1, 30);
 
     for (size_t i = 0; i < files.size(); i++) {
       const auto file = files[i];
-      renderer.drawUiText(10, 50 + i * 30, file.c_str(), i != selectorIndex);
+      renderer.drawText(UI_FONT_ID, 20, 60 + i * 30, file.c_str(), i != selectorIndex);
     }
   }
 
-  renderer.flushDisplay();
+  renderer.displayBuffer();
 }
