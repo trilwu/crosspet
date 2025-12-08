@@ -1,11 +1,12 @@
 #include "EpubReaderScreen.h"
 
 #include <EpdRenderer.h>
+#include <Epub/Page.h>
 #include <SD.h>
 
 #include "Battery.h"
 
-constexpr int PAGES_PER_REFRESH = 20;
+constexpr int PAGES_PER_REFRESH = 15;
 constexpr unsigned long SKIP_CHAPTER_MS = 700;
 
 void EpubReaderScreen::taskTrampoline(void* param) {
@@ -128,7 +129,7 @@ void EpubReaderScreen::displayTaskLoop() {
     if (updateRequired) {
       updateRequired = false;
       xSemaphoreTake(renderingMutex, portMAX_DELAY);
-      renderPage();
+      renderScreen();
       xSemaphoreGive(renderingMutex);
     }
     vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -136,7 +137,7 @@ void EpubReaderScreen::displayTaskLoop() {
 }
 
 // TODO: Failure handling
-void EpubReaderScreen::renderPage() {
+void EpubReaderScreen::renderScreen() {
   if (!epub) {
     return;
   }
@@ -159,10 +160,12 @@ void EpubReaderScreen::renderPage() {
         constexpr int y = 50;
         const int w = textWidth + margin * 2;
         const int h = renderer.getLineHeight() + margin * 2;
+        renderer.swapBuffers();
         renderer.fillRect(x, y, w, h, 0);
         renderer.drawText(x + margin, y + margin, "Indexing...");
         renderer.drawRect(x + 5, y + 5, w - 10, h - 10);
-        renderer.flushArea(x, y, w, h);
+        renderer.flushDisplay(EInkDisplay::HALF_REFRESH);
+        pagesUntilFullRefresh = 0;
       }
 
       section->setupCacheDir();
@@ -184,15 +187,28 @@ void EpubReaderScreen::renderPage() {
   }
 
   renderer.clearScreen();
-  section->renderPage();
-  renderStatusBar();
-  if (pagesUntilFullRefresh <= 1) {
-    renderer.flushDisplay(false);
-    pagesUntilFullRefresh = PAGES_PER_REFRESH;
-  } else {
+
+  if (section->pageCount == 0) {
+    Serial.println("No pages to render");
+    const int width = renderer.getTextWidth("Empty chapter", BOLD);
+    renderer.drawText((renderer.getPageWidth() - width) / 2, 300, "Empty chapter", true, BOLD);
+    renderStatusBar();
     renderer.flushDisplay();
-    pagesUntilFullRefresh--;
+    return;
   }
+
+  if (section->currentPage < 0 || section->currentPage >= section->pageCount) {
+    Serial.printf("Page out of bounds: %d (max %d)\n", section->currentPage, section->pageCount);
+    const int width = renderer.getTextWidth("Out of bounds", BOLD);
+    renderer.drawText((renderer.getPageWidth() - width) / 2, 300, "Out of bounds", true, BOLD);
+    renderStatusBar();
+    renderer.flushDisplay();
+    return;
+  }
+
+  const Page* p = section->loadPageFromSD();
+  renderContents(p);
+  delete p;
 
   File f = SD.open((epub->getCachePath() + "/progress.bin").c_str(), FILE_WRITE);
   uint8_t data[4];
@@ -202,6 +218,36 @@ void EpubReaderScreen::renderPage() {
   data[3] = (section->currentPage >> 8) & 0xFF;
   f.write(data, 4);
   f.close();
+}
+
+void EpubReaderScreen::renderContents(const Page* p) {
+  p->render(renderer);
+  renderStatusBar();
+  if (pagesUntilFullRefresh <= 1) {
+    renderer.flushDisplay(EInkDisplay::HALF_REFRESH);
+    pagesUntilFullRefresh = PAGES_PER_REFRESH;
+  } else {
+    renderer.flushDisplay();
+    pagesUntilFullRefresh--;
+  }
+
+  // grayscale rendering
+  {
+    renderer.clearScreen(0x00);
+    renderer.setFontRendererMode(GRAYSCALE_LSB);
+    p->render(renderer);
+    renderer.copyGrayscaleLsbBuffers();
+
+    // Render and copy to MSB buffer
+    renderer.clearScreen(0x00);
+    renderer.setFontRendererMode(GRAYSCALE_MSB);
+    p->render(renderer);
+    renderer.copyGrayscaleMsbBuffers();
+
+    // display grayscale part
+    renderer.displayGrayBuffer();
+    renderer.setFontRendererMode(BW);
+  }
 }
 
 void EpubReaderScreen::renderStatusBar() const {

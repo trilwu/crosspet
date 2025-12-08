@@ -2,6 +2,18 @@
 
 #include <EpdRenderer.h>
 
-#include "images/SleepScreenImg.h"
+#include "images/CrossLarge.h"
 
-void SleepScreen::onEnter() { renderer.drawImageNoMargin(SleepScreenImg, 0, 0, 800, 480, false, true); }
+void SleepScreen::onEnter() {
+  const auto pageWidth = renderer.getPageWidth();
+  const auto pageHeight = renderer.getPageHeight();
+
+  renderer.clearScreen();
+  renderer.drawImage(CrossLarge, (pageHeight - 128) / 2, (pageWidth - 128) / 2, 128, 128);
+  const int width = renderer.getUiTextWidth("CrossPoint", BOLD);
+  renderer.drawUiText((pageWidth - width)/ 2, pageHeight / 2 + 70, "CrossPoint", true, BOLD);
+  const int bootingWidth = renderer.getSmallTextWidth("SLEEPING");
+  renderer.drawSmallText((pageWidth - bootingWidth) / 2, pageHeight / 2 + 95, "SLEEPING");
+  renderer.invertScreen();
+  renderer.flushDisplay(EInkDisplay::FULL_REFRESH);
+}
