@@ -36,7 +36,30 @@ This project is **not affiliated with Xteink**; it's built as a community projec
 - [ ] WiFi connectivity
 - [ ] BLE connectivity
 
-## Getting Started
+## Installing
+
+### Web (latest firmware)
+
+1. Connect your Xteink X4 to your computer via USB-C
+2. Go to https://xteink.dve.al/ and click "Flash CrossPoint firmware"
+
+To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
+back to the other partition using the "Swap boot partition" button here https://xteink.dve.al/debug.
+
+### Web (specific firmware version)
+
+1. Connect your Xteink X4 to your computer via USB-C
+2. Download the `firmware.bin` file from the release of your choice via the [releases page](https://github.com/daveallie/crosspoint-reader/releases)
+3. Go to https://xteink.dve.al/ and flash the firmware file using the "OTA fast flash controls" section
+
+To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
+back to the other partition using the "Swap boot partition" button here https://xteink.dve.al/debug.
+
+### Manual
+
+See [Development](#development) below.
+
+## Development
 
 ### Prerequisites
 
@@ -57,25 +80,6 @@ git submodule update --init --recursive
 ```
 
 ### Flashing your device
-
-#### Web (latest firmware)
-
-1. Connect your Xteink X4 to your computer via USB-C
-2. Go to https://xteink.dve.al/ and click "Flash CrossPoint firmware"
-
-To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
-back to the other partition using the "Swap boot partition" button here https://xteink.dve.al/debug. 
-
-#### Web (specific firmware version)
-
-1. Connect your Xteink X4 to your computer via USB-C
-2. Download the `firmware.bin` file from the release of your choice via the [releases page](https://github.com/daveallie/crosspoint-reader/releases)
-3. Go to https://xteink.dve.al/ and flash the firmware file using the "OTA fast flash controls" section
-
-To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
-back to the other partition using the "Swap boot partition" button here https://xteink.dve.al/debug.
-
-#### Command line
 
 Connect your Xteink X4 to your computer via USB-C and run the following command.
 
