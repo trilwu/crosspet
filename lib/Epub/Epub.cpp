@@ -299,6 +299,5 @@ int Epub::getTocIndexForSpineIndex(const int spineIndex) const {
   }
 
   Serial.printf("[%lu] [EBP] TOC item not found\n", millis());
-  // not found - default to first item
-  return 0;
+  return -1;
 }

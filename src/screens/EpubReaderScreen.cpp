@@ -328,12 +328,21 @@ void EpubReaderScreen::renderStatusBar() const {
   const int titleMarginLeft = 20 + percentageTextWidth + 30 + marginLeft;
   const int titleMarginRight = progressTextWidth + 30 + marginRight;
   const int availableTextWidth = GfxRenderer::getScreenWidth() - titleMarginLeft - titleMarginRight;
-  const auto tocItem = epub->getTocItem(epub->getTocIndexForSpineIndex(currentSpineIndex));
-  auto title = tocItem.title;
-  int titleWidth = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
-  while (titleWidth > availableTextWidth) {
-    title = title.substr(0, title.length() - 8) + "...";
+  const int tocIndex = epub->getTocIndexForSpineIndex(currentSpineIndex);
+
+  std::string title;
+  int titleWidth;
+  if (tocIndex == -1) {
+    title = "Unnamed";
+    titleWidth = renderer.getTextWidth(SMALL_FONT_ID, "Unnamed");
+  } else {
+    const auto tocItem = epub->getTocItem(tocIndex);
+    title = tocItem.title;
     titleWidth = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
+    while (titleWidth > availableTextWidth) {
+      title = title.substr(0, title.length() - 8) + "...";
+      titleWidth = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
+    }
   }
 
   renderer.drawText(SMALL_FONT_ID, titleMarginLeft + (availableTextWidth - titleWidth) / 2, textY, title.c_str());
