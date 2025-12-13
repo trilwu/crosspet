@@ -79,6 +79,14 @@ void EpubReaderScreen::handleInput() {
     return;
   }
 
+  // any botton press when at end of the book goes back to the last page
+  if (currentSpineIndex > 0 && currentSpineIndex >= epub->getSpineItemsCount()) {
+    currentSpineIndex = epub->getSpineItemsCount() - 1;
+    nextPageNumber = UINT16_MAX;
+    updateRequired = true;
+    return;
+  }
+
   const bool skipChapter = inputManager.getHeldTime() > SKIP_CHAPTER_MS;
 
   if (skipChapter) {
@@ -143,8 +151,21 @@ void EpubReaderScreen::renderScreen() {
     return;
   }
 
-  if (currentSpineIndex >= epub->getSpineItemsCount() || currentSpineIndex < 0) {
+  // edge case handling for sub-zero spine index
+  if (currentSpineIndex < 0) {
     currentSpineIndex = 0;
+  }
+  // based bounds of book, show end of book screen
+  if (currentSpineIndex > epub->getSpineItemsCount()) {
+    currentSpineIndex = epub->getSpineItemsCount();
+  }
+
+  // Show end of book screen
+  if (currentSpineIndex == epub->getSpineItemsCount()) {
+    renderer.clearScreen();
+    renderer.drawCenteredText(READER_FONT_ID, 300, "End of book", true, BOLD);
+    renderer.displayBuffer();
+    return;
   }
 
   if (!section) {
