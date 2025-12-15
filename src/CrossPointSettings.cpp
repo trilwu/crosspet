@@ -50,13 +50,13 @@ bool CrossPointSettings::loadFromFile() {
 
   // load settings that exist
   switch (fileSettingsCount) {
-      case 1:
-          serialization::readPod(inputFile, whiteSleepScreen);
-          break;
-      case 2:
-          serialization::readPod(inputFile, whiteSleepScreen);
-          serialization::readPod(inputFile, extraParagraphSpacing);
-          break;
+    case 1:
+      serialization::readPod(inputFile, whiteSleepScreen);
+      break;
+    case 2:
+      serialization::readPod(inputFile, whiteSleepScreen);
+      serialization::readPod(inputFile, extraParagraphSpacing);
+      break;
   }
 
   inputFile.close();

@@ -2,9 +2,9 @@
 
 #include <GfxRenderer.h>
 
+#include "CrossPointSettings.h"
 #include "config.h"
 #include "images/CrossLarge.h"
-#include "CrossPointSettings.h"
 
 void SleepScreen::onEnter() {
   const auto pageWidth = GfxRenderer::getScreenWidth();

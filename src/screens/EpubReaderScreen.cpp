@@ -205,8 +205,8 @@ void EpubReaderScreen::renderScreen() {
     const auto filepath = epub->getSpineItem(currentSpineIndex);
     Serial.printf("[%lu] [ERS] Loading file: %s, index: %d\n", millis(), filepath.c_str(), currentSpineIndex);
     section = std::unique_ptr<Section>(new Section(epub, currentSpineIndex, renderer));
-    if (!section->loadCacheMetadata(READER_FONT_ID, lineCompression, marginTop, marginRight, marginBottom,
-                                    marginLeft, SETTINGS.extraParagraphSpacing)) {
+    if (!section->loadCacheMetadata(READER_FONT_ID, lineCompression, marginTop, marginRight, marginBottom, marginLeft,
+                                    SETTINGS.extraParagraphSpacing)) {
       Serial.printf("[%lu] [ERS] Cache not found, building...\n", millis());
 
       {

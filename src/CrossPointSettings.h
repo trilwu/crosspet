@@ -24,9 +24,7 @@ class CrossPointSettings {
   ~CrossPointSettings() = default;
 
   // Get singleton instance
-  static CrossPointSettings& getInstance() {
-    return instance;
-  }
+  static CrossPointSettings& getInstance() { return instance; }
 
   bool saveToFile() const;
   bool loadFromFile();

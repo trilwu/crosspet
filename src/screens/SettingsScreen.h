@@ -1,9 +1,9 @@
 #pragma once
-#include <cstdint>
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
 #include <freertos/task.h>
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -13,7 +13,7 @@ class CrossPointSettings;
 
 // Structure to hold setting information
 struct SettingInfo {
-  const char* name;       // Display name of the setting
+  const char* name;                        // Display name of the setting
   uint8_t CrossPointSettings::* valuePtr;  // Pointer to member in CrossPointSettings
 };
 
@@ -34,8 +34,7 @@ class SettingsScreen final : public Screen {
   void toggleCurrentSetting();
 
  public:
-  explicit SettingsScreen(GfxRenderer& renderer, InputManager& inputManager,
-                           const std::function<void()>& onGoHome)
+  explicit SettingsScreen(GfxRenderer& renderer, InputManager& inputManager, const std::function<void()>& onGoHome)
       : Screen(renderer, inputManager), onGoHome(onGoHome) {}
   void onEnter() override;
   void onExit() override;

@@ -8,9 +8,8 @@
 // Define the static settings list
 
 const SettingInfo SettingsScreen::settingsList[SettingsScreen::settingsCount] = {
-  {"White Sleep Screen", &CrossPointSettings::whiteSleepScreen},
-  {"Extra Paragraph Spacing", &CrossPointSettings::extraParagraphSpacing}
-};
+    {"White Sleep Screen", &CrossPointSettings::whiteSleepScreen},
+    {"Extra Paragraph Spacing", &CrossPointSettings::extraParagraphSpacing}};
 
 void SettingsScreen::taskTrampoline(void* param) {
   auto* self = static_cast<SettingsScreen*>(param);
@@ -19,8 +18,6 @@ void SettingsScreen::taskTrampoline(void* param) {
 
 void SettingsScreen::onEnter() {
   renderingMutex = xSemaphoreCreateMutex();
-
-
 
   // Reset selection to first item
   selectedSettingIndex = 0;
@@ -55,7 +52,7 @@ void SettingsScreen::handleInput() {
 
     // Trigger a redraw of the entire screen
     updateRequired = true;
-    return; // Return early to prevent further processing
+    return;  // Return early to prevent further processing
   }
 
   // Check for Back button to exit settings
@@ -121,7 +118,7 @@ void SettingsScreen::render() const {
 
   // Draw all settings
   for (int i = 0; i < settingsCount; i++) {
-    const int settingY = 60 + i * 30; // 30 pixels between settings
+    const int settingY = 60 + i * 30;  // 30 pixels between settings
 
     // Draw selection indicator for the selected setting
     if (i == selectedSettingIndex) {
@@ -135,8 +132,7 @@ void SettingsScreen::render() const {
   }
 
   // Draw help text
-  renderer.drawText(SMALL_FONT_ID, 20, pageHeight - 30,
-                   "Press OK to toggle, BACK to save & exit");
+  renderer.drawText(SMALL_FONT_ID, 20, pageHeight - 30, "Press OK to toggle, BACK to save & exit");
 
   // Always use standard refresh for settings screen
   renderer.displayBuffer();

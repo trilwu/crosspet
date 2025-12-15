@@ -129,8 +129,7 @@ void FileSelectionScreen::render() const {
   renderer.drawCenteredText(READER_FONT_ID, 10, "CrossPoint Reader", true, BOLD);
 
   // Help text
-  renderer.drawText(SMALL_FONT_ID, 20, GfxRenderer::getScreenHeight() - 30,
-                   "Press BACK for Settings");
+  renderer.drawText(SMALL_FONT_ID, 20, GfxRenderer::getScreenHeight() - 30, "Press BACK for Settings");
 
   if (files.empty()) {
     renderer.drawText(UI_FONT_ID, 20, 60, "No EPUBs found");
