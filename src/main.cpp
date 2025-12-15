@@ -14,12 +14,14 @@
 #include <builtinFonts/ubuntu_bold_10.h>
 
 #include "Battery.h"
+#include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "config.h"
 #include "screens/BootLogoScreen.h"
 #include "screens/EpubReaderScreen.h"
 #include "screens/FileSelectionScreen.h"
 #include "screens/FullScreenMessageScreen.h"
+#include "screens/SettingsScreen.h"
 #include "screens/SleepScreen.h"
 
 #define SPI_FQ 40000000
@@ -58,9 +60,9 @@ EpdFontFamily ubuntuFontFamily(&ubuntu10Font, &ubuntuBold10Font);
 
 // Power button timing
 // Time required to confirm boot from sleep
-constexpr unsigned long POWER_BUTTON_WAKEUP_MS = 1000;
+constexpr unsigned long POWER_BUTTON_WAKEUP_MS = 500;
 // Time required to enter sleep mode
-constexpr unsigned long POWER_BUTTON_SLEEP_MS = 1000;
+constexpr unsigned long POWER_BUTTON_SLEEP_MS = 500;
 
 std::unique_ptr<Epub> loadEpub(const std::string& path) {
   if (!SD.exists(path.c_str())) {
@@ -165,9 +167,14 @@ void onSelectEpubFile(const std::string& path) {
   }
 }
 
+void onGoToSettings() {
+  exitScreen();
+  enterNewScreen(new SettingsScreen(renderer, inputManager, onGoHome));
+}
+
 void onGoHome() {
   exitScreen();
-  enterNewScreen(new FileSelectionScreen(renderer, inputManager, onSelectEpubFile));
+  enterNewScreen(new FileSelectionScreen(renderer, inputManager, onSelectEpubFile, onGoToSettings));
 }
 
 void setup() {
@@ -199,6 +206,7 @@ void setup() {
   // SD Card Initialization
   SD.begin(SD_SPI_CS, SPI, SPI_FQ);
 
+  SETTINGS.loadFromFile();
   appState.loadFromFile();
   if (!appState.openEpubPath.empty()) {
     auto epub = loadEpub(appState.openEpubPath);
@@ -212,7 +220,7 @@ void setup() {
   }
 
   exitScreen();
-  enterNewScreen(new FileSelectionScreen(renderer, inputManager, onSelectEpubFile));
+  enterNewScreen(new FileSelectionScreen(renderer, inputManager, onSelectEpubFile, onGoToSettings));
 
   // Ensure we're not still holding the power button before leaving setup
   waitForPowerRelease();
