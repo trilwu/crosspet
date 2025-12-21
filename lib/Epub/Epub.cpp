@@ -126,7 +126,6 @@ bool Epub::parseTocNcxFile() {
 // load in the meta data for the epub file
 bool Epub::load() {
   Serial.printf("[%lu] [EBP] Loading ePub: %s\n", millis(), filepath.c_str());
-  ZipFile zip("/sd" + filepath);
 
   std::string contentOpfFilePath;
   if (!findContentOpfFile(&contentOpfFilePath)) {
@@ -155,44 +154,20 @@ bool Epub::load() {
 }
 
 void Epub::initializeSpineItemSizes() {
-  setupCacheDir();
+  Serial.printf("[%lu] [EBP] Calculating book size\n", millis());
 
-  size_t spineItemsCount = getSpineItemsCount();
+  const size_t spineItemsCount = getSpineItemsCount();
   size_t cumSpineItemSize = 0;
-  if (SD.exists((getCachePath() + "/spine_size.bin").c_str())) {
-    File f = SD.open((getCachePath() + "/spine_size.bin").c_str());
-    uint8_t data[4];
-    for (size_t i = 0; i < spineItemsCount; i++) {
-      f.read(data, 4);
-      cumSpineItemSize = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
-      cumulativeSpineItemSize.emplace_back(cumSpineItemSize);
-      // Serial.printf("[%lu] [EBP] Loading item %d size %u to %u %u\n", millis(),
-      //     i, cumSpineItemSize, data[1], data[0]);
-    }
-    f.close();
-  } else {
-    File f = SD.open((getCachePath() + "/spine_size.bin").c_str(), FILE_WRITE);
-    uint8_t data[4];
-    // determine size of spine items
-    for (size_t i = 0; i < spineItemsCount; i++) {
-      std::string spineItem = getSpineItem(i);
-      size_t s = 0;
-      getItemSize(spineItem, &s);
-      cumSpineItemSize += s;
-      cumulativeSpineItemSize.emplace_back(cumSpineItemSize);
+  const ZipFile zip("/sd" + filepath);
 
-      // and persist to cache
-      data[0] = cumSpineItemSize & 0xFF;
-      data[1] = (cumSpineItemSize >> 8) & 0xFF;
-      data[2] = (cumSpineItemSize >> 16) & 0xFF;
-      data[3] = (cumSpineItemSize >> 24) & 0xFF;
-      // Serial.printf("[%lu] [EBP] Persisting item %d size %u to %u %u\n", millis(),
-      //     i, cumSpineItemSize, data[1], data[0]);
-      f.write(data, 4);
-    }
-
-    f.close();
+  for (size_t i = 0; i < spineItemsCount; i++) {
+    std::string spineItem = getSpineItem(i);
+    size_t s = 0;
+    getItemSize(zip, spineItem, &s);
+    cumSpineItemSize += s;
+    cumulativeSpineItemSize.emplace_back(cumSpineItemSize);
   }
+
   Serial.printf("[%lu] [EBP] Book size: %lu\n", millis(), cumSpineItemSize);
 }
 
@@ -291,8 +266,11 @@ bool Epub::readItemContentsToStream(const std::string& itemHref, Print& out, con
 
 bool Epub::getItemSize(const std::string& itemHref, size_t* size) const {
   const ZipFile zip("/sd" + filepath);
-  const std::string path = normalisePath(itemHref);
+  return getItemSize(zip, itemHref, size);
+}
 
+bool Epub::getItemSize(const ZipFile& zip, const std::string& itemHref, size_t* size) {
+  const std::string path = normalisePath(itemHref);
   return zip.getInflatedFileSize(path.c_str(), size);
 }
 
