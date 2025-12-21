@@ -6,6 +6,7 @@
 
 #include "Battery.h"
 #include "CrossPointSettings.h"
+#include "CrossPointState.h"
 #include "EpubReaderChapterSelectionActivity.h"
 #include "config.h"
 
@@ -43,6 +44,10 @@ void EpubReaderActivity::onEnter() {
     }
     f.close();
   }
+
+  // Save current epub as last opened epub
+  APP_STATE.openEpubPath = epub->getPath();
+  APP_STATE.saveToFile();
 
   // Trigger first update
   updateRequired = true;
