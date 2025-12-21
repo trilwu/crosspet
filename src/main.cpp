@@ -60,6 +60,9 @@ EpdFontFamily ubuntuFontFamily(&ubuntu10Font, &ubuntuBold10Font);
 
 // Auto-sleep timeout (10 minutes of inactivity)
 constexpr unsigned long AUTO_SLEEP_TIMEOUT_MS = 10 * 60 * 1000;
+// measurement of power button press duration calibration value
+unsigned long t1 = 0;
+unsigned long t2 = 0;
 
 void exitActivity() {
   if (currentActivity) {
@@ -79,6 +82,10 @@ void verifyWakeupLongPress() {
   // Give the user up to 1000ms to start holding the power button, and must hold for SETTINGS.getPowerButtonDuration()
   const auto start = millis();
   bool abort = false;
+  // It takes us some time to wake up from deep sleep, so we need to subtract that from the duration
+  uint16_t calibration = 25;
+  uint16_t calibratedPressDuration =
+      (calibration < SETTINGS.getPowerButtonDuration()) ? SETTINGS.getPowerButtonDuration() - calibration : 1;
 
   inputManager.update();
   // Verify the user has actually pressed
@@ -87,13 +94,13 @@ void verifyWakeupLongPress() {
     inputManager.update();
   }
 
+  t2 = millis();
   if (inputManager.isPressed(InputManager::BTN_POWER)) {
     do {
       delay(10);
       inputManager.update();
-    } while (inputManager.isPressed(InputManager::BTN_POWER) &&
-             inputManager.getHeldTime() < SETTINGS.getPowerButtonDuration());
-    abort = inputManager.getHeldTime() < SETTINGS.getPowerButtonDuration();
+    } while (inputManager.isPressed(InputManager::BTN_POWER) && inputManager.getHeldTime() < calibratedPressDuration);
+    abort = inputManager.getHeldTime() < calibratedPressDuration;
   } else {
     abort = true;
   }
@@ -120,7 +127,7 @@ void enterDeepSleep() {
   enterNewActivity(new SleepActivity(renderer, inputManager));
 
   einkDisplay.deepSleep();
-
+  Serial.printf("[%lu] [   ] Power button press calibration value: %lu ms\n", millis(), t2 - t1);
   Serial.printf("[%lu] [   ] Entering deep sleep.\n", millis());
   esp_deep_sleep_enable_gpio_wakeup(1ULL << InputManager::POWER_BUTTON_PIN, ESP_GPIO_WAKEUP_GPIO_LOW);
   // Ensure that the power button has been released to avoid immediately turning back on if you're holding it
@@ -152,6 +159,7 @@ void onGoHome() {
 }
 
 void setup() {
+  t1 = millis();
   Serial.begin(115200);
 
   Serial.printf("[%lu] [   ] Starting CrossPoint version " CROSSPOINT_VERSION "\n", millis());
