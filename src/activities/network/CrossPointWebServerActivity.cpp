@@ -4,8 +4,8 @@
 #include <ESPmDNS.h>
 #include <GfxRenderer.h>
 #include <InputManager.h>
-#include <QRCode.h>
 #include <WiFi.h>
+#include <qrcode.h>
 
 #include <cstddef>
 
