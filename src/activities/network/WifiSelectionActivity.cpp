@@ -150,6 +150,11 @@ void WifiSelectionActivity::processWifiScanResults() {
   std::sort(networks.begin(), networks.end(),
             [](const WifiNetworkInfo& a, const WifiNetworkInfo& b) { return a.rssi > b.rssi; });
 
+  // Show networks with PW first
+  std::sort(networks.begin(), networks.end(), [](const WifiNetworkInfo& a, const WifiNetworkInfo& b) {
+    return a.hasSavedPassword && !b.hasSavedPassword;
+  });
+
   WiFi.scanDelete();
   state = WifiSelectionState::NETWORK_LIST;
   selectedNetworkIndex = 0;
@@ -581,7 +586,7 @@ void WifiSelectionActivity::renderConnecting() const {
   if (state == WifiSelectionState::SCANNING) {
     renderer.drawCenteredText(UI_FONT_ID, top, "Scanning...", true, REGULAR);
   } else {
-    renderer.drawCenteredText(READER_FONT_ID, top - 30, "Connecting...", true, BOLD);
+    renderer.drawCenteredText(READER_FONT_ID, top - 40, "Connecting...", true, BOLD);
 
     std::string ssidInfo = "to " + selectedSSID;
     if (ssidInfo.length() > 25) {
