@@ -4,11 +4,10 @@
 #include <ESPmDNS.h>
 #include <GfxRenderer.h>
 #include <InputManager.h>
-#include <QrCode.h>
+#include <QRCode.h>
 #include <WiFi.h>
 
 #include <cstddef>
-#include <cstdint>
 
 #include "NetworkModeSelectionActivity.h"
 #include "WifiSelectionActivity.h"
