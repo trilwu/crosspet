@@ -9,13 +9,17 @@
 
 // Define the static settings list
 namespace {
-constexpr int settingsCount = 5;
+constexpr int settingsCount = 6;
 const SettingInfo settingsList[settingsCount] = {
     // Should match with SLEEP_SCREEN_MODE
     {"Sleep Screen", SettingType::ENUM, &CrossPointSettings::sleepScreen, {"Dark", "Light", "Custom", "Cover"}},
     {"Status Bar", SettingType::ENUM, &CrossPointSettings::statusBar, {"None", "No Progress", "Full"}},
     {"Extra Paragraph Spacing", SettingType::TOGGLE, &CrossPointSettings::extraParagraphSpacing, {}},
     {"Short Power Button Click", SettingType::TOGGLE, &CrossPointSettings::shortPwrBtn, {}},
+    {"Reading Orientation",
+     SettingType::ENUM,
+     &CrossPointSettings::orientation,
+     {"Portrait", "Landscape CW", "Inverted", "Landscape CCW"}},
     {"Check for updates", SettingType::ACTION, nullptr, {}},
 };
 }  // namespace
@@ -139,8 +143,8 @@ void SettingsActivity::displayTaskLoop() {
 void SettingsActivity::render() const {
   renderer.clearScreen();
 
-  const auto pageWidth = GfxRenderer::getScreenWidth();
-  const auto pageHeight = GfxRenderer::getScreenHeight();
+  const auto pageWidth = renderer.getScreenWidth();
+  const auto pageHeight = renderer.getScreenHeight();
 
   // Draw header
   renderer.drawCenteredText(READER_FONT_ID, 10, "Settings", true, BOLD);
