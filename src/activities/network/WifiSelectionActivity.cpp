@@ -437,7 +437,7 @@ std::string WifiSelectionActivity::getSignalStrengthIndicator(const int32_t rssi
 void WifiSelectionActivity::displayTaskLoop() {
   while (true) {
     if (subActivity) {
-      return;
+      continue;
     }
 
     if (updateRequired) {
