@@ -187,6 +187,8 @@ void WifiSelectionActivity::selectNetwork(const int index) {
   if (selectedRequiresPassword) {
     // Show password entry
     state = WifiSelectionState::PASSWORD_ENTRY;
+    // Don't allow screen updates while changing activity
+    xSemaphoreTake(renderingMutex, portMAX_DELAY);
     enterNewActivity(new KeyboardEntryActivity(
         renderer, inputManager, "Enter WiFi Password",
         "",     // No initial text
@@ -203,6 +205,7 @@ void WifiSelectionActivity::selectNetwork(const int index) {
           exitActivity();
         }));
     updateRequired = true;
+    xSemaphoreGive(renderingMutex);
   } else {
     // Connect directly for open networks
     attemptConnection();
