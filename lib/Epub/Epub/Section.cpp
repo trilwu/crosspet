@@ -1,7 +1,6 @@
 #include "Section.h"
 
-#include <FsHelpers.h>
-#include <SD.h>
+#include <SDCardManager.h>
 #include <Serialization.h>
 
 #include "Page.h"
@@ -9,17 +8,17 @@
 
 namespace {
 constexpr uint8_t SECTION_FILE_VERSION = 7;
-constexpr size_t HEADER_SIZE = sizeof(uint8_t) + sizeof(int) + sizeof(float) + sizeof(bool) + sizeof(int) +
-                               sizeof(int) + sizeof(int) + sizeof(size_t);
+constexpr uint32_t HEADER_SIZE = sizeof(uint8_t) + sizeof(int) + sizeof(float) + sizeof(bool) + sizeof(int) +
+                                 sizeof(int) + sizeof(int) + sizeof(uint32_t);
 }  // namespace
 
-size_t Section::onPageComplete(std::unique_ptr<Page> page) {
+uint32_t Section::onPageComplete(std::unique_ptr<Page> page) {
   if (!file) {
     Serial.printf("[%lu] [SCT] File not open for writing page %d\n", millis(), pageCount);
     return 0;
   }
 
-  const auto position = file.position();
+  const uint32_t position = file.position();
   if (!page->serialize(file)) {
     Serial.printf("[%lu] [SCT] Failed to serialize page %d\n", millis(), pageCount);
     return 0;
@@ -38,7 +37,7 @@ void Section::writeSectionFileHeader(const int fontId, const float lineCompressi
   }
   static_assert(HEADER_SIZE == sizeof(SECTION_FILE_VERSION) + sizeof(fontId) + sizeof(lineCompression) +
                                    sizeof(extraParagraphSpacing) + sizeof(viewportWidth) + sizeof(viewportHeight) +
-                                   sizeof(pageCount) + sizeof(size_t),
+                                   sizeof(pageCount) + sizeof(uint32_t),
                 "Header size mismatch");
   serialization::writePod(file, SECTION_FILE_VERSION);
   serialization::writePod(file, fontId);
@@ -47,12 +46,12 @@ void Section::writeSectionFileHeader(const int fontId, const float lineCompressi
   serialization::writePod(file, viewportWidth);
   serialization::writePod(file, viewportHeight);
   serialization::writePod(file, pageCount);  // Placeholder for page count (will be initially 0 when written)
-  serialization::writePod(file, static_cast<size_t>(0));  // Placeholder for LUT offset
+  serialization::writePod(file, static_cast<uint32_t>(0));  // Placeholder for LUT offset
 }
 
 bool Section::loadSectionFile(const int fontId, const float lineCompression, const bool extraParagraphSpacing,
                               const int viewportWidth, const int viewportHeight) {
-  if (!FsHelpers::openFileForRead("SCT", filePath, file)) {
+  if (!SdMan.openFileForRead("SCT", filePath, file)) {
     return false;
   }
 
@@ -94,12 +93,12 @@ bool Section::loadSectionFile(const int fontId, const float lineCompression, con
 
 // Your updated class method (assuming you are using the 'SD' object, which is a wrapper for a specific filesystem)
 bool Section::clearCache() const {
-  if (!SD.exists(filePath.c_str())) {
+  if (!SdMan.exists(filePath.c_str())) {
     Serial.printf("[%lu] [SCT] Cache does not exist, no action needed\n", millis());
     return true;
   }
 
-  if (!SD.remove(filePath.c_str())) {
+  if (!SdMan.remove(filePath.c_str())) {
     Serial.printf("[%lu] [SCT] Failed to clear cache\n", millis());
     return false;
   }
@@ -112,13 +111,19 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
                                 const int viewportWidth, const int viewportHeight,
                                 const std::function<void()>& progressSetupFn,
                                 const std::function<void(int)>& progressFn) {
-  constexpr size_t MIN_SIZE_FOR_PROGRESS = 50 * 1024;  // 50KB
+  constexpr uint32_t MIN_SIZE_FOR_PROGRESS = 50 * 1024;  // 50KB
   const auto localPath = epub->getSpineItem(spineIndex).href;
   const auto tmpHtmlPath = epub->getCachePath() + "/.tmp_" + std::to_string(spineIndex) + ".html";
 
+  // Create cache directory if it doesn't exist
+  {
+    const auto sectionsDir = epub->getCachePath() + "/sections";
+    SdMan.mkdir(sectionsDir.c_str());
+  }
+
   // Retry logic for SD card timing issues
   bool success = false;
-  size_t fileSize = 0;
+  uint32_t fileSize = 0;
   for (int attempt = 0; attempt < 3 && !success; attempt++) {
     if (attempt > 0) {
       Serial.printf("[%lu] [SCT] Retrying stream (attempt %d)...\n", millis(), attempt + 1);
@@ -126,12 +131,12 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
     }
 
     // Remove any incomplete file from previous attempt before retrying
-    if (SD.exists(tmpHtmlPath.c_str())) {
-      SD.remove(tmpHtmlPath.c_str());
+    if (SdMan.exists(tmpHtmlPath.c_str())) {
+      SdMan.remove(tmpHtmlPath.c_str());
     }
 
-    File tmpHtml;
-    if (!FsHelpers::openFileForWrite("SCT", tmpHtmlPath, tmpHtml)) {
+    FsFile tmpHtml;
+    if (!SdMan.openFileForWrite("SCT", tmpHtmlPath, tmpHtml)) {
       continue;
     }
     success = epub->readItemContentsToStream(localPath, tmpHtml, 1024);
@@ -139,8 +144,8 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
     tmpHtml.close();
 
     // If streaming failed, remove the incomplete file immediately
-    if (!success && SD.exists(tmpHtmlPath.c_str())) {
-      SD.remove(tmpHtmlPath.c_str());
+    if (!success && SdMan.exists(tmpHtmlPath.c_str())) {
+      SdMan.remove(tmpHtmlPath.c_str());
       Serial.printf("[%lu] [SCT] Removed incomplete temp file after failed attempt\n", millis());
     }
   }
@@ -157,11 +162,11 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
     progressSetupFn();
   }
 
-  if (!FsHelpers::openFileForWrite("SCT", filePath, file)) {
+  if (!SdMan.openFileForWrite("SCT", filePath, file)) {
     return false;
   }
   writeSectionFileHeader(fontId, lineCompression, extraParagraphSpacing, viewportWidth, viewportHeight);
-  std::vector<size_t> lut = {};
+  std::vector<uint32_t> lut = {};
 
   ChapterHtmlSlimParser visitor(
       tmpHtmlPath, renderer, fontId, lineCompression, extraParagraphSpacing, viewportWidth, viewportHeight,
@@ -169,18 +174,18 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
       progressFn);
   success = visitor.parseAndBuildPages();
 
-  SD.remove(tmpHtmlPath.c_str());
+  SdMan.remove(tmpHtmlPath.c_str());
   if (!success) {
     Serial.printf("[%lu] [SCT] Failed to parse XML and build pages\n", millis());
     file.close();
-    SD.remove(filePath.c_str());
+    SdMan.remove(filePath.c_str());
     return false;
   }
 
-  const auto lutOffset = file.position();
+  const uint32_t lutOffset = file.position();
   bool hasFailedLutRecords = false;
   // Write LUT
-  for (const auto& pos : lut) {
+  for (const uint32_t& pos : lut) {
     if (pos == 0) {
       hasFailedLutRecords = true;
       break;
@@ -191,12 +196,12 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
   if (hasFailedLutRecords) {
     Serial.printf("[%lu] [SCT] Failed to write LUT due to invalid page positions\n", millis());
     file.close();
-    SD.remove(filePath.c_str());
+    SdMan.remove(filePath.c_str());
     return false;
   }
 
   // Go back and write LUT offset
-  file.seek(HEADER_SIZE - sizeof(size_t) - sizeof(pageCount));
+  file.seek(HEADER_SIZE - sizeof(uint32_t) - sizeof(pageCount));
   serialization::writePod(file, pageCount);
   serialization::writePod(file, lutOffset);
   file.close();
@@ -204,15 +209,15 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
 }
 
 std::unique_ptr<Page> Section::loadPageFromSectionFile() {
-  if (!FsHelpers::openFileForRead("SCT", filePath, file)) {
+  if (!SdMan.openFileForRead("SCT", filePath, file)) {
     return nullptr;
   }
 
-  file.seek(HEADER_SIZE - sizeof(size_t));
-  size_t lutOffset;
+  file.seek(HEADER_SIZE - sizeof(uint32_t));
+  uint32_t lutOffset;
   serialization::readPod(file, lutOffset);
-  file.seek(lutOffset + sizeof(size_t) * currentPage);
-  size_t pagePos;
+  file.seek(lutOffset + sizeof(uint32_t) * currentPage);
+  uint32_t pagePos;
   serialization::readPod(file, pagePos);
   file.seek(pagePos);
 
