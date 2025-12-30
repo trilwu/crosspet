@@ -109,17 +109,20 @@ bool Epub::parseTocNcxFile() const {
 
   if (!ncxParser.setup()) {
     Serial.printf("[%lu] [EBP] Could not setup toc ncx parser\n", millis());
+    tempNcxFile.close();
     return false;
   }
 
   const auto ncxBuffer = static_cast<uint8_t*>(malloc(1024));
   if (!ncxBuffer) {
     Serial.printf("[%lu] [EBP] Could not allocate memory for toc ncx parser\n", millis());
+    tempNcxFile.close();
     return false;
   }
 
   while (tempNcxFile.available()) {
     const auto readSize = tempNcxFile.read(ncxBuffer, 1024);
+    if (readSize == 0) break;
     const auto processedSize = ncxParser.write(ncxBuffer, readSize);
 
     if (processedSize != readSize) {
