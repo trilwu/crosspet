@@ -64,10 +64,30 @@ The Settings screen allows you to configure the device's behavior. There are a f
   - "Light" - The same default sleep screen, on a white background
   - "Custom" - Custom images from the SD card, see [3.6 Sleep Screen](#36-sleep-screen) below for more information
   - "Cover" - The book cover image (Note: this is experimental and may not work as expected)
+- **Status Bar**: Configure the status bar displayed while reading, options are:
+  - "None" - No status bar
+  - "No Progress" - Show status bar without reading progress
+  - "Full" - Show status bar with reading progress
 - **Extra Paragraph Spacing**: If enabled, vertical space will be added between paragraphs in the book, if disabled,
   paragraphs will not have vertical space between them, but will have first word indentation.
 - **Short Power Button Click**: Whether to trigger the power button on a short press or a long press.
-- **Front Button Layout**: Swap the order of the bottom edge buttons from Back/Confirm/Left/Right to Left/Right/Back/Confirm.
+- **Reading Orientation**: Set the screen orientation for reading, options are:
+  - "Portrait" (default) - Standard portrait orientation
+  - "Landscape CW" - Landscape, rotated clockwise
+  - "Inverted" - Portrait, upside down
+  - "Landscape CCW" - Landscape, rotated counter-clockwise
+- **Front Button Layout**: Configure the order of the bottom edge buttons, options are:
+  - "Bck, Cnfrm, Lft, Rght" (default) - Back, Confirm, Left, Right
+  - "Lft, Rght, Bck, Cnfrm" - Left, Right, Back, Confirm
+  - "Lft, Bck, Cnfrm, Rght" - Left, Back, Confirm, Right
+- **Side Button Layout**: Swap the order of the volume buttons from Previous/Next to Next/Previous. This change is only in effect when reading.
+- **Reader Font Family**: Choose the font used for reading, options are:
+  - "Bookerly" (default) - Amazon's reading font
+  - "Noto Sans" - Google's sans-serif font
+  - "Open Dyslexic" - Font designed for readers with dyslexia
+- **Reader Font Size**: Adjust the text size for reading, options are "Small", "Medium", "Large", or "X Large".
+- **Reader Line Spacing**: Adjust the spacing between lines, options are "Tight", "Normal", or "Wide".
+- **Check for updates**: Check for firmware updates over WiFi.
 
 ### 3.6 Sleep Screen
 
@@ -124,5 +144,3 @@ Please note that this firmware is currently in active development. The following
 are planned for future updates:
 
 * **Images:** Embedded images in e-books will not render.
-* **Text Formatting:** There are currently no settings to adjust font type, size, line spacing, or margins.
-* **Rotation**: Different rotation options are not supported.
