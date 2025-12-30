@@ -5,11 +5,11 @@
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "OtaUpdateActivity.h"
-#include "config.h"
+#include "fontIds.h"
 
 // Define the static settings list
 namespace {
-constexpr int settingsCount = 8;
+constexpr int settingsCount = 10;
 const SettingInfo settingsList[settingsCount] = {
     // Should match with SLEEP_SCREEN_MODE
     {"Sleep Screen", SettingType::ENUM, &CrossPointSettings::sleepScreen, {"Dark", "Light", "Custom", "Cover"}},
@@ -28,6 +28,8 @@ const SettingInfo settingsList[settingsCount] = {
      SettingType::ENUM,
      &CrossPointSettings::sideButtonLayout,
      {"Prev, Next", "Next, Prev"}},
+    {"Reader Font Family", SettingType::ENUM, &CrossPointSettings::fontFamily, {"Aleo", "Noto Sans", "Open Dyslexic"}},
+    {"Reader Font Size", SettingType::ENUM, &CrossPointSettings::fontSize, {"Small", "Medium", "Large", "X Large"}},
     {"Check for updates", SettingType::ACTION, nullptr, {}},
 };
 }  // namespace
@@ -157,7 +159,7 @@ void SettingsActivity::render() const {
   const auto pageHeight = renderer.getScreenHeight();
 
   // Draw header
-  renderer.drawCenteredText(READER_FONT_ID, 10, "Settings", true, BOLD);
+  renderer.drawCenteredText(UI_12_FONT_ID, 10, "Settings", true, BOLD);
 
   // Draw selection
   renderer.fillRect(0, 60 + selectedSettingIndex * 30 - 2, pageWidth - 1, 30);
@@ -168,11 +170,11 @@ void SettingsActivity::render() const {
 
     // Draw selection indicator for the selected setting
     if (i == selectedSettingIndex) {
-      renderer.drawText(UI_FONT_ID, 5, settingY, ">");
+      renderer.drawText(UI_10_FONT_ID, 5, settingY, ">");
     }
 
     // Draw setting name
-    renderer.drawText(UI_FONT_ID, 20, settingY, settingsList[i].name, i != selectedSettingIndex);
+    renderer.drawText(UI_10_FONT_ID, 20, settingY, settingsList[i].name, i != selectedSettingIndex);
 
     // Draw value based on setting type
     std::string valueText = "";
@@ -183,8 +185,8 @@ void SettingsActivity::render() const {
       const uint8_t value = SETTINGS.*(settingsList[i].valuePtr);
       valueText = settingsList[i].enumValues[value];
     }
-    const auto width = renderer.getTextWidth(UI_FONT_ID, valueText.c_str());
-    renderer.drawText(UI_FONT_ID, pageWidth - 20 - width, settingY, valueText.c_str(), i != selectedSettingIndex);
+    const auto width = renderer.getTextWidth(UI_10_FONT_ID, valueText.c_str());
+    renderer.drawText(UI_10_FONT_ID, pageWidth - 20 - width, settingY, valueText.c_str(), i != selectedSettingIndex);
   }
 
   // Draw version text above button hints
@@ -193,7 +195,7 @@ void SettingsActivity::render() const {
 
   // Draw help text
   const auto labels = mappedInput.mapLabels("« Save", "Toggle", "", "");
-  renderer.drawButtonHints(UI_FONT_ID, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  renderer.drawButtonHints(UI_10_FONT_ID, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
   // Always use standard refresh for settings screen
   renderer.displayBuffer();
