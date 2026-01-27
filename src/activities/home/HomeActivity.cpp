@@ -502,8 +502,8 @@ void HomeActivity::render() {
   // Build menu items dynamically
   std::vector<const char*> menuItems = {"My Library", "File Transfer", "Settings"};
   if (hasOpdsUrl) {
-    // Insert Calibre Library after My Library
-    menuItems.insert(menuItems.begin() + 1, "Calibre Library");
+    // Insert OPDS Browser after My Library
+    menuItems.insert(menuItems.begin() + 1, "OPDS Browser");
   }
 
   const int menuTileWidth = pageWidth - 2 * margin;
