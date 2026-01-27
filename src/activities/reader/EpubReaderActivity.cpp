@@ -85,7 +85,7 @@ void EpubReaderActivity::onEnter() {
   // Save current epub as last opened epub and add to recent books
   APP_STATE.openEpubPath = epub->getPath();
   APP_STATE.saveToFile();
-  RECENT_BOOKS.addBook(epub->getPath());
+  RECENT_BOOKS.addBook(epub->getPath(), epub->getTitle(), epub->getAuthor());
 
   // Trigger first update
   updateRequired = true;
