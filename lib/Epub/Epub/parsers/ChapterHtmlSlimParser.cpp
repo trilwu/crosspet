@@ -40,6 +40,23 @@ bool matches(const char* tag_name, const char* possible_tags[], const int possib
   return false;
 }
 
+// flush the contents of partWordBuffer to currentTextBlock
+void ChapterHtmlSlimParser::flushPartWordBuffer() {
+  // determine font style
+  EpdFontFamily::Style fontStyle = EpdFontFamily::REGULAR;
+  if (boldUntilDepth < depth && italicUntilDepth < depth) {
+    fontStyle = EpdFontFamily::BOLD_ITALIC;
+  } else if (boldUntilDepth < depth) {
+    fontStyle = EpdFontFamily::BOLD;
+  } else if (italicUntilDepth < depth) {
+    fontStyle = EpdFontFamily::ITALIC;
+  }
+  // flush the buffer
+  partWordBuffer[partWordBufferIndex] = '\0';
+  currentTextBlock->addWord(partWordBuffer, fontStyle);
+  partWordBufferIndex = 0;
+}
+
 // start a new text block if needed
 void ChapterHtmlSlimParser::startNewTextBlock(const TextBlock::Style style) {
   if (currentTextBlock) {
@@ -125,6 +142,10 @@ void XMLCALL ChapterHtmlSlimParser::startElement(void* userData, const XML_Char*
     self->boldUntilDepth = std::min(self->boldUntilDepth, self->depth);
   } else if (matches(name, BLOCK_TAGS, NUM_BLOCK_TAGS)) {
     if (strcmp(name, "br") == 0) {
+      if (self->partWordBufferIndex > 0) {
+        // flush word preceding <br/> to currentTextBlock before calling startNewTextBlock
+        self->flushPartWordBuffer();
+      }
       self->startNewTextBlock(self->currentTextBlock->getStyle());
     } else {
       self->startNewTextBlock((TextBlock::Style)self->paragraphAlignment);
@@ -149,22 +170,11 @@ void XMLCALL ChapterHtmlSlimParser::characterData(void* userData, const XML_Char
     return;
   }
 
-  EpdFontFamily::Style fontStyle = EpdFontFamily::REGULAR;
-  if (self->boldUntilDepth < self->depth && self->italicUntilDepth < self->depth) {
-    fontStyle = EpdFontFamily::BOLD_ITALIC;
-  } else if (self->boldUntilDepth < self->depth) {
-    fontStyle = EpdFontFamily::BOLD;
-  } else if (self->italicUntilDepth < self->depth) {
-    fontStyle = EpdFontFamily::ITALIC;
-  }
-
   for (int i = 0; i < len; i++) {
     if (isWhitespace(s[i])) {
       // Currently looking at whitespace, if there's anything in the partWordBuffer, flush it
       if (self->partWordBufferIndex > 0) {
-        self->partWordBuffer[self->partWordBufferIndex] = '\0';
-        self->currentTextBlock->addWord(self->partWordBuffer, fontStyle);
-        self->partWordBufferIndex = 0;
+        self->flushPartWordBuffer();
       }
       // Skip the whitespace char
       continue;
@@ -186,9 +196,7 @@ void XMLCALL ChapterHtmlSlimParser::characterData(void* userData, const XML_Char
 
     // If we're about to run out of space, then cut the word off and start a new one
     if (self->partWordBufferIndex >= MAX_WORD_SIZE) {
-      self->partWordBuffer[self->partWordBufferIndex] = '\0';
-      self->currentTextBlock->addWord(self->partWordBuffer, fontStyle);
-      self->partWordBufferIndex = 0;
+      self->flushPartWordBuffer();
     }
 
     self->partWordBuffer[self->partWordBufferIndex++] = s[i];
@@ -219,18 +227,7 @@ void XMLCALL ChapterHtmlSlimParser::endElement(void* userData, const XML_Char* n
         matches(name, BOLD_TAGS, NUM_BOLD_TAGS) || matches(name, ITALIC_TAGS, NUM_ITALIC_TAGS) || self->depth == 1;
 
     if (shouldBreakText) {
-      EpdFontFamily::Style fontStyle = EpdFontFamily::REGULAR;
-      if (self->boldUntilDepth < self->depth && self->italicUntilDepth < self->depth) {
-        fontStyle = EpdFontFamily::BOLD_ITALIC;
-      } else if (self->boldUntilDepth < self->depth) {
-        fontStyle = EpdFontFamily::BOLD;
-      } else if (self->italicUntilDepth < self->depth) {
-        fontStyle = EpdFontFamily::ITALIC;
-      }
-
-      self->partWordBuffer[self->partWordBufferIndex] = '\0';
-      self->currentTextBlock->addWord(self->partWordBuffer, fontStyle);
-      self->partWordBufferIndex = 0;
+      self->flushPartWordBuffer();
     }
   }
 
