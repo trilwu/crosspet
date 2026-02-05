@@ -24,6 +24,9 @@ class EpubReaderActivity final : public ActivityWithSubactivity {
   // Normalized 0.0-1.0 progress within the target spine item, computed from book percentage.
   float pendingSpineProgress = 0.0f;
   bool updateRequired = false;
+  bool pendingSubactivityExit = false;  // Defer subactivity exit to avoid use-after-free
+  bool pendingGoHome = false;           // Defer go home to avoid race condition with display task
+  bool skipNextButtonCheck = false;     // Skip button processing for one frame after subactivity exit
   const std::function<void()> onGoBack;
   const std::function<void()> onGoHome;
 
