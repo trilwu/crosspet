@@ -48,9 +48,22 @@ class KOReaderDocumentId {
   // Uses the same directory convention as the Epub cache (/.crosspoint/epub_<hash>/).
   static std::string getCacheFilePath(const std::string& filePath);
 
-  // Returns the cached hash if the file size matches, or empty string on miss/invalidation.
-  static std::string loadCachedHash(const std::string& cacheFilePath, size_t fileSize);
+  // Returns the cached hash if the file size and fingerprint match, or empty
+  // string on miss/invalidation.
+  //
+  // The fingerprint is derived from the file's modification timestamp.  We
+  // call `FsFile::getModifyDateTime` to retrieve the packed date/time fields
+  // from the filesystem.  These two 16‑bit values are concatenated as
+  // eight hex digits (YYYYYYTTTT? actually date and time bits) and used as a
+  // lightweight change signal; any change to the file's mtime will cause the
+  // fingerprint to differ and the cache to be invalidated.  Since the full
+  // document hash is expensive to compute, using mtime gives us a quick way to
+  // detect modifications without reading file contents.
+  static std::string loadCachedHash(const std::string& cacheFilePath, size_t fileSize,
+                                    const std::string& currentFingerprint);
 
-  // Persists the computed hash alongside the file size used to compute it.
-  static void saveCachedHash(const std::string& cacheFilePath, size_t fileSize, const std::string& hash);
+  // Persists the computed hash alongside the file size and fingerprint (the
+  // modification-timestamp token) used to generate it.
+  static void saveCachedHash(const std::string& cacheFilePath, size_t fileSize, const std::string& fingerprint,
+                             const std::string& hash);
 };
