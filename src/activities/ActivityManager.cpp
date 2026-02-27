@@ -11,11 +11,12 @@
 #include "network/CrossPointWebServerActivity.h"
 #include "reader/ReaderActivity.h"
 #include "settings/SettingsActivity.h"
+#include "tools/ToolsActivity.h"
 #include "util/FullScreenMessageActivity.h"
 
 void ActivityManager::begin() {
   xTaskCreate(&renderTaskTrampoline, "ActivityManagerRender",
-              8192,              // Stack size
+              12288,             // Stack size (increased from 8192 for complex render paths)
               this,              // Parameters
               1,                 // Priority
               &renderTaskHandle  // Task handle
@@ -184,6 +185,8 @@ void ActivityManager::goToBrowser() {
 void ActivityManager::goToReader(std::string path) {
   replaceActivity(std::make_unique<ReaderActivity>(renderer, mappedInput, std::move(path)));
 }
+
+void ActivityManager::goToTools() { replaceActivity(std::make_unique<ToolsActivity>(renderer, mappedInput)); }
 
 void ActivityManager::goToSleep() {
   replaceActivity(std::make_unique<SleepActivity>(renderer, mappedInput));
