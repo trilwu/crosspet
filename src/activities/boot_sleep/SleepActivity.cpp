@@ -7,6 +7,8 @@
 #include <Txt.h>
 #include <Xtc.h>
 
+#include <ctime>
+
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "components/UITheme.h"
@@ -26,6 +28,8 @@ void SleepActivity::onEnter() {
     case (CrossPointSettings::SLEEP_SCREEN_MODE::COVER):
     case (CrossPointSettings::SLEEP_SCREEN_MODE::COVER_CUSTOM):
       return renderCoverSleepScreen();
+    case (CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK):
+      return renderClockSleepScreen();
     default:
       return renderDefaultSleepScreen();
   }
@@ -278,6 +282,52 @@ void SleepActivity::renderCoverSleepScreen() const {
   }
 
   return (this->*renderNoCoverSleepScreen)();
+}
+
+void SleepActivity::renderClockSleepScreen() const {
+  const auto pageWidth = renderer.getScreenWidth();
+  const auto pageHeight = renderer.getScreenHeight();
+
+  renderer.clearScreen();
+
+  struct tm timeinfo;
+  bool timeValid = getLocalTime(&timeinfo, 0) && timeinfo.tm_year >= 125;
+
+  if (timeValid) {
+    // Day names and month names for formatting
+    static const char* const DAY_NAMES[] = {"Sunday",   "Monday", "Tuesday", "Wednesday",
+                                            "Thursday", "Friday", "Saturday"};
+    static const char* const MONTH_NAMES[] = {"January",   "February", "March",    "April",
+                                              "May",       "June",     "July",     "August",
+                                              "September", "October",  "November", "December"};
+
+    // Format time HH:MM
+    char timeBuf[6];
+    snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+
+    // Format date: "Wednesday, 25 February 2026"
+    char dateBuf[64];
+    snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d", DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
+             MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
+
+    // Center time+date vertically
+    const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
+    const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
+    const int totalHeight = timeHeight + 10 + dateHeight;
+    const int startY = (pageHeight - totalHeight) / 2;
+
+    renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
+    renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 10, dateBuf);
+  } else {
+    // No time available — fall back to logo + "SLEEPING"
+    renderer.drawImage(Logo120, (pageWidth - 120) / 2, (pageHeight - 120) / 2, 120, 120);
+    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 + 70, tr(STR_CROSSPOINT), true, EpdFontFamily::BOLD);
+    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 95, tr(STR_SLEEPING));
+  }
+
+  // Dark background (inverted)
+  renderer.invertScreen();
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
 
 void SleepActivity::renderBlankSleepScreen() const {
