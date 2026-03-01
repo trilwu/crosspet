@@ -34,10 +34,24 @@ enum class PetNeed : uint8_t {
   SLEEPY = 5,
 };
 
+// Pet species types — cosmetic label for the pet
+namespace PetTypeNames {
+  constexpr const char* NAMES[] = {
+    "Default", "Cat", "Dog", "Dragon", "Bunny", "Robot", "Bear", "Slime"
+  };
+  constexpr uint8_t COUNT = 8;
+  inline const char* get(uint8_t t) { return (t < COUNT) ? NAMES[t] : NAMES[0]; }
+}
+
 // Persistent pet state — serialized to JSON on SD card
 struct PetState {
   bool initialized = false;  // true after hatchNew(); prevents false-positive exists() with no clock
   PetStage stage = PetStage::EGG;
+
+  // Customization
+  char petName[20] = {};     // user-given name (empty = show stage name)
+  uint8_t petType = 0;       // PetType index — cosmetic species label
+
   uint8_t hunger = 80;       // 0-100 (0=starving, 100=full)
   uint8_t happiness = 80;    // 0-100
   uint8_t health = 100;      // 0-100 (decreases when hunger=0)

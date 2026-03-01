@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include <Logging.h>
 
+#include <cstring>
 #include <ctime>
 
 PetManager& PetManager::getInstance() {
@@ -147,19 +148,41 @@ bool PetManager::pet() {
   return true;
 }
 
-void PetManager::hatchNew() {
-  state = PetState();  // Resets all fields to struct defaults (including new fields)
+void PetManager::hatchNew(const char* name, uint8_t type) {
+  state = PetState();  // Resets all fields to struct defaults
   state.initialized = true;
   state.stage = PetStage::EGG;
   state.hunger = 80;
   state.happiness = 80;
   state.health = 100;
+  state.petType = type;
+  if (name && name[0]) {
+    strncpy(state.petName, name, sizeof(state.petName) - 1);
+    state.petName[sizeof(state.petName) - 1] = '\0';
+  }
   if (isTimeValid()) {
     state.birthTime = getCurrentTime();
     state.lastTickTime = state.birthTime;
   }
   save();
-  LOG_DBG("PET", "New egg hatched!");
+  LOG_DBG("PET", "New egg hatched! name='%s' type=%d", state.petName, state.petType);
+}
+
+bool PetManager::renamePet(const char* name) {
+  if (!state.exists()) return false;
+  if (name && name[0]) {
+    strncpy(state.petName, name, sizeof(state.petName) - 1);
+    state.petName[sizeof(state.petName) - 1] = '\0';
+  } else {
+    state.petName[0] = '\0';
+  }
+  return save();
+}
+
+bool PetManager::changeType(uint8_t type) {
+  if (!state.exists()) return false;
+  state.petType = type;
+  return save();
 }
 
 // --- State queries ---

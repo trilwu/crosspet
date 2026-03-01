@@ -38,6 +38,9 @@ bool PetActionMenu::isActionAvailable(PetAction action, const PetState& state) c
       return true;
     case PetAction::PET_PET:
       return !state.isSleeping;
+    case PetAction::RENAME:
+    case PetAction::CHANGE_TYPE:
+      return true;
     default:
       return false;
   }
@@ -56,6 +59,8 @@ const char* PetActionMenu::actionLabel(PetAction action) {
     case PetAction::IGNORE_CRY:    return "Ignore";
     case PetAction::TOGGLE_LIGHTS: return "Lights";
     case PetAction::PET_PET:       return "Pet";
+    case PetAction::RENAME:        return "Rename";
+    case PetAction::CHANGE_TYPE:   return "Change Type";
     default:                       return "???";
   }
 }

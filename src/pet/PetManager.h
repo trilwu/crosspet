@@ -33,8 +33,12 @@ class PetManager {
   // User interaction — petting gives happiness (with cooldown)
   bool pet();
 
-  // Start a new pet from egg
-  void hatchNew();
+  // Start a new pet from egg (optionally with custom name and type)
+  void hatchNew(const char* name = nullptr, uint8_t type = 0);
+
+  // Rename/retype an existing pet
+  bool renamePet(const char* name);
+  bool changeType(uint8_t type);
 
   // --- User actions (PetActions.cpp) ---
   bool feedMeal();       // fill hunger + add weight + waste tracking

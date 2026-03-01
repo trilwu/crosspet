@@ -4,6 +4,7 @@
 #include <HalStorage.h>
 #include <Logging.h>
 
+#include <cstring>
 #include <ctime>
 
 // --- Persistence ---
@@ -40,6 +41,12 @@ bool PetManager::load() {
   state.daysAtStage     = doc["daysAtStage"]     | (uint8_t)0;
   state.lastReadDay     = doc["lastReadDay"]      | (uint16_t)0;
   state.pageAccumulator = doc["pageAccumulator"] | (uint16_t)0;
+  // Customization fields — backward compat: missing = empty name, default type
+  const char* petNameStr = doc["petName"] | "";
+  strncpy(state.petName, petNameStr, sizeof(state.petName) - 1);
+  state.petName[sizeof(state.petName) - 1] = '\0';
+  state.petType = doc["petType"] | (uint8_t)0;
+
   // Backward compat: infer initialized from birthTime if field missing
   state.initialized     = doc["initialized"]     | (state.birthTime > 0);
   state.missionDay      = doc["missionDay"]      | (uint16_t)0;
@@ -87,6 +94,9 @@ bool PetManager::save() {
   Storage.mkdir(PetConfig::PET_DIR);
 
   JsonDocument doc;
+  // Customization
+  doc["petName"]        = state.petName;
+  doc["petType"]        = state.petType;
   // Core fields
   doc["initialized"]    = state.initialized;
   doc["stage"]          = static_cast<uint8_t>(state.stage);
