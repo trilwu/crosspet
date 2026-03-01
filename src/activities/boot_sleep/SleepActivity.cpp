@@ -18,9 +18,13 @@
 #include "pet/PetSpriteRenderer.h"
 #include "util/StringUtils.h"
 
+#include <HalPowerManager.h>
+
 void SleepActivity::onEnter() {
   Activity::onEnter();
   GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+  // Persist current time to SD so it survives power cycles
+  PET_MANAGER.save();
 
   switch (SETTINGS.sleepScreen) {
     case (CrossPointSettings::SLEEP_SCREEN_MODE::BLANK):
@@ -296,6 +300,28 @@ void SleepActivity::renderCoverSleepScreen() const {
   return (this->*renderNoCoverSleepScreen)();
 }
 
+// Draw a single 7-segment digit at (x, y) with width dw and height dh.
+// digit=-1 draws a dash (middle segment only).
+// Segments have a 2px corner gap so each bar appears visually separated —
+// this is the key detail that gives a modern vs old-school digital look.
+static void drawSegDigit(GfxRenderer& renderer, int x, int y, int dw, int dh, int digit) {
+  static const uint8_t SEGS[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
+  const uint8_t s = (digit >= 0 && digit <= 9) ? SEGS[digit] : 0x40;  // 0x40 = dash (g only)
+  const int t = dh / 14;  // segment thickness — thinner than classic for a cleaner look
+  const int g = 2;         // corner gap: adjacent segments don't touch at joints
+  const int mh = dh / 2;
+  // Horizontal segments — inset by (t+g) on both ends
+  if (s & 0x01) renderer.fillRect(x + t + g, y,          dw - 2*(t+g), t);            // a top
+  if (s & 0x40) renderer.fillRect(x + t + g, y + mh,     dw - 2*(t+g), t);            // g middle
+  if (s & 0x08) renderer.fillRect(x + t + g, y + dh - t, dw - 2*(t+g), t);            // d bottom
+  // Vertical top-half — starts g below top bar, ends g above middle bar
+  if (s & 0x20) renderer.fillRect(x,          y + t + g, t, mh - t - 2*g);            // f top-left
+  if (s & 0x02) renderer.fillRect(x + dw - t, y + t + g, t, mh - t - 2*g);            // b top-right
+  // Vertical bottom-half — starts g below middle bar, ends g above bottom bar
+  if (s & 0x10) renderer.fillRect(x,          y + mh + t + g, t, dh - mh - 2*t - 2*g); // e bot-left
+  if (s & 0x04) renderer.fillRect(x + dw - t, y + mh + t + g, t, dh - mh - 2*t - 2*g); // c bot-right
+}
+
 static int sleepDaysInMonth(int month, int year) {
   if (month == 1) {
     int y = year + 1900;
@@ -313,11 +339,6 @@ void SleepActivity::renderClockSleepScreen() const {
   struct tm timeinfo;
   localtime_r(&now, &timeinfo);
 
-  if (timeinfo.tm_year < 125) {
-    // Time not synced — fall back to proven default sleep screen
-    return renderDefaultSleepScreen();
-  }
-
   static const char* const DAY_NAMES[] = {"Sunday",   "Monday", "Tuesday", "Wednesday",
                                           "Thursday", "Friday", "Saturday"};
   static const char* const MONTH_NAMES[] = {"January",   "February", "March",    "April",
@@ -325,75 +346,161 @@ void SleepActivity::renderClockSleepScreen() const {
                                             "September", "October",  "November", "December"};
   static const char* const DAY_HDR[] = {"S", "M", "T", "W", "T", "F", "S"};
 
+  // Valid time = year >= 2025; show placeholder text if not synced yet
+  const bool timeValid = (timeinfo.tm_year >= 125);
+
   const int pageWidth = renderer.getScreenWidth();
   const int pageHeight = renderer.getScreenHeight();
 
   renderer.clearScreen();
 
-  char timeBuf[6];
-  snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+  // Battery percentage — top-right corner
+  char battBuf[8];
+  snprintf(battBuf, sizeof(battBuf), "%u%%", (unsigned)powerManager.getBatteryPercentage());
+  const int battW = renderer.getTextWidth(SMALL_FONT_ID, battBuf);
+  renderer.drawText(SMALL_FONT_ID, pageWidth - battW - 10, 10, battBuf);
 
+  // Time — show placeholder if clock not yet synced
+  char timeBuf[16];
+  if (timeValid) {
+    snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+  } else {
+    snprintf(timeBuf, sizeof(timeBuf), "--:--");
+  }
+
+  // Date line
   char dateBuf[64];
-  snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d", DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
-           MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
+  if (timeValid) {
+    snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s", DAY_NAMES[timeinfo.tm_wday],
+             timeinfo.tm_mday, MONTH_NAMES[timeinfo.tm_mon]);
+  } else {
+    snprintf(dateBuf, sizeof(dateBuf), "Sync time via WiFi");
+  }
 
-  const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
+  // Calendar month header
+  char monthBuf[32];
+  if (timeValid) {
+    snprintf(monthBuf, sizeof(monthBuf), "%s %d", MONTH_NAMES[timeinfo.tm_mon],
+             timeinfo.tm_year + 1900);
+  } else {
+    snprintf(monthBuf, sizeof(monthBuf), "---");
+  }
+
+  // 7-segment clock digits: 80×128 each, wider spacing for a modern layout
+  constexpr int DW = 80;
+  constexpr int DH = 128;
+  constexpr int DGAP = 10;  // gap between digits in same HH or MM group
+  constexpr int CW = 28;    // colon area width
+  const int clockW = 4 * DW + 2 * DGAP + CW;
+  const int clockX = (pageWidth - clockW) / 2;
+
+  const int timeHeight = DH;
   const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
-  const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
-  const int calH = cellH * 7;  // 1 header + max 6 body rows
+  const int monthHdrH = renderer.getLineHeight(SMALL_FONT_ID);
+  const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 6;
+  const int calH = monthHdrH + 6 + cellH * 7;  // month header + day headers + max 6 body rows
 
-  const int blockH = timeHeight + 8 + dateHeight + 16 + calH;
+  const int blockH = timeHeight + 14 + dateHeight + 16 + calH;
   const int startY = (pageHeight - blockH) / 2;
 
-  renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
-  renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 8, dateBuf);
+  // Draw large 7-segment time digits
+  if (timeValid) {
+    const int h0 = timeinfo.tm_hour / 10, h1 = timeinfo.tm_hour % 10;
+    const int m0 = timeinfo.tm_min  / 10, m1 = timeinfo.tm_min  % 10;
+    drawSegDigit(renderer, clockX,                        startY, DW, DH, h0);
+    drawSegDigit(renderer, clockX + DW + DGAP,            startY, DW, DH, h1);
+    // Colon: two square dots, evenly spaced in the upper and lower thirds
+    constexpr int DOT = 12;
+    const int colonX = clockX + 2 * DW + 2 * DGAP + (CW - DOT) / 2;
+    renderer.fillRect(colonX, startY + DH / 3 - DOT / 2,     DOT, DOT);
+    renderer.fillRect(colonX, startY + 2 * DH / 3 - DOT / 2, DOT, DOT);
+    drawSegDigit(renderer, clockX + 2 * DW + 2 * DGAP + CW,           startY, DW, DH, m0);
+    drawSegDigit(renderer, clockX + 3 * DW + 2 * DGAP + CW + DGAP,    startY, DW, DH, m1);
+  } else {
+    // No time sync — show dashes
+    for (int i = 0; i < 4; i++) {
+      int xd = clockX + i * (DW + DGAP) + (i >= 2 ? CW : 0);
+      drawSegDigit(renderer, xd, startY, DW, DH, -1);
+    }
+  }
+  renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 14, dateBuf);
 
   // Calendar grid
   const int margin = 20;
   const int calW = pageWidth - margin * 2;
   const int cellW = calW / 7;
   const int x0 = margin;
-  int calTop = startY + timeHeight + 8 + dateHeight + 16;
+  int calTop = startY + timeHeight + 14 + dateHeight + 16;
 
-  // Day-of-week header
-  for (int d = 0; d < 7; d++) {
-    int tw = renderer.getTextWidth(SMALL_FONT_ID, DAY_HDR[d]);
-    renderer.drawText(SMALL_FONT_ID, x0 + d * cellW + (cellW - tw) / 2, calTop, DAY_HDR[d]);
-  }
+  // Thin separator between time area and calendar
+  renderer.fillRect(margin + 20, calTop - 8, calW - 40, 1);
 
-  // First weekday of month
-  struct tm fm = timeinfo;
-  fm.tm_mday = 1; fm.tm_hour = 0; fm.tm_min = 0; fm.tm_sec = 0;
-  mktime(&fm);
+  // Month header above calendar
+  renderer.drawCenteredText(SMALL_FONT_ID, calTop, monthBuf);
+  calTop += monthHdrH + 6;
 
-  int col = fm.tm_wday;
-  int maxDay = sleepDaysInMonth(timeinfo.tm_mon, timeinfo.tm_year);
-  int rowY = calTop + cellH;
-
-  for (int day = 1; day <= maxDay; day++) {
-    char buf[3];
-    snprintf(buf, sizeof(buf), "%d", day);
-    int tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
-    int cx = x0 + col * cellW;
-    int tx = cx + (cellW - tw) / 2;
-
-    if (day == timeinfo.tm_mday) {
-      renderer.fillRect(cx + 2, rowY - 2, cellW - 4, cellH - 2);
-      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf, false);  // white text
-    } else {
-      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf);
+  // Calendar grid — only rendered when time is synced
+  if (timeValid) {
+    // Day-of-week header
+    for (int d = 0; d < 7; d++) {
+      int tw = renderer.getTextWidth(SMALL_FONT_ID, DAY_HDR[d]);
+      renderer.drawText(SMALL_FONT_ID, x0 + d * cellW + (cellW - tw) / 2, calTop, DAY_HDR[d]);
     }
-    if (++col == 7) { col = 0; rowY += cellH; }
+
+    // First weekday of month
+    struct tm fm = timeinfo;
+    fm.tm_mday = 1; fm.tm_hour = 0; fm.tm_min = 0; fm.tm_sec = 0;
+    mktime(&fm);
+
+    int col = fm.tm_wday;
+    int maxDay = sleepDaysInMonth(timeinfo.tm_mon, timeinfo.tm_year);
+    int rowY = calTop + cellH;
+
+    for (int day = 1; day <= maxDay; day++) {
+      char buf[3];
+      snprintf(buf, sizeof(buf), "%d", day);
+      int tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
+      int cx = x0 + col * cellW;
+      int tx = cx + (cellW - tw) / 2;
+
+      if (day == timeinfo.tm_mday) {
+        renderer.fillRect(cx + 2, rowY - 2, cellW - 4, cellH - 2);
+        renderer.drawText(SMALL_FONT_ID, tx, rowY, buf, false);  // white text
+      } else {
+        renderer.drawText(SMALL_FONT_ID, tx, rowY, buf);
+      }
+      if (++col == 7) { col = 0; rowY += cellH; }
+    }
   }
 
-  // Draw mini pet in bottom-right corner if a pet exists
+  // Draw cat in bottom-right corner (2x scale = 96x96) with a speech bubble above it
   if (PET_MANAGER.exists()) {
     const PetMood petMood = PET_MANAGER.isAlive()
                                 ? (PET_MANAGER.getState().hunger <= 30 ? PetMood::SAD : PetMood::SLEEPING)
                                 : PetMood::DEAD;
-    PetSpriteRenderer::drawMini(renderer, pageWidth - PetSpriteRenderer::MINI_W - 10,
-                                pageHeight - PetSpriteRenderer::MINI_H - 10,
-                                PET_MANAGER.getState().stage, petMood);
+    constexpr int PET_SCALE = 2;
+    const int pSize = PetSpriteRenderer::displaySize(PET_SCALE);
+    const int petX = pageWidth - pSize - 10;
+    const int petY = pageHeight - pSize - 10;
+    PetSpriteRenderer::drawPet(renderer, petX, petY, PET_MANAGER.getState().stage, petMood, PET_SCALE);
+
+    // Speech bubble: pick a message based on mood, varied by hour
+    const char* msg = nullptr;
+    if (petMood == PetMood::SLEEPING) {
+      static const char* const SLEEP_MSGS[] = {"Zzz...", "Purr~", "Sweet dreams", "Dreaming..."};
+      msg = SLEEP_MSGS[(uint32_t)time(nullptr) / 3600 % 4];
+    } else if (petMood == PetMood::SAD) {
+      static const char* const SAD_MSGS[] = {"Hungry...", "Read more!", "Feed me~"};
+      msg = SAD_MSGS[(uint32_t)time(nullptr) / 3600 % 3];
+    }
+    if (msg != nullptr) {
+      const int lh = renderer.getLineHeight(SMALL_FONT_ID);
+      const int msgW = renderer.getTextWidth(SMALL_FONT_ID, msg);
+      // Center the text over the pet sprite
+      const int msgX = petX + (pSize - msgW) / 2;
+      const int msgY = petY - lh - 4;
+      renderer.drawText(SMALL_FONT_ID, msgX, msgY, msg);
+    }
   }
 
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);

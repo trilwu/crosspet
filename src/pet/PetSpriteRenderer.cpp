@@ -55,32 +55,39 @@ size_t PetSpriteRenderer::loadSprite(const char* path, size_t expectedBytes) {
   return read;
 }
 
-// ---- Pixel-art fallback sprites (12x12 logical grid → 4px per cell = 48x48) ----
-// Encoding: bit 11 = col 0 (left), bit 0 = col 11 (right)
+// ---- Kitty pixel-art sprites (12x12 grid, bit11=col0 left, bit0=col11 right) ----
+// Solid-filled body with hollow eye holes and feature gaps for a cute cat look.
+// Each logical pixel renders as (4 * scale) physical pixels → 48x48 at scale=1, 96x96 at scale=2.
 namespace {
-// Cute egg with smiley face
+// Kitten peeking from egg — cat ears above oval shell, two eye dots
 static const uint16_t kSprite_Egg[12] = {
-  0x1F8, 0x204, 0x402, 0x801, 0xA09, 0x801, 0x8F1, 0x801, 0x402, 0x204, 0x1F8, 0x000
+  0x204, 0x70E, 0x3FC, 0x7FE, 0xEF7, 0xFFF,
+  0xF9F, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8
 };
-// Fluffy hatchling chick with tiny beak
+// Tiny kitten — compact 8-wide head, small ear tips, dot eyes, stub paws
 static const uint16_t kSprite_Hatchling[12] = {
-  0x0F0, 0x3FC, 0x50A, 0x4F2, 0x3FC, 0x7FE, 0x7FE, 0x3FC, 0x204, 0x70E, 0x30C, 0x000
+  0x108, 0x39C, 0x3FC, 0x3FC, 0x2F4, 0x3FC,
+  0x39C, 0x3FC, 0x3FC, 0x3FC, 0x198, 0x198
 };
-// Rounder youngster with bigger eyes
+// Growing kitten — medium head, clear eyes, mouth gap, four paws
 static const uint16_t kSprite_Youngster[12] = {
-  0x3FC, 0x7FE, 0xA05, 0x9F9, 0x7FE, 0xFFF, 0xFFF, 0x7FE, 0x8F1, 0x3FC, 0x30C, 0x30C
+  0x204, 0x70E, 0x7FE, 0x7FE, 0x6F6, 0x7FE,
+  0x79E, 0x7FE, 0x7FE, 0x3FC, 0x30C, 0x30C
 };
-// Companion — round body, full smile
+// Adult cat — full head, dot eyes, whisker gap, sturdy body and paws
 static const uint16_t kSprite_Companion[12] = {
-  0x3FC, 0x7FE, 0xA05, 0x801, 0x9F9, 0x7FE, 0xFFF, 0xFFF, 0x3FC, 0x3FC, 0x30C, 0x1F0
+  0x204, 0x70E, 0x7FE, 0xFFF, 0xEF7, 0xFFF,
+  0xBFD, 0xFFF, 0x7FE, 0x7FE, 0x606, 0x606
 };
-// Elder — crowned head, regal expression
+// Elder cat — broad ears, large head, full body, dignified whiskers
 static const uint16_t kSprite_Elder[12] = {
-  0x0C0, 0x1E0, 0x3FC, 0x7FE, 0xA05, 0x801, 0xBFD, 0x7FE, 0xFFF, 0xBFD, 0x30C, 0x79E
+  0x606, 0xF0F, 0xFFF, 0xFFF, 0xEF7, 0xF9F,
+  0xBFD, 0xFFF, 0xFFF, 0x7FE, 0x606, 0x606
 };
-// Dead — diagonal X pattern
+// Dead cat — X eyes (crossed hole pattern), flat laid-out body
 static const uint16_t kSprite_Dead[12] = {
-  0x801, 0x402, 0x204, 0x108, 0x090, 0x060, 0x060, 0x090, 0x108, 0x204, 0x402, 0x801
+  0x204, 0x70E, 0x7FE, 0xFFF, 0xEF7, 0xD6B,
+  0xF9F, 0xFFF, 0xFFF, 0xFFF, 0x8F1, 0xFFF
 };
 
 const uint16_t* getSpriteRows(PetStage stage) {
@@ -97,10 +104,9 @@ const uint16_t* getSpriteRows(PetStage stage) {
 
 // ---- Fallback renderer --------------------------------------------------
 
-void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int w, int h,
+void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int scale,
                                      PetStage stage) {
-  // Scale: each logical pixel = cell size (supports both 48x48 and 24x24)
-  const int cell = w / 12;  // 4 for full, 2 for mini
+  const int cell = 4 * scale;  // base 4px per logical pixel, scaled up
   const uint16_t* rows = getSpriteRows(stage);
   for (int row = 0; row < 12; row++) {
     uint16_t mask = rows[row];
@@ -115,16 +121,16 @@ void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int w,
 // ---- Public API ---------------------------------------------------------
 
 void PetSpriteRenderer::drawPet(GfxRenderer& renderer, int x, int y, PetStage stage,
-                                 PetMood mood) {
+                                 PetMood mood, int scale) {
   char path[64];
   snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/%s_%s.bin", stageName(stage),
            moodName(mood));
 
   const size_t read = loadSprite(path, SPRITE_BYTES);
-  if (read == SPRITE_BYTES) {
+  if (read == SPRITE_BYTES && scale == 1) {
     renderer.drawImage(spriteBuffer, x, y, SPRITE_W, SPRITE_H);
   } else {
-    drawFallback(renderer, x, y, SPRITE_W, SPRITE_H, stage);
+    drawFallback(renderer, x, y, scale, stage);
   }
 }
 
@@ -138,6 +144,6 @@ void PetSpriteRenderer::drawMini(GfxRenderer& renderer, int x, int y, PetStage s
   if (read == MINI_BYTES) {
     renderer.drawImage(spriteBuffer, x, y, MINI_W, MINI_H);
   } else {
-    drawFallback(renderer, x, y, MINI_W, MINI_H, stage);
+    drawFallback(renderer, x, y, /*scale=*/1, stage);  // mini uses 4px cells = 48px
   }
 }

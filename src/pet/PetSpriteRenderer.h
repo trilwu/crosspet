@@ -19,8 +19,11 @@ class PetSpriteRenderer {
   static constexpr int SPRITE_BYTES = SPRITE_W * SPRITE_H / 8;  // 288
   static constexpr int MINI_BYTES   = MINI_W * MINI_H / 8;       // 72
 
-  // Draw 48x48 sprite at (x,y). Falls back to labelled rect if file missing.
-  static void drawPet(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood);
+  // Draw sprite at (x,y). scale multiplies each logical pixel (default 1 = 48x48, 2 = 96x96).
+  // displaySize(scale) gives the pixel footprint: 12 * 4 * scale.
+  static void drawPet(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood,
+                      int scale = 1);
+  static constexpr int displaySize(int scale = 1) { return 12 * 4 * scale; }
 
   // Draw 24x24 mini sprite at (x,y). Falls back to labelled rect if file missing.
   static void drawMini(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood);
@@ -36,6 +39,5 @@ class PetSpriteRenderer {
   // Attempt to load sprite into spriteBuffer. Returns bytes read (0 on fail).
   static size_t loadSprite(const char* path, size_t expectedBytes);
 
-  // Draw fallback rect + initial letter
-  static void drawFallback(GfxRenderer& renderer, int x, int y, int w, int h, PetStage stage);
+  static void drawFallback(GfxRenderer& renderer, int x, int y, int scale, PetStage stage);
 };

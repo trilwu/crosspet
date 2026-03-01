@@ -52,7 +52,7 @@ namespace PetConfig {
   constexpr uint16_t PAGES_PER_MEAL = 20;
   constexpr uint8_t HUNGER_PER_MEAL = 25;
   constexpr uint8_t HAPPINESS_PER_PET = 10;
-  constexpr uint32_t PET_COOLDOWN_MS = 300000; // 5 minutes between petting
+  constexpr uint32_t PET_COOLDOWN_MS = 30000; // 30 seconds between petting
 
   // Decay rates (per hour)
   constexpr uint8_t HUNGER_DECAY_PER_HOUR = 1;

@@ -25,4 +25,7 @@ class VirtualPetActivity final : public Activity {
 
   // Draw today's missions panel at (x, y)
   void drawMissions(int x, int y, int width) const;
+
+  // Last action feedback shown below missions (nullptr = nothing)
+  const char* petFeedback = nullptr;
 };

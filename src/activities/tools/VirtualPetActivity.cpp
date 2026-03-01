@@ -12,6 +12,7 @@
 
 void VirtualPetActivity::onEnter() {
   Activity::onEnter();
+  petFeedback = nullptr;
   PET_MANAGER.load();
   PET_MANAGER.tick();
   requestUpdate();
@@ -26,9 +27,10 @@ void VirtualPetActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) {
       PET_MANAGER.hatchNew();
+      petFeedback = nullptr;
     } else {
-      PET_MANAGER.pet();
-      PET_MANAGER.save();
+      const bool petted = PET_MANAGER.pet();
+      petFeedback = petted ? "~(^.^)~ Petted! +Happiness" : "(>_<) Still resting...";
     }
     requestUpdate();
   }
@@ -81,10 +83,12 @@ void VirtualPetActivity::renderDead() const {
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int centerY = contentTop + (pageHeight - contentTop - metrics.buttonHintsHeight) / 2;
 
-  // Draw dead sprite
-  const int spriteX = (renderer.getScreenWidth() - PetSpriteRenderer::SPRITE_W) / 2;
-  PetSpriteRenderer::drawPet(renderer, spriteX, centerY - PetSpriteRenderer::SPRITE_H - lh,
-                              PetStage::DEAD, PetMood::DEAD);
+  // Draw dead sprite at 2x scale
+  constexpr int PET_SCALE = 2;
+  const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
+  const int spriteX = (renderer.getScreenWidth() - petSize) / 2;
+  PetSpriteRenderer::drawPet(renderer, spriteX, centerY - petSize - lh,
+                              PetStage::DEAD, PetMood::DEAD, PET_SCALE);
 
   renderer.drawCenteredText(UI_10_FONT_ID, centerY, tr(STR_PET_DEAD_MESSAGE));
 
@@ -103,12 +107,13 @@ void VirtualPetActivity::renderAlive() const {
   const int contentBottom = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing;
   const int contentHeight = contentBottom - contentTop;
 
-  // --- Pet sprite (48x48 drawn in a 144x144 scaled visual area via centered placement) ---
-  // We draw the actual 48x48 sprite but position it in the upper third of content area
+  // --- Pet sprite: draw at 2x scale (96x96) centered in upper content area ---
+  constexpr int PET_SCALE = 2;
+  const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);  // 96
   const int spriteAreaH = contentHeight * 2 / 5;
-  const int spriteX = (pageWidth - PetSpriteRenderer::SPRITE_W) / 2;
-  const int spriteY = contentTop + (spriteAreaH - PetSpriteRenderer::SPRITE_H) / 2;
-  PetSpriteRenderer::drawPet(renderer, spriteX, spriteY, state.stage, mood);
+  const int spriteX = (pageWidth - petSize) / 2;
+  const int spriteY = contentTop + (spriteAreaH - petSize) / 2;
+  PetSpriteRenderer::drawPet(renderer, spriteX, spriteY, state.stage, mood, PET_SCALE);
 
   // --- Stage + days info ---
   const char* stageLabelStr = tr(STR_PET_STAGE_EGG);
@@ -139,6 +144,12 @@ void VirtualPetActivity::renderAlive() const {
   // --- Daily missions ---
   const int missionTop = barAreaTop + barSpacing * 3 + metrics.verticalSpacing;
   drawMissions(barX, missionTop, barW);
+
+  // --- Pet action feedback ---
+  if (petFeedback != nullptr) {
+    const int fbY = contentBottom - metrics.buttonHintsHeight - renderer.getLineHeight(SMALL_FONT_ID) - 4;
+    renderer.drawCenteredText(SMALL_FONT_ID, fbY, petFeedback);
+  }
 
   // --- Button hints ---
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_PET_HAPPINESS), "", "");
@@ -184,18 +195,20 @@ void VirtualPetActivity::drawStatBar(int x, int y, int barWidth, const char* lab
   constexpr int BAR_H = 10;
   const int lh = renderer.getLineHeight(SMALL_FONT_ID);
 
-  // Label left-aligned
+  // Label left-aligned, bar drawn to its right within the allocated width
+  const int lblW = renderer.getTextWidth(SMALL_FONT_ID, label);
   renderer.drawText(SMALL_FONT_ID, x, y, label);
 
-  // Bar outline
+  const int barX = x + lblW + 6;
+  const int actualBarW = barWidth - lblW - 6;
   const int barY = y + (lh - BAR_H) / 2;
-  renderer.drawRect(x, barY, barWidth, BAR_H);
+  renderer.drawRect(barX, barY, actualBarW, BAR_H);
 
   // Fill proportional to value (0-100)
   if (value > 0) {
-    const int fillW = (barWidth - 2) * value / 100;
+    const int fillW = (actualBarW - 2) * value / 100;
     if (fillW > 0) {
-      renderer.fillRect(x + 1, barY + 1, fillW, BAR_H - 2);
+      renderer.fillRect(barX + 1, barY + 1, fillW, BAR_H - 2);
     }
   }
 }

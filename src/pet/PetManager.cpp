@@ -51,6 +51,20 @@ bool PetManager::load() {
   state.missionPagesRead = doc["missionPagesRead"] | (uint8_t)0;
   state.missionPetCount  = doc["missionPetCount"]  | (uint8_t)0;
 
+  // Restore clock if RTC lost time (power cycle) but SD card has a saved timestamp
+  uint32_t savedTime = doc["savedTime"] | (uint32_t)0;
+  if (savedTime > 0) {
+    time_t now = time(nullptr);
+    struct tm check;
+    gmtime_r(&now, &check);
+    if (check.tm_year < 125) {
+      // System clock is invalid — restore from last saved timestamp
+      struct timeval tv = {static_cast<time_t>(savedTime), 0};
+      settimeofday(&tv, nullptr);
+      LOG_DBG("PET", "Restored clock from SD: %lu", (unsigned long)savedTime);
+    }
+  }
+
   loaded = true;
   LOG_DBG("PET", "Loaded pet: stage=%d hunger=%d happy=%d health=%d",
           (int)state.stage, state.hunger, state.happiness, state.health);
@@ -76,6 +90,9 @@ bool PetManager::save() {
   doc["missionDay"]       = state.missionDay;
   doc["missionPagesRead"] = state.missionPagesRead;
   doc["missionPetCount"]  = state.missionPetCount;
+
+  // Persist current timestamp so it can be restored after power cycle
+  doc["savedTime"] = (uint32_t)time(nullptr);
 
   String json;
   serializeJson(doc, json);
@@ -197,7 +214,11 @@ void PetManager::onPageTurn() {
 
   uint16_t today = getDayOfYear();
   resetMissionsIfNewDay(state, today);
-  if (state.missionPagesRead < 20) state.missionPagesRead++;
+  bool missionProgress = false;
+  if (state.missionPagesRead < 20) {
+    state.missionPagesRead++;
+    missionProgress = true;
+  }
 
   // Update streak tracking
   if (today > 0 && today != state.lastReadDay) {
@@ -220,6 +241,8 @@ void PetManager::onPageTurn() {
     }
 
     save();  // Persist on feed (every ~20 pages)
+  } else if (missionProgress) {
+    save();  // Persist mission progress on every page so Pet screen sees live data
   }
 }
 
