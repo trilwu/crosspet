@@ -20,6 +20,8 @@
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
+#include "ble/BleRemoteManager.h"
+#include "pet/PetManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ButtonNavigator.h"
@@ -31,6 +33,7 @@ MappedInputManager mappedInputManager(gpio);
 GfxRenderer renderer(display);
 ActivityManager activityManager(renderer, mappedInputManager);
 FontDecompressor fontDecompressor;
+BleRemoteManager bleManager(gpio);
 
 // Fonts
 EpdFont bookerly14RegularFont(&bookerly_14_regular);
@@ -185,6 +188,7 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
+  bleManager.deinit();
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
@@ -255,6 +259,16 @@ void setup() {
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 
+  // Load virtual pet state and apply time-based decay
+  PET_MANAGER.load();
+  PET_MANAGER.tick();
+
+  // Initialize BLE remote if enabled and has bonded device
+  if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
+    bleManager.init();
+    bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
+  }
+
   switch (gpio.getWakeupReason()) {
     case HalGPIO::WakeupReason::PowerButton:
       // For normal wakeups, verify power button press duration
@@ -307,6 +321,20 @@ void loop() {
   static unsigned long lastMemPrint = 0;
 
   gpio.update();
+
+  // Handle BLE enable/disable from settings toggle
+  // Skip init if suspended for WiFi — resume() handles re-init
+  if (SETTINGS.bleEnabled) {
+    if (!bleManager.isEnabled() && !bleManager.isSuspended()) {
+      bleManager.init();
+      if (strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
+        bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
+      }
+    }
+    bleManager.tick();
+  } else if (bleManager.isEnabled()) {
+    bleManager.deinit();
+  }
 
   renderer.setFadingFix(SETTINGS.fadingFix);
 

@@ -194,6 +194,12 @@ class CrossPointSettings {
   // Use book's embedded CSS styles for EPUB rendering (1 = enabled, 0 = disabled)
   uint8_t embeddedStyle = 1;
 
+  // BLE Remote settings
+  uint8_t bleEnabled = 0;                  // 0=disabled, 1=enabled
+  char bleBondedDeviceAddr[18] = "";       // "XX:XX:XX:XX:XX:XX" format
+  char bleBondedDeviceName[32] = "";       // Display name of bonded remote
+  uint8_t bleBondedDeviceAddrType = 0;     // BLE address type (0=public, 1=random)
+
   ~CrossPointSettings() = default;
 
   // Get singleton instance

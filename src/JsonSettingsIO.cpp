@@ -120,6 +120,32 @@ bool JsonSettingsIO::saveSettings(const CrossPointSettings& s, const char* path)
   doc["frontButtonConfirm"] = s.frontButtonConfirm;
   doc["frontButtonLeft"] = s.frontButtonLeft;
   doc["frontButtonRight"] = s.frontButtonRight;
+  doc["fontFamily"] = s.fontFamily;
+  doc["fontSize"] = s.fontSize;
+  doc["lineSpacing"] = s.lineSpacing;
+  doc["paragraphAlignment"] = s.paragraphAlignment;
+  doc["sleepTimeout"] = s.sleepTimeout;
+  doc["refreshFrequency"] = s.refreshFrequency;
+  doc["screenMargin"] = s.screenMargin;
+  doc["opdsServerUrl"] = s.opdsServerUrl;
+  doc["opdsUsername"] = s.opdsUsername;
+  doc["opdsPassword_obf"] = obfuscation::obfuscateToBase64(s.opdsPassword);
+  doc["hideBatteryPercentage"] = s.hideBatteryPercentage;
+  doc["longPressChapterSkip"] = s.longPressChapterSkip;
+  doc["hyphenationEnabled"] = s.hyphenationEnabled;
+  doc["uiTheme"] = s.uiTheme;
+  doc["fadingFix"] = s.fadingFix;
+  doc["embeddedStyle"] = s.embeddedStyle;
+  doc["bleEnabled"] = s.bleEnabled;
+  doc["bleBondedDeviceAddr"] = s.bleBondedDeviceAddr;
+  doc["bleBondedDeviceName"] = s.bleBondedDeviceName;
+  doc["bleBondedDeviceAddrType"] = s.bleBondedDeviceAddrType;
+  doc["statusBarChapterPageCount"] = s.statusBarChapterPageCount;
+  doc["statusBarBookProgressPercentage"] = s.statusBarBookProgressPercentage;
+  doc["statusBarProgressBar"] = s.statusBarProgressBar;
+  doc["statusBarTitle"] = s.statusBarTitle;
+  doc["statusBarBattery"] = s.statusBarBattery;
+  doc["statusBarProgressBarThickness"] = s.statusBarProgressBarThickness;
 
   String json;
   serializeJson(doc, json);
@@ -199,6 +225,32 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   s.frontButtonRight =
       clamp(doc["frontButtonRight"] | (uint8_t)S::FRONT_HW_RIGHT, S::FRONT_BUTTON_HARDWARE_COUNT, S::FRONT_HW_RIGHT);
   CrossPointSettings::validateFrontButtonMapping(s);
+  s.fontFamily = clamp(doc["fontFamily"] | (uint8_t)S::BOOKERLY, S::FONT_FAMILY_COUNT, S::BOOKERLY);
+  s.fontSize = clamp(doc["fontSize"] | (uint8_t)S::MEDIUM, S::FONT_SIZE_COUNT, S::MEDIUM);
+  s.lineSpacing = clamp(doc["lineSpacing"] | (uint8_t)S::NORMAL, S::LINE_COMPRESSION_COUNT, S::NORMAL);
+  s.paragraphAlignment =
+      clamp(doc["paragraphAlignment"] | (uint8_t)S::JUSTIFIED, S::PARAGRAPH_ALIGNMENT_COUNT, S::JUSTIFIED);
+  s.sleepTimeout = clamp(doc["sleepTimeout"] | (uint8_t)S::SLEEP_10_MIN, S::SLEEP_TIMEOUT_COUNT, S::SLEEP_10_MIN);
+  s.refreshFrequency =
+      clamp(doc["refreshFrequency"] | (uint8_t)S::REFRESH_15, S::REFRESH_FREQUENCY_COUNT, S::REFRESH_15);
+  s.screenMargin = doc["screenMargin"] | (uint8_t)5;
+  s.hideBatteryPercentage =
+      clamp(doc["hideBatteryPercentage"] | (uint8_t)S::HIDE_NEVER, S::HIDE_BATTERY_PERCENTAGE_COUNT, S::HIDE_NEVER);
+  s.longPressChapterSkip = doc["longPressChapterSkip"] | (uint8_t)1;
+  s.hyphenationEnabled = doc["hyphenationEnabled"] | (uint8_t)0;
+  s.uiTheme = doc["uiTheme"] | (uint8_t)S::LYRA;
+  s.fadingFix = doc["fadingFix"] | (uint8_t)0;
+  s.embeddedStyle = doc["embeddedStyle"] | (uint8_t)1;
+  s.bleEnabled = doc["bleEnabled"] | (uint8_t)0;
+
+  const char* bleAddr = doc["bleBondedDeviceAddr"] | "";
+  strncpy(s.bleBondedDeviceAddr, bleAddr, sizeof(s.bleBondedDeviceAddr) - 1);
+  s.bleBondedDeviceAddr[sizeof(s.bleBondedDeviceAddr) - 1] = '\0';
+
+  const char* bleName = doc["bleBondedDeviceName"] | "";
+  strncpy(s.bleBondedDeviceName, bleName, sizeof(s.bleBondedDeviceName) - 1);
+  s.bleBondedDeviceName[sizeof(s.bleBondedDeviceName) - 1] = '\0';
+  s.bleBondedDeviceAddrType = doc["bleBondedDeviceAddrType"] | (uint8_t)0;
 
   LOG_DBG("CPS", "Settings loaded from file");
 
