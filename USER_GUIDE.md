@@ -22,6 +22,7 @@ Welcome to the **CrossPoint** firmware. This guide outlines the hardware control
       - [3.6.4 System](#364-system)
       - [3.6.5 KOReader Sync Quick Setup](#365-koreader-sync-quick-setup)
     - [3.7 Sleep Screen](#37-sleep-screen)
+    - [3.8 Tools Menu](#38-tools-menu)
   - [4. Reading Mode](#4-reading-mode)
     - [Page Turning](#page-turning)
     - [Chapter Navigation](#chapter-navigation)
@@ -320,6 +321,35 @@ You can customize the sleep screen by placing custom images in specific location
 > For best results:
 > - Use uncompressed BMP files with 24-bit color depth
 > - Use a resolution of 480x800 pixels to match the device's screen resolution.
+
+---
+
+### 3.8 Tools Menu
+
+The Tools Menu provides access to a variety of games and interactive utilities to enjoy on your device.
+
+**How to Access:** From the Home screen, select **Tools** to browse the available activities.
+
+**Available Tools:**
+
+| Tool | Description |
+|------|-------------|
+| **Clock** | Display current time with date, useful as a always-on bedside clock mode. |
+| **Pomodoro** | Pomodoro timer for productivity — cycles between work and break intervals. |
+| **Daily Quote** | Read an inspirational or thought-provoking quote each day. |
+| **Conference Badge** | Create a customizable conference or event badge for display. |
+| **Virtual Pet** | Nurture a virtual pet that you can feed and interact with. |
+| **Photo Frame** | Display images from your SD card in a slideshow or static frame. |
+| **Maze Game** | Navigate through procedurally generated mazes. |
+| **Game of Life** | John Conway's classic cellular automaton simulation. |
+| **Snake** | Classic turn-based snake game — eat food to grow longer without hitting walls or yourself. |
+| **2048** | Slide tiles to combine matching numbers and reach the 2048 tile. |
+
+**Controls in Tools:**
+
+- **Up / Down (or Volume +/-):** Navigate between tools
+- **Confirm:** Enter selected tool
+- **Back:** Return to Home screen
 
 ---
 

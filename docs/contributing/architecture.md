@@ -59,6 +59,7 @@ Top-level activity groups:
 - `src/activities/reader/`: EPUB/XTC/TXT reading flows
 - `src/activities/settings/`: settings menus and configuration
 - `src/activities/network/`: WiFi selection, AP/STA mode, file transfer server
+- `src/activities/tools/`: games and interactive tools (Clock, Pomodoro, Snake, 2048, Maze, etc.)
 - `src/activities/boot_sleep/`: boot and sleep transitions
 
 ## Reader and content pipeline
@@ -177,6 +178,7 @@ When editing related source assets, regenerate via normal build steps/scripts.
 ## Key directories
 
 - `src/`: app orchestration, settings/state, and activity implementations
+- `src/activities/`: activity hierarchy (home, reader, settings, network, tools, boot_sleep)
 - `src/network/`: web server and OTA/update networking
 - `src/components/`: theming and shared UI components
 - `lib/Epub/`: EPUB parser, layout, CSS handling, and hyphenation
