@@ -4,17 +4,25 @@
 #include <I18n.h>
 #include <Logging.h>
 #include <WiFi.h>
+#include <esp_sntp.h>
 
 #include <map>
 
+#include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "WifiCredentialStore.h"
 #include "activities/util/KeyboardEntryActivity.h"
+#include "ble/BleRemoteManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
+extern BleRemoteManager bleManager;
+
 void WifiSelectionActivity::onEnter() {
   Activity::onEnter();
+
+  // Suspend BLE — WiFi and BLE share the 2.4GHz radio
+  bleManager.suspend();
 
   // Load saved WiFi credentials - SD card operations need lock as we use SPI
   // for both
@@ -72,6 +80,9 @@ void WifiSelectionActivity::onEnter() {
 
 void WifiSelectionActivity::onExit() {
   Activity::onExit();
+
+  // Note: BLE resume happens in the parent WiFi-owning activity's onExit,
+  // not here — WiFi may still be active after WifiSelectionActivity exits.
 
   LOG_DBG("WIFI", "Free heap at onExit start: %d bytes", ESP.getFreeHeap());
 
@@ -246,6 +257,11 @@ void WifiSelectionActivity::checkConnectionStatus() {
     snprintf(ipStr, sizeof(ipStr), "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
     connectedIP = ipStr;
     autoConnecting = false;
+
+    // Start NTP sync so Clock activity shows correct time after WiFi connects
+    if (!esp_sntp_enabled()) {
+      configTime(0, 0, "pool.ntp.org", "time.google.com");
+    }
 
     // Save this as the last connected network - SD card operations need lock as
     // we use SPI for both

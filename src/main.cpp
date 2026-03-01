@@ -322,14 +322,14 @@ void loop() {
 
   gpio.update();
 
-  // Handle BLE enable/disable from settings toggle
-  // Skip init if suspended for WiFi — resume() handles re-init
-  if (SETTINGS.bleEnabled) {
+  // Handle BLE enable/disable from settings toggle.
+  // Only auto-init when a bonded device exists — init() without NimBLE stack
+  // configured can fault at 0x00000000. Pairing activity calls init() explicitly.
+  // Skip init if suspended for WiFi — resume() handles re-init.
+  if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
     if (!bleManager.isEnabled() && !bleManager.isSuspended()) {
       bleManager.init();
-      if (strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
-        bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
-      }
+      bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
     }
     bleManager.tick();
   } else if (bleManager.isEnabled()) {

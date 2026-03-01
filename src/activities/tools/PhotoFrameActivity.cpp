@@ -12,7 +12,8 @@
 
 void PhotoFrameActivity::scanPhotos() {
   photos.clear();
-  auto dir = Storage.open("/photos");
+  // Share the same /sleep folder used by the sleep screen custom images
+  auto dir = Storage.open("/sleep");
   if (!dir || !dir.isDirectory()) return;
 
   char name[256];
@@ -25,12 +26,12 @@ void PhotoFrameActivity::scanPhotos() {
       std::string ext = fname.substr(fname.size() - 4);
       // Case-insensitive .bmp check (FAT32 may return uppercase)
       for (auto& c : ext) c = (char)tolower((unsigned char)c);
-      if (ext == ".bmp") photos.emplace_back("/photos/" + fname);
+      if (ext == ".bmp") photos.emplace_back("/sleep/" + fname);
     }
     f.close();
   }
   dir.close();
-  LOG_DBG("PF", "Found %d photos", (int)photos.size());
+  LOG_DBG("PF", "Found %d photos in /sleep", (int)photos.size());
 }
 
 void PhotoFrameActivity::onEnter() {
@@ -97,7 +98,7 @@ void PhotoFrameActivity::render(RenderLock&&) {
 
   if (photos.empty()) {
     renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, "No photos found");
-    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 32, "Place .bmp files in /photos/");
+    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 32, "Place .bmp files in /sleep/");
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), "", "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
     renderer.displayBuffer();
