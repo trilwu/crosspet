@@ -57,7 +57,7 @@ void ConferenceBadgeActivity::loadFromFile() {
 void ConferenceBadgeActivity::saveToFile() {
   // Write "name\ntitle\nqr\n" — fields may be empty but order is fixed
   std::string content = badgeName + "\n" + badgeTitle + "\n" + qrData + "\n";
-  Storage.writeFile(BADGE_FILE, content.c_str(), content.size());
+  Storage.writeFile(BADGE_FILE, String(content.c_str()));
   fileLoaded = true;
 }
 

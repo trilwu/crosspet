@@ -12,6 +12,9 @@
 #include <builtinFonts/all.h>
 
 #include <cstring>
+#include <sys/time.h>
+
+#include <esp_private/esp_clk.h>
 
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
@@ -124,6 +127,13 @@ EpdFont ui12RegularFont(&ubuntu_12_regular);
 EpdFont ui12BoldFont(&ubuntu_12_bold);
 EpdFontFamily ui12FontFamily(&ui12RegularFont, &ui12BoldFont);
 
+// RTC memory persists across deep sleep — used to restore clock with elapsed time correction.
+// Magic sentinel confirms the values were set by a clean sleep entry (not stale/garbage).
+static constexpr uint32_t SLEEP_RTC_MAGIC = 0x43524C4B;  // "CRLK"
+RTC_DATA_ATTR static uint32_t g_rtcSleepMagic = 0;
+RTC_DATA_ATTR static int64_t  g_rtcUsBeforeSleep = 0;    // esp_clk_rtc_time() before sleep
+RTC_DATA_ATTR static uint32_t g_unixBeforeSleep = 0;     // time(nullptr) before sleep
+
 // measurement of power button press duration calibration value
 unsigned long t1 = 0;
 unsigned long t2 = 0;
@@ -193,6 +203,12 @@ void enterDeepSleep() {
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
 
+  // Snapshot time + RTC counter for accurate clock restoration on wake.
+  // The LP/RTC timer (esp_clk_rtc_time) keeps running during deep sleep.
+  g_unixBeforeSleep  = (uint32_t)time(nullptr);
+  g_rtcUsBeforeSleep = esp_clk_rtc_time();
+  g_rtcSleepMagic    = SLEEP_RTC_MAGIC;
+
   powerManager.startDeepSleep(gpio);
 }
 
@@ -258,6 +274,27 @@ void setup() {
   KOREADER_STORE.loadFromFile();
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
+
+  // Restore system clock after deep sleep with elapsed-time correction.
+  // Uses the RTC timer (runs during sleep) to compute how long the device was asleep.
+  // Cold-boot case (battery died) is handled later by PetPersistence::load() via savedTime in JSON.
+  if (g_rtcSleepMagic == SLEEP_RTC_MAGIC && g_unixBeforeSleep > 0) {
+    time_t now = time(nullptr);
+    struct tm check;
+    gmtime_r(&now, &check);
+    if (check.tm_year < 125) {  // year < 2025 → clock lost, needs restore
+      int64_t rtcNow      = esp_clk_rtc_time();
+      uint32_t elapsedSec = 0;
+      if (rtcNow > g_rtcUsBeforeSleep) {
+        elapsedSec = (uint32_t)((rtcNow - g_rtcUsBeforeSleep) / 1000000LL);
+      }
+      time_t corrected = (time_t)g_unixBeforeSleep + elapsedSec;
+      struct timeval tv = {corrected, 0};
+      settimeofday(&tv, nullptr);
+      LOG_DBG("MAIN", "Clock restored after deep sleep: base=%lu + %us elapsed", g_unixBeforeSleep, elapsedSec);
+    }
+    g_rtcSleepMagic = 0;  // consume — next boot treats as cold boot unless we sleep again
+  }
 
   // Load virtual pet state and apply time-based decay
   PET_MANAGER.load();
