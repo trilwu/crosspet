@@ -2,6 +2,14 @@
 
 #include "PetState.h"
 
+// A single daily mission shown in the pet UI
+struct PetMission {
+  const char* label;   // display text
+  uint8_t     progress; // current value
+  uint8_t     goal;     // target value
+  bool        done;
+};
+
 // Manages virtual pet game logic, stat decay, evolution, and persistence.
 // Singleton accessed via PET_MANAGER macro.
 class PetManager {
@@ -33,6 +41,9 @@ class PetManager {
   bool isAlive() const { return state.isAlive(); }
   bool exists() const { return state.exists(); }
   uint32_t getDaysAlive() const;
+
+  // Daily missions — returns 3 missions for today
+  void getMissions(PetMission out[3]) const;
 
  private:
   PetManager() = default;

@@ -296,6 +296,15 @@ void SleepActivity::renderCoverSleepScreen() const {
   return (this->*renderNoCoverSleepScreen)();
 }
 
+static int sleepDaysInMonth(int month, int year) {
+  if (month == 1) {
+    int y = year + 1900;
+    return ((y % 4 == 0 && y % 100 != 0) || y % 400 == 0) ? 29 : 28;
+  }
+  static const int days[] = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  return days[month];
+}
+
 void SleepActivity::renderClockSleepScreen() const {
   // Use time()/localtime_r() directly instead of getLocalTime() to avoid
   // its internal delay(10) which can cause scheduler issues during sleep flow
@@ -314,9 +323,10 @@ void SleepActivity::renderClockSleepScreen() const {
   static const char* const MONTH_NAMES[] = {"January",   "February", "March",    "April",
                                             "May",       "June",     "July",     "August",
                                             "September", "October",  "November", "December"};
+  static const char* const DAY_HDR[] = {"S", "M", "T", "W", "T", "F", "S"};
 
-  const auto pageWidth = renderer.getScreenWidth();
-  const auto pageHeight = renderer.getScreenHeight();
+  const int pageWidth = renderer.getScreenWidth();
+  const int pageHeight = renderer.getScreenHeight();
 
   renderer.clearScreen();
 
@@ -329,10 +339,52 @@ void SleepActivity::renderClockSleepScreen() const {
 
   const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
   const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
-  const int startY = (pageHeight - timeHeight - 10 - dateHeight) / 2;
+  const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
+  const int calH = cellH * 7;  // 1 header + max 6 body rows
+
+  const int blockH = timeHeight + 8 + dateHeight + 16 + calH;
+  const int startY = (pageHeight - blockH) / 2;
 
   renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
-  renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 10, dateBuf);
+  renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 8, dateBuf);
+
+  // Calendar grid
+  const int margin = 20;
+  const int calW = pageWidth - margin * 2;
+  const int cellW = calW / 7;
+  const int x0 = margin;
+  int calTop = startY + timeHeight + 8 + dateHeight + 16;
+
+  // Day-of-week header
+  for (int d = 0; d < 7; d++) {
+    int tw = renderer.getTextWidth(SMALL_FONT_ID, DAY_HDR[d]);
+    renderer.drawText(SMALL_FONT_ID, x0 + d * cellW + (cellW - tw) / 2, calTop, DAY_HDR[d]);
+  }
+
+  // First weekday of month
+  struct tm fm = timeinfo;
+  fm.tm_mday = 1; fm.tm_hour = 0; fm.tm_min = 0; fm.tm_sec = 0;
+  mktime(&fm);
+
+  int col = fm.tm_wday;
+  int maxDay = sleepDaysInMonth(timeinfo.tm_mon, timeinfo.tm_year);
+  int rowY = calTop + cellH;
+
+  for (int day = 1; day <= maxDay; day++) {
+    char buf[3];
+    snprintf(buf, sizeof(buf), "%d", day);
+    int tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
+    int cx = x0 + col * cellW;
+    int tx = cx + (cellW - tw) / 2;
+
+    if (day == timeinfo.tm_mday) {
+      renderer.fillRect(cx + 2, rowY - 2, cellW - 4, cellH - 2);
+      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf, false);  // white text
+    } else {
+      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf);
+    }
+    if (++col == 7) { col = 0; rowY += cellH; }
+  }
 
   // Draw mini pet in bottom-right corner if a pet exists
   if (PET_MANAGER.exists()) {

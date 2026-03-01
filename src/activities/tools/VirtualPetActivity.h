@@ -22,4 +22,7 @@ class VirtualPetActivity final : public Activity {
 
   // Draw a labelled stat bar at (x, y) with given width
   void drawStatBar(int x, int y, int barWidth, const char* label, uint8_t value) const;
+
+  // Draw today's missions panel at (x, y)
+  void drawMissions(int x, int y, int width) const;
 };

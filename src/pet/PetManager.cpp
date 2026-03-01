@@ -47,6 +47,9 @@ bool PetManager::load() {
   state.pageAccumulator = doc["pageAccumulator"] | (uint16_t)0;
   // Backwards compat: old saves without "initialized" infer from birthTime
   state.initialized = doc["initialized"] | (state.birthTime > 0);
+  state.missionDay       = doc["missionDay"]       | (uint16_t)0;
+  state.missionPagesRead = doc["missionPagesRead"] | (uint8_t)0;
+  state.missionPetCount  = doc["missionPetCount"]  | (uint8_t)0;
 
   loaded = true;
   LOG_DBG("PET", "Loaded pet: stage=%d hunger=%d happy=%d health=%d",
@@ -70,6 +73,9 @@ bool PetManager::save() {
   doc["daysAtStage"] = state.daysAtStage;
   doc["lastReadDay"] = state.lastReadDay;
   doc["pageAccumulator"] = state.pageAccumulator;
+  doc["missionDay"]       = state.missionDay;
+  doc["missionPagesRead"] = state.missionPagesRead;
+  doc["missionPetCount"]  = state.missionPetCount;
 
   String json;
   serializeJson(doc, json);
@@ -171,6 +177,16 @@ void PetManager::updateStreak() {
   }
 }
 
+// --- Mission helpers ---
+
+static void resetMissionsIfNewDay(PetState& state, uint16_t today) {
+  if (today > 0 && today != state.missionDay) {
+    state.missionDay = today;
+    state.missionPagesRead = 0;
+    state.missionPetCount = 0;
+  }
+}
+
 // --- Feeding ---
 
 void PetManager::onPageTurn() {
@@ -179,8 +195,11 @@ void PetManager::onPageTurn() {
   state.pageAccumulator++;
   state.totalPagesRead++;
 
-  // Update streak tracking
   uint16_t today = getDayOfYear();
+  resetMissionsIfNewDay(state, today);
+  if (state.missionPagesRead < 20) state.missionPagesRead++;
+
+  // Update streak tracking
   if (today > 0 && today != state.lastReadDay) {
     state.lastReadDay = today;
     state.currentStreak++;
@@ -216,6 +235,8 @@ bool PetManager::pet() {
 
   lastPetTimeMs = now;
   state.happiness = clampAdd(state.happiness, PetConfig::HAPPINESS_PER_PET);
+  resetMissionsIfNewDay(state, getDayOfYear());
+  if (state.missionPetCount < 3) state.missionPetCount++;
   LOG_DBG("PET", "Petted! happiness=%d", state.happiness);
   save();
   return true;
@@ -272,6 +293,12 @@ uint16_t PetManager::getDayOfYear() const {
   if (!getLocalTime(&timeinfo, 0)) return 0;
   if (timeinfo.tm_year < 125) return 0;
   return static_cast<uint16_t>(timeinfo.tm_yday + 1);  // 1-366
+}
+
+void PetManager::getMissions(PetMission out[3]) const {
+  out[0] = {"Read 20 pages",    state.missionPagesRead, 20, state.missionPagesRead >= 20};
+  out[1] = {"Pet 3 times",      state.missionPetCount,   3, state.missionPetCount  >=  3};
+  out[2] = {"Keep fed (>40%)",  state.hunger,           40, state.hunger            >= 40};
 }
 
 uint8_t PetManager::clampSub(uint8_t val, uint8_t amount) {

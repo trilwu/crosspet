@@ -136,9 +136,45 @@ void VirtualPetActivity::renderAlive() const {
   drawStatBar(barX, barAreaTop + barSpacing,       barW, tr(STR_PET_HAPPINESS), state.happiness);
   drawStatBar(barX, barAreaTop + barSpacing * 2,   barW, tr(STR_PET_HEALTH),    state.health);
 
+  // --- Daily missions ---
+  const int missionTop = barAreaTop + barSpacing * 3 + metrics.verticalSpacing;
+  drawMissions(barX, missionTop, barW);
+
   // --- Button hints ---
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_PET_HAPPINESS), "", "");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+}
+
+// ---- Missions panel -----------------------------------------------------
+
+void VirtualPetActivity::drawMissions(int x, int y, int width) const {
+  PetMission missions[3];
+  PET_MANAGER.getMissions(missions);
+
+  const int lh = renderer.getLineHeight(SMALL_FONT_ID);
+  const int rowH = lh + 4;
+  const int checkW = renderer.getTextWidth(SMALL_FONT_ID, "[x]");
+
+  // Section header
+  renderer.drawText(SMALL_FONT_ID, x, y, "Today:");
+  int rowY = y + rowH;
+
+  for (int i = 0; i < 3; i++) {
+    const auto& m = missions[i];
+
+    // Checkbox [x] or [ ]
+    renderer.drawText(SMALL_FONT_ID, x, rowY, m.done ? "[x]" : "[ ]");
+
+    // Mission label + progress (if not done)
+    char buf[40];
+    if (m.done) {
+      snprintf(buf, sizeof(buf), "%s", m.label);
+    } else {
+      snprintf(buf, sizeof(buf), "%s  %d/%d", m.label, m.progress, m.goal);
+    }
+    renderer.drawText(SMALL_FONT_ID, x + checkW + 4, rowY, buf);
+    rowY += rowH;
+  }
 }
 
 // ---- Stat bar helper ----------------------------------------------------

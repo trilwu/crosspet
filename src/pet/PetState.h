@@ -37,6 +37,11 @@ struct PetState {
   uint16_t lastReadDay = 0;     // day-of-year of last reading (for streak)
   uint16_t pageAccumulator = 0; // pages since last feed (batched every 20)
 
+  // Daily mission progress — reset each new day
+  uint16_t missionDay = 0;      // day-of-year when missions last reset
+  uint8_t  missionPagesRead = 0; // pages read today (for Read 20 Pages mission)
+  uint8_t  missionPetCount = 0;  // times petted today (for Pet 3x mission)
+
   bool isAlive() const { return stage != PetStage::DEAD; }
   bool exists() const { return initialized; }
 };
