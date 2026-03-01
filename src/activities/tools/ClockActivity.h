@@ -11,6 +11,7 @@ class ClockActivity final : public Activity {
   struct tm editTime = {};
 
   void applyEditedTime();
+  void renderCalendar(int startY, const struct tm& t) const;
 
  public:
   explicit ClockActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)

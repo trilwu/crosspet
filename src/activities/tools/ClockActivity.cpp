@@ -198,14 +198,67 @@ void ClockActivity::render(RenderLock&&) {
 
     const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
     const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
-    const int startY = (pageHeight - timeHeight - 10 - dateHeight) / 2;
+    const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
+    // calendar: 1 header row + max 6 body rows
+    const int calH = cellH * 7;
+
+    // Center the whole block (time + date + calendar) in content area
+    const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
+    const int contentBot = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing;
+    const int blockH = timeHeight + 8 + dateHeight + 16 + calH;
+    const int startY = contentTop + (contentBot - contentTop - blockH) / 2;
 
     renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
-    renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 10, dateBuf);
+    renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 8, dateBuf);
+    renderCalendar(startY + timeHeight + 8 + dateHeight + 16, timeinfo);
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   }
 
   renderer.displayBuffer();
+}
+
+void ClockActivity::renderCalendar(int startY, const struct tm& t) const {
+  static const char* const DAY_HDR[] = {"S", "M", "T", "W", "T", "F", "S"};
+  const int pageWidth = renderer.getScreenWidth();
+  const int margin = 20;
+  const int calW = pageWidth - margin * 2;
+  const int cellW = calW / 7;
+  const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
+  const int x0 = margin;
+
+  // Day-of-week header row
+  for (int d = 0; d < 7; d++) {
+    int tw = renderer.getTextWidth(SMALL_FONT_ID, DAY_HDR[d]);
+    renderer.drawText(SMALL_FONT_ID, x0 + d * cellW + (cellW - tw) / 2, startY, DAY_HDR[d]);
+  }
+
+  // First weekday of this month
+  struct tm fm = t;
+  fm.tm_mday = 1;
+  fm.tm_hour = 0; fm.tm_min = 0; fm.tm_sec = 0;
+  mktime(&fm);
+
+  int col = fm.tm_wday;  // 0=Sun
+  int maxDay = daysInMonth(t.tm_mon, t.tm_year);
+  int rowY = startY + cellH;
+
+  for (int day = 1; day <= maxDay; day++) {
+    char buf[3];
+    snprintf(buf, sizeof(buf), "%d", day);
+    int tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
+    int cx = x0 + col * cellW;
+    int tx = cx + (cellW - tw) / 2;
+
+    if (day == t.tm_mday) {
+      // Filled box highlight for today
+      renderer.fillRect(cx + 2, rowY - 2, cellW - 4, cellH - 2);
+      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf, false);  // white text
+    } else {
+      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf);
+    }
+
+    if (++col == 7) { col = 0; rowY += cellH; }
+  }
 }
