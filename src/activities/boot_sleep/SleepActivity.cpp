@@ -14,6 +14,8 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/Logo120.h"
+#include "pet/PetManager.h"
+#include "pet/PetSpriteRenderer.h"
 #include "util/StringUtils.h"
 
 void SleepActivity::onEnter() {
@@ -121,6 +123,16 @@ void SleepActivity::renderDefaultSleepScreen() const {
   renderer.drawImage(Logo120, (pageWidth - 120) / 2, (pageHeight - 120) / 2, 120, 120);
   renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 + 70, tr(STR_CROSSPOINT), true, EpdFontFamily::BOLD);
   renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 95, tr(STR_SLEEPING));
+
+  // Draw mini pet in bottom-right corner if a pet exists
+  if (PET_MANAGER.exists()) {
+    const PetMood petMood = PET_MANAGER.isAlive()
+                                ? (PET_MANAGER.getState().hunger <= 30 ? PetMood::SAD : PetMood::SLEEPING)
+                                : PetMood::DEAD;
+    PetSpriteRenderer::drawMini(renderer, pageWidth - PetSpriteRenderer::MINI_W - 10,
+                                pageHeight - PetSpriteRenderer::MINI_H - 10,
+                                PET_MANAGER.getState().stage, petMood);
+  }
 
   // Make sleep screen dark unless light is selected in settings
   if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::LIGHT) {
@@ -285,47 +297,53 @@ void SleepActivity::renderCoverSleepScreen() const {
 }
 
 void SleepActivity::renderClockSleepScreen() const {
+  // Use time()/localtime_r() directly instead of getLocalTime() to avoid
+  // its internal delay(10) which can cause scheduler issues during sleep flow
+  time_t now;
+  time(&now);
+  struct tm timeinfo;
+  localtime_r(&now, &timeinfo);
+
+  if (timeinfo.tm_year < 125) {
+    // Time not synced — fall back to proven default sleep screen
+    return renderDefaultSleepScreen();
+  }
+
+  static const char* const DAY_NAMES[] = {"Sunday",   "Monday", "Tuesday", "Wednesday",
+                                          "Thursday", "Friday", "Saturday"};
+  static const char* const MONTH_NAMES[] = {"January",   "February", "March",    "April",
+                                            "May",       "June",     "July",     "August",
+                                            "September", "October",  "November", "December"};
+
   const auto pageWidth = renderer.getScreenWidth();
   const auto pageHeight = renderer.getScreenHeight();
 
   renderer.clearScreen();
 
-  struct tm timeinfo;
-  bool timeValid = getLocalTime(&timeinfo, 0) && timeinfo.tm_year >= 125;
+  char timeBuf[6];
+  snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
-  if (timeValid) {
-    // Day names and month names for formatting
-    static const char* const DAY_NAMES[] = {"Sunday",   "Monday", "Tuesday", "Wednesday",
-                                            "Thursday", "Friday", "Saturday"};
-    static const char* const MONTH_NAMES[] = {"January",   "February", "March",    "April",
-                                              "May",       "June",     "July",     "August",
-                                              "September", "October",  "November", "December"};
+  char dateBuf[64];
+  snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d", DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
+           MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
 
-    // Format time HH:MM
-    char timeBuf[6];
-    snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+  const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
+  const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
+  const int startY = (pageHeight - timeHeight - 10 - dateHeight) / 2;
 
-    // Format date: "Wednesday, 25 February 2026"
-    char dateBuf[64];
-    snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d", DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
-             MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
+  renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
+  renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 10, dateBuf);
 
-    // Center time+date vertically
-    const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
-    const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
-    const int totalHeight = timeHeight + 10 + dateHeight;
-    const int startY = (pageHeight - totalHeight) / 2;
-
-    renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
-    renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 10, dateBuf);
-  } else {
-    // No time available — fall back to logo + "SLEEPING"
-    renderer.drawImage(Logo120, (pageWidth - 120) / 2, (pageHeight - 120) / 2, 120, 120);
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 + 70, tr(STR_CROSSPOINT), true, EpdFontFamily::BOLD);
-    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 95, tr(STR_SLEEPING));
+  // Draw mini pet in bottom-right corner if a pet exists
+  if (PET_MANAGER.exists()) {
+    const PetMood petMood = PET_MANAGER.isAlive()
+                                ? (PET_MANAGER.getState().hunger <= 30 ? PetMood::SAD : PetMood::SLEEPING)
+                                : PetMood::DEAD;
+    PetSpriteRenderer::drawMini(renderer, pageWidth - PetSpriteRenderer::MINI_W - 10,
+                                pageHeight - PetSpriteRenderer::MINI_H - 10,
+                                PET_MANAGER.getState().stage, petMood);
   }
 
-  // Dark background (inverted)
   renderer.invertScreen();
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }

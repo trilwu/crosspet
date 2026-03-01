@@ -9,6 +9,7 @@
 #include <Logging.h>
 
 #include "CrossPointSettings.h"
+#include "pet/PetManager.h"
 #include "CrossPointState.h"
 #include "EpubReaderChapterSelectionActivity.h"
 #include "EpubReaderFootnotesActivity.h"

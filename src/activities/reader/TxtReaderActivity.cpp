@@ -7,6 +7,7 @@
 #include <Utf8.h>
 
 #include "CrossPointSettings.h"
+#include "pet/PetManager.h"
 #include "CrossPointState.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
@@ -106,9 +107,11 @@ void TxtReaderActivity::loop() {
 
   if (prevTriggered && currentPage > 0) {
     currentPage--;
+    PET_MANAGER.onPageTurn();
     requestUpdate();
   } else if (nextTriggered && currentPage < totalPages - 1) {
     currentPage++;
+    PET_MANAGER.onPageTurn();
     requestUpdate();
   }
 }
