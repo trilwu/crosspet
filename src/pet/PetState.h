@@ -24,6 +24,7 @@ enum class PetMood : uint8_t {
 
 // Persistent pet state — serialized to JSON on SD card
 struct PetState {
+  bool initialized = false;  // true after hatchNew(); prevents false-positive exists() with no clock
   PetStage stage = PetStage::EGG;
   uint8_t hunger = 80;       // 0-100 (0=starving, 100=full)
   uint8_t happiness = 80;    // 0-100
@@ -37,7 +38,7 @@ struct PetState {
   uint16_t pageAccumulator = 0; // pages since last feed (batched every 20)
 
   bool isAlive() const { return stage != PetStage::DEAD; }
-  bool exists() const { return birthTime > 0; }
+  bool exists() const { return initialized; }
 };
 
 // Game balance constants

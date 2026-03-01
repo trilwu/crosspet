@@ -45,6 +45,8 @@ bool PetManager::load() {
   state.daysAtStage = doc["daysAtStage"] | (uint8_t)0;
   state.lastReadDay = doc["lastReadDay"] | (uint16_t)0;
   state.pageAccumulator = doc["pageAccumulator"] | (uint16_t)0;
+  // Backwards compat: old saves without "initialized" infer from birthTime
+  state.initialized = doc["initialized"] | (state.birthTime > 0);
 
   loaded = true;
   LOG_DBG("PET", "Loaded pet: stage=%d hunger=%d happy=%d health=%d",
@@ -56,6 +58,7 @@ bool PetManager::save() {
   Storage.mkdir(PetConfig::PET_DIR);
 
   JsonDocument doc;
+  doc["initialized"] = state.initialized;
   doc["stage"] = static_cast<uint8_t>(state.stage);
   doc["hunger"] = state.hunger;
   doc["happiness"] = state.happiness;
@@ -220,6 +223,7 @@ bool PetManager::pet() {
 
 void PetManager::hatchNew() {
   state = PetState();  // Reset to defaults
+  state.initialized = true;
   state.stage = PetStage::EGG;
   state.hunger = 80;
   state.happiness = 80;
