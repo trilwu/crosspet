@@ -15,6 +15,32 @@ namespace {
 constexpr const char* QUOTES_FILE = "/quotes.txt";
 constexpr size_t MAX_FILE_SIZE = 4096;
 constexpr int MAX_QUOTES = 50;
+
+// Built-in quotes shown when no quotes.txt is on the SD card
+constexpr const char DEFAULT_QUOTES[] =
+    "The only way to do great work is to love what you do.\n"
+    "-- Steve Jobs\n"
+    "---\n"
+    "In the middle of every difficulty lies opportunity.\n"
+    "-- Albert Einstein\n"
+    "---\n"
+    "Be the change you wish to see in the world.\n"
+    "-- Mahatma Gandhi\n"
+    "---\n"
+    "The journey of a thousand miles begins with one step.\n"
+    "-- Lao Tzu\n"
+    "---\n"
+    "It does not matter how slowly you go as long as you do not stop.\n"
+    "-- Confucius\n"
+    "---\n"
+    "Life is what happens when you're busy making other plans.\n"
+    "-- John Lennon\n"
+    "---\n"
+    "Success is not final, failure is not fatal: it is the courage to continue that counts.\n"
+    "-- Winston Churchill\n"
+    "---\n"
+    "Not all those who wander are lost.\n"
+    "-- J.R.R. Tolkien";
 }  // namespace
 
 void DailyQuoteActivity::parseQuotes(const char* data, size_t len) {
@@ -69,6 +95,7 @@ void DailyQuoteActivity::parseQuotes(const char* data, size_t len) {
 
 void DailyQuoteActivity::onEnter() {
   Activity::onEnter();
+  usingDefaults = false;
 
   if (Storage.exists(QUOTES_FILE)) {
     auto buffer = std::make_unique<char[]>(MAX_FILE_SIZE);
@@ -77,6 +104,12 @@ void DailyQuoteActivity::onEnter() {
       parseQuotes(buffer.get(), bytesRead);
       fileLoaded = true;
     }
+  }
+
+  // Fall back to built-in quotes when no SD card file is present
+  if (quotes.empty()) {
+    parseQuotes(DEFAULT_QUOTES, sizeof(DEFAULT_QUOTES) - 1);
+    usingDefaults = true;
   }
 
   if (!quotes.empty()) {
@@ -115,6 +148,7 @@ void DailyQuoteActivity::render(RenderLock&&) {
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_DAILY_QUOTE));
 
   if (quotes.empty()) {
+    // Should never reach here since we always preload defaults, but just in case
     const int y = (pageHeight - renderer.getLineHeight(UI_10_FONT_ID)) / 2;
     renderer.drawCenteredText(UI_10_FONT_ID, y, tr(STR_PLACE_QUOTES_TXT));
   } else {
@@ -182,6 +216,12 @@ void DailyQuoteActivity::render(RenderLock&&) {
       snprintf(attr, sizeof(attr), "- %s", q.attribution.c_str());
       renderer.drawCenteredText(SMALL_FONT_ID, y, attr);
     }
+  }
+
+  // Show "built-in" label when no custom quotes.txt is loaded
+  if (usingDefaults && !quotes.empty()) {
+    const int lblY = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing - renderer.getLineHeight(SMALL_FONT_ID);
+    renderer.drawCenteredText(SMALL_FONT_ID, lblY, tr(STR_QUOTE_DEFAULT_LABEL));
   }
 
   const char* btn4 = quotes.size() > 1 ? tr(STR_DIR_RIGHT) : "";
