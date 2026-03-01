@@ -13,6 +13,7 @@ class DailyQuoteActivity final : public Activity {
   std::vector<Quote> quotes;
   int currentIndex = 0;
   bool fileLoaded = false;
+  bool usingDefaults = false;
 
   void parseQuotes(const char* data, size_t len);
 
