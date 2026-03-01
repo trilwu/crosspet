@@ -2,6 +2,7 @@
 
 #include <GfxRenderer.h>
 #include <I18n.h>
+#include <sys/time.h>
 
 #include <ctime>
 
@@ -13,16 +14,41 @@ const char* DAY_NAMES[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday
 const char* MONTH_NAMES[] = {"January",   "February", "March",    "April",
                               "May",       "June",     "July",     "August",
                               "September", "October",  "November", "December"};
+const char* FIELD_LABELS[] = {"Hour", "Minute", "Day", "Month", "Year"};
+static constexpr int FIELD_COUNT = 5;
 
 bool isTimeValid() {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo, 0)) return false;
   return timeinfo.tm_year >= 125;  // Year >= 2025
 }
+
+int daysInMonth(int month, int year) {
+  // month 0-based (tm_mon), year = tm_year (years since 1900)
+  if (month == 1) {
+    int y = year + 1900;
+    return ((y % 4 == 0 && y % 100 != 0) || y % 400 == 0) ? 29 : 28;
+  }
+  static const int days[] = {31,0,31,30,31,30,31,31,30,31,30,31};
+  return days[month];
+}
 }  // namespace
+
+void ClockActivity::applyEditedTime() {
+  // Clamp day to valid range for the month
+  int maxDay = daysInMonth(editTime.tm_mon, editTime.tm_year);
+  if (editTime.tm_mday > maxDay) editTime.tm_mday = maxDay;
+
+  struct timeval tv;
+  tv.tv_sec = mktime(&editTime);
+  tv.tv_usec = 0;
+  settimeofday(&tv, nullptr);
+}
 
 void ClockActivity::onEnter() {
   Activity::onEnter();
+  editing = false;
+  editField = 0;
   timeAvailable = isTimeValid();
   lastUpdateMs = millis();
   requestUpdate();
@@ -30,17 +56,86 @@ void ClockActivity::onEnter() {
 
 void ClockActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
-    finish();
+    if (editing) {
+      editing = false;
+      timeAvailable = isTimeValid();
+      requestUpdate();
+    } else {
+      finish();
+    }
     return;
   }
 
-  // Re-check time validity periodically
+  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+    if (!editing) {
+      // Enter edit mode — seed with current time or default
+      if (timeAvailable) {
+        getLocalTime(&editTime, 0);
+      } else {
+        editTime = {};
+        editTime.tm_year = 125;  // 2025
+        editTime.tm_mon  = 0;
+        editTime.tm_mday = 1;
+      }
+      editField = 0;
+      editing = true;
+    } else {
+      // Save and exit edit mode
+      applyEditedTime();
+      editing = false;
+      timeAvailable = true;
+      lastUpdateMs = millis();
+    }
+    requestUpdate();
+    return;
+  }
+
+  if (editing) {
+    bool changed = false;
+
+    if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
+      editField = (editField - 1 + FIELD_COUNT) % FIELD_COUNT;
+      changed = true;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
+      editField = (editField + 1) % FIELD_COUNT;
+      changed = true;
+    }
+
+    if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
+      switch (editField) {
+        case 0: editTime.tm_hour = (editTime.tm_hour + 1) % 24; break;
+        case 1: editTime.tm_min  = (editTime.tm_min  + 1) % 60; break;
+        case 2: { int max = daysInMonth(editTime.tm_mon, editTime.tm_year);
+                  editTime.tm_mday = editTime.tm_mday % max + 1; break; }
+        case 3: editTime.tm_mon  = (editTime.tm_mon  + 1) % 12; break;
+        case 4: editTime.tm_year = (editTime.tm_year < 200) ? editTime.tm_year + 1 : 125; break;
+      }
+      changed = true;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+      switch (editField) {
+        case 0: editTime.tm_hour = (editTime.tm_hour + 23) % 24; break;
+        case 1: editTime.tm_min  = (editTime.tm_min  + 59) % 60; break;
+        case 2: { int max = daysInMonth(editTime.tm_mon, editTime.tm_year);
+                  editTime.tm_mday = (editTime.tm_mday - 2 + max) % max + 1; break; }
+        case 3: editTime.tm_mon  = (editTime.tm_mon  + 11) % 12; break;
+        case 4: editTime.tm_year = (editTime.tm_year > 125) ? editTime.tm_year - 1 : 125; break;
+      }
+      changed = true;
+    }
+
+    if (changed) requestUpdate();
+    return;
+  }
+
+  // Normal clock mode: re-check time validity
   if (!timeAvailable) {
     timeAvailable = isTimeValid();
     if (timeAvailable) requestUpdate();
   }
 
-  // Refresh display every 60 seconds
+  // Refresh every 60 seconds
   if (timeAvailable && millis() - lastUpdateMs >= 60000) {
     lastUpdateMs = millis();
     requestUpdate();
@@ -53,39 +148,64 @@ void ClockActivity::render(RenderLock&&) {
   const auto pageHeight = renderer.getScreenHeight();
 
   renderer.clearScreen();
-
-  // Use drawHeader for battery — avoids manual drawBatteryRight positioning bugs
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_CLOCK));
 
-  if (!timeAvailable) {
-    // Show hint to connect WiFi
+  if (editing) {
+    // --- Edit mode ---
+    const int timeH = renderer.getLineHeight(UI_12_FONT_ID);
+    const int dateH = renderer.getLineHeight(UI_10_FONT_ID);
+    const int labelH = renderer.getLineHeight(SMALL_FONT_ID);
+    const int totalH = timeH + 12 + dateH + 12 + labelH;
+    const int startY = (pageHeight - totalH) / 2;
+
+    // Time row: HH:MM with active field highlighted
+    char timeBuf[6];
+    snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", editTime.tm_hour, editTime.tm_min);
+    renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
+
+    // Date row
+    char dateBuf[64];
+    snprintf(dateBuf, sizeof(dateBuf), "%d %s %d",
+             editTime.tm_mday, MONTH_NAMES[editTime.tm_mon], editTime.tm_year + 1900);
+    renderer.drawCenteredText(UI_10_FONT_ID, startY + timeH + 12, dateBuf);
+
+    // Active field label
+    char fieldBuf[32];
+    snprintf(fieldBuf, sizeof(fieldBuf), "< %s >", FIELD_LABELS[editField]);
+    renderer.drawCenteredText(SMALL_FONT_ID, startY + timeH + 12 + dateH + 12, fieldBuf);
+
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_CONFIRM), "", "");
+    GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+
+  } else if (!timeAvailable) {
     const int y = (pageHeight - renderer.getLineHeight(UI_10_FONT_ID)) / 2;
     renderer.drawCenteredText(UI_10_FONT_ID, y, tr(STR_CONNECT_WIFI_TIME));
+
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
+    GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+
   } else {
     struct tm timeinfo;
     getLocalTime(&timeinfo, 0);
 
-    // Format time HH:MM
     char timeBuf[6];
     snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
-    // Format date: "Wednesday, 25 February 2026"
     char dateBuf[64];
-    snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d", DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
+    snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d",
+             DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
              MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
 
-    // Center time vertically
     const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
     const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
-    const int totalHeight = timeHeight + 10 + dateHeight;
-    const int startY = (pageHeight - totalHeight) / 2;
+    const int startY = (pageHeight - timeHeight - 10 - dateHeight) / 2;
 
     renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
     renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 10, dateBuf);
-  }
 
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), "", "", "");
-  GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
+    GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  }
 
   renderer.displayBuffer();
 }
