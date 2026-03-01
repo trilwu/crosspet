@@ -26,7 +26,6 @@ void VirtualPetActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) {
       PET_MANAGER.hatchNew();
-      PET_MANAGER.save();
     } else {
       PET_MANAGER.pet();
       PET_MANAGER.save();
