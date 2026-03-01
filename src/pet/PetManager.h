@@ -4,13 +4,14 @@
 
 // A single daily mission shown in the pet UI
 struct PetMission {
-  const char* label;   // display text
-  uint8_t     progress; // current value
-  uint8_t     goal;     // target value
+  const char* label;
+  uint8_t     progress;
+  uint8_t     goal;
   bool        done;
 };
 
 // Manages virtual pet game logic, stat decay, evolution, and persistence.
+// Implementation split across PetManager.cpp, PetPersistence.cpp, PetActions.cpp.
 // Singleton accessed via PET_MANAGER macro.
 class PetManager {
  public:
@@ -19,7 +20,7 @@ class PetManager {
 
   static PetManager& getInstance();
 
-  // Persistence
+  // Persistence (PetPersistence.cpp)
   bool load();
   bool save();
 
@@ -35,12 +36,23 @@ class PetManager {
   // Start a new pet from egg
   void hatchNew();
 
+  // --- User actions (PetActions.cpp) ---
+  bool feedMeal();       // fill hunger + add weight + waste tracking
+  bool feedSnack();      // add happiness + add weight (no hunger)
+  bool giveMedicine();   // cure sickness
+  bool exercise();       // reduce weight + add happiness (1h cooldown)
+  bool cleanBathroom();  // clear all waste piles
+  bool disciplinePet();  // scold during attention call
+  bool ignoreCry();      // ignore attention call (good if fake, bad if real)
+  bool toggleLights();   // toggle sleep lights-off flag
+
   // State queries
   const PetState& getState() const { return state; }
   PetMood getMood() const;
   bool isAlive() const { return state.isAlive(); }
   bool exists() const { return state.exists(); }
   uint32_t getDaysAlive() const;
+  const char* getLastFeedback() const { return lastFeedback; }
 
   // Daily missions — returns 3 missions for today
   void getMissions(PetMission out[3]) const;
@@ -49,12 +61,12 @@ class PetManager {
   PetManager() = default;
 
   PetState state;
-  unsigned long lastPetTimeMs = 0; // millis() of last petting (cooldown)
+  unsigned long lastPetTimeMs = 0;      // millis() of last petting (cooldown)
+  unsigned long lastExerciseMs = 0;     // millis() of last exercise (cooldown)
   bool loaded = false;
+  const char* lastFeedback = nullptr;   // feedback string for UI display
 
   // Internal helpers
-  void applyDecay(uint32_t elapsedHours);
-  void checkEvolution();
   void updateStreak();
   bool isTimeValid() const;
   uint32_t getCurrentTime() const;
@@ -62,6 +74,8 @@ class PetManager {
 
   static uint8_t clampSub(uint8_t val, uint8_t amount);
   static uint8_t clampAdd(uint8_t val, uint8_t amount);
+
+  friend class PetPersistence;  // allow PetPersistence.cpp to access privates via method calls
 };
 
 #define PET_MANAGER PetManager::getInstance()

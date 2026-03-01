@@ -20,13 +20,15 @@ class PetSpriteRenderer {
   static constexpr int MINI_BYTES   = MINI_W * MINI_H / 8;       // 72
 
   // Draw sprite at (x,y). scale multiplies each logical pixel (default 1 = 48x48, 2 = 96x96).
-  // displaySize(scale) gives the pixel footprint: 12 * 4 * scale.
+  // variant selects evolution branch (0=default, 1=chubby, 2=misbehaved).
+  // Tries {stage}_v{variant}_{mood}.bin first, falls back to {stage}_{mood}.bin.
   static void drawPet(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood,
-                      int scale = 1);
+                      int scale = 1, uint8_t variant = 0);
   static constexpr int displaySize(int scale = 1) { return 12 * 4 * scale; }
 
-  // Draw 24x24 mini sprite at (x,y). Falls back to labelled rect if file missing.
-  static void drawMini(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood);
+  // Draw 24x24 mini sprite at (x,y). Falls back to pixel-art if file missing.
+  static void drawMini(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood,
+                       uint8_t variant = 0);
 
  private:
   // Shared 288-byte buffer — large enough for a full sprite frame.
@@ -39,5 +41,6 @@ class PetSpriteRenderer {
   // Attempt to load sprite into spriteBuffer. Returns bytes read (0 on fail).
   static size_t loadSprite(const char* path, size_t expectedBytes);
 
-  static void drawFallback(GfxRenderer& renderer, int x, int y, int scale, PetStage stage);
+  static void drawFallback(GfxRenderer& renderer, int x, int y, int scale, PetStage stage,
+                           uint8_t variant = 0);
 };

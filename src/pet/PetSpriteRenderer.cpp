@@ -29,6 +29,9 @@ const char* PetSpriteRenderer::moodName(PetMood mood) {
     case PetMood::SICK:     return "sick";
     case PetMood::SLEEPING: return "sleeping";
     case PetMood::DEAD:     return "dead";
+    // New moods map to neutral sprite; attention indicator drawn separately by caller
+    case PetMood::NEEDY:    return "neutral";
+    case PetMood::REFUSING: return "neutral";
     default:                return "neutral";
   }
 }
@@ -90,7 +93,35 @@ static const uint16_t kSprite_Dead[12] = {
   0xF9F, 0xFFF, 0xFFF, 0xFFF, 0x8F1, 0xFFF
 };
 
-const uint16_t* getSpriteRows(PetStage stage) {
+// Chubby youngster — wider lower body (variant 1)
+static const uint16_t kSprite_Youngster_v1[12] = {
+  0x204, 0x70E, 0x7FE, 0xFFE, 0x6F6, 0xFFE,
+  0x79E, 0xFFE, 0xFFE, 0x7FC, 0x70E, 0x70E
+};
+// Rowdy youngster — furrowed brows, aggressive eye gap (variant 2)
+static const uint16_t kSprite_Youngster_v2[12] = {
+  0x204, 0xF0F, 0xFFE, 0xFFE, 0x5B6, 0x7FE,
+  0x79E, 0x7FE, 0x7FE, 0x3FC, 0x30C, 0x30C
+};
+// Chonky companion — full/wide body (variant 1)
+static const uint16_t kSprite_Companion_v1[12] = {
+  0x204, 0x70E, 0xFFE, 0xFFF, 0xEF7, 0xFFF,
+  0xBFD, 0xFFF, 0xFFE, 0xFFE, 0x70E, 0x70E
+};
+// Wild companion — intense eye pattern (variant 2)
+static const uint16_t kSprite_Companion_v2[12] = {
+  0x204, 0xF0F, 0xFFE, 0xFFF, 0xCF3, 0xFFF,
+  0xBFD, 0xFFF, 0x7FE, 0x7FE, 0x606, 0x606
+};
+
+const uint16_t* getSpriteRows(PetStage stage, uint8_t variant = 0) {
+  if (variant == 1) {
+    if (stage == PetStage::YOUNGSTER) return kSprite_Youngster_v1;
+    if (stage == PetStage::COMPANION) return kSprite_Companion_v1;
+  } else if (variant == 2) {
+    if (stage == PetStage::YOUNGSTER) return kSprite_Youngster_v2;
+    if (stage == PetStage::COMPANION) return kSprite_Companion_v2;
+  }
   switch (stage) {
     case PetStage::EGG:       return kSprite_Egg;
     case PetStage::HATCHLING: return kSprite_Hatchling;
@@ -105,9 +136,9 @@ const uint16_t* getSpriteRows(PetStage stage) {
 // ---- Fallback renderer --------------------------------------------------
 
 void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int scale,
-                                     PetStage stage) {
-  const int cell = 4 * scale;  // base 4px per logical pixel, scaled up
-  const uint16_t* rows = getSpriteRows(stage);
+                                     PetStage stage, uint8_t variant) {
+  const int cell = 4 * scale;
+  const uint16_t* rows = getSpriteRows(stage, variant);
   for (int row = 0; row < 12; row++) {
     uint16_t mask = rows[row];
     for (int col = 0; col < 12; col++) {
@@ -121,29 +152,45 @@ void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int sc
 // ---- Public API ---------------------------------------------------------
 
 void PetSpriteRenderer::drawPet(GfxRenderer& renderer, int x, int y, PetStage stage,
-                                 PetMood mood, int scale) {
-  char path[64];
+                                 PetMood mood, int scale, uint8_t variant) {
+  char path[80];
+  // Try variant-specific file first
+  if (variant > 0) {
+    snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/%s_v%d_%s.bin",
+             stageName(stage), (int)variant, moodName(mood));
+    if (loadSprite(path, SPRITE_BYTES) == SPRITE_BYTES && scale == 1) {
+      renderer.drawImage(spriteBuffer, x, y, SPRITE_W, SPRITE_H);
+      return;
+    }
+  }
+  // Default path
   snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/%s_%s.bin", stageName(stage),
            moodName(mood));
-
-  const size_t read = loadSprite(path, SPRITE_BYTES);
-  if (read == SPRITE_BYTES && scale == 1) {
+  if (loadSprite(path, SPRITE_BYTES) == SPRITE_BYTES && scale == 1) {
     renderer.drawImage(spriteBuffer, x, y, SPRITE_W, SPRITE_H);
   } else {
-    drawFallback(renderer, x, y, scale, stage);
+    drawFallback(renderer, x, y, scale, stage, variant);
   }
 }
 
 void PetSpriteRenderer::drawMini(GfxRenderer& renderer, int x, int y, PetStage stage,
-                                  PetMood mood) {
-  char path[72];
+                                  PetMood mood, uint8_t variant) {
+  char path[88];
+  // Try variant-specific mini file first
+  if (variant > 0) {
+    snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/mini/%s_v%d_%s.bin",
+             stageName(stage), (int)variant, moodName(mood));
+    if (loadSprite(path, MINI_BYTES) == MINI_BYTES) {
+      renderer.drawImage(spriteBuffer, x, y, MINI_W, MINI_H);
+      return;
+    }
+  }
+  // Default mini path
   snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/mini/%s_%s.bin", stageName(stage),
            moodName(mood));
-
-  const size_t read = loadSprite(path, MINI_BYTES);
-  if (read == MINI_BYTES) {
+  if (loadSprite(path, MINI_BYTES) == MINI_BYTES) {
     renderer.drawImage(spriteBuffer, x, y, MINI_W, MINI_H);
   } else {
-    drawFallback(renderer, x, y, /*scale=*/1, stage);  // mini uses 4px cells = 48px
+    drawFallback(renderer, x, y, /*scale=*/1, stage, variant);
   }
 }

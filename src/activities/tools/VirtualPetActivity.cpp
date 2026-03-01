@@ -5,6 +5,7 @@
 
 #include "components/UITheme.h"
 #include "fontIds.h"
+#include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
 #include "pet/PetSpriteRenderer.h"
 
@@ -12,7 +13,6 @@
 
 void VirtualPetActivity::onEnter() {
   Activity::onEnter();
-  petFeedback = nullptr;
   PET_MANAGER.load();
   PET_MANAGER.tick();
   requestUpdate();
@@ -24,15 +24,44 @@ void VirtualPetActivity::loop() {
     return;
   }
 
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) {
+  if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) {
+    // Confirm hatches a new egg from no-pet or dead state
+    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
       PET_MANAGER.hatchNew();
-      petFeedback = nullptr;
-    } else {
-      const bool petted = PET_MANAGER.pet();
-      petFeedback = petted ? "~(^.^)~ Petted! +Happiness" : "(>_<) Still resting...";
+      requestUpdate();
     }
-    requestUpdate();
+    return;
+  }
+
+  bool changed = false;
+  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
+    actionMenu.moveUp();
+    changed = true;
+  }
+  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    actionMenu.moveDown();
+    changed = true;
+  }
+  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+    executeSelectedAction();
+    changed = true;
+  }
+  if (changed) requestUpdate();
+}
+
+void VirtualPetActivity::executeSelectedAction() {
+  const PetAction action = actionMenu.getSelected();
+  switch (action) {
+    case PetAction::FEED_MEAL:     PET_MANAGER.feedMeal();      break;
+    case PetAction::FEED_SNACK:    PET_MANAGER.feedSnack();     break;
+    case PetAction::MEDICINE:      PET_MANAGER.giveMedicine();  break;
+    case PetAction::EXERCISE:      PET_MANAGER.exercise();      break;
+    case PetAction::CLEAN:         PET_MANAGER.cleanBathroom(); break;
+    case PetAction::SCOLD:         PET_MANAGER.disciplinePet(); break;
+    case PetAction::IGNORE_CRY:    PET_MANAGER.ignoreCry();     break;
+    case PetAction::TOGGLE_LIGHTS: PET_MANAGER.toggleLights();  break;
+    case PetAction::PET_PET:       PET_MANAGER.pet();           break;
+    default: break;
   }
 }
 
@@ -60,38 +89,30 @@ void VirtualPetActivity::render(RenderLock&&) {
 // ---- Sub-renderers ------------------------------------------------------
 
 void VirtualPetActivity::renderNoPet() const {
-  const auto pageHeight = renderer.getScreenHeight();
-  const auto pageWidth = renderer.getScreenWidth();
   const auto& metrics = UITheme::getInstance().getMetrics();
-
+  const auto pageHeight = renderer.getScreenHeight();
   const int lh = renderer.getLineHeight(UI_10_FONT_ID);
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int centerY = contentTop + (pageHeight - contentTop - metrics.buttonHintsHeight) / 2;
 
   renderer.drawCenteredText(UI_10_FONT_ID, centerY - lh, tr(STR_PET_NO_PET));
-
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_PET_HATCH_EGG), "", "");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
-  (void)pageWidth;
 }
 
 void VirtualPetActivity::renderDead() const {
-  const auto pageHeight = renderer.getScreenHeight();
   const auto& metrics = UITheme::getInstance().getMetrics();
-
+  const auto pageHeight = renderer.getScreenHeight();
   const int lh = renderer.getLineHeight(UI_10_FONT_ID);
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int centerY = contentTop + (pageHeight - contentTop - metrics.buttonHintsHeight) / 2;
 
-  // Draw dead sprite at 2x scale
   constexpr int PET_SCALE = 2;
   const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
   const int spriteX = (renderer.getScreenWidth() - petSize) / 2;
   PetSpriteRenderer::drawPet(renderer, spriteX, centerY - petSize - lh,
                               PetStage::DEAD, PetMood::DEAD, PET_SCALE);
-
   renderer.drawCenteredText(UI_10_FONT_ID, centerY, tr(STR_PET_DEAD_MESSAGE));
-
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_PET_HATCH_NEW), "", "");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
@@ -100,115 +121,49 @@ void VirtualPetActivity::renderAlive() const {
   const auto& state = PET_MANAGER.getState();
   const auto mood = PET_MANAGER.getMood();
   const auto& metrics = UITheme::getInstance().getMetrics();
-  const auto pageWidth = renderer.getScreenWidth();
-  const auto pageHeight = renderer.getScreenHeight();
-
+  const int pageWidth = renderer.getScreenWidth();
+  const int pageHeight = renderer.getScreenHeight();
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int contentBottom = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing;
-  const int contentHeight = contentBottom - contentTop;
 
-  // --- Pet sprite: draw at 2x scale (96x96) centered in upper content area ---
+  // --- Pet sprite (96x96) centered at top ---
   constexpr int PET_SCALE = 2;
-  const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);  // 96
-  const int spriteAreaH = contentHeight * 2 / 5;
+  const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
   const int spriteX = (pageWidth - petSize) / 2;
-  const int spriteY = contentTop + (spriteAreaH - petSize) / 2;
-  PetSpriteRenderer::drawPet(renderer, spriteX, spriteY, state.stage, mood, PET_SCALE);
+  PetSpriteRenderer::drawPet(renderer, spriteX, contentTop, state.stage, mood, PET_SCALE,
+                              state.evolutionVariant);
 
-  // --- Stage + days info ---
-  const char* stageLabelStr = tr(STR_PET_STAGE_EGG);
-  switch (state.stage) {
-    case PetStage::HATCHLING: stageLabelStr = tr(STR_PET_STAGE_HATCHLING); break;
-    case PetStage::YOUNGSTER: stageLabelStr = tr(STR_PET_STAGE_YOUNGSTER); break;
-    case PetStage::COMPANION: stageLabelStr = tr(STR_PET_STAGE_COMPANION); break;
-    case PetStage::ELDER:     stageLabelStr = tr(STR_PET_STAGE_ELDER);     break;
-    default: break;
-  }
+  // --- Status icons row below sprite ---
+  const int iconsY = contentTop + petSize + 4;
+  const int sideMargin = 30;
+  statsPanel.renderStatusIcons(renderer, state, sideMargin, iconsY, pageWidth - sideMargin * 2);
+
+  // --- Stage | Day | Streak info line ---
+  const int infoY = iconsY + renderer.getLineHeight(SMALL_FONT_ID) + 4;
+  const char* stageName = PetEvolution::variantStageName(state.stage, state.evolutionVariant);
   char infoLine[64];
-  snprintf(infoLine, sizeof(infoLine), "%s  |  Day %lu  |  Streak %u", stageLabelStr,
-           (unsigned long)PET_MANAGER.getDaysAlive(), (unsigned)state.currentStreak);
-
-  const int infoY = contentTop + spriteAreaH + metrics.verticalSpacing / 2;
+  snprintf(infoLine, sizeof(infoLine), "%s  |  Day %lu  |  Streak %u",
+           stageName, (unsigned long)PET_MANAGER.getDaysAlive(), (unsigned)state.currentStreak);
   renderer.drawCenteredText(SMALL_FONT_ID, infoY, infoLine);
 
   // --- Stat bars ---
-  const int barAreaTop = infoY + renderer.getLineHeight(SMALL_FONT_ID) + metrics.verticalSpacing;
-  const int barW = pageWidth - 80;  // leave margins for labels
-  const int barX = (pageWidth - barW) / 2;
-  const int barSpacing = renderer.getLineHeight(UI_10_FONT_ID) + 10;
+  const int statsY = infoY + renderer.getLineHeight(SMALL_FONT_ID) + metrics.verticalSpacing;
+  const int barW = pageWidth - sideMargin * 2;
+  statsPanel.renderStats(renderer, state, sideMargin, statsY, barW);
 
-  drawStatBar(barX, barAreaTop,                   barW, tr(STR_PET_HUNGER),    state.hunger);
-  drawStatBar(barX, barAreaTop + barSpacing,       barW, tr(STR_PET_HAPPINESS), state.happiness);
-  drawStatBar(barX, barAreaTop + barSpacing * 2,   barW, tr(STR_PET_HEALTH),    state.health);
+  // --- Action menu fills remaining space ---
+  const int barSpacing = renderer.getLineHeight(SMALL_FONT_ID) + 10;
+  const int menuY = statsY + barSpacing * 6 + metrics.verticalSpacing;
+  const int menuH = contentBottom - menuY;
+  actionMenu.render(renderer, state, sideMargin, menuY, barW, menuH);
 
-  // --- Daily missions ---
-  const int missionTop = barAreaTop + barSpacing * 3 + metrics.verticalSpacing;
-  drawMissions(barX, missionTop, barW);
-
-  // --- Pet action feedback ---
-  if (petFeedback != nullptr) {
-    const int fbY = contentBottom - metrics.buttonHintsHeight - renderer.getLineHeight(SMALL_FONT_ID) - 4;
-    renderer.drawCenteredText(SMALL_FONT_ID, fbY, petFeedback);
+  // --- Feedback text above button hints ---
+  if (PET_MANAGER.getLastFeedback() != nullptr) {
+    const int fbY = contentBottom - renderer.getLineHeight(SMALL_FONT_ID) - 2;
+    renderer.drawCenteredText(SMALL_FONT_ID, fbY, PET_MANAGER.getLastFeedback());
   }
 
   // --- Button hints ---
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_PET_HAPPINESS), "", "");
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Select", "Up", "Down");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
-}
-
-// ---- Missions panel -----------------------------------------------------
-
-void VirtualPetActivity::drawMissions(int x, int y, int width) const {
-  PetMission missions[3];
-  PET_MANAGER.getMissions(missions);
-
-  const int lh = renderer.getLineHeight(SMALL_FONT_ID);
-  const int rowH = lh + 4;
-  const int checkW = renderer.getTextWidth(SMALL_FONT_ID, "[x]");
-
-  // Section header
-  renderer.drawText(SMALL_FONT_ID, x, y, "Today:");
-  int rowY = y + rowH;
-
-  for (int i = 0; i < 3; i++) {
-    const auto& m = missions[i];
-
-    // Checkbox [x] or [ ]
-    renderer.drawText(SMALL_FONT_ID, x, rowY, m.done ? "[x]" : "[ ]");
-
-    // Mission label + progress (if not done)
-    char buf[40];
-    if (m.done) {
-      snprintf(buf, sizeof(buf), "%s", m.label);
-    } else {
-      snprintf(buf, sizeof(buf), "%s  %d/%d", m.label, m.progress, m.goal);
-    }
-    renderer.drawText(SMALL_FONT_ID, x + checkW + 4, rowY, buf);
-    rowY += rowH;
-  }
-}
-
-// ---- Stat bar helper ----------------------------------------------------
-
-void VirtualPetActivity::drawStatBar(int x, int y, int barWidth, const char* label,
-                                      uint8_t value) const {
-  constexpr int BAR_H = 10;
-  const int lh = renderer.getLineHeight(SMALL_FONT_ID);
-
-  // Label left-aligned, bar drawn to its right within the allocated width
-  const int lblW = renderer.getTextWidth(SMALL_FONT_ID, label);
-  renderer.drawText(SMALL_FONT_ID, x, y, label);
-
-  const int barX = x + lblW + 6;
-  const int actualBarW = barWidth - lblW - 6;
-  const int barY = y + (lh - BAR_H) / 2;
-  renderer.drawRect(barX, barY, actualBarW, BAR_H);
-
-  // Fill proportional to value (0-100)
-  if (value > 0) {
-    const int fillW = (actualBarW - 2) * value / 100;
-    if (fillW > 0) {
-      renderer.fillRect(barX + 1, barY + 1, fillW, BAR_H - 2);
-    }
-  }
 }

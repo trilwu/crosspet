@@ -130,12 +130,22 @@ void SleepActivity::renderDefaultSleepScreen() const {
 
   // Draw mini pet in bottom-right corner if a pet exists
   if (PET_MANAGER.exists()) {
+    const auto& petState = PET_MANAGER.getState();
     const PetMood petMood = PET_MANAGER.isAlive()
-                                ? (PET_MANAGER.getState().hunger <= 30 ? PetMood::SAD : PetMood::SLEEPING)
+                                ? (petState.attentionCall ? PetMood::NEEDY
+                                   : petState.isSick ? PetMood::SICK
+                                   : petState.hunger <= 30 ? PetMood::SAD
+                                   : PetMood::SLEEPING)
                                 : PetMood::DEAD;
-    PetSpriteRenderer::drawMini(renderer, pageWidth - PetSpriteRenderer::MINI_W - 10,
-                                pageHeight - PetSpriteRenderer::MINI_H - 10,
-                                PET_MANAGER.getState().stage, petMood);
+    const int miniX = pageWidth - PetSpriteRenderer::MINI_W - 10;
+    const int miniY = pageHeight - PetSpriteRenderer::MINI_H - 10;
+    PetSpriteRenderer::drawMini(renderer, miniX, miniY, petState.stage, petMood,
+                                petState.evolutionVariant);
+    // Attention indicator: "!" above the mini pet
+    if (petState.attentionCall) {
+      renderer.drawText(SMALL_FONT_ID, miniX + PetSpriteRenderer::MINI_W / 2 - 2,
+                        miniY - renderer.getLineHeight(SMALL_FONT_ID) - 1, "!");
+    }
   }
 
   // Make sleep screen dark unless light is selected in settings
@@ -475,18 +485,39 @@ void SleepActivity::renderClockSleepScreen() const {
 
   // Draw cat in bottom-right corner (2x scale = 96x96) with a speech bubble above it
   if (PET_MANAGER.exists()) {
+    const auto& petState = PET_MANAGER.getState();
     const PetMood petMood = PET_MANAGER.isAlive()
-                                ? (PET_MANAGER.getState().hunger <= 30 ? PetMood::SAD : PetMood::SLEEPING)
+                                ? (petState.attentionCall ? PetMood::NEEDY
+                                   : petState.isSick ? PetMood::SICK
+                                   : petState.hunger <= 30 ? PetMood::SAD
+                                   : PetMood::SLEEPING)
                                 : PetMood::DEAD;
     constexpr int PET_SCALE = 2;
     const int pSize = PetSpriteRenderer::displaySize(PET_SCALE);
     const int petX = pageWidth - pSize - 10;
     const int petY = pageHeight - pSize - 10;
-    PetSpriteRenderer::drawPet(renderer, petX, petY, PET_MANAGER.getState().stage, petMood, PET_SCALE);
+    PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, PET_SCALE,
+                               petState.evolutionVariant);
 
-    // Speech bubble: pick a message based on mood, varied by hour
+    // Attention "!" indicator above the pet sprite
+    if (petState.attentionCall) {
+      renderer.drawText(SMALL_FONT_ID, petX + pSize / 2 - 2,
+                        petY - renderer.getLineHeight(SMALL_FONT_ID) - 2, "!");
+    }
+
+    // Speech bubble: need-specific messages, varied by hour for sleep/sad states
     const char* msg = nullptr;
-    if (petMood == PetMood::SLEEPING) {
+    if (petMood == PetMood::NEEDY) {
+      switch (petState.currentNeed) {
+        case PetNeed::HUNGRY: msg = "Feed me~"; break;
+        case PetNeed::SICK:   msg = "Need medicine..."; break;
+        case PetNeed::DIRTY:  msg = "It's dirty..."; break;
+        case PetNeed::BORED:  msg = "So bored..."; break;
+        default:              msg = "Hey!"; break;  // fake call
+      }
+    } else if (petMood == PetMood::SICK) {
+      msg = "Not feeling well...";
+    } else if (petMood == PetMood::SLEEPING) {
       static const char* const SLEEP_MSGS[] = {"Zzz...", "Purr~", "Sweet dreams", "Dreaming..."};
       msg = SLEEP_MSGS[(uint32_t)time(nullptr) / 3600 % 4];
     } else if (petMood == PetMood::SAD) {
@@ -496,7 +527,6 @@ void SleepActivity::renderClockSleepScreen() const {
     if (msg != nullptr) {
       const int lh = renderer.getLineHeight(SMALL_FONT_ID);
       const int msgW = renderer.getTextWidth(SMALL_FONT_ID, msg);
-      // Center the text over the pet sprite
       const int msgX = petX + (pSize - msgW) / 2;
       const int msgY = petY - lh - 4;
       renderer.drawText(SMALL_FONT_ID, msgX, msgY, msg);

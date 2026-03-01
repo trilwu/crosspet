@@ -1,10 +1,13 @@
 #pragma once
+
 #include "../Activity.h"
 
+#include "PetActionMenu.h"
+#include "PetStatsPanel.h"
+
 // Main virtual pet interaction screen.
-// Shows pet sprite (3x scaled area), stat bars, mood, and button hints.
-// Confirm = pet interaction | Back = exit
-// Dead/no-pet states prompt hatching a new egg.
+// Sprite + status icons + scrollable action menu + extended stat bars.
+// Up/Down = navigate menu | Confirm = execute action | Back = exit
 class VirtualPetActivity final : public Activity {
  public:
   explicit VirtualPetActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
@@ -15,17 +18,13 @@ class VirtualPetActivity final : public Activity {
   void render(RenderLock&&) override;
 
  private:
-  // Split render helpers to keep render() under 200 lines
   void renderNoPet() const;
   void renderDead() const;
   void renderAlive() const;
 
-  // Draw a labelled stat bar at (x, y) with given width
-  void drawStatBar(int x, int y, int barWidth, const char* label, uint8_t value) const;
+  // Execute the currently selected action via PetManager
+  void executeSelectedAction();
 
-  // Draw today's missions panel at (x, y)
-  void drawMissions(int x, int y, int width) const;
-
-  // Last action feedback shown below missions (nullptr = nothing)
-  const char* petFeedback = nullptr;
+  PetActionMenu actionMenu;
+  PetStatsPanel statsPanel;
 };

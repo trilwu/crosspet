@@ -1,8 +1,10 @@
 #include "PetManager.h"
 
+#include "PetCareTracker.h"
+#include "PetDecayEngine.h"
+#include "PetEvolution.h"
+
 #include <Arduino.h>
-#include <ArduinoJson.h>
-#include <HalStorage.h>
 #include <Logging.h>
 
 #include <ctime>
@@ -12,189 +14,69 @@ PetManager& PetManager::getInstance() {
   return instance;
 }
 
-// --- Persistence ---
-
-bool PetManager::load() {
-  if (!Storage.exists(PetConfig::STATE_PATH)) {
-    LOG_DBG("PET", "No pet state file found");
-    loaded = true;
-    return true;  // No pet yet — not an error
-  }
-
-  String json = Storage.readFile(PetConfig::STATE_PATH);
-  if (json.isEmpty()) {
-    LOG_ERR("PET", "Failed to read pet state");
-    return false;
-  }
-
-  JsonDocument doc;
-  auto err = deserializeJson(doc, json);
-  if (err) {
-    LOG_ERR("PET", "JSON parse error: %s", err.c_str());
-    return false;
-  }
-
-  state.stage = static_cast<PetStage>(doc["stage"] | 0);
-  state.hunger = doc["hunger"] | (uint8_t)80;
-  state.happiness = doc["happiness"] | (uint8_t)80;
-  state.health = doc["health"] | (uint8_t)100;
-  state.birthTime = doc["birthTime"] | (uint32_t)0;
-  state.lastTickTime = doc["lastTickTime"] | (uint32_t)0;
-  state.totalPagesRead = doc["totalPagesRead"] | (uint32_t)0;
-  state.currentStreak = doc["currentStreak"] | (uint16_t)0;
-  state.daysAtStage = doc["daysAtStage"] | (uint8_t)0;
-  state.lastReadDay = doc["lastReadDay"] | (uint16_t)0;
-  state.pageAccumulator = doc["pageAccumulator"] | (uint16_t)0;
-  // Backwards compat: old saves without "initialized" infer from birthTime
-  state.initialized = doc["initialized"] | (state.birthTime > 0);
-  state.missionDay       = doc["missionDay"]       | (uint16_t)0;
-  state.missionPagesRead = doc["missionPagesRead"] | (uint8_t)0;
-  state.missionPetCount  = doc["missionPetCount"]  | (uint8_t)0;
-
-  // Restore clock if RTC lost time (power cycle) but SD card has a saved timestamp
-  uint32_t savedTime = doc["savedTime"] | (uint32_t)0;
-  if (savedTime > 0) {
-    time_t now = time(nullptr);
-    struct tm check;
-    gmtime_r(&now, &check);
-    if (check.tm_year < 125) {
-      // System clock is invalid — restore from last saved timestamp
-      struct timeval tv = {static_cast<time_t>(savedTime), 0};
-      settimeofday(&tv, nullptr);
-      LOG_DBG("PET", "Restored clock from SD: %lu", (unsigned long)savedTime);
-    }
-  }
-
-  loaded = true;
-  LOG_DBG("PET", "Loaded pet: stage=%d hunger=%d happy=%d health=%d",
-          (int)state.stage, state.hunger, state.happiness, state.health);
-  return true;
-}
-
-bool PetManager::save() {
-  Storage.mkdir(PetConfig::PET_DIR);
-
-  JsonDocument doc;
-  doc["initialized"] = state.initialized;
-  doc["stage"] = static_cast<uint8_t>(state.stage);
-  doc["hunger"] = state.hunger;
-  doc["happiness"] = state.happiness;
-  doc["health"] = state.health;
-  doc["birthTime"] = state.birthTime;
-  doc["lastTickTime"] = state.lastTickTime;
-  doc["totalPagesRead"] = state.totalPagesRead;
-  doc["currentStreak"] = state.currentStreak;
-  doc["daysAtStage"] = state.daysAtStage;
-  doc["lastReadDay"] = state.lastReadDay;
-  doc["pageAccumulator"] = state.pageAccumulator;
-  doc["missionDay"]       = state.missionDay;
-  doc["missionPagesRead"] = state.missionPagesRead;
-  doc["missionPetCount"]  = state.missionPetCount;
-
-  // Persist current timestamp so it can be restored after power cycle
-  doc["savedTime"] = (uint32_t)time(nullptr);
-
-  String json;
-  serializeJson(doc, json);
-  bool ok = Storage.writeFile(PetConfig::STATE_PATH, json);
-  if (ok) {
-    LOG_DBG("PET", "State saved");
-  } else {
-    LOG_ERR("PET", "Failed to save state");
-  }
-  return ok;
-}
-
 // --- Game Logic ---
 
 void PetManager::tick() {
   if (!state.exists() || !state.isAlive()) return;
-  if (!isTimeValid()) return;  // Can't decay without valid time
+  if (!isTimeValid()) return;
 
   uint32_t now = getCurrentTime();
   if (state.lastTickTime == 0) {
-    // First tick after hatch — just set the timestamp
     state.lastTickTime = now;
     save();
     return;
   }
+  if (now <= state.lastTickTime) return;
 
-  // Calculate elapsed hours since last tick
-  if (now <= state.lastTickTime) return;  // Clock hasn't advanced
   uint32_t elapsedSec = now - state.lastTickTime;
   uint32_t elapsedHours = elapsedSec / 3600;
+  if (elapsedHours == 0) return;
 
-  if (elapsedHours > 0) {
-    applyDecay(elapsedHours);
-    state.lastTickTime = now;
+  // Determine the hour-of-day at the start of the elapsed period for sleep simulation
+  struct tm startTm;
+  time_t startTime = static_cast<time_t>(state.lastTickTime);
+  localtime_r(&startTime, &startTm);
+  uint8_t startHour = static_cast<uint8_t>(startTm.tm_hour);
 
-    // Check evolution once per day (when elapsed >= 24h worth or days changed)
-    uint8_t elapsedDays = elapsedHours / 24;
-    if (elapsedDays > 0) {
-      state.daysAtStage += elapsedDays;
-      checkEvolution();
-      updateStreak();
-    }
+  PetDecayEngine::applyDecay(state, elapsedHours, startHour);
+  PetCareTracker::checkCareMistakes(state, elapsedHours);
+  PetCareTracker::expireAttentionCall(state, now);
+  PetCareTracker::generateAttentionCall(state, now);
 
-    save();
-  }
-}
+  state.lastTickTime = now;
 
-void PetManager::applyDecay(uint32_t elapsedHours) {
-  // Cap to prevent overflow from very long absences (max 30 days = 720h)
-  if (elapsedHours > 720) elapsedHours = 720;
+  uint8_t elapsedDays = static_cast<uint8_t>(elapsedHours / 24);
+  if (elapsedDays > 0) {
+    state.daysAtStage += elapsedDays;
+    state.totalAge    += elapsedDays;
+    PetCareTracker::updateCareScore(state);
+    PetEvolution::checkEvolution(state);
+    updateStreak();
 
-  for (uint32_t h = 0; h < elapsedHours; h++) {
-    // Hunger decreases every hour
-    state.hunger = clampSub(state.hunger, PetConfig::HUNGER_DECAY_PER_HOUR);
-
-    // Happiness decreases every ~2 hours (alternate hours)
-    if (h % 2 == 0) {
-      state.happiness = clampSub(state.happiness, PetConfig::HAPPINESS_DECAY_PER_HOUR);
-    }
-
-    // Health drains when starving
-    if (state.hunger == 0) {
-      state.health = clampSub(state.health, PetConfig::HEALTH_DECAY_PER_HOUR);
-    }
-
-    // Death check
-    if (state.health == 0) {
-      state.stage = PetStage::DEAD;
-      LOG_DBG("PET", "Pet has died after %lu hours of decay", (unsigned long)elapsedHours);
-      return;
+    // Elder lifespan death check
+    if (state.stage == PetStage::ELDER && state.isAlive()) {
+      uint16_t lifespan = (state.careMistakes < PetConfig::ELDER_LIFESPAN_DAYS)
+                              ? PetConfig::ELDER_LIFESPAN_DAYS - state.careMistakes
+                              : 1;
+      if (state.totalAge >= lifespan) {
+        state.stage = PetStage::DEAD;
+        LOG_DBG("PET", "Pet died of old age");
+      }
     }
   }
+
+  save();
 }
 
-void PetManager::checkEvolution() {
-  uint8_t stageIdx = static_cast<uint8_t>(state.stage);
-  if (stageIdx >= static_cast<uint8_t>(PetStage::ELDER)) return;  // Already max or dead
-
-  const auto& req = PetConfig::EVOLUTION[stageIdx];
-  if (state.daysAtStage >= req.minDays &&
-      state.totalPagesRead >= req.minPages &&
-      state.hunger >= req.minAvgHunger) {
-    state.stage = static_cast<PetStage>(stageIdx + 1);
-    state.daysAtStage = 0;
-    LOG_DBG("PET", "Evolved to stage %d!", static_cast<int>(state.stage));
-  }
-}
 
 void PetManager::updateStreak() {
   uint16_t today = getDayOfYear();
-  if (today == 0) return;  // No valid time
-
-  // If last read was yesterday, streak continues. Otherwise reset.
+  if (today == 0) return;
   if (state.lastReadDay > 0) {
     uint16_t diff = (today >= state.lastReadDay) ? (today - state.lastReadDay) : 1;
-    if (diff > 1) {
-      state.currentStreak = 0;
-    }
+    if (diff > 1) state.currentStreak = 0;
   }
 }
-
-// --- Mission helpers ---
 
 static void resetMissionsIfNewDay(PetState& state, uint16_t today) {
   if (today > 0 && today != state.missionDay) {
@@ -204,7 +86,7 @@ static void resetMissionsIfNewDay(PetState& state, uint16_t today) {
   }
 }
 
-// --- Feeding ---
+// --- Feeding (page-driven) ---
 
 void PetManager::onPageTurn() {
   if (!state.exists() || !state.isAlive()) return;
@@ -220,41 +102,41 @@ void PetManager::onPageTurn() {
     missionProgress = true;
   }
 
-  // Update streak tracking
   if (today > 0 && today != state.lastReadDay) {
     state.lastReadDay = today;
     state.currentStreak++;
-    // Streak bonus happiness
     uint8_t streakBonus = (state.currentStreak > 5) ? 5 : state.currentStreak;
     state.happiness = clampAdd(state.happiness, streakBonus);
   }
 
-  // Batch feed every PAGES_PER_MEAL pages
   if (state.pageAccumulator >= PetConfig::PAGES_PER_MEAL) {
     state.hunger = clampAdd(state.hunger, PetConfig::HUNGER_PER_MEAL);
     state.pageAccumulator -= PetConfig::PAGES_PER_MEAL;
-    LOG_DBG("PET", "Fed! hunger=%d pages=%lu", state.hunger, (unsigned long)state.totalPagesRead);
-
-    // Health recovers when fed (if not dead)
-    if (state.health < PetConfig::MAX_STAT && state.hunger > 0) {
+    if (state.health < PetConfig::MAX_STAT && state.hunger > 0)
       state.health = clampAdd(state.health, 5);
+
+    // Weight and waste tracking per meal
+    state.weight = clampAdd(state.weight, PetConfig::WEIGHT_PER_MEAL);
+    state.mealsSinceClean++;
+    if (state.mealsSinceClean >= PetConfig::MEALS_UNTIL_WASTE) {
+      state.mealsSinceClean = 0;
+      if (state.wasteCount < PetConfig::MAX_WASTE) state.wasteCount++;
     }
 
-    save();  // Persist on feed (every ~20 pages)
+    LOG_DBG("PET", "Fed! hunger=%d weight=%d waste=%d", state.hunger, state.weight, state.wasteCount);
+    save();
   } else if (missionProgress) {
-    save();  // Persist mission progress on every page so Pet screen sees live data
+    save();
   }
 }
 
-// --- User Interaction ---
+// --- User interaction ---
 
 bool PetManager::pet() {
   if (!state.exists() || !state.isAlive()) return false;
 
   unsigned long now = millis();
-  if (now - lastPetTimeMs < PetConfig::PET_COOLDOWN_MS) {
-    return false;  // Cooldown active
-  }
+  if (now - lastPetTimeMs < PetConfig::PET_COOLDOWN_MS) return false;
 
   lastPetTimeMs = now;
   state.happiness = clampAdd(state.happiness, PetConfig::HAPPINESS_PER_PET);
@@ -266,27 +148,29 @@ bool PetManager::pet() {
 }
 
 void PetManager::hatchNew() {
-  state = PetState();  // Reset to defaults
+  state = PetState();  // Resets all fields to struct defaults (including new fields)
   state.initialized = true;
   state.stage = PetStage::EGG;
   state.hunger = 80;
   state.happiness = 80;
   state.health = 100;
-
   if (isTimeValid()) {
     state.birthTime = getCurrentTime();
     state.lastTickTime = state.birthTime;
   }
-
   save();
   LOG_DBG("PET", "New egg hatched!");
 }
 
-// --- State Queries ---
+// --- State queries ---
 
 PetMood PetManager::getMood() const {
-  if (!state.isAlive()) return PetMood::DEAD;
-  if (state.hunger == 0) return PetMood::SICK;
+  if (!state.isAlive())  return PetMood::DEAD;
+  if (state.isSleeping)  return PetMood::SLEEPING;
+  if (state.isSick)      return PetMood::SICK;
+  if (state.attentionCall) return PetMood::NEEDY;
+  // Low discipline → occasional refusal behaviour
+  if (state.discipline < 30 && random(100) < 20) return PetMood::REFUSING;
   if (state.hunger > 70 && state.health > 70) return PetMood::HAPPY;
   if (state.hunger > 30 && state.health > 30) return PetMood::NEUTRAL;
   return PetMood::SAD;
@@ -299,12 +183,18 @@ uint32_t PetManager::getDaysAlive() const {
   return (now - state.birthTime) / 86400;
 }
 
+void PetManager::getMissions(PetMission out[3]) const {
+  out[0] = {"Read 20 pages",   state.missionPagesRead, 20, state.missionPagesRead >= 20};
+  out[1] = {"Pet 3 times",     state.missionPetCount,   3, state.missionPetCount  >=  3};
+  out[2] = {"Keep fed (>40%)", state.hunger,            40, state.hunger           >= 40};
+}
+
 // --- Helpers ---
 
 bool PetManager::isTimeValid() const {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo, 0)) return false;
-  return timeinfo.tm_year >= 125;  // Year >= 2025
+  return timeinfo.tm_year >= 125;
 }
 
 uint32_t PetManager::getCurrentTime() const {
@@ -315,13 +205,7 @@ uint16_t PetManager::getDayOfYear() const {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo, 0)) return 0;
   if (timeinfo.tm_year < 125) return 0;
-  return static_cast<uint16_t>(timeinfo.tm_yday + 1);  // 1-366
-}
-
-void PetManager::getMissions(PetMission out[3]) const {
-  out[0] = {"Read 20 pages",    state.missionPagesRead, 20, state.missionPagesRead >= 20};
-  out[1] = {"Pet 3 times",      state.missionPetCount,   3, state.missionPetCount  >=  3};
-  out[2] = {"Keep fed (>40%)",  state.hunger,           40, state.hunger            >= 40};
+  return static_cast<uint16_t>(timeinfo.tm_yday + 1);
 }
 
 uint8_t PetManager::clampSub(uint8_t val, uint8_t amount) {
