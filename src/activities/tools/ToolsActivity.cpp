@@ -9,6 +9,8 @@
 #include "PomodoroActivity.h"
 #include "GameOfLifeActivity.h"
 #include "MazeGameActivity.h"
+#include "SnakeActivity.h"
+#include "TwentyFortyEightActivity.h"
 #include "PhotoFrameActivity.h"
 #include "VirtualPetActivity.h"
 #include "components/UITheme.h"
@@ -57,6 +59,12 @@ void ToolsActivity::loop() {
       case 7:
         activityManager.pushActivity(std::make_unique<GameOfLifeActivity>(renderer, mappedInput));
         break;
+      case 8:
+        activityManager.pushActivity(std::make_unique<SnakeActivity>(renderer, mappedInput));
+        break;
+      case 9:
+        activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
+        break;
     }
   }
 
@@ -75,7 +83,8 @@ void ToolsActivity::render(RenderLock&&) {
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_TOOLS));
 
   const char* menuLabels[] = {tr(STR_CLOCK), tr(STR_POMODORO), tr(STR_DAILY_QUOTE), tr(STR_CONFERENCE_BADGE),
-                               tr(STR_VIRTUAL_PET), tr(STR_PHOTO_FRAME), tr(STR_MAZE_GAME), tr(STR_GAME_OF_LIFE)};
+                               tr(STR_VIRTUAL_PET), tr(STR_PHOTO_FRAME), tr(STR_MAZE_GAME), tr(STR_GAME_OF_LIFE),
+                               tr(STR_SNAKE), tr(STR_2048)};
 
   const int menuTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int menuHeight = pageHeight - menuTop - metrics.buttonHintsHeight - metrics.verticalSpacing;
