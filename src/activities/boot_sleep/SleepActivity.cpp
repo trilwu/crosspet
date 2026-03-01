@@ -396,7 +396,6 @@ void SleepActivity::renderClockSleepScreen() const {
                                 PET_MANAGER.getState().stage, petMood);
   }
 
-  renderer.invertScreen();
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
 
