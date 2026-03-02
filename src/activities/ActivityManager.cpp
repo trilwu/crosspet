@@ -96,9 +96,6 @@ void ActivityManager::loop() {
           handler(pendingResult);
         }
 
-        // Request a full refresh on next render to clear ghosting from previous activity
-        renderer.requestNextFullRefresh();
-
         // Request an update to ensure the popped activity gets re-rendered
         if (pendingAction == PendingAction::None) {
           requestUpdate();
@@ -127,9 +124,6 @@ void ActivityManager::loop() {
       }
       pendingAction = PendingAction::None;
       currentActivity = std::move(pendingActivity);
-
-      // Full refresh on next render to clear ghosting from previous activity
-      renderer.requestNextFullRefresh();
 
       lock.unlock();  // onEnter may acquire its own lock
       currentActivity->onEnter();

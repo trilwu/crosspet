@@ -197,31 +197,21 @@ void ClockActivity::render(RenderLock&&) {
              DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
              MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
 
-    // Vietnamese lunar date
-    LunarDate lunar = solarToLunar(timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
-    char lunarBuf[32];
-    if (lunar.isLeapMonth) {
-      snprintf(lunarBuf, sizeof(lunarBuf), "Ngày %d tháng nhuận %d ÂL", lunar.day, lunar.month);
-    } else {
-      snprintf(lunarBuf, sizeof(lunarBuf), "Ngày %d tháng %d ÂL", lunar.day, lunar.month);
-    }
-
-    const int timeHeight  = renderer.getLineHeight(UI_12_FONT_ID);
-    const int dateHeight  = renderer.getLineHeight(UI_10_FONT_ID);
-    const int lunarHeight = renderer.getLineHeight(SMALL_FONT_ID);
-    const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
-    const int calH  = cellH * 7;
+    const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
+    const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
+    const int gregH  = renderer.getLineHeight(SMALL_FONT_ID);
+    const int cellH  = gregH * 2 + 10;  // two rows (gregorian + lunar) per calendar cell
+    const int calH   = cellH * 7;       // header row + up to 6 body rows
 
     // Center the whole block in content area
     const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
     const int contentBot = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing;
-    const int blockH = timeHeight + 8 + dateHeight + 4 + lunarHeight + 12 + calH;
+    const int blockH = timeHeight + 8 + dateHeight + 12 + calH;
     const int startY = contentTop + (contentBot - contentTop - blockH) / 2;
 
     renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
     renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 8, dateBuf);
-    renderer.drawCenteredText(SMALL_FONT_ID, startY + timeHeight + 8 + dateHeight + 4, lunarBuf);
-    renderCalendar(startY + timeHeight + 8 + dateHeight + 4 + lunarHeight + 12, timeinfo);
+    renderCalendar(startY + timeHeight + 8 + dateHeight + 12, timeinfo);
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
@@ -236,7 +226,8 @@ void ClockActivity::renderCalendar(int startY, const struct tm& t) const {
   const int margin = 20;
   const int calW = pageWidth - margin * 2;
   const int cellW = calW / 7;
-  const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
+  const int gregH = renderer.getLineHeight(SMALL_FONT_ID);
+  const int cellH = gregH * 2 + 10;  // gregorian day + lunar day + padding
   const int x0 = margin;
 
   // Day-of-week header row
@@ -247,27 +238,47 @@ void ClockActivity::renderCalendar(int startY, const struct tm& t) const {
 
   // First weekday of this month
   struct tm fm = t;
-  fm.tm_mday = 1;
-  fm.tm_hour = 0; fm.tm_min = 0; fm.tm_sec = 0;
+  fm.tm_mday = 1; fm.tm_hour = 0; fm.tm_min = 0; fm.tm_sec = 0;
   mktime(&fm);
 
-  int col = fm.tm_wday;  // 0=Sun
+  int col = fm.tm_wday;
   int maxDay = daysInMonth(t.tm_mon, t.tm_year);
   int rowY = startY + cellH;
 
-  for (int day = 1; day <= maxDay; day++) {
-    char buf[3];
-    snprintf(buf, sizeof(buf), "%d", day);
-    int tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
-    int cx = x0 + col * cellW;
-    int tx = cx + (cellW - tw) / 2;
+  // Precompute lunar day for each gregorian day of this month
+  int lunarDay[32] = {};
+  for (int d = 1; d <= maxDay; d++) {
+    lunarDay[d] = solarToLunar(d, t.tm_mon + 1, t.tm_year + 1900).day;
+  }
 
-    if (day == t.tm_mday) {
-      // Filled box highlight for today
-      renderer.fillRect(cx + 2, rowY - 2, cellW - 4, cellH - 2);
-      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf, false);  // white text
+  for (int day = 1; day <= maxDay; day++) {
+    char gregBuf[4], lunBuf[4];
+    snprintf(gregBuf, sizeof(gregBuf), "%d", day);
+    snprintf(lunBuf,  sizeof(lunBuf),  "%d", lunarDay[day]);
+
+    const int cx    = x0 + col * cellW;
+    const int gregX = cx + (cellW - renderer.getTextWidth(SMALL_FONT_ID, gregBuf)) / 2;
+    const int lunX  = cx + (cellW - renderer.getTextWidth(SMALL_FONT_ID, lunBuf))  / 2;
+    const int lunY  = rowY + gregH + 2;
+
+    const bool isToday    = (day == t.tm_mday);
+    const bool isNewLunar = (lunarDay[day] == 1);  // first day of a lunar month
+
+    if (isToday) {
+      // Filled box for today — both gregorian and lunar in white
+      renderer.fillRect(cx + 1, rowY - 2, cellW - 2, cellH - 1);
+      renderer.drawText(SMALL_FONT_ID, gregX, rowY, gregBuf, false);
+      renderer.drawText(SMALL_FONT_ID, lunX, lunY, lunBuf, false);
     } else {
-      renderer.drawText(SMALL_FONT_ID, tx, rowY, buf);
+      renderer.drawText(SMALL_FONT_ID, gregX, rowY, gregBuf);
+      if (isNewLunar) {
+        // Small filled badge on "1" to mark start of lunar month
+        const int lw = renderer.getTextWidth(SMALL_FONT_ID, lunBuf);
+        renderer.fillRect(lunX - 2, lunY - 1, lw + 4, gregH - 1);
+        renderer.drawText(SMALL_FONT_ID, lunX, lunY, lunBuf, false);
+      } else {
+        renderer.drawText(SMALL_FONT_ID, lunX, lunY, lunBuf);
+      }
     }
 
     if (++col == 7) { col = 0; rowY += cellH; }

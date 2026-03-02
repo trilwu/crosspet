@@ -17,6 +17,7 @@
 #include "images/Logo120.h"
 #include "pet/PetManager.h"
 #include "pet/PetSpriteRenderer.h"
+#include "util/LunarCalendar.h"
 #include "util/StringUtils.h"
 
 #include <HalPowerManager.h>
@@ -390,6 +391,17 @@ void SleepActivity::renderClockSleepScreen() const {
     snprintf(dateBuf, sizeof(dateBuf), "Sync time via WiFi");
   }
 
+  // Vietnamese lunar date
+  char lunarBuf[40] = "";
+  if (timeValid) {
+    LunarDate lunar = solarToLunar(timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+    if (lunar.isLeapMonth) {
+      snprintf(lunarBuf, sizeof(lunarBuf), "Ngày %d tháng nhuận %d ÂL", lunar.day, lunar.month);
+    } else {
+      snprintf(lunarBuf, sizeof(lunarBuf), "Ngày %d tháng %d ÂL", lunar.day, lunar.month);
+    }
+  }
+
   // Calendar month header
   char monthBuf[32];
   if (timeValid) {
@@ -409,11 +421,12 @@ void SleepActivity::renderClockSleepScreen() const {
 
   const int timeHeight = DH;
   const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
+  const int lunarHeight = renderer.getLineHeight(SMALL_FONT_ID);
   const int monthHdrH = renderer.getLineHeight(SMALL_FONT_ID);
   const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 6;
   const int calH = monthHdrH + 6 + cellH * 7;  // month header + day headers + max 6 body rows
 
-  const int blockH = timeHeight + 14 + dateHeight + 16 + calH;
+  const int blockH = timeHeight + 14 + dateHeight + 6 + lunarHeight + 10 + calH;
   const int startY = (pageHeight - blockH) / 2;
 
   // Draw large 7-segment time digits
@@ -437,13 +450,16 @@ void SleepActivity::renderClockSleepScreen() const {
     }
   }
   renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 14, dateBuf);
+  if (lunarBuf[0]) {
+    renderer.drawCenteredText(SMALL_FONT_ID, startY + timeHeight + 14 + dateHeight + 6, lunarBuf);
+  }
 
   // Calendar grid
   const int margin = 20;
   const int calW = pageWidth - margin * 2;
   const int cellW = calW / 7;
   const int x0 = margin;
-  int calTop = startY + timeHeight + 14 + dateHeight + 16;
+  int calTop = startY + timeHeight + 14 + dateHeight + 6 + lunarHeight + 10;
 
   // Thin separator between time area and calendar
   renderer.fillRect(margin + 20, calTop - 8, calW - 40, 1);
