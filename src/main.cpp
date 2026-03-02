@@ -19,6 +19,7 @@
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "KOReaderCredentialStore.h"
+#include "GameScores.h"
 #include "ReadingStats.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
@@ -283,7 +284,8 @@ void setup() {
   SETTINGS.loadFromFile();
   I18N.loadSettings();
   KOREADER_STORE.loadFromFile();
-  READ_STATS.loadFromFile();  // loaded early so abort-to-sleep paths show correct stats
+  READ_STATS.loadFromFile();   // loaded early so abort-to-sleep paths show correct stats
+  GAME_SCORES.loadFromFile();
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 

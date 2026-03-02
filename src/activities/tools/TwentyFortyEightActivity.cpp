@@ -6,6 +6,7 @@
 #include <cstring>
 #include <esp_random.h>
 
+#include "GameScores.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -132,6 +133,11 @@ bool TwentyFortyEightActivity::hasMovesLeft() const {
 
 void TwentyFortyEightActivity::onEnter() {
   Activity::onEnter();
+  // Persist best score before resetting for a new game
+  if (score > GAME_SCORES.best2048) {
+    GAME_SCORES.best2048 = score;
+    GAME_SCORES.saveToFile();
+  }
   memset(grid, 0, sizeof(grid));
   score = 0;
   gameOver = false;
@@ -187,9 +193,10 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight},
                  tr(STR_2048));
 
-  // Score line
-  char scoreStr[32];
-  snprintf(scoreStr, sizeof(scoreStr), "Score: %lu", (unsigned long)score);
+  // Score + best score on one line
+  char scoreStr[48];
+  const uint32_t bestScore = (score > GAME_SCORES.best2048) ? score : GAME_SCORES.best2048;
+  snprintf(scoreStr, sizeof(scoreStr), "Score: %lu    Best: %lu", (unsigned long)score, (unsigned long)bestScore);
   renderer.drawCenteredText(SMALL_FONT_ID, scoreY, scoreStr);
 
   // Tile grid
