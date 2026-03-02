@@ -1,27 +1,37 @@
-# CrossPoint Reader
+# CrossPet
 
-Firmware for the **Xteink X4** e-paper display reader (unaffiliated with Xteink).
-Built using **PlatformIO** and targeting the **ESP32-C3** microcontroller.
-
-CrossPoint Reader is a purpose-built firmware designed to be a drop-in, fully open-source replacement for the official 
-Xteink firmware. It aims to match or improve upon the standard EPUB reading experience.
+**CrossPet** is a personal fork of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader) —
+open-source firmware for the **Xteink X4** e-paper reader, built with **PlatformIO** on **ESP32-C3**.
 
 ![](./docs/images/cover.jpg)
 
-## Motivation
+## What's different from CrossPoint?
 
-E-paper devices are fantastic for reading, but most commercially available readers are closed systems with limited 
-customisation. The **Xteink X4** is an affordable, e-paper device, however the official firmware remains closed.
-CrossPoint exists partly as a fun side-project and partly to open up the ecosystem and truely unlock the device's
-potential.
+CrossPet extends the upstream firmware with reading-productivity and personality features:
 
-CrossPoint Reader aims to:
-* Provide a **fully open-source alternative** to the official firmware.
-* Offer a **document reader** capable of handling EPUB content on constrained hardware.
-* Support **customisable font, layout, and display** options.
-* Run purely on the **Xteink X4 hardware**.
+- **Smoother page turns** — anti-aliased text always uses FAST_REFRESH, eliminating the ~1s transition stutter
+- **Reading Stats sleep screen** — shows today's reading time, all-time total, and current book progress with a progress bar; resets daily at midnight
+- **Clock sleep screen** — 7-segment clock + calendar with rotating daily literary quotes
+- **Reliable sleep display** — clock and reading stats refresh correctly on brief wakeups (no stale timestamp)
+- **Virtual pet** — a tamagotchi-style companion that lives and evolves alongside your reading habit
 
-This project is **not affiliated with Xteink**; it's built as a community project.
+Everything else (EPUB rendering, KOReader Sync, WiFi upload, OTA updates) is inherited from CrossPoint.
+
+> Fork of [crosspoint-reader/crosspoint-reader](https://github.com/crosspoint-reader/crosspoint-reader). Not affiliated with Xteink.
+
+---
+
+## Why CrossPoint? (upstream)
+
+Most affordable e-paper readers ship locked-down firmware. The Xteink X4 is capable hardware with a closed ecosystem.
+CrossPoint opened it up:
+
+- **Fully open-source** EPUB firmware for constrained embedded hardware (ESP32-C3, 800×480 e-ink)
+- **Distraction-free reading** — configurable fonts, layouts, margins, anti-aliased text
+- **KOReader Sync** — cross-device progress sync
+- **Openness** — flash via browser, OTA over WiFi, web-based book upload
+
+No subscriptions. No telemetry. No vendor lock-in.
 
 ## Features & Usage
 
@@ -34,6 +44,8 @@ This project is **not affiliated with Xteink**; it's built as a community projec
   - [ ] EPUB picker with cover art
 - [x] Custom sleep screen
   - [x] Cover sleep screen
+  - [x] Clock + calendar sleep screen with daily literary quotes
+  - [x] Reading Stats sleep screen (today's time, all-time total, last book progress)
 - [x] Wifi book upload
 - [x] Wifi OTA updates
 - [x] KOReader Sync integration for cross-device reading progress
@@ -41,6 +53,7 @@ This project is **not affiliated with Xteink**; it's built as a community projec
   - [ ] User provided fonts
   - [ ] Full UTF support
 - [x] Screen rotation
+- [x] Reading time tracking (per-session, daily, all-time)
 
 Multi-language support: Read EPUBs in various languages, including English, Spanish, French, German, Italian, Portuguese, Russian, Ukrainian, Polish, Swedish, Norwegian, [and more](./USER_GUIDE.md#supported-languages).
 
