@@ -8,10 +8,12 @@
 #include <algorithm>
 
 #include "../util/ConfirmationActivity.h"
+#include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/StringUtils.h"
+
 
 namespace {
 constexpr unsigned long GO_HOME_MS = 1000;
@@ -83,7 +85,7 @@ void FileBrowserActivity::loadFiles() {
   char name[500];
   for (auto file = root.openNextFile(); file; file = root.openNextFile()) {
     file.getName(name, sizeof(name));
-    if (name[0] == '.' || strcmp(name, "System Volume Information") == 0) {
+    if ((!SETTINGS.showHiddenFiles && name[0] == '.') || strcmp(name, "System Volume Information") == 0) {
       file.close();
       continue;
     }
