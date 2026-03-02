@@ -23,8 +23,17 @@ class HalGPIO {
   InputManager inputMgr;
 #endif
 
+  // BLE-injected button state and edge detection
+  volatile uint8_t bleState = 0;
+  uint8_t prevBleState = 0;
+  uint8_t bleWasPressed = 0;
+  uint8_t bleWasReleased = 0;
+
  public:
   HalGPIO() = default;
+
+  // Set BLE-injected button bitmask (called from BLE callback task)
+  void setBleButtonState(uint8_t state) { bleState = state; }
 
   // Start button GPIO and setup SPI for screen and SD card
   void begin();

@@ -1,0 +1,247 @@
+#pragma once
+#include "PetState.h"
+
+// ---- Built-in pixel-art sprite data (12x12 logical grid) ----
+// Format: uint16_t[12] rows; bit 11 = leftmost column (col 0), bit 0 = rightmost (col 11)
+// Each logical pixel renders as (4 * scale) physical pixels via PetSpriteRenderer.
+// Stage index mapping: [0]=EGG [1]=HATCHLING [2]=YOUNGSTER [3]=COMPANION [4]=ELDER
+// Dead sprite is shared across all types.
+
+namespace {
+
+// ============================================================
+// DEFAULT / CAT (types 0 and 1)
+// ============================================================
+
+static const uint16_t kSprite_Egg[12] = {
+  0x204, 0x70E, 0x3FC, 0x7FE, 0xEF7, 0xFFF,
+  0xF9F, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8
+};
+static const uint16_t kSprite_Hatchling[12] = {
+  0x108, 0x39C, 0x3FC, 0x3FC, 0x2F4, 0x3FC,
+  0x39C, 0x3FC, 0x3FC, 0x3FC, 0x198, 0x198
+};
+static const uint16_t kSprite_Youngster[12] = {
+  0x204, 0x70E, 0x7FE, 0x7FE, 0x6F6, 0x7FE,
+  0x79E, 0x7FE, 0x7FE, 0x3FC, 0x30C, 0x30C
+};
+static const uint16_t kSprite_Companion[12] = {
+  0x204, 0x70E, 0x7FE, 0xFFF, 0xEF7, 0xFFF,
+  0xBFD, 0xFFF, 0x7FE, 0x7FE, 0x606, 0x606
+};
+static const uint16_t kSprite_Elder[12] = {
+  0x606, 0xF0F, 0xFFF, 0xFFF, 0xEF7, 0xF9F,
+  0xBFD, 0xFFF, 0xFFF, 0x7FE, 0x606, 0x606
+};
+static const uint16_t kSprite_Dead[12] = {
+  0x204, 0x70E, 0x7FE, 0xFFF, 0xEF7, 0xD6B,
+  0xF9F, 0xFFF, 0xFFF, 0xFFF, 0x8F1, 0xFFF
+};
+
+// Youngster/Companion variants (chubby=1, misbehaved=2)
+static const uint16_t kSprite_Youngster_v1[12] = {
+  0x204, 0x70E, 0x7FE, 0xFFE, 0x6F6, 0xFFE,
+  0x79E, 0xFFE, 0xFFE, 0x7FC, 0x70E, 0x70E
+};
+static const uint16_t kSprite_Youngster_v2[12] = {
+  0x204, 0xF0F, 0xFFE, 0xFFE, 0x5B6, 0x7FE,
+  0x79E, 0x7FE, 0x7FE, 0x3FC, 0x30C, 0x30C
+};
+static const uint16_t kSprite_Companion_v1[12] = {
+  0x204, 0x70E, 0xFFE, 0xFFF, 0xEF7, 0xFFF,
+  0xBFD, 0xFFF, 0xFFE, 0xFFE, 0x70E, 0x70E
+};
+static const uint16_t kSprite_Companion_v2[12] = {
+  0x204, 0xF0F, 0xFFE, 0xFFF, 0xCF3, 0xFFF,
+  0xBFD, 0xFFF, 0x7FE, 0x7FE, 0x606, 0x606
+};
+
+// ============================================================
+// DOG (type 2) — round head, floppy side-ears (rows 1-3),
+//                no pointed ear tips on top
+// 0xBFD = X.XXXXXXXX.X — ear at col0,col11 with gap at col1,col10
+// ============================================================
+
+static const uint16_t kDog[5][12] = {
+  // EGG — tiny ear-flap hints at extreme sides
+  {0x801, 0xFFF, 0xFFF, 0xFFF, 0xFFF, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // HATCHLING — small round pup, no top ears
+  {0x000, 0x1F8, 0x3FC, 0x3FC, 0x2F4, 0x3FC,
+   0x1F8, 0x1F8, 0x1F8, 0x1F8, 0x108, 0x108},
+  // YOUNGSTER — round head, 3 rows of droopy side-ears
+  {0x3FC, 0xBFD, 0xBFD, 0xBFD, 0x3FC, 0x2F4,
+   0x3FC, 0x1F8, 0x3FC, 0x3FC, 0x198, 0x198},
+  // COMPANION — larger, long floppy ears
+  {0x3FC, 0xBFD, 0xBFD, 0xBFD, 0xFFF, 0xEF7,
+   0xFFF, 0x7FE, 0xFFF, 0xFFF, 0x30C, 0x30C},
+  // ELDER — dignified old dog, ears reach down even further
+  {0x3FC, 0xBFD, 0xBFD, 0xBFD, 0xBFD, 0xFFF,
+   0xEF7, 0xFFF, 0xFFF, 0xFFF, 0x606, 0x606},
+};
+
+// ============================================================
+// DRAGON (type 3) — horn tips wider than cat ears (col1,col10),
+//                   full-width body = implied wings
+// 0x402 = .X..........X. (horns at col1,col10)
+// ============================================================
+
+static const uint16_t kDragon[5][12] = {
+  // EGG — horn tips peeking from top
+  {0x402, 0x7FE, 0xFFF, 0xFFF, 0xFFF, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // HATCHLING — tiny dragon with stubby horns
+  {0x402, 0x7FE, 0x3FC, 0x3FC, 0x2F4, 0x3FC,
+   0x1F8, 0x3FC, 0x3FC, 0x1F8, 0x108, 0x108},
+  // YOUNGSTER — horns + wide wing-body
+  {0x402, 0x7FE, 0xFFF, 0xFFF, 0xEF7, 0xFFF,
+   0x3FC, 0xFFF, 0xFFF, 0x3FC, 0x204, 0x204},
+  // COMPANION — majestic, full spread
+  {0x402, 0xFFF, 0xFFF, 0xFFF, 0xEF7, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x204, 0x204},
+  // ELDER — ancient dragon, wide base-horns (col1,2,9,10)
+  {0x606, 0xFFF, 0xFFF, 0xFFF, 0xEF7, 0xF9F,
+   0xFFF, 0xFFF, 0xFFF, 0xFFF, 0x204, 0x204},
+};
+
+// ============================================================
+// BUNNY (type 4) — tall thin upright ears (2 thin rows before bases)
+// ============================================================
+
+static const uint16_t kBunny[5][12] = {
+  // EGG — two thin ear rows peeking high
+  {0x204, 0x204, 0x3FC, 0x7FE, 0xFFF, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // HATCHLING — two thin ear rows then bases
+  {0x108, 0x108, 0x39C, 0x3FC, 0x2F4, 0x3FC,
+   0x1F8, 0x1F8, 0x3FC, 0x1F8, 0x108, 0x108},
+  // YOUNGSTER — tall ears, round body
+  {0x204, 0x204, 0x70E, 0x7FE, 0x7FE, 0x6F6,
+   0x7FE, 0x7FE, 0x7FE, 0x3FC, 0x30C, 0x30C},
+  // COMPANION — long ears, bigger body
+  {0x204, 0x204, 0x70E, 0x7FE, 0xFFF, 0xEF7,
+   0xFFF, 0x7FE, 0xFFF, 0x7FE, 0x30C, 0x30C},
+  // ELDER — 3 thin ear rows (longest ears!), big paws
+  {0x108, 0x108, 0x108, 0x39C, 0xFFF, 0xFFF,
+   0xEF7, 0xFFF, 0xFFF, 0xFFF, 0x606, 0x606},
+};
+
+// ============================================================
+// ROBOT (type 5) — square head, antenna (cols 5-6), square eyes
+// 0x264 = square 2-wide eye-holes at cols 3-4 and cols 7-8
+// 0x060 = antenna tip at cols 5-6
+// ============================================================
+
+static const uint16_t kRobot[5][12] = {
+  // EGG — antenna peeking from top
+  {0x060, 0x060, 0x3FC, 0x7FE, 0xFFF, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // HATCHLING — tiny square bot
+  {0x060, 0x060, 0x1F8, 0x1F8, 0x168, 0x1F8,
+   0x0F0, 0x1F8, 0x1F8, 0x1F8, 0x198, 0x198},
+  // YOUNGSTER — classic square robot
+  {0x060, 0x060, 0x3FC, 0x3FC, 0x264, 0x3FC,
+   0x0F0, 0x3FC, 0x3FC, 0x3FC, 0x18C, 0x18C},
+  // COMPANION — bigger robot body
+  {0x060, 0x0E0, 0x7FE, 0x7FE, 0x666, 0x7FE,
+   0x1F8, 0x7FE, 0x7FE, 0x7FE, 0x30C, 0x30C},
+  // ELDER — massive heavy robot
+  {0x060, 0x0E0, 0xFFF, 0xFFF, 0xCF3, 0xFFF,
+   0x1F8, 0xFFF, 0xFFF, 0xFFF, 0x30C, 0x30C},
+};
+
+// ============================================================
+// BEAR (type 6) — round ear bumps (cols 2-3 and 8-9), chubby body
+// 0x30C = round ear bumps at cols 2,3 and cols 8,9
+// ============================================================
+
+static const uint16_t kBear[5][12] = {
+  // EGG — round ear bumps on top
+  {0x000, 0x30C, 0x7FE, 0xFFF, 0xFFF, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // HATCHLING — tiny round bear cub
+  {0x30C, 0x39C, 0x3FC, 0x3FC, 0x2F4, 0x3FC,
+   0x1F8, 0x3FC, 0x3FC, 0x3FC, 0x198, 0x198},
+  // YOUNGSTER — wide head, chubby body
+  {0x30C, 0x39C, 0x7FE, 0x7FE, 0x6F6, 0x7FE,
+   0x7FE, 0x7FE, 0xFFF, 0x7FE, 0x606, 0x606},
+  // COMPANION — big bear, cheek detail
+  {0x30C, 0x39C, 0x7FE, 0xFFF, 0xEF7, 0xFFF,
+   0xBFD, 0xFFF, 0xFFF, 0xFFF, 0x606, 0x606},
+  // ELDER — ancient bear, wide base-ears
+  {0x30C, 0x7FE, 0xFFF, 0xFFF, 0xEF7, 0xF9F,
+   0xBFD, 0xFFF, 0xFFF, 0xFFF, 0x606, 0x606},
+};
+
+// ============================================================
+// SLIME (type 7) — amorphous blob, no head/body separation,
+//                  narrows at top, widest in middle
+// ============================================================
+
+static const uint16_t kSlime[5][12] = {
+  // EGG — blobby round egg
+  {0x000, 0x3FC, 0x7FE, 0xFFF, 0xFFF, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // HATCHLING — tiny blob with eyes
+  {0x000, 0x000, 0x1F8, 0x3FC, 0x2F4, 0x3FC,
+   0x7FE, 0x7FE, 0x7FE, 0x3FC, 0x1F8, 0x0F0},
+  // YOUNGSTER — bigger blob, wide base
+  {0x000, 0x1F8, 0x3FC, 0x7FE, 0x6F6, 0x7FE,
+   0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC, 0x1F8},
+  // COMPANION — large blob filling the space
+  {0x000, 0x3FC, 0x7FE, 0xFFF, 0xEF7, 0xFFF,
+   0xFFF, 0xFFF, 0xFFF, 0xFFF, 0x7FE, 0x3FC},
+  // ELDER — giant ancient slime, fills almost whole grid
+  {0x1F8, 0x3FC, 0x7FE, 0xFFF, 0xFFF, 0xEF7,
+   0xFFF, 0xFFF, 0xFFF, 0xFFF, 0xFFF, 0xFFF},
+};
+
+// ============================================================
+// Sprite lookup — returns pointer to the appropriate 12-row array
+// ============================================================
+
+inline const uint16_t* getSpriteRows(PetStage stage, uint8_t variant, uint8_t petType) {
+  // Dead sprite is shared across all types
+  if (stage == PetStage::DEAD) return kSprite_Dead;
+
+  // Default/Cat: existing sprites with variant support
+  if (petType <= 1) {
+    if (variant == 1) {
+      if (stage == PetStage::YOUNGSTER) return kSprite_Youngster_v1;
+      if (stage == PetStage::COMPANION) return kSprite_Companion_v1;
+    } else if (variant == 2) {
+      if (stage == PetStage::YOUNGSTER) return kSprite_Youngster_v2;
+      if (stage == PetStage::COMPANION) return kSprite_Companion_v2;
+    }
+  }
+
+  // Map stage to array index (EGG=0 .. ELDER=4)
+  int idx;
+  switch (stage) {
+    case PetStage::EGG:       idx = 0; break;
+    case PetStage::HATCHLING: idx = 1; break;
+    case PetStage::YOUNGSTER: idx = 2; break;
+    case PetStage::COMPANION: idx = 3; break;
+    case PetStage::ELDER:     idx = 4; break;
+    default:                  return kSprite_Dead;
+  }
+
+  switch (petType) {
+    case 2: return kDog[idx];
+    case 3: return kDragon[idx];
+    case 4: return kBunny[idx];
+    case 5: return kRobot[idx];
+    case 6: return kBear[idx];
+    case 7: return kSlime[idx];
+    default:  // Default/Cat (0 or 1)
+      switch (stage) {
+        case PetStage::EGG:       return kSprite_Egg;
+        case PetStage::HATCHLING: return kSprite_Hatchling;
+        case PetStage::YOUNGSTER: return kSprite_Youngster;
+        case PetStage::COMPANION: return kSprite_Companion;
+        default:                  return kSprite_Elder;
+      }
+  }
+}
+
+}  // anonymous namespace

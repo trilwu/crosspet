@@ -8,6 +8,7 @@
 
 #include "components/UITheme.h"
 #include "fontIds.h"
+#include "util/LunarCalendar.h"
 
 namespace {
 const char* DAY_NAMES[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -196,21 +197,31 @@ void ClockActivity::render(RenderLock&&) {
              DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
              MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
 
-    const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
-    const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
-    const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
-    // calendar: 1 header row + max 6 body rows
-    const int calH = cellH * 7;
+    // Vietnamese lunar date
+    LunarDate lunar = solarToLunar(timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
+    char lunarBuf[32];
+    if (lunar.isLeapMonth) {
+      snprintf(lunarBuf, sizeof(lunarBuf), "Ngày %d tháng nhuận %d ÂL", lunar.day, lunar.month);
+    } else {
+      snprintf(lunarBuf, sizeof(lunarBuf), "Ngày %d tháng %d ÂL", lunar.day, lunar.month);
+    }
 
-    // Center the whole block (time + date + calendar) in content area
+    const int timeHeight  = renderer.getLineHeight(UI_12_FONT_ID);
+    const int dateHeight  = renderer.getLineHeight(UI_10_FONT_ID);
+    const int lunarHeight = renderer.getLineHeight(SMALL_FONT_ID);
+    const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 10;
+    const int calH  = cellH * 7;
+
+    // Center the whole block in content area
     const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
     const int contentBot = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing;
-    const int blockH = timeHeight + 8 + dateHeight + 16 + calH;
+    const int blockH = timeHeight + 8 + dateHeight + 4 + lunarHeight + 12 + calH;
     const int startY = contentTop + (contentBot - contentTop - blockH) / 2;
 
     renderer.drawCenteredText(UI_12_FONT_ID, startY, timeBuf, true, EpdFontFamily::BOLD);
     renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 8, dateBuf);
-    renderCalendar(startY + timeHeight + 8 + dateHeight + 16, timeinfo);
+    renderer.drawCenteredText(SMALL_FONT_ID, startY + timeHeight + 8 + dateHeight + 4, lunarBuf);
+    renderCalendar(startY + timeHeight + 8 + dateHeight + 4 + lunarHeight + 12, timeinfo);
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);

@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "../Activity.h"
-#include "./MyLibraryActivity.h"
 #include "util/ButtonNavigator.h"
 
 struct RecentBook;
@@ -15,25 +14,29 @@ class HomeActivity final : public Activity {
   bool recentsLoading = false;
   bool recentsLoaded = false;
   bool firstRenderDone = false;
-  bool hasOpdsUrl = false;
   bool coverRendered = false;      // Track if cover has been rendered once
   bool coverBufferStored = false;  // Track if cover buffer is stored
   uint8_t* coverBuffer = nullptr;  // HomeActivity's own buffer for cover image
   std::vector<RecentBook> recentBooks;
   void onSelectBook(const std::string& path);
   void onMyLibraryOpen();
-  void onRecentsOpen();
-  void onSettingsOpen();
+  void onRecentBooksOpen();
+  void onVirtualPetOpen();
   void onFileTransferOpen();
-  void onOpdsBrowserOpen();
+  void onSettingsOpen();
   void onToolsOpen();
 
-  int getMenuItemCount() const;
   bool storeCoverBuffer();    // Store frame buffer for cover image
   bool restoreCoverBuffer();  // Restore frame buffer from stored cover
   void freeCoverBuffer();     // Free the stored cover buffer
   void loadRecentBooks(int maxBooks);
   void loadRecentCovers(int coverHeight);
+
+  // Render helpers
+  void renderCoverPanel(int panelX, int panelY, int panelW, int panelH, int coverH);
+  void renderProgressPanel(int panelX, int panelY, int panelW, int panelH);
+  void renderGridCell(int cellX, int cellY, int cellW, int cellH, int gridIdx, const uint8_t* icon, const char* label);
+  void renderSelectionHighlight(int panelX, int panelY, int panelW, int panelH);
 
  public:
   explicit HomeActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)

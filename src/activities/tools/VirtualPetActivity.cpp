@@ -139,7 +139,8 @@ void VirtualPetActivity::renderDead() const {
   const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
   const int spriteX = (renderer.getScreenWidth() - petSize) / 2;
   PetSpriteRenderer::drawPet(renderer, spriteX, centerY - petSize - lh,
-                              PetStage::DEAD, PetMood::DEAD, PET_SCALE);
+                              PetStage::DEAD, PetMood::DEAD, PET_SCALE, 0,
+                              PET_MANAGER.getState().petType);
   renderer.drawCenteredText(UI_10_FONT_ID, centerY, tr(STR_PET_DEAD_MESSAGE));
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_PET_HATCH_NEW), "", "");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
@@ -159,7 +160,7 @@ void VirtualPetActivity::renderAlive() const {
   const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
   const int spriteX = (pageWidth - petSize) / 2;
   PetSpriteRenderer::drawPet(renderer, spriteX, contentTop, state.stage, mood, PET_SCALE,
-                              state.evolutionVariant);
+                              state.evolutionVariant, state.petType);
 
   // --- Status icons row below sprite ---
   const int iconsY = contentTop + petSize + 4;
@@ -201,7 +202,7 @@ void VirtualPetActivity::renderAlive() const {
 
   // --- Action menu fills remaining space ---
   const int barSpacing = renderer.getLineHeight(SMALL_FONT_ID) + 10;
-  const int menuY = statsY + barSpacing * 6 + metrics.verticalSpacing;
+  const int menuY = statsY + barSpacing * 7 + metrics.verticalSpacing;
   const int menuH = contentBottom - menuY;
   actionMenu.render(renderer, state, sideMargin, menuY, barW, menuH);
 

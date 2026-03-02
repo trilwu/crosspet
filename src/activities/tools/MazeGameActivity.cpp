@@ -91,27 +91,32 @@ void MazeGameActivity::loop() {
     return;
   }
 
-  // Up/Down changes difficulty and generates a fresh maze
-  bool diffChanged = false;
-  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
-    if ((int)difficulty > 0) { difficulty = (Difficulty)((int)difficulty - 1); diffChanged = true; }
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
-    if ((int)difficulty < 2) { difficulty = (Difficulty)((int)difficulty + 1); diffChanged = true; }
-  }
-  if (diffChanged) {
-    generateMaze();
-    playerX = 0; playerY = 0;
-    moveCount = 0; victory = false;
-    requestUpdate();
-    return;
+  // Read directional inputs once — wasReleased is one-shot per frame
+  const bool up    = mappedInput.wasReleased(MappedInputManager::Button::Up);
+  const bool down  = mappedInput.wasReleased(MappedInputManager::Button::Down);
+  const bool left  = mappedInput.wasReleased(MappedInputManager::Button::Left);
+  const bool right = mappedInput.wasReleased(MappedInputManager::Button::Right);
+
+  // Up/Down changes difficulty only when not actively playing (before first move or after victory)
+  if (moveCount == 0 || victory) {
+    bool diffChanged = false;
+    if (up   && (int)difficulty > 0) { difficulty = (Difficulty)((int)difficulty - 1); diffChanged = true; }
+    if (down && (int)difficulty < 2) { difficulty = (Difficulty)((int)difficulty + 1); diffChanged = true; }
+    if (diffChanged) {
+      generateMaze();
+      playerX = 0; playerY = 0;
+      moveCount = 0; victory = false;
+      requestUpdate();
+      return;
+    }
   }
 
+  // Player movement
   bool moved = false;
-  if (mappedInput.wasReleased(MappedInputManager::Button::Right)) moved |= tryMove(1, 0, 1);
-  if (mappedInput.wasReleased(MappedInputManager::Button::Left))  moved |= tryMove(-1, 0, 3);
-  if (mappedInput.wasReleased(MappedInputManager::Button::Down))  moved |= tryMove(0, 1, 2);
-  if (mappedInput.wasReleased(MappedInputManager::Button::Up))    moved |= tryMove(0, -1, 0);
+  if (right) moved |= tryMove(1, 0, 1);
+  if (left)  moved |= tryMove(-1, 0, 3);
+  if (down)  moved |= tryMove(0, 1, 2);
+  if (up)    moved |= tryMove(0, -1, 0);
   if (moved) requestUpdate();
 }
 
