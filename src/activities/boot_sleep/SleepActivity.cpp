@@ -20,7 +20,6 @@
 #include "images/Logo120.h"
 #include "util/StringUtils.h"
 
-
 namespace {
 
 // Context passed through PNGdec's decode() user-pointer to the per-scanline draw callback.
@@ -34,6 +33,9 @@ struct PngOverlayCtx {
   int dstY;
   float yScale;
   int lastDstY;
+  // Color-key transparency (tRNS chunk) for TRUECOLOR and GRAYSCALE images.
+  // -1 means no color key. For TRUECOLOR: 0x00RRGGBB; for GRAYSCALE: low byte only.
+  int32_t transparentColor;
 };
 
 // PNGdec file I/O callbacks — mirror the pattern in PngToFramebufferConverter.cpp.
@@ -99,10 +101,20 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
         case PNG_PIXEL_TRUECOLOR: {
           const uint8_t* p = &pixels[srcX * 3];
           gray = (uint8_t)((p[0] * 77 + p[1] * 150 + p[2] * 29) >> 8);
+          // tRNS color-key: if pixel matches the designated transparent color, skip it
+          if (ctx->transparentColor >= 0 && p[0] == (uint8_t)((ctx->transparentColor >> 16) & 0xFF) &&
+              p[1] == (uint8_t)((ctx->transparentColor >> 8) & 0xFF) &&
+              p[2] == (uint8_t)(ctx->transparentColor & 0xFF)) {
+            alpha = 0;
+          }
           break;
         }
         case PNG_PIXEL_GRAYSCALE:
           gray = pixels[srcX];
+          // tRNS color-key: transparent gray value stored in low byte
+          if (ctx->transparentColor >= 0 && gray == (uint8_t)(ctx->transparentColor & 0xFF)) {
+            alpha = 0;
+          }
           break;
         case PNG_PIXEL_INDEXED:
           if (pDraw->pPalette) {
@@ -508,6 +520,13 @@ void SleepActivity::renderOverlaySleepScreen() const {
     ctx.dstY = (pageHeight - dstH) / 2;
     ctx.yScale = yScale;
     ctx.lastDstY = -1;
+    // Populate color-key transparency for TRUECOLOR/GRAYSCALE PNGs with a tRNS chunk.
+    // TRUECOLOR_ALPHA and GRAY_ALPHA carry per-pixel alpha, handled directly in the callback.
+    // INDEXED+tRNS stores per-palette alpha at pPalette[768+idx], also handled there.
+    const int pixType = png->getPixelType();
+    ctx.transparentColor = (png->hasAlpha() && (pixType == PNG_PIXEL_TRUECOLOR || pixType == PNG_PIXEL_GRAYSCALE))
+                               ? (int32_t)png->getTransparentColor()
+                               : -1;
 
     rc = png->decode(&ctx, 0);
     png->close();
