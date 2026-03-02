@@ -134,9 +134,9 @@ void PomodoroActivity::loop() {
       return;
     }
 
-    // Refresh display: every 60s normally, every 1s in last 60 seconds
+    // Refresh display: every 30s normally, every 1s in last 60 seconds
     uint32_t remaining = getRemainingMs();
-    unsigned long refreshInterval = (remaining <= 60000) ? 1000 : 60000;
+    unsigned long refreshInterval = (remaining <= 60000) ? 1000 : 30000;
     if (millis() - lastRenderMs >= refreshInterval) {
       lastRenderMs = millis();
       requestUpdate();

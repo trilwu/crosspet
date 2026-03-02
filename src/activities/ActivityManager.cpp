@@ -12,6 +12,7 @@
 #include "reader/ReaderActivity.h"
 #include "settings/SettingsActivity.h"
 #include "tools/ToolsActivity.h"
+#include "tools/VirtualPetActivity.h"
 #include "util/FullScreenMessageActivity.h"
 
 void ActivityManager::begin() {
@@ -95,6 +96,9 @@ void ActivityManager::loop() {
           handler(pendingResult);
         }
 
+        // Request a full refresh on next render to clear ghosting from previous activity
+        renderer.requestNextFullRefresh();
+
         // Request an update to ensure the popped activity gets re-rendered
         if (pendingAction == PendingAction::None) {
           requestUpdate();
@@ -124,6 +128,9 @@ void ActivityManager::loop() {
       pendingAction = PendingAction::None;
       currentActivity = std::move(pendingActivity);
 
+      // Full refresh on next render to clear ghosting from previous activity
+      renderer.requestNextFullRefresh();
+
       lock.unlock();  // onEnter may acquire its own lock
       currentActivity->onEnter();
 
@@ -134,10 +141,10 @@ void ActivityManager::loop() {
 
   if (requestedUpdate) {
     requestedUpdate = false;
-    // Using direct notification to signal the render task to update
-    // Increment counter so multiple rapid calls won't be lost
+    // Use eSetBits (not eIncrement) so rapid calls cap at 1 pending render.
+    // This prevents queued-up renders from causing multiple e-ink refreshes.
     if (renderTaskHandle) {
-      xTaskNotify(renderTaskHandle, 1, eIncrement);
+      xTaskNotify(renderTaskHandle, 1, eSetBits);
     }
   }
 }
@@ -188,6 +195,10 @@ void ActivityManager::goToReader(std::string path) {
 
 void ActivityManager::goToTools() { replaceActivity(std::make_unique<ToolsActivity>(renderer, mappedInput)); }
 
+void ActivityManager::goToVirtualPet() {
+  replaceActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
+}
+
 void ActivityManager::goToSleep() {
   replaceActivity(std::make_unique<SleepActivity>(renderer, mappedInput));
   loop();  // Important: sleep screen must be rendered immediately, the caller will go to sleep right after this returns
@@ -229,7 +240,7 @@ bool ActivityManager::skipLoopDelay() const { return currentActivity && currentA
 void ActivityManager::requestUpdate(bool immediate) {
   if (immediate) {
     if (renderTaskHandle) {
-      xTaskNotify(renderTaskHandle, 1, eIncrement);
+      xTaskNotify(renderTaskHandle, 1, eSetBits);
     }
   } else {
     // Deferring the update until current loop is finished

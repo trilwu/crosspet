@@ -7,17 +7,31 @@ void HalGPIO::begin() {
   pinMode(UART0_RXD, INPUT);
 }
 
-void HalGPIO::update() { inputMgr.update(); }
+void HalGPIO::update() {
+  inputMgr.update();
 
-bool HalGPIO::isPressed(uint8_t buttonIndex) const { return inputMgr.isPressed(buttonIndex); }
+  // Detect BLE button press/release edges
+  uint8_t currentBle = bleState;
+  bleWasPressed = currentBle & ~prevBleState;   // newly pressed bits
+  bleWasReleased = prevBleState & ~currentBle;  // newly released bits
+  prevBleState = currentBle;
+}
 
-bool HalGPIO::wasPressed(uint8_t buttonIndex) const { return inputMgr.wasPressed(buttonIndex); }
+bool HalGPIO::isPressed(uint8_t buttonIndex) const {
+  return inputMgr.isPressed(buttonIndex) || (prevBleState & (1 << buttonIndex));
+}
 
-bool HalGPIO::wasAnyPressed() const { return inputMgr.wasAnyPressed(); }
+bool HalGPIO::wasPressed(uint8_t buttonIndex) const {
+  return inputMgr.wasPressed(buttonIndex) || (bleWasPressed & (1 << buttonIndex));
+}
 
-bool HalGPIO::wasReleased(uint8_t buttonIndex) const { return inputMgr.wasReleased(buttonIndex); }
+bool HalGPIO::wasAnyPressed() const { return inputMgr.wasAnyPressed() || (bleWasPressed != 0); }
 
-bool HalGPIO::wasAnyReleased() const { return inputMgr.wasAnyReleased(); }
+bool HalGPIO::wasReleased(uint8_t buttonIndex) const {
+  return inputMgr.wasReleased(buttonIndex) || (bleWasReleased & (1 << buttonIndex));
+}
+
+bool HalGPIO::wasAnyReleased() const { return inputMgr.wasAnyReleased() || (bleWasReleased != 0); }
 
 unsigned long HalGPIO::getHeldTime() const { return inputMgr.getHeldTime(); }
 

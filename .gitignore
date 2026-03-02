@@ -15,3 +15,5 @@ build
 .history/
 /.venv
 *.local*
+/docs/
+/plans/

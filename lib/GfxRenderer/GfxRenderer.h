@@ -36,6 +36,7 @@ class GfxRenderer {
   RenderMode renderMode;
   Orientation orientation;
   bool fadingFix;
+  mutable bool nextRefreshFull = false;  // if true, next displayBuffer() upgrades to FULL_REFRESH
   uint8_t* frameBuffer = nullptr;
   uint8_t* bwBufferChunks[BW_BUFFER_NUM_CHUNKS] = {nullptr};
   std::map<int, EpdFontFamily> fontMap;
@@ -70,6 +71,10 @@ class GfxRenderer {
 
   // Fading fix control
   void setFadingFix(const bool enabled) { fadingFix = enabled; }
+
+  // Request that the next displayBuffer() call uses FULL_REFRESH to clear ghosting.
+  // Called by ActivityManager on activity transitions; resets automatically after use.
+  void requestNextFullRefresh() { nextRefreshFull = true; }
 
   // Screen ops
   int getScreenWidth() const;

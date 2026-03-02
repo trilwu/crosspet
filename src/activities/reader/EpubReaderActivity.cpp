@@ -696,6 +696,12 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
   } else {
     LOG_ERR("ERS", "Could not save progress!");
   }
+
+  // Update progress percent in recent books store for home screen display
+  const float chapterProg = (pageCount > 0) ? static_cast<float>(currentPage) / pageCount : 0.0f;
+  const float bookProg = epub->calculateProgress(currentSpineIndex, chapterProg) * 100.0f;
+  const uint8_t percent = static_cast<uint8_t>(clampPercent(static_cast<int>(bookProg + 0.5f)));
+  RECENT_BOOKS.updateBookProgress(epub->getPath(), percent);
 }
 void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int orientedMarginTop,
                                         const int orientedMarginRight, const int orientedMarginBottom,

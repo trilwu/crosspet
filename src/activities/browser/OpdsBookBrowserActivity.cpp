@@ -10,7 +10,10 @@
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "activities/network/WifiSelectionActivity.h"
+#include "ble/BleRemoteManager.h"
 #include "components/UITheme.h"
+
+extern BleRemoteManager bleManager;
 #include "fontIds.h"
 #include "network/HttpDownloader.h"
 #include "util/StringUtils.h"
@@ -22,6 +25,9 @@ constexpr int PAGE_ITEMS = 23;
 
 void OpdsBookBrowserActivity::onEnter() {
   Activity::onEnter();
+
+  // Suspend BLE before WiFi — shared 2.4GHz radio
+  bleManager.suspend();
 
   state = BrowserState::CHECK_WIFI;
   entries.clear();
@@ -41,6 +47,9 @@ void OpdsBookBrowserActivity::onExit() {
 
   // Turn off WiFi when exiting
   WiFi.mode(WIFI_OFF);
+
+  // Resume BLE now that WiFi is off
+  bleManager.resume();
 
   entries.clear();
   navigationHistory.clear();

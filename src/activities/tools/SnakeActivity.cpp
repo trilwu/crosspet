@@ -106,11 +106,19 @@ void SnakeActivity::loop() {
   }
 
   if (!gameOver) {
-    // Queue next direction — prevents 180° reversal into self
-    if (mappedInput.wasReleased(MappedInputManager::Button::Up)    && dirY != 1)  { nextDirX = 0;  nextDirY = -1; }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Down)  && dirY != -1) { nextDirX = 0;  nextDirY = 1;  }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Left)  && dirX != 1)  { nextDirX = -1; nextDirY = 0;  }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Right) && dirX != -1) { nextDirX = 1;  nextDirY = 0;  }
+    // D-pad: apply direction immediately for instant feedback, then reset timer
+    bool dirChanged = false;
+    if (mappedInput.wasReleased(MappedInputManager::Button::Up)    && dirY != 1)  { nextDirX = 0;  nextDirY = -1; dirChanged = true; }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Down)  && dirY != -1) { nextDirX = 0;  nextDirY = 1;  dirChanged = true; }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Left)  && dirX != 1)  { nextDirX = -1; nextDirY = 0;  dirChanged = true; }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right) && dirX != -1) { nextDirX = 1;  nextDirY = 0;  dirChanged = true; }
+    if (dirChanged) {
+      dirX = nextDirX; dirY = nextDirY;
+      doMove();
+      lastMoveMs = millis();
+      requestUpdate();
+      return;  // timer reset; skip auto-advance this frame
+    }
   } else {
     // When game over: Up/Down changes speed for next game
     if (mappedInput.wasReleased(MappedInputManager::Button::Up) && speedIdx > 0) {

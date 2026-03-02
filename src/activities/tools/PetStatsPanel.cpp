@@ -58,8 +58,13 @@ void PetStatsPanel::renderStats(GfxRenderer& renderer, const PetState& state,
   drawStatBar(renderer, x, y + barSpacing * 3,     w, "Weight",     state.weight);
   drawStatBar(renderer, x, y + barSpacing * 4,     w, "Discipline", state.discipline);
 
+  // Reading progress bar: pages accumulated toward next meal (0-PAGES_PER_MEAL)
+  const uint8_t readPct = static_cast<uint8_t>(
+      state.pageAccumulator * 100u / PetConfig::PAGES_PER_MEAL);
+  drawStatBar(renderer, x, y + barSpacing * 5,     w, "Reading",    readPct);
+
   // Care mistakes counter below bars
   char mistakesBuf[24];
   snprintf(mistakesBuf, sizeof(mistakesBuf), "Mistakes: %d", state.careMistakes);
-  renderer.drawText(SMALL_FONT_ID, x, y + barSpacing * 5, mistakesBuf);
+  renderer.drawText(SMALL_FONT_ID, x, y + barSpacing * 6, mistakesBuf);
 }
