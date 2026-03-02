@@ -559,9 +559,8 @@ void SleepActivity::renderOverlaySleepScreen() const {
         file.close();
         continue;
       }
-      const auto flen = filename.length();
-      const bool isBmp = flen >= 4 && filename.substr(flen - 4) == ".bmp";
-      const bool isPng = flen >= 4 && filename.substr(flen - 4) == ".png";
+      const bool isBmp = StringUtils::checkFileExtension(filename, ".bmp");
+      const bool isPng = StringUtils::checkFileExtension(filename, ".png");
       if (!isBmp && !isPng) {
         file.close();
         continue;
@@ -585,8 +584,7 @@ void SleepActivity::renderOverlaySleepScreen() const {
       APP_STATE.lastSleepImage = randomFileIndex;
       APP_STATE.saveToFile();
       const std::string selected = "/sleep/" + files[randomFileIndex];
-      const auto slen = selected.length();
-      if (slen >= 4 && selected.substr(slen - 4) == ".png") {
+      if (StringUtils::checkFileExtension(selected, ".png")) {
         overlayDrawn = tryDrawPngOverlay(selected);
       } else {
         overlayDrawn = tryDrawOverlay(selected);
