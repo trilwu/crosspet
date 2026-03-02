@@ -6,6 +6,7 @@
 #include <cstring>
 #include <esp_random.h>
 
+#include "GameScores.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -62,16 +63,25 @@ void SnakeActivity::doMove() {
 void SnakeActivity::onEnter() {
   Activity::onEnter();
 
+  // Ensure session high reflects persisted all-time best
+  if (GAME_SCORES.snakeHigh > (uint32_t)highScore) highScore = (int)GAME_SCORES.snakeHigh;
+
+  // Persist all-time high score; update session high for display
+  if (score > GAME_SCORES.snakeHigh) {
+    GAME_SCORES.snakeHigh = score;
+    GAME_SCORES.saveToFile();
+  }
+  if (score > highScore) highScore = score;
+
   // Reset state
   body.clear();
   memset(occupied, 0, sizeof(occupied));
   gameOver = false;
   score = 0;
-  dirX = 1;
-  dirY = 0;
+  dirX = 1; dirY = 0;
+  nextDirX = 1; nextDirY = 0;
 
   // Initial snake: length 3, centered at row 20, heading right
-  // head = (15,20), then (14,20), (13,20)
   body.push_back({15, 20});
   body.push_back({14, 20});
   body.push_back({13, 20});
@@ -80,6 +90,7 @@ void SnakeActivity::onEnter() {
   occupied[20][13] = true;
 
   spawnFood();
+  lastMoveMs = millis();
   requestUpdate();
 }
 
@@ -94,24 +105,30 @@ void SnakeActivity::loop() {
     return;
   }
 
-  // Accept direction input even when game over (so player sees they pressed)
-  // but only move if not game over
-  bool moved = false;
-  if (mappedInput.wasReleased(MappedInputManager::Button::Up) && dirY != 1) {
-    dirX = 0; dirY = -1; moved = true;
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Down) && dirY != -1) {
-    dirX = 0; dirY = 1; moved = true;
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Left) && dirX != 1) {
-    dirX = -1; dirY = 0; moved = true;
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Right) && dirX != -1) {
-    dirX = 1; dirY = 0; moved = true;
+  if (!gameOver) {
+    // Queue next direction — prevents 180° reversal into self
+    if (mappedInput.wasReleased(MappedInputManager::Button::Up)    && dirY != 1)  { nextDirX = 0;  nextDirY = -1; }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Down)  && dirY != -1) { nextDirX = 0;  nextDirY = 1;  }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Left)  && dirX != 1)  { nextDirX = -1; nextDirY = 0;  }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right) && dirX != -1) { nextDirX = 1;  nextDirY = 0;  }
+  } else {
+    // When game over: Up/Down changes speed for next game
+    if (mappedInput.wasReleased(MappedInputManager::Button::Up) && speedIdx > 0) {
+      speedIdx--;
+      requestUpdate();
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Down) && speedIdx < SPEED_COUNT - 1) {
+      speedIdx++;
+      requestUpdate();
+    }
   }
 
-  if (moved && !gameOver) {
+  // Auto-advance: apply queued direction then step
+  if (!gameOver && (millis() - lastMoveMs) >= SPEED_MS[speedIdx]) {
+    dirX = nextDirX;
+    dirY = nextDirY;
     doMove();
+    lastMoveMs = millis();
     requestUpdate();
   }
 }
@@ -124,33 +141,34 @@ void SnakeActivity::render(RenderLock&&) {
 
   renderer.clearScreen();
 
-  // Header with title
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight},
                  tr(STR_SNAKE));
-
-  // Score shown in button hints area (btn3 slot) — avoids header overlap, matches Maze pattern
-  char scoreStr[24];
-  snprintf(scoreStr, sizeof(scoreStr), "Score: %d", score);
 
   // Draw food as outline square
   const int fx = foodX * CELL_SIZE;
   const int fy = gameTop + foodY * CELL_SIZE;
   renderer.drawRect(fx, fy, CELL_SIZE, CELL_SIZE);
 
-  // Draw snake body as filled squares (1px gap on right/bottom for grid visibility)
+  // Draw snake body as filled squares (1px gap for grid visibility)
   for (auto& seg : body) {
     const int sx = seg.first * CELL_SIZE;
     const int sy = gameTop + seg.second * CELL_SIZE;
     renderer.fillRect(sx, sy, CELL_SIZE - 1, CELL_SIZE - 1);
   }
 
-  // Game over overlay
+  // Game over: show message + speed-change hint
   if (gameOver) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, "Game Over!");
+    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 - 16, "Game Over!");
+    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 8, "Up/Down: speed");
   }
 
-  // Button hints: Back=Exit, Confirm=New Game, btn3=Score
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_NEW_GAME), scoreStr, "");
+  // Button hints: score + high score in btn3, current speed in btn4
+  char scoreStr[32];
+  snprintf(scoreStr, sizeof(scoreStr), "Score:%d Hi:%d", score, highScore);
+  char speedStr[16];
+  snprintf(speedStr, sizeof(speedStr), "[%s]", SPEED_LABELS[speedIdx]);
+
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_NEW_GAME), scoreStr, speedStr);
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
   renderer.displayBuffer();

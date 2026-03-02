@@ -34,15 +34,22 @@ int GameOfLifeActivity::countNeighbors(int x, int y) const {
   return count;
 }
 
+int GameOfLifeActivity::countAliveCells() const {
+  int count = 0;
+  for (int i = 0; i < GRID_BYTES; i++)
+    count += __builtin_popcount(current[i]);
+  return count;
+}
+
 void GameOfLifeActivity::randomize() {
   for (int i = 0; i < GRID_BYTES; i++) {
-    // ~30% alive: each bit alive if random < 77 (out of 256)
     uint8_t rnd = (uint8_t)(esp_random() & 0xFF);
     gridA[i] = rnd & (uint8_t)(esp_random() & 0xFF);  // AND reduces density ~25%
   }
   current = gridA;
   next = gridB;
   generation = 0;
+  aliveCells = countAliveCells();
 }
 
 void GameOfLifeActivity::step() {
@@ -56,12 +63,77 @@ void GameOfLifeActivity::step() {
   }
   std::swap(current, next);
   generation++;
+  aliveCells = countAliveCells();
+}
+
+// --- Pattern presets ---
+// Each preset stamps a known pattern centered on the grid.
+
+void GameOfLifeActivity::loadPreset(int idx) {
+  memset(gridA, 0, sizeof(gridA));
+  memset(gridB, 0, sizeof(gridB));
+  current = gridA;
+  next = gridB;
+  generation = 0;
+
+  // Helper: stamp a cell relative to grid center
+  const int cx = COLS / 2;
+  const int cy = ROWS / 2;
+  auto set = [&](int dx, int dy) {
+    int x = (cx + dx + COLS) % COLS;
+    int y = (cy + dy + ROWS) % ROWS;
+    setCell(current, x, y, true);
+  };
+
+  switch (idx) {
+    case 0:  // Random
+      randomize();
+      return;
+
+    case 1:  // Glider — 5 cells, travels diagonally
+      set(0, -1); set(1, 0); set(-1, 1); set(0, 1); set(1, 1);
+      break;
+
+    case 2:  // Blinker — 3 cells, period-2 oscillator
+      set(-1, 0); set(0, 0); set(1, 0);
+      break;
+
+    case 3:  // Toad — 6 cells, period-2
+      set(0, 0); set(1, 0); set(2, 0);
+      set(-1, 1); set(0, 1); set(1, 1);
+      break;
+
+    case 4:  // Beacon — 8 cells, period-2
+      set(-2, -2); set(-1, -2); set(-2, -1);
+      set(1, 0); set(2, 0); set(1, 1);
+      set(-1, -1); set(2, 1);
+      break;
+
+    case 5:  // Pulsar — 48 cells, period-3 (a classic large oscillator)
+      // Arms at ±2 and ±4 rows/cols from center
+      for (int i : {-4, -3, -2, 2, 3, 4}) {
+        set(i, -6); set(i, -1); set(i, 1); set(i, 6);
+        set(-6, i); set(-1, i); set(1, i); set(6, i);
+      }
+      break;
+
+    case 6:  // R-pentomino — 5 cells, chaotic long-lived pattern
+      set(0, -1); set(1, -1); set(-1, 0); set(0, 0); set(0, 1);
+      break;
+
+    default:
+      randomize();
+      return;
+  }
+
+  aliveCells = countAliveCells();
 }
 
 // --- Lifecycle ---
 
 void GameOfLifeActivity::onEnter() {
   Activity::onEnter();
+  presetIdx = 0;
   randomize();
   lastStepMs = millis();
   requestUpdate();
@@ -77,11 +149,17 @@ void GameOfLifeActivity::loop() {
     lastStepMs = millis();
     changed = true;
   }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Left) && paused) {
-    step();
+  // Left = cycle to next preset
+  if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
+    presetIdx = (presetIdx + 1) % PRESET_COUNT;
+    loadPreset(presetIdx);
+    paused = false;
+    lastStepMs = millis();
     changed = true;
   }
+  // Right = randomize (reset to random, same as preset 0)
   if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
+    presetIdx = 0;
     randomize();
     lastStepMs = millis();
     changed = true;
@@ -108,7 +186,6 @@ void GameOfLifeActivity::loop() {
 void GameOfLifeActivity::render(RenderLock&&) {
   renderer.clearScreen();
 
-  // Draw alive cells as filled CELL_SIZE squares
   for (int y = 0; y < ROWS; y++) {
     for (int x = 0; x < COLS; x++) {
       if (getCell(current, x, y)) {
@@ -119,23 +196,21 @@ void GameOfLifeActivity::render(RenderLock&&) {
 
   // HUD bar at bottom (grid uses top 720px, bottom 80px free)
   const int hudY = ROWS * CELL_SIZE;  // 720
+  renderer.fillRect(0, hudY, renderer.getScreenWidth(), 1);  // separator
+
+  const int textY = hudY + 10;
   char genStr[24];
   snprintf(genStr, sizeof(genStr), "Gen %lu", (unsigned long)generation);
+  renderer.drawText(SMALL_FONT_ID, 8, textY, genStr);
+
+  // Center: preset name + alive count
+  char centerStr[32];
+  snprintf(centerStr, sizeof(centerStr), "%s | %d alive", PRESET_NAMES[presetIdx], aliveCells);
+  renderer.drawCenteredText(SMALL_FONT_ID, textY, centerStr);
 
   const char* speedStr = speedIdx == 0 ? "Fast" : speedIdx == 1 ? "Med" :
                          speedIdx == 2 ? "Slow" : "Slowest";
   const char* pauseStr = paused ? "Resume" : "Pause";
-
-  // Draw a thin separator line
-  renderer.fillRect(0, hudY, renderer.getScreenWidth(), 1);
-
-  // Text labels in hud area
-  const int textY = hudY + 10;
-  renderer.drawText(SMALL_FONT_ID, 8, textY, genStr);
-
-  char speedLabel[16];
-  snprintf(speedLabel, sizeof(speedLabel), "[%s]", speedStr);
-  renderer.drawCenteredText(SMALL_FONT_ID, textY, speedLabel);
 
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), pauseStr, tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);

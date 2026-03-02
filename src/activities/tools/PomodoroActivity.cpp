@@ -61,6 +61,7 @@ void PomodoroActivity::onEnter() {
   totalDurationMs = focusDurationMs;
   completedSessions = 0;
   pausedElapsedMs = 0;
+  selectedField = IdleField::FOCUS;
   requestUpdate();
 }
 
@@ -73,19 +74,19 @@ void PomodoroActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (state) {
       case State::IDLE:
-        startTimer(State::FOCUS, focusDurationMs);
+        // Cycle which duration field is selected for editing
+        selectedField = (IdleField)(((int)selectedField + 1) % 3);
+        requestUpdate();
         break;
       case State::FOCUS:
       case State::SHORT_BREAK:
       case State::LONG_BREAK:
-        // Pause
         pausedFrom = state;
         pausedElapsedMs += (millis() - timerStartMs);
         state = State::PAUSED;
         requestUpdate();
         break;
       case State::PAUSED:
-        // Resume
         state = pausedFrom;
         timerStartMs = millis();
         lastRenderMs = millis();
@@ -94,22 +95,30 @@ void PomodoroActivity::loop() {
     }
   }
 
-  // Up/Down adjust duration in IDLE state
+  // In IDLE: Up/Down adjusts the selected duration field; Right = Start
   if (state == State::IDLE) {
-    buttonNavigator.onNext([this] {
-      if (focusDurationMs > 5 * 60 * 1000) {
-        focusDurationMs -= 5 * 60 * 1000;
+    auto adjustField = [&](int delta) {
+      constexpr uint32_t STEP = 5 * 60 * 1000;
+      constexpr uint32_t MIN_MS = 5 * 60 * 1000;
+      constexpr uint32_t MAX_MS = 60 * 60 * 1000;
+      uint32_t* target = nullptr;
+      if (selectedField == IdleField::FOCUS)       target = &focusDurationMs;
+      else if (selectedField == IdleField::SHORT_BREAK) target = &shortBreakDurationMs;
+      else                                          target = &longBreakDurationMs;
+      uint32_t next = *target + (uint32_t)(delta * (int)STEP);
+      if (next >= MIN_MS && next <= MAX_MS) {
+        *target = next;
         totalDurationMs = focusDurationMs;
         requestUpdate();
       }
-    });
-    buttonNavigator.onPrevious([this] {
-      if (focusDurationMs < 60 * 60 * 1000) {
-        focusDurationMs += 5 * 60 * 1000;
-        totalDurationMs = focusDurationMs;
-        requestUpdate();
-      }
-    });
+    };
+    buttonNavigator.onNext([&] { adjustField(-1); });    // Up = decrease
+    buttonNavigator.onPrevious([&] { adjustField(+1); }); // Down = increase
+
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
+      startTimer(State::FOCUS, focusDurationMs);
+      return;
+    }
   }
 
   // Skip button (Right) during running or paused states
@@ -156,31 +165,53 @@ void PomodoroActivity::render(RenderLock&&) {
   const int totalBlockHeight = labelHeight + 10 + timeHeight + 20 + dotSize;
   const int blockTop = contentCenter - totalBlockHeight / 2;
 
-  renderer.drawCenteredText(UI_10_FONT_ID, blockTop, getStateLabel(), true, EpdFontFamily::BOLD);
+  if (state == State::IDLE) {
+    // IDLE: show all three durations as an editable list
+    // Confirm = select field, Up/Down = adjust, Right = Start
+    const int rowH = labelHeight + 8;
+    const int listTop = contentCenter - (3 * rowH) / 2;
+    const int labelX = pageWidth / 2 - 80;  // left-align labels at ~center-80
 
-  // Large countdown MM:SS
-  uint32_t remaining = getRemainingMs();
-  int minutes = remaining / 60000;
-  int seconds = (remaining % 60000) / 1000;
-  char timeBuf[6];
-  snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", minutes, seconds);
-  renderer.drawCenteredText(UI_12_FONT_ID, blockTop + labelHeight + 10, timeBuf, true, EpdFontFamily::BOLD);
+    struct { const char* name; uint32_t ms; IdleField field; } rows[3] = {
+      {"Focus:      ", focusDurationMs,      IdleField::FOCUS},
+      {"Short break:", shortBreakDurationMs, IdleField::SHORT_BREAK},
+      {"Long break: ", longBreakDurationMs,  IdleField::LONG_BREAK},
+    };
 
-  // Session dots: 4 small squares
-  const int dotsY = blockTop + labelHeight + 10 + timeHeight + 20;
-  const int totalDotsWidth = SESSIONS_BEFORE_LONG_BREAK * dotSize + (SESSIONS_BEFORE_LONG_BREAK - 1) * dotSpacing;
-  const int dotsX = (pageWidth - totalDotsWidth) / 2;
+    for (int i = 0; i < 3; i++) {
+      const int y = listTop + i * rowH;
+      const bool selected = (rows[i].field == selectedField);
+      char buf[32];
+      snprintf(buf, sizeof(buf), "%s %2lu min", rows[i].name, (unsigned long)(rows[i].ms / 60000));
+      // Draw selection arrow + bold text for selected row
+      if (selected) {
+        renderer.drawText(SMALL_FONT_ID, labelX - 14, y, ">");
+        renderer.drawText(UI_10_FONT_ID, labelX, y, buf);
+      } else {
+        renderer.drawText(SMALL_FONT_ID, labelX, y, buf);
+      }
+    }
+  } else {
+    // Running / paused: show state label + large countdown + session dots
+    renderer.drawCenteredText(UI_10_FONT_ID, blockTop, getStateLabel(), true, EpdFontFamily::BOLD);
 
-  for (int i = 0; i < SESSIONS_BEFORE_LONG_BREAK; i++) {
-    int x = dotsX + i * (dotSize + dotSpacing);
-    if (i < completedSessions) {
-      renderer.fillRect(x, dotsY, dotSize, dotSize, true);
-    } else {
-      renderer.drawRect(x, dotsY, dotSize, dotSize, true);
+    uint32_t remaining = getRemainingMs();
+    int minutes = remaining / 60000;
+    int seconds = (remaining % 60000) / 1000;
+    char timeBuf[6];
+    snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", minutes, seconds);
+    renderer.drawCenteredText(UI_12_FONT_ID, blockTop + labelHeight + 10, timeBuf, true, EpdFontFamily::BOLD);
+
+    const int dotsY = blockTop + labelHeight + 10 + timeHeight + 20;
+    const int totalDotsWidth = SESSIONS_BEFORE_LONG_BREAK * dotSize + (SESSIONS_BEFORE_LONG_BREAK - 1) * dotSpacing;
+    const int dotsX = (pageWidth - totalDotsWidth) / 2;
+    for (int i = 0; i < SESSIONS_BEFORE_LONG_BREAK; i++) {
+      int x = dotsX + i * (dotSize + dotSpacing);
+      if (i < completedSessions) renderer.fillRect(x, dotsY, dotSize, dotSize, true);
+      else                       renderer.drawRect(x, dotsY, dotSize, dotSize, true);
     }
   }
 
-  // Button hints vary by state
   const char* btn1 = tr(STR_BACK);
   const char* btn2 = "";
   const char* btn3 = "";
@@ -188,9 +219,9 @@ void PomodoroActivity::render(RenderLock&&) {
 
   switch (state) {
     case State::IDLE:
-      btn2 = tr(STR_START);
+      btn2 = "Select";
       btn3 = tr(STR_DIR_UP);
-      btn4 = tr(STR_DIR_DOWN);
+      btn4 = "Start >";
       break;
     case State::FOCUS:
     case State::SHORT_BREAK:

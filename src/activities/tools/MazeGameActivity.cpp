@@ -18,8 +18,10 @@ static constexpr int DY[] = {-1, 0, 1, 0};
 static constexpr int OPP[] = {2, 3, 0, 1};  // opposite direction index
 
 void MazeGameActivity::generateMaze() {
-  for (int y = 0; y < ROWS; y++)
-    for (int x = 0; x < COLS; x++) {
+  const auto& cfg = CONFIGS[(int)difficulty];
+
+  for (int y = 0; y < cfg.rows; y++)
+    for (int x = 0; x < cfg.cols; x++) {
       walls[y][x] = 0x0F;   // all 4 walls present
       visited[y][x] = false;
     }
@@ -32,7 +34,7 @@ void MazeGameActivity::generateMaze() {
   while (!stack.empty()) {
     auto [cx, cy] = stack.back();
 
-    // Collect and shuffle valid unvisited neighbours
+    // Shuffle valid unvisited neighbours
     int dirs[4] = {0, 1, 2, 3};
     for (int i = 3; i > 0; i--) {
       int j = (int)(esp_random() % (uint32_t)(i + 1));
@@ -43,9 +45,9 @@ void MazeGameActivity::generateMaze() {
     for (int i = 0; i < 4; i++) {
       int d = dirs[i];
       int nx = cx + DX[d], ny = cy + DY[d];
-      if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS && !visited[ny][nx]) {
-        walls[cy][cx] &= ~(1 << d);         // remove wall on this side
-        walls[ny][nx] &= ~(1 << OPP[d]);    // remove wall on opposite side
+      if (nx >= 0 && nx < cfg.cols && ny >= 0 && ny < cfg.rows && !visited[ny][nx]) {
+        walls[cy][cx] &= ~(1 << d);
+        walls[ny][nx] &= ~(1 << OPP[d]);
         visited[ny][nx] = true;
         stack.push_back({nx, ny});
         moved = true;
@@ -61,11 +63,12 @@ bool MazeGameActivity::hasWall(int x, int y, int dir) const {
 }
 
 bool MazeGameActivity::tryMove(int dx, int dy, int dir) {
+  const auto& cfg = CONFIGS[(int)difficulty];
   if (victory || hasWall(playerX, playerY, dir)) return false;
   playerX += dx;
   playerY += dy;
   moveCount++;
-  if (playerX == COLS - 1 && playerY == ROWS - 1) victory = true;
+  if (playerX == cfg.cols - 1 && playerY == cfg.rows - 1) victory = true;
   return true;
 }
 
@@ -88,6 +91,22 @@ void MazeGameActivity::loop() {
     return;
   }
 
+  // Up/Down changes difficulty and generates a fresh maze
+  bool diffChanged = false;
+  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
+    if ((int)difficulty > 0) { difficulty = (Difficulty)((int)difficulty - 1); diffChanged = true; }
+  }
+  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    if ((int)difficulty < 2) { difficulty = (Difficulty)((int)difficulty + 1); diffChanged = true; }
+  }
+  if (diffChanged) {
+    generateMaze();
+    playerX = 0; playerY = 0;
+    moveCount = 0; victory = false;
+    requestUpdate();
+    return;
+  }
+
   bool moved = false;
   if (mappedInput.wasReleased(MappedInputManager::Button::Right)) moved |= tryMove(1, 0, 1);
   if (mappedInput.wasReleased(MappedInputManager::Button::Left))  moved |= tryMove(-1, 0, 3);
@@ -98,49 +117,54 @@ void MazeGameActivity::loop() {
 
 void MazeGameActivity::render(RenderLock&&) {
   const auto& metrics = UITheme::getInstance().getMetrics();
-  const int mazeY = metrics.topPadding + metrics.headerHeight;
+  const auto& cfg = CONFIGS[(int)difficulty];
   const int pageWidth = renderer.getScreenWidth();
+  const int mazeY = metrics.topPadding + metrics.headerHeight;
+
+  // Center Small maze; Medium/Large fill 480px naturally
+  const int mazeOffsetX = (pageWidth - cfg.cols * cfg.cellSize) / 2;
 
   renderer.clearScreen();
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight},
                  tr(STR_MAZE_GAME));
 
-  // Draw maze walls (N + W for every cell, then close S/E border)
-  for (int y = 0; y < ROWS; y++) {
-    for (int x = 0; x < COLS; x++) {
-      const int px = x * CELL_SIZE;
-      const int py = mazeY + y * CELL_SIZE;
-      if (hasWall(x, y, 0)) renderer.fillRect(px, py, CELL_SIZE + 1, 2);          // N
-      if (hasWall(x, y, 3)) renderer.fillRect(px, py, 2, CELL_SIZE + 1);          // W
+  // Draw N + W wall for each cell, then close the S/E border
+  for (int y = 0; y < cfg.rows; y++) {
+    for (int x = 0; x < cfg.cols; x++) {
+      const int px = mazeOffsetX + x * cfg.cellSize;
+      const int py = mazeY + y * cfg.cellSize;
+      if (hasWall(x, y, 0)) renderer.fillRect(px, py, cfg.cellSize + 1, 2);
+      if (hasWall(x, y, 3)) renderer.fillRect(px, py, 2, cfg.cellSize + 1);
     }
   }
-  // Bottom border (S wall of last row) and right border (E wall of last col)
-  for (int x = 0; x < COLS; x++) {
-    if (hasWall(x, ROWS - 1, 2))
-      renderer.fillRect(x * CELL_SIZE, mazeY + ROWS * CELL_SIZE, CELL_SIZE + 1, 2);
+  for (int x = 0; x < cfg.cols; x++) {
+    if (hasWall(x, cfg.rows - 1, 2))
+      renderer.fillRect(mazeOffsetX + x * cfg.cellSize, mazeY + cfg.rows * cfg.cellSize, cfg.cellSize + 1, 2);
   }
-  for (int y = 0; y < ROWS; y++) {
-    if (hasWall(COLS - 1, y, 1))
-      renderer.fillRect(COLS * CELL_SIZE, mazeY + y * CELL_SIZE, 2, CELL_SIZE + 1);
+  for (int y = 0; y < cfg.rows; y++) {
+    if (hasWall(cfg.cols - 1, y, 1))
+      renderer.fillRect(mazeOffsetX + cfg.cols * cfg.cellSize, mazeY + y * cfg.cellSize, 2, cfg.cellSize + 1);
   }
 
-  // Goal: double square at bottom-right
-  const int gx = (COLS - 1) * CELL_SIZE + CELL_SIZE / 2;
-  const int gy = mazeY + (ROWS - 1) * CELL_SIZE + CELL_SIZE / 2;
+  // Goal: double square at bottom-right cell center
+  const int gx = mazeOffsetX + (cfg.cols - 1) * cfg.cellSize + cfg.cellSize / 2;
+  const int gy = mazeY + (cfg.rows - 1) * cfg.cellSize + cfg.cellSize / 2;
   renderer.drawRect(gx - 5, gy - 5, 10, 10);
   renderer.drawRect(gx - 8, gy - 8, 16, 16);
 
-  // Player: filled square
-  const int px = playerX * CELL_SIZE + CELL_SIZE / 2;
-  const int py = mazeY + playerY * CELL_SIZE + CELL_SIZE / 2;
+  // Player: filled square at current cell center
+  const int px = mazeOffsetX + playerX * cfg.cellSize + cfg.cellSize / 2;
+  const int py = mazeY + playerY * cfg.cellSize + cfg.cellSize / 2;
   renderer.fillRect(px - 5, py - 5, 10, 10);
 
-  // Status line in button hints
   char status[40];
   if (victory) snprintf(status, sizeof(status), "Done! %d moves", moveCount);
   else         snprintf(status, sizeof(status), "Moves: %d", moveCount);
 
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_NEW_MAZE), status, "");
+  char diffStr[16];
+  snprintf(diffStr, sizeof(diffStr), "[%s]", cfg.label);
+
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_NEW_MAZE), status, diffStr);
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
   renderer.displayBuffer();
