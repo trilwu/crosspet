@@ -19,6 +19,7 @@
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "KOReaderCredentialStore.h"
+#include "ReadingStats.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
@@ -138,6 +139,9 @@ RTC_DATA_ATTR static uint32_t g_unixBeforeSleep = 0;     // time(nullptr) before
 unsigned long t1 = 0;
 unsigned long t2 = 0;
 
+// Forward declaration — defined later in setup section
+void setupDisplayAndFonts();
+
 // Verify power button press duration on wake-up from deep sleep
 // Pre-condition: isWakeupByPowerButton() == true
 void verifyPowerButtonDuration() {
@@ -177,6 +181,13 @@ void verifyPowerButtonDuration() {
 
   if (abort) {
     // Button released too early. Returning to sleep.
+    // Refresh dynamic sleep screens (clock, reading stats) so the display isn't stale.
+    const auto mode = SETTINGS.sleepScreen;
+    if (mode == CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK ||
+        mode == CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS) {
+      setupDisplayAndFonts();
+      activityManager.goToSleep();
+    }
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
     powerManager.startDeepSleep(gpio);
   }
@@ -333,6 +344,7 @@ void setup() {
 
   APP_STATE.loadFromFile();
   RECENT_BOOKS.loadFromFile();
+  READ_STATS.loadFromFile();
 
   // Boot to home screen if no book is open, last sleep was not from reader, back button is held, or reader activity
   // crashed (indicated by readerActivityLoadCount > 0)
