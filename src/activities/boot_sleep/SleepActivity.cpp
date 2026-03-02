@@ -10,15 +10,16 @@
 
 #include <new>
 
+#include "../reader/EpubReaderActivity.h"
+#include "../reader/TxtReaderActivity.h"
+#include "../reader/XtcReaderActivity.h"
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/Logo120.h"
-#include "reader/EpubReaderActivity.h"
-#include "reader/TxtReaderActivity.h"
-#include "reader/XtcReaderActivity.h"
 #include "util/StringUtils.h"
+
 
 namespace {
 
@@ -522,17 +523,29 @@ void SleepActivity::renderOverlaySleepScreen() const {
     std::vector<std::string> files;
     char name[500];
     for (auto file = dir.openNextFile(); file; file = dir.openNextFile()) {
-      if (file.isDirectory()) { file.close(); continue; }
+      if (file.isDirectory()) {
+        file.close();
+        continue;
+      }
       file.getName(name, sizeof(name));
       auto filename = std::string(name);
-      if (filename[0] == '.') { file.close(); continue; }
+      if (filename[0] == '.') {
+        file.close();
+        continue;
+      }
       const auto flen = filename.length();
       const bool isBmp = flen >= 4 && filename.substr(flen - 4) == ".bmp";
       const bool isPng = flen >= 4 && filename.substr(flen - 4) == ".png";
-      if (!isBmp && !isPng) { file.close(); continue; }
+      if (!isBmp && !isPng) {
+        file.close();
+        continue;
+      }
       if (isBmp) {
         Bitmap bmp(file);
-        if (bmp.parseHeaders() != BmpReaderError::Ok) { file.close(); continue; }
+        if (bmp.parseHeaders() != BmpReaderError::Ok) {
+          file.close();
+          continue;
+        }
       }
       files.emplace_back(filename);
       file.close();
