@@ -34,8 +34,11 @@ struct PngOverlayCtx {
   float yScale;
   int lastDstY;
   // Color-key transparency (tRNS chunk) for TRUECOLOR and GRAYSCALE images.
-  // -1 means no color key. For TRUECOLOR: 0x00RRGGBB; for GRAYSCALE: low byte only.
+  // Initialized lazily on the first draw callback because tRNS is processed during decode(),
+  // not during open() — so hasAlpha()/getTransparentColor() are only valid once decode() starts.
+  // -2 = not yet read; -1 = no color key; >=0 = 0x00RRGGBB (TRUECOLOR) or low-byte gray.
   int32_t transparentColor;
+  PNG* pngObj;  // for lazy-init of transparentColor on first callback
 };
 
 // PNGdec file I/O callbacks — mirror the pattern in PngToFramebufferConverter.cpp.
@@ -70,6 +73,15 @@ int32_t pngSleepSeek(PNGFILE* pFile, int32_t pos) {
 // Opaque pixels are drawn in their grayscale brightness (dark → black, light → white).
 int pngOverlayDraw(PNGDRAW* pDraw) {
   PngOverlayCtx* ctx = reinterpret_cast<PngOverlayCtx*>(pDraw->pUser);
+
+  // Lazy-init: tRNS chunk is processed during decode() before any IDAT data, so by the time
+  // the first draw callback fires, hasAlpha() / getTransparentColor() are already valid.
+  if (ctx->transparentColor == -2) {
+    const int pt = pDraw->iPixelType;
+    ctx->transparentColor = (pDraw->iHasAlpha && (pt == PNG_PIXEL_TRUECOLOR || pt == PNG_PIXEL_GRAYSCALE))
+                                ? (int32_t)ctx->pngObj->getTransparentColor()
+                                : -1;
+  }
 
   const int destY = ctx->dstY + (int)(pDraw->y * ctx->yScale);
   if (destY == ctx->lastDstY) return 1;  // skip duplicate rows from Y scaling
@@ -520,13 +532,8 @@ void SleepActivity::renderOverlaySleepScreen() const {
     ctx.dstY = (pageHeight - dstH) / 2;
     ctx.yScale = yScale;
     ctx.lastDstY = -1;
-    // Populate color-key transparency for TRUECOLOR/GRAYSCALE PNGs with a tRNS chunk.
-    // TRUECOLOR_ALPHA and GRAY_ALPHA carry per-pixel alpha, handled directly in the callback.
-    // INDEXED+tRNS stores per-palette alpha at pPalette[768+idx], also handled there.
-    const int pixType = png->getPixelType();
-    ctx.transparentColor = (png->hasAlpha() && (pixType == PNG_PIXEL_TRUECOLOR || pixType == PNG_PIXEL_GRAYSCALE))
-                               ? (int32_t)png->getTransparentColor()
-                               : -1;
+    ctx.transparentColor = -2;  // will be resolved on first draw callback (after tRNS is parsed)
+    ctx.pngObj = png;
 
     rc = png->decode(&ctx, 0);
     png->close();
