@@ -19,6 +19,7 @@
 #include "MappedInputManager.h"
 #include "QrDisplayActivity.h"
 #include "RecentBooksStore.h"
+#include "ReadingStats.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ScreenshotUtil.h"
@@ -106,12 +107,26 @@ void EpubReaderActivity::onEnter() {
   APP_STATE.saveToFile();
   RECENT_BOOKS.addBook(epub->getPath(), epub->getTitle(), epub->getAuthor(), epub->getThumbBmpPath());
 
+  // Begin tracking how long this reading session lasts
+  READ_STATS.startSession();
+
   // Trigger first update
   requestUpdate();
 }
 
 void EpubReaderActivity::onExit() {
   Activity::onExit();
+
+  // Accumulate reading time and record book progress before resetting state
+  uint8_t progress = 0;
+  const char* title = epub ? epub->getTitle().c_str() : nullptr;
+  if (epub && epub->getBookSize() > 0 && section && section->pageCount > 0) {
+    const float chapterProgress =
+        static_cast<float>(section->currentPage) / static_cast<float>(section->pageCount);
+    progress = static_cast<uint8_t>(
+        clampPercent(static_cast<int>(epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f + 0.5f)));
+  }
+  READ_STATS.endSession(title, progress);
 
   // Reset orientation back to portrait for the rest of the UI
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
@@ -514,6 +529,7 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
       }
     }
   }
+  PET_MANAGER.onPageTurn();
   lastPageTurnTime = millis();
   requestUpdate();
 }
@@ -708,6 +724,15 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderer.displayBuffer(HalDisplay::HALF_REFRESH);
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
+  } else if (SETTINGS.textAntiAliasing) {
+    // Same constraint as image+AA: HALF_REFRESH locks particles too firmly for the grayscale LUT
+    // to adjust gray-zone pixels. Always use FAST_REFRESH when a grayscale AA pass will follow.
+    renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+    if (pagesUntilFullRefresh <= 1) {
+      pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
+    } else {
+      pagesUntilFullRefresh--;
+    }
   } else if (pagesUntilFullRefresh <= 1) {
     renderer.displayBuffer(HalDisplay::HALF_REFRESH);
     pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();

@@ -11,6 +11,7 @@
 
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
+#include "ReadingStats.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/Logo120.h"
@@ -36,6 +37,8 @@ void SleepActivity::onEnter() {
       return renderCoverSleepScreen();
     case (CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK):
       return renderClockSleepScreen();
+    case (CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS):
+      return renderReadingStatsSleepScreen();
     default:
       return renderDefaultSleepScreen();
   }
@@ -140,7 +143,7 @@ void SleepActivity::renderDefaultSleepScreen() const {
     const int miniX = pageWidth - PetSpriteRenderer::MINI_W - 10;
     const int miniY = pageHeight - PetSpriteRenderer::MINI_H - 10;
     PetSpriteRenderer::drawMini(renderer, miniX, miniY, petState.stage, petMood,
-                                petState.evolutionVariant);
+                                petState.evolutionVariant, petState.petType);
     // Attention indicator: "!" above the mini pet
     if (petState.attentionCall) {
       renderer.drawText(SMALL_FONT_ID, miniX + PetSpriteRenderer::MINI_W / 2 - 2,
@@ -497,7 +500,7 @@ void SleepActivity::renderClockSleepScreen() const {
     const int petX = pageWidth - pSize - 10;
     const int petY = pageHeight - pSize - 10;
     PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, PET_SCALE,
-                               petState.evolutionVariant);
+                               petState.evolutionVariant, petState.petType);
 
     // Attention "!" indicator above the pet sprite
     if (petState.attentionCall) {
@@ -533,10 +536,214 @@ void SleepActivity::renderClockSleepScreen() const {
     }
   }
 
+  // Daily quote — changes each day, shown at the bottom of the screen.
+  // Positioned within the left portion to avoid the pet in the bottom-right corner.
+  if (timeValid) {
+    static const char* const QUOTE_TEXT[] = {
+      "A reader lives a thousand lives.",
+      "Not all those who wander are lost.",
+      "A book is a dream you hold in your hands.",
+      "So many books, so little time.",
+      "Books are a uniquely portable magic.",
+      "There is no friend as loyal as a book.",
+      "A word after a word after a word is power.",
+      "Read, read, read. Read everything.",
+      "A good book has no ending.",
+      "Books are mirrors of the soul.",
+      "Think before you speak. Read before you think.",
+      "Good books don't give up all their secrets at once.",
+      "Today a reader, tomorrow a leader.",
+      "Literature is news that stays news.",
+      "I have always imagined Paradise as a kind of library.",
+      "Sleep is good; books are better.",
+      "A house without books is like a room without windows.",
+      "No two persons ever read the same book.",
+      "One book, one pen can change the world.",
+      "Books permit us to voyage through time.",
+      "The reading of good books is a conversation.",
+      "Reading is to the mind what exercise is to the body.",
+      "You don't have to burn books to destroy a culture.",
+      "Classic: a book people praise and don't read.",
+      "One must always be careful of books.",
+      "I declare after all there is no enjoyment like reading!",
+      "Where is human nature so weak as in a bookshop?",
+      "It is what you read when you don't have to that matters.",
+    };
+    static const char* const QUOTE_AUTHOR[] = {
+      "G.R.R. Martin",    "J.R.R. Tolkien",   "Neil Gaiman",
+      "Frank Zappa",      "Stephen King",      "Hemingway",
+      "Margaret Atwood",  "Faulkner",          "R.D. Cumming",
+      "Virginia Woolf",   "Fran Lebowitz",     "Stephen King",
+      "W. Fusselman",     "Ezra Pound",        "Jorge L. Borges",
+      "G.R.R. Martin",    "Horace Mann",       "Edmund Wilson",
+      "Malala Yousafzai", "Carl Sagan",        "Descartes",
+      "Richard Steele",   "Ray Bradbury",      "Mark Twain",
+      "Cassandra Clare",  "Jane Austen",       "H.W. Beecher",
+      "Oscar Wilde",
+    };
+    constexpr int QUOTE_COUNT = 28;
+    const int qIdx = timeinfo.tm_yday % QUOTE_COUNT;
+
+    const int lhQ = renderer.getLineHeight(SMALL_FONT_ID);
+    // Safe width: leave ~108px on the right for the pet (96px sprite + padding)
+    constexpr int PET_RESERVE = 108;
+    const int qLeft = margin;
+    const int qRight = pageWidth - PET_RESERVE;
+    const int qCenterX = (qLeft + qRight) / 2;
+    const int qMaxW = qRight - qLeft;
+
+    // Author line: "— Author", second line from bottom
+    char authorBuf[32];
+    snprintf(authorBuf, sizeof(authorBuf), "— %s", QUOTE_AUTHOR[qIdx]);
+
+    const int authorY = pageHeight - 12;
+    const int quoteY  = authorY - lhQ - 3;
+
+    // Truncate quote if it exceeds the available width
+    const std::string qStr =
+        renderer.truncatedText(SMALL_FONT_ID, QUOTE_TEXT[qIdx], qMaxW, EpdFontFamily::REGULAR);
+
+    const int qW = renderer.getTextWidth(SMALL_FONT_ID, qStr.c_str());
+    renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - qW / 2), quoteY, qStr.c_str());
+
+    const int aW = renderer.getTextWidth(SMALL_FONT_ID, authorBuf);
+    renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - aW / 2), authorY, authorBuf);
+  }
+
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
 
 void SleepActivity::renderBlankSleepScreen() const {
   renderer.clearScreen();
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+}
+
+// Format a duration in seconds into a human-readable string.
+// Results: "< 1 min", "X min", "X hr Y min", "X days Y hr"
+static void formatDuration(char* buf, size_t size, uint32_t secs) {
+  const uint32_t mins  = secs / 60;
+  const uint32_t hours = mins / 60;
+  const uint32_t days  = hours / 24;
+  if (mins < 1) {
+    snprintf(buf, size, "< 1 min");
+  } else if (hours < 1) {
+    snprintf(buf, size, "%lu min", (unsigned long)mins);
+  } else if (days < 1) {
+    snprintf(buf, size, "%lu hr %lu min", (unsigned long)hours, (unsigned long)(mins % 60));
+  } else {
+    snprintf(buf, size, "%lu days %lu hr", (unsigned long)days, (unsigned long)(hours % 24));
+  }
+}
+
+void SleepActivity::renderReadingStatsSleepScreen() const {
+  const int pageWidth  = renderer.getScreenWidth();
+  const int pageHeight = renderer.getScreenHeight();
+  constexpr int MARGIN = 28;
+
+  renderer.clearScreen();
+
+  // Battery — top-right corner
+  char battBuf[8];
+  snprintf(battBuf, sizeof(battBuf), "%u%%", (unsigned)powerManager.getBatteryPercentage());
+  const int battW = renderer.getTextWidth(SMALL_FONT_ID, battBuf);
+  renderer.drawText(SMALL_FONT_ID, pageWidth - battW - 10, 10, battBuf);
+
+  // Header: "Reading Stats"
+  const int lhSmall = renderer.getLineHeight(SMALL_FONT_ID);
+  const int lhUi10  = renderer.getLineHeight(UI_10_FONT_ID);
+  const int lhUi12  = renderer.getLineHeight(UI_12_FONT_ID);
+
+  int y = 60;
+  renderer.drawCenteredText(UI_12_FONT_ID, y, tr(STR_READING_STATS), true, EpdFontFamily::BOLD);
+  y += lhUi12 + 6;
+
+  // Thin separator under header
+  renderer.fillRect(MARGIN + 20, y, pageWidth - 2 * (MARGIN + 20), 1);
+  y += 18;
+
+  // --- TODAY ---
+  renderer.drawText(SMALL_FONT_ID, MARGIN, y, "TODAY");
+  y += lhSmall + 4;
+
+  char todayBuf[32];
+  formatDuration(todayBuf, sizeof(todayBuf), READ_STATS.todayReadSeconds);
+  renderer.drawText(UI_10_FONT_ID, MARGIN, y, todayBuf, true, EpdFontFamily::BOLD);
+  y += lhUi10 + 20;
+
+  // Thin separator
+  renderer.fillRect(MARGIN + 20, y, pageWidth - 2 * (MARGIN + 20), 1);
+  y += 18;
+
+  // --- ALL TIME ---
+  renderer.drawText(SMALL_FONT_ID, MARGIN, y, "ALL TIME");
+  y += lhSmall + 4;
+
+  char totalBuf[32];
+  formatDuration(totalBuf, sizeof(totalBuf), READ_STATS.totalReadSeconds);
+  renderer.drawText(UI_10_FONT_ID, MARGIN, y, totalBuf, true, EpdFontFamily::BOLD);
+  y += lhUi10 + 20;
+
+  // Thin separator
+  renderer.fillRect(MARGIN + 20, y, pageWidth - 2 * (MARGIN + 20), 1);
+  y += 18;
+
+  // --- LAST BOOK ---
+  renderer.drawText(SMALL_FONT_ID, MARGIN, y, "LAST BOOK");
+  y += lhSmall + 4;
+
+  if (READ_STATS.lastBookTitle[0] != '\0') {
+    // Truncate title to fit width (leave room for progress badge on the right)
+    constexpr int BADGE_RESERVE = 64;
+    const int titleMaxW = pageWidth - MARGIN * 2 - BADGE_RESERVE;
+    const std::string titleStr = renderer.truncatedText(
+        UI_10_FONT_ID, READ_STATS.lastBookTitle, titleMaxW, EpdFontFamily::BOLD);
+    renderer.drawText(UI_10_FONT_ID, MARGIN, y, titleStr.c_str(), true, EpdFontFamily::BOLD);
+
+    // Progress percentage badge — right-aligned on same baseline
+    char progBuf[8];
+    snprintf(progBuf, sizeof(progBuf), "%u%%", (unsigned)READ_STATS.lastBookProgress);
+    const int progW = renderer.getTextWidth(SMALL_FONT_ID, progBuf);
+    renderer.drawText(SMALL_FONT_ID, pageWidth - MARGIN - progW, y + (lhUi10 - lhSmall) / 2, progBuf);
+
+    y += lhUi10 + 6;
+
+    // Progress bar: bordered outline + filled progress portion
+    constexpr int BAR_H = 6;
+    const int barW = pageWidth - MARGIN * 2;
+    // Border
+    renderer.fillRect(MARGIN,             y,             barW, 1);          // top
+    renderer.fillRect(MARGIN,             y + BAR_H - 1, barW, 1);          // bottom
+    renderer.fillRect(MARGIN,             y,             1,    BAR_H);       // left
+    renderer.fillRect(MARGIN + barW - 1,  y,             1,    BAR_H);       // right
+    // Inner fill for progress portion
+    const int filledW = static_cast<int>((barW - 2) * READ_STATS.lastBookProgress / 100);
+    if (filledW > 0) {
+      renderer.fillRect(MARGIN + 1, y + 1, filledW, BAR_H - 2);
+    }
+  } else {
+    renderer.drawText(UI_10_FONT_ID, MARGIN, y, "No books read yet", true, EpdFontFamily::REGULAR);
+  }
+
+  // Pet sprite — bottom-right corner (same as other screens)
+  if (PET_MANAGER.exists()) {
+    const auto& petState = PET_MANAGER.getState();
+    const PetMood petMood = PET_MANAGER.isAlive()
+                                ? (petState.attentionCall ? PetMood::NEEDY
+                                   : petState.isSick      ? PetMood::SICK
+                                   : petState.hunger <= 30 ? PetMood::SAD
+                                   : PetMood::SLEEPING)
+                                : PetMood::DEAD;
+    constexpr int PET_SCALE = 2;
+    const int pSize = PetSpriteRenderer::displaySize(PET_SCALE);
+    const int petX  = pageWidth  - pSize - 10;
+    const int petY  = pageHeight - pSize - 10;
+    PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, PET_SCALE,
+                               petState.evolutionVariant, petState.petType);
+    if (petState.attentionCall) {
+      renderer.drawText(SMALL_FONT_ID, petX + pSize / 2 - 2,
+                        petY - lhSmall - 2, "!");
+    }
+  }
+
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
