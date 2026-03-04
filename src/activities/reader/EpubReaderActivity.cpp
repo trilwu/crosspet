@@ -24,7 +24,6 @@
 #include "fontIds.h"
 #include "util/ScreenshotUtil.h"
 
-
 namespace {
 // pagesPerRefresh now comes from SETTINGS.getRefreshFrequency()
 constexpr unsigned long skipChapterMs = 700;
