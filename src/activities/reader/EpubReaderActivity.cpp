@@ -10,6 +10,7 @@
 
 #include "CrossPointSettings.h"
 #include "pet/PetManager.h"
+#include "pet/PetSpriteRenderer.h"
 #include "CrossPointState.h"
 #include "EpubReaderChapterSelectionActivity.h"
 #include "EpubReaderFootnotesActivity.h"
@@ -142,6 +143,43 @@ void EpubReaderActivity::loop() {
     // Should never happen
     finish();
     return;
+  }
+
+  // Dismiss chapter popup after 2s or any button press
+  if (showChapterPopup) {
+    const bool anyBtn = mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
+                         mappedInput.wasReleased(MappedInputManager::Button::Back) ||
+                         mappedInput.wasReleased(MappedInputManager::Button::Left) ||
+                         mappedInput.wasReleased(MappedInputManager::Button::PageBack);
+    if (millis() - chapterPopupTime > 2000 || anyBtn) {
+      showChapterPopup = false;
+      // Check for milestone that fired during chapter popup
+      if (!showMilestoneToast) {
+        auto milestone = PET_MANAGER.consumePendingMilestone();
+        if (milestone != PetManager::Milestone::NONE) {
+          uint16_t val = PET_MANAGER.getLastMilestoneValue();
+          switch (milestone) {
+            case PetManager::Milestone::DAILY_GOAL:
+              snprintf(milestoneText, sizeof(milestoneText), "%s", tr(STR_MILESTONE_DAILY_GOAL)); break;
+            case PetManager::Milestone::STREAK_UP:
+              snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_STREAK_UP), val); break;
+            case PetManager::Milestone::PAGE_MILESTONE:
+              snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_PAGES), (unsigned long)val); break;
+            default: break;
+          }
+          showMilestoneToast = true;
+          milestoneToastTime = millis();
+        }
+      }
+      requestUpdate();
+    }
+    return;  // block other input while popup is shown
+  }
+
+  // Dismiss milestone toast after 1.5s (non-blocking — doesn't consume input)
+  if (showMilestoneToast && millis() - milestoneToastTime > 1500) {
+    showMilestoneToast = false;
+    requestUpdate();
   }
 
   if (automaticPageTurnActive) {
@@ -515,6 +553,18 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
         currentSpineIndex++;
         section.reset();
       }
+      // Chapter completion: always give +5 happiness, show popup every 3rd chapter
+      if (PET_MANAGER.exists() && PET_MANAGER.isAlive() &&
+          currentSpineIndex > lastCompletedSpineIndex &&
+          currentSpineIndex < epub->getSpineItemsCount()) {
+        lastCompletedSpineIndex = currentSpineIndex;
+        chapterCompleteCount++;
+        PET_MANAGER.onChapterComplete();
+        if (chapterCompleteCount % 3 == 0) {
+          showChapterPopup = true;
+          chapterPopupTime = millis();
+        }
+      }
     }
   } else {
     if (section->currentPage > 0) {
@@ -529,7 +579,33 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
       }
     }
   }
+  // Clear any showing milestone toast on page turn (one page of visibility is enough)
+  showMilestoneToast = false;
+
   PET_MANAGER.onPageTurn();
+
+  // Check for milestone toast (only if no chapter popup is showing)
+  if (!showChapterPopup) {
+    auto milestone = PET_MANAGER.consumePendingMilestone();
+    if (milestone != PetManager::Milestone::NONE) {
+      uint16_t val = PET_MANAGER.getLastMilestoneValue();
+      switch (milestone) {
+        case PetManager::Milestone::DAILY_GOAL:
+          snprintf(milestoneText, sizeof(milestoneText), "%s", tr(STR_MILESTONE_DAILY_GOAL));
+          break;
+        case PetManager::Milestone::STREAK_UP:
+          snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_STREAK_UP), val);
+          break;
+        case PetManager::Milestone::PAGE_MILESTONE:
+          snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_PAGES), (unsigned long)val);
+          break;
+        default: break;
+      }
+      showMilestoneToast = true;
+      milestoneToastTime = millis();
+    }
+  }
+
   lastPageTurnTime = millis();
   requestUpdate();
 }
@@ -559,6 +635,39 @@ void EpubReaderActivity::render(RenderLock&& lock) {
     renderer.drawCenteredText(UI_12_FONT_ID, 300, tr(STR_END_OF_BOOK), true, EpdFontFamily::BOLD);
     renderer.displayBuffer();
     automaticPageTurnActive = false;
+    return;
+  }
+
+  // Chapter completion popup — overlay on existing page content (no clearScreen to avoid e-ink flash)
+  if (showChapterPopup) {
+    const int screenW = renderer.getScreenWidth();
+    const int screenH = renderer.getScreenHeight();
+    const int popupW = 260, popupH = 130;
+    const int px = (screenW - popupW) / 2;
+    const int py = (screenH - popupH) / 2;
+    renderer.fillRect(px, py, popupW, popupH, false);
+    renderer.drawRect(px, py, popupW, popupH);
+    renderer.drawRect(px + 2, py + 2, popupW - 4, popupH - 4);  // double border
+
+    // Full-size pet sprite (48x48) centered at top of popup
+    if (PET_MANAGER.exists()) {
+      const auto& ps = PET_MANAGER.getState();
+      PetSpriteRenderer::drawPet(renderer, px + (popupW - PetSpriteRenderer::SPRITE_W) / 2, py + 10,
+                                 ps.stage, PET_MANAGER.getMood(), 1, ps.evolutionVariant, ps.petType);
+    }
+
+    // "Chapter Complete!" text below pet
+    const int txtW = renderer.getTextWidth(SMALL_FONT_ID, tr(STR_CHAPTER_COMPLETE), EpdFontFamily::BOLD);
+    renderer.drawText(SMALL_FONT_ID, px + (popupW - txtW) / 2, py + 68,
+                      tr(STR_CHAPTER_COMPLETE), true, EpdFontFamily::BOLD);
+
+    // "+5 happy" indicator
+    char happyBuf[16];
+    snprintf(happyBuf, sizeof(happyBuf), "+%d :)", PetConfig::CHAPTER_COMPLETE_HAPPINESS);
+    const int happyW = renderer.getTextWidth(SMALL_FONT_ID, happyBuf);
+    renderer.drawText(SMALL_FONT_ID, px + (popupW - happyW) / 2, py + 90, happyBuf, true);
+
+    renderer.displayBuffer();
     return;
   }
 
@@ -717,6 +826,19 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
 
   page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
   renderStatusBar();
+
+  // Milestone toast — small banner at bottom of page content area
+  if (showMilestoneToast && milestoneText[0]) {
+    const int screenW = renderer.getScreenWidth();
+    const int toastW = renderer.getTextWidth(SMALL_FONT_ID, milestoneText) + 16;
+    const int toastH = renderer.getLineHeight(SMALL_FONT_ID) + 8;
+    const int tx = (screenW - toastW) / 2;
+    const int ty = orientedMarginTop + 4;
+    renderer.fillRect(tx, ty, toastW, toastH, false);
+    renderer.drawRect(tx, ty, toastW, toastH);
+    renderer.drawText(SMALL_FONT_ID, tx + 8, ty + 4, milestoneText, true, EpdFontFamily::BOLD);
+  }
+
   if (imagePageWithAA) {
     // Double FAST_REFRESH with selective image blanking (pablohc's technique):
     // HALF_REFRESH sets particles too firmly for the grayscale LUT to adjust.
@@ -736,15 +858,6 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderer.displayBuffer(HalDisplay::HALF_REFRESH);
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
-  } else if (SETTINGS.textAntiAliasing) {
-    // Same constraint as image+AA: HALF_REFRESH locks particles too firmly for the grayscale LUT
-    // to adjust gray-zone pixels. Always use FAST_REFRESH when a grayscale AA pass will follow.
-    renderer.displayBuffer(HalDisplay::FAST_REFRESH);
-    if (pagesUntilFullRefresh <= 1) {
-      pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
-    } else {
-      pagesUntilFullRefresh--;
-    }
   } else if (pagesUntilFullRefresh <= 1) {
     renderer.displayBuffer(HalDisplay::HALF_REFRESH);
     pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();

@@ -81,10 +81,10 @@ void PhotoFrameActivity::loop() {
     changed = true;
   }
 
-  // Overlay expiry
+  // Overlay expiry — don't trigger a full redraw just to hide text;
+  // next auto-advance or manual navigation will clear it naturally.
   if (showOverlay && millis() >= overlayEndMs) {
     showOverlay = false;
-    changed = true;
   }
 
   if (changed) requestUpdate();

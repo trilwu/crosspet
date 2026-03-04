@@ -30,14 +30,14 @@ void VirtualPetActivity::loop() {
       requestUpdate();
       return;
     }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
+    buttonNavigator.onPrevious([this] {
       typeSelectIndex = (typeSelectIndex > 0) ? typeSelectIndex - 1 : PetTypeNames::COUNT - 1;
       requestUpdate();
-    }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    });
+    buttonNavigator.onNext([this] {
       typeSelectIndex = (typeSelectIndex + 1) % PetTypeNames::COUNT;
       requestUpdate();
-    }
+    });
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
       confirmTypeSelect();
     }
@@ -58,14 +58,14 @@ void VirtualPetActivity::loop() {
   }
 
   bool changed = false;
-  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
+  buttonNavigator.onPrevious([&] {
     actionMenu.moveUp();
     changed = true;
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+  });
+  buttonNavigator.onNext([&] {
     actionMenu.moveDown();
     changed = true;
-  }
+  });
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     executeSelectedAction();
     changed = true;

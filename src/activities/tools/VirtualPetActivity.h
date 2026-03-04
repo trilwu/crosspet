@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Activity.h"
+#include "util/ButtonNavigator.h"
 
 #include "PetActionMenu.h"
 #include "PetStatsPanel.h"
@@ -40,6 +41,7 @@ class VirtualPetActivity final : public Activity {
   void startTypeSelectForChange(); // shows type select, then calls changeType()
   void confirmTypeSelect();        // called when user confirms a type
 
+  ButtonNavigator buttonNavigator;
   PetActionMenu actionMenu;
   PetStatsPanel statsPanel;
 

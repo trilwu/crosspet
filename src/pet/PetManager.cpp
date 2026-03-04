@@ -111,17 +111,34 @@ void PetManager::onPageTurn() {
     state.happiness = clampAdd(state.happiness, streakBonus);
 
     // Recalculate streak tier after streak update
+    uint8_t oldTier = state.streakTier;
     if (state.currentStreak >= 30)      state.streakTier = 3;
     else if (state.currentStreak >= 14) state.streakTier = 2;
     else if (state.currentStreak >= 7)  state.streakTier = 1;
     else                                state.streakTier = 0;
+
+    // Streak tier milestone (higher priority than page milestone)
+    if (state.streakTier > oldTier) {
+      pendingMilestone = Milestone::STREAK_UP;
+      lastMilestoneValue = state.currentStreak;
+    }
   }
 
-  // Daily reading goal reward (fires once when goal is exactly reached)
-  if (state.missionPagesRead == PetConfig::DAILY_GOAL_PAGES) {
+  // Daily reading goal reward (fires once on the exact page that reaches the goal)
+  if (missionProgress && state.missionPagesRead == PetConfig::DAILY_GOAL_PAGES) {
     state.health = clampAdd(state.health, PetConfig::DAILY_GOAL_HEALTH);
     state.happiness = clampAdd(state.happiness, PetConfig::DAILY_GOAL_HAPPINESS);
+    if (pendingMilestone == Milestone::NONE) {  // don't overwrite higher-priority streak milestone
+      pendingMilestone = Milestone::DAILY_GOAL;
+      lastMilestoneValue = PetConfig::DAILY_GOAL_PAGES;
+    }
     LOG_DBG("PET", "Daily reading goal met! health=%d happiness=%d", state.health, state.happiness);
+  }
+
+  // Page milestone every 100 pages (only if no higher-priority milestone pending)
+  if (pendingMilestone == Milestone::NONE && state.totalPagesRead > 0 && state.totalPagesRead % 100 == 0) {
+    pendingMilestone = Milestone::PAGE_MILESTONE;
+    lastMilestoneValue = static_cast<uint16_t>(state.totalPagesRead > 65535 ? 65535 : state.totalPagesRead);
   }
 
   if (state.pageAccumulator >= getEffectivePagesPerMeal()) {
@@ -206,6 +223,13 @@ uint16_t PetManager::getEffectivePagesPerMeal() const {
   return PetConfig::STREAK_PAGES_PER_MEAL[tier];
 }
 
+void PetManager::onChapterComplete() {
+  if (!state.exists() || !state.isAlive()) return;
+  state.happiness = clampAdd(state.happiness, PetConfig::CHAPTER_COMPLETE_HAPPINESS);
+  LOG_DBG("PET", "Chapter complete! happiness=%d", state.happiness);
+  save();
+}
+
 void PetManager::onBookFinished() {
   if (!state.exists() || !state.isAlive()) return;
   state.happiness = clampAdd(state.happiness, PetConfig::BOOK_FINISH_HAPPINESS);
@@ -248,6 +272,14 @@ void PetManager::getMissions(PetMission out[3]) const {
   out[0] = {tr(STR_PET_MISSION_READ), state.missionPagesRead, 20, state.missionPagesRead >= 20};
   out[1] = {tr(STR_PET_MISSION_PET),  state.missionPetCount,   3, state.missionPetCount  >=  3};
   out[2] = {tr(STR_PET_MISSION_FED),  state.hunger,            40, state.hunger           >= 40};
+}
+
+// --- Milestones ---
+
+PetManager::Milestone PetManager::consumePendingMilestone() {
+  Milestone m = pendingMilestone;
+  pendingMilestone = Milestone::NONE;
+  return m;
 }
 
 // --- Helpers ---

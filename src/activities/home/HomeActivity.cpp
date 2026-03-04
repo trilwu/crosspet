@@ -23,6 +23,8 @@
 #include "components/icons/tools.h"
 #include "components/icons/transfer.h"
 #include "fontIds.h"
+#include "pet/PetEvolution.h"
+#include "pet/PetManager.h"
 #include "util/StringUtils.h"
 
 // ── Layout constants ─────────────────────────────────────────────────────────
@@ -236,6 +238,43 @@ void HomeActivity::renderSelectionHighlight(int panelX, int panelY, int panelW, 
   renderer.drawRoundedRect(panelX + 2, panelY + 2, panelW - 4, panelH - 4, 2, 8, true);
 }
 
+// ── Pet status widget (drawn over header left side) ──────────────────────
+
+void HomeActivity::renderPetStatusWidget(int headerH) {
+  if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
+
+  const auto& ps = PET_MANAGER.getState();
+  const PetMood mood = PET_MANAGER.getMood();
+  const int screenW = renderer.getScreenWidth();
+
+  // Context-aware motivational status message (i18n)
+  const char* name = ps.petName[0] ? ps.petName : PetEvolution::variantStageName(ps.stage, ps.evolutionVariant);
+  char petBuf[64];
+
+  if (ps.hunger < 30) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HUNGRY), name);
+  } else if (mood == PetMood::SAD) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SAD), name);
+  } else if (mood == PetMood::SICK) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SICK), name);
+  } else if (mood == PetMood::NEEDY) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_NEEDY), name);
+  } else if (mood == PetMood::SLEEPING) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SLEEPING), name);
+  } else if (ps.currentStreak > 7) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_STREAK), name, ps.currentStreak);
+  } else if (mood == PetMood::HAPPY) {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HAPPY), name);
+  } else {
+    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_DEFAULT), name);
+  }
+  const int textW = renderer.getTextWidth(SMALL_FONT_ID, petBuf);
+  // Battery occupies right ~40px of header; place pet status left of it
+  const int x = screenW - 44 - textW;
+  const int y = 5;  // same y offset as battery
+  renderer.drawText(SMALL_FONT_ID, x, y, petBuf, true);
+}
+
 // ── Main render ───────────────────────────────────────────────────────────────
 
 void HomeActivity::render(RenderLock&&) {
@@ -244,6 +283,7 @@ void HomeActivity::render(RenderLock&&) {
   if (!coverRendered) {
     renderer.clearScreen();
     GUI.drawHeader(renderer, Rect{0, 0, pageWidth, HEADER_H}, nullptr);
+    renderPetStatusWidget(HEADER_H);
     renderer.drawLine(DIVIDER_X, HEADER_H,  DIVIDER_X, DIVIDER_Y,   true);  // top vertical
     renderer.drawLine(0,         DIVIDER_Y, pageWidth,  DIVIDER_Y,   true);  // mid horizontal
     renderer.drawLine(DIVIDER_X, DIVIDER_Y, DIVIDER_X, GRID_BOTTOM, true);  // grid vertical
@@ -256,6 +296,7 @@ void HomeActivity::render(RenderLock&&) {
   } else {
     restoreCoverBuffer();
     GUI.drawHeader(renderer, Rect{0, 0, pageWidth, HEADER_H}, nullptr);
+    renderPetStatusWidget(HEADER_H);
   }
 
   // Grid cells (redrawn each frame for selection state)

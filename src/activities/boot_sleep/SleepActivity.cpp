@@ -364,12 +364,13 @@ void SleepActivity::renderClockSleepScreen() const {
   struct tm timeinfo;
   localtime_r(&now, &timeinfo);
 
-  static const char* const DAY_NAMES[] = {"Sunday",   "Monday", "Tuesday", "Wednesday",
-                                          "Thursday", "Friday", "Saturday"};
-  static const char* const MONTH_NAMES[] = {"January",   "February", "March",    "April",
-                                            "May",       "June",     "July",     "August",
-                                            "September", "October",  "November", "December"};
-  static const char* const DAY_HDR[] = {"S", "M", "T", "W", "T", "F", "S"};
+  const char* const DAY_NAMES[] = {tr(STR_DAY_SUN), tr(STR_DAY_MON), tr(STR_DAY_TUE), tr(STR_DAY_WED),
+                                    tr(STR_DAY_THU), tr(STR_DAY_FRI), tr(STR_DAY_SAT)};
+  const char* const MONTH_NAMES[] = {tr(STR_MONTH_JAN), tr(STR_MONTH_FEB), tr(STR_MONTH_MAR), tr(STR_MONTH_APR),
+                                      tr(STR_MONTH_MAY), tr(STR_MONTH_JUN), tr(STR_MONTH_JUL), tr(STR_MONTH_AUG),
+                                      tr(STR_MONTH_SEP), tr(STR_MONTH_OCT), tr(STR_MONTH_NOV), tr(STR_MONTH_DEC)};
+  const char* const DAY_HDR[] = {tr(STR_CAL_SUN), tr(STR_CAL_MON), tr(STR_CAL_TUE), tr(STR_CAL_WED),
+                                  tr(STR_CAL_THU), tr(STR_CAL_FRI), tr(STR_CAL_SAT)};
 
   // Valid time = year >= 2025; show placeholder text if not synced yet
   const bool timeValid = (timeinfo.tm_year >= 125);
@@ -399,7 +400,7 @@ void SleepActivity::renderClockSleepScreen() const {
     snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s", DAY_NAMES[timeinfo.tm_wday],
              timeinfo.tm_mday, MONTH_NAMES[timeinfo.tm_mon]);
   } else {
-    snprintf(dateBuf, sizeof(dateBuf), "Sync time via WiFi");
+    snprintf(dateBuf, sizeof(dateBuf), "%s", tr(STR_SYNC_TIME));
   }
 
   // Vietnamese lunar date
@@ -539,19 +540,21 @@ void SleepActivity::renderClockSleepScreen() const {
     const char* msg = nullptr;
     if (petMood == PetMood::NEEDY) {
       switch (petState.currentNeed) {
-        case PetNeed::HUNGRY: msg = "Feed me~"; break;
-        case PetNeed::SICK:   msg = "Need medicine..."; break;
-        case PetNeed::DIRTY:  msg = "It's dirty..."; break;
-        case PetNeed::BORED:  msg = "So bored..."; break;
-        default:              msg = "Hey!"; break;  // fake call
+        case PetNeed::HUNGRY: msg = tr(STR_PET_SLEEP_FEED_ME); break;
+        case PetNeed::SICK:   msg = tr(STR_PET_SLEEP_MEDICINE); break;
+        case PetNeed::DIRTY:  msg = tr(STR_PET_SLEEP_DIRTY); break;
+        case PetNeed::BORED:  msg = tr(STR_PET_SLEEP_BORED); break;
+        default:              msg = tr(STR_PET_SLEEP_HEY); break;
       }
     } else if (petMood == PetMood::SICK) {
-      msg = "Not feeling well...";
+      msg = tr(STR_PET_SLEEP_SICK);
     } else if (petMood == PetMood::SLEEPING) {
-      static const char* const SLEEP_MSGS[] = {"Zzz...", "Purr~", "Sweet dreams", "Dreaming..."};
+      const char* const SLEEP_MSGS[] = {tr(STR_PET_SLEEP_ZZZ), tr(STR_PET_SLEEP_PURR),
+                                         tr(STR_PET_SLEEP_SWEET), tr(STR_PET_SLEEP_DREAMING)};
       msg = SLEEP_MSGS[(uint32_t)time(nullptr) / 3600 % 4];
     } else if (petMood == PetMood::SAD) {
-      static const char* const SAD_MSGS[] = {"Hungry...", "Read more!", "Feed me~"};
+      const char* const SAD_MSGS[] = {tr(STR_PET_SLEEP_HUNGRY), tr(STR_PET_SLEEP_READ_MORE),
+                                       tr(STR_PET_SLEEP_FEED_ME)};
       msg = SAD_MSGS[(uint32_t)time(nullptr) / 3600 % 3];
     }
     if (msg != nullptr) {
@@ -566,7 +569,7 @@ void SleepActivity::renderClockSleepScreen() const {
   // Daily quote — changes each day, shown at the bottom of the screen.
   // Positioned within the left portion to avoid the pet in the bottom-right corner.
   if (timeValid) {
-    static const char* const QUOTE_TEXT[] = {
+    static const char* const QUOTE_EN[] = {
       "A reader lives a thousand lives.",
       "Not all those who wander are lost.",
       "A book is a dream you hold in your hands.",
@@ -596,6 +599,36 @@ void SleepActivity::renderClockSleepScreen() const {
       "Where is human nature so weak as in a bookshop?",
       "It is what you read when you don't have to that matters.",
     };
+    static const char* const QUOTE_VI[] = {
+      "Người đọc sống ngàn cuộc đời.",
+      "Không phải ai lang thang cũng lạc lối.",
+      "Sách là giấc mơ cầm trên tay.",
+      "Nhiều sách quá, ít thời gian quá.",
+      "Sách là phép màu bỏ túi.",
+      "Không bạn nào trung thành như sách.",
+      "Từ nối từ nối từ là sức mạnh.",
+      "Đọc, đọc, đọc. Đọc mọi thứ.",
+      "Sách hay không có hồi kết.",
+      "Sách là tấm gương tâm hồn.",
+      "Nghĩ trước khi nói. Đọc trước khi nghĩ.",
+      "Sách hay không tiết lộ hết bí mật.",
+      "Hôm nay đọc sách, mai dẫn đầu.",
+      "Văn chương là tin tức còn mãi.",
+      "Tôi luôn hình dung Thiên đường như thư viện.",
+      "Ngủ thì tốt, sách thì tuyệt hơn.",
+      "Nhà không sách như phòng không cửa sổ.",
+      "Không ai đọc cùng một cuốn sách giống nhau.",
+      "Một cuốn sách, một cây bút đổi thay thế giới.",
+      "Sách cho ta du hành qua thời gian.",
+      "Đọc sách hay là một cuộc trò chuyện.",
+      "Đọc sách là tập thể dục cho trí óc.",
+      "Không cần đốt sách để hủy nền văn hóa.",
+      "Kinh điển: sách người ta khen mà không đọc.",
+      "Luôn phải cẩn thận với sách.",
+      "Không có niềm vui nào bằng đọc sách!",
+      "Bản tính con người yếu đuối nhất ở hiệu sách.",
+      "Điều bạn đọc khi không bắt buộc mới quan trọng.",
+    };
     static const char* const QUOTE_AUTHOR[] = {
       "G.R.R. Martin",    "J.R.R. Tolkien",   "Neil Gaiman",
       "Frank Zappa",      "Stephen King",      "Hemingway",
@@ -610,6 +643,8 @@ void SleepActivity::renderClockSleepScreen() const {
     };
     constexpr int QUOTE_COUNT = 28;
     const int qIdx = timeinfo.tm_yday % QUOTE_COUNT;
+    const bool isVi = I18N.getLanguage() == Language::VIETNAMESE;
+    const char* const* QUOTE_TEXT = isVi ? QUOTE_VI : QUOTE_EN;
 
     const int lhQ = renderer.getLineHeight(SMALL_FONT_ID);
     // Safe width: leave ~108px on the right for the pet (96px sprite + padding)

@@ -26,6 +26,17 @@ class EpubReaderActivity final : public Activity {
   bool automaticPageTurnActive = false;
   bool bookCompletionNotified = false;
 
+  // Chapter completion celebration (Phase 2)
+  int lastCompletedSpineIndex = -1;   // prevents double-fire on back-then-forward
+  int chapterCompleteCount = 0;       // show popup every 3rd chapter
+  bool showChapterPopup = false;
+  unsigned long chapterPopupTime = 0;
+
+  // Milestone toast (Phase 3)
+  bool showMilestoneToast = false;
+  unsigned long milestoneToastTime = 0;
+  char milestoneText[48] = {};
+
   // Footnote support
   std::vector<FootnoteEntry> currentPageFootnotes;
   struct SavedPosition {
