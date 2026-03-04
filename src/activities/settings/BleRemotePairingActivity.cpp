@@ -105,10 +105,14 @@ void BleRemotePairingActivity::loop() {
         state = BleUiState::SCAN_COMPLETE;
         requestUpdate();
       }
-      // Allow back to cancel scan
       if (mappedInput.wasPressed(MappedInputManager::Button::Back)) {
         bleManager.stopScan();
         finish();
+      }
+      // Long-press Confirm → restart scan
+      if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) && mappedInput.getHeldTime() > 800) {
+        bleManager.stopScan();
+        startScanning();
       }
       return;
     }
@@ -309,7 +313,10 @@ void BleRemotePairingActivity::renderScanComplete() const {
     renderer.drawCenteredText(UI_10_FONT_ID, top, tr(STR_BLE_NO_DEVICES));
   } else {
     GUI.drawList(renderer, Rect{0, contentTop, pageWidth, contentHeight}, deviceCount, selectedDeviceIndex,
-                 [&devices](int i) { return devices[i].name; }, nullptr, nullptr,
+                 [&devices](int i) {
+                   return devices[i].advertisesHid ? devices[i].name + " [HID]" : devices[i].name;
+                 },
+                 nullptr, nullptr,
                  [this, &devices](int i) {
                    char rssi[16];
                    snprintf(rssi, sizeof(rssi), "%s %ddB", getSignalStrengthIndicator(devices[i].rssi).c_str(),

@@ -13,7 +13,8 @@ class HalGPIO;
 struct BleDiscoveredDevice {
   std::string name;
   NimBLEAddress address;
-  int rssi;
+  int rssi = 0;
+  bool advertisesHid = false;
 };
 
 // Manages BLE Central connection to HID page-turn remotes

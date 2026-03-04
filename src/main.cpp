@@ -371,6 +371,11 @@ void setup() {
     g_rtcSleepMagic = 0;  // consume — next boot treats as cold boot unless we sleep again
   }
 
+  // Set timezone to UTC+7 (ICT — Indochina Time) so localtime_r() returns local time.
+  // This must happen after settimeofday() and before any localtime_r() calls.
+  setenv("TZ", "ICT-7", 1);
+  tzset();
+
   // Load virtual pet state and apply time-based decay
   PET_MANAGER.load();
   PET_MANAGER.tick();
@@ -512,10 +517,11 @@ void loop() {
   }
 
   // Short power button press = full screen refresh (clears e-ink ghosting)
+  // Use deferred requestUpdate() so it merges with any activity render into a single refresh
   if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::SCREEN_REFRESH &&
       gpio.wasReleased(HalGPIO::BTN_POWER)) {
     renderer.requestNextFullRefresh();
-    activityManager.requestUpdate(true);
+    activityManager.requestUpdate();
   }
 
   const unsigned long activityStartTime = millis();

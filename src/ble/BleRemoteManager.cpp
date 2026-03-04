@@ -3,6 +3,8 @@
 #include <HalGPIO.h>
 #include <Logging.h>
 
+#include <algorithm>
+
 // Prevent Arduino from releasing BLE controller memory at boot.
 // NimBLE-Arduino 2.x doesn't include esp32-hal-bt-mem.h, so btInUse() returns
 // false and initArduino() frees BLE memory via esp_bt_controller_mem_release().
@@ -157,7 +159,7 @@ bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
   }
 
   client->setClientCallbacks(this, false);
-  client->setConnectTimeout(8);
+  client->setConnectTimeout(12);
 
   LOG_DBG("BLE", "Connecting to %s (type %d)...", addr.toString().c_str(), addr.getType());
 
@@ -316,6 +318,9 @@ void BleRemoteManager::onResult(const NimBLEAdvertisedDevice* device) {
         d.name = name;  // replace address placeholder with real name
       }
       d.rssi = device->getRSSI();  // update signal strength
+      if (!d.advertisesHid) {
+        d.advertisesHid = device->isAdvertisingService(NimBLEUUID((uint16_t)0x1812));
+      }
       return;
     }
   }
@@ -324,6 +329,7 @@ void BleRemoteManager::onResult(const NimBLEAdvertisedDevice* device) {
   d.name = name.empty() ? device->getAddress().toString() : name;
   d.address = device->getAddress();
   d.rssi = device->getRSSI();
+  d.advertisesHid = device->isAdvertisingService(NimBLEUUID((uint16_t)0x1812));
   discoveredDevices.push_back(d);
 
   LOG_DBG("BLE", "Found: %s (%d dBm)", d.name.c_str(), d.rssi);
@@ -332,7 +338,13 @@ void BleRemoteManager::onResult(const NimBLEAdvertisedDevice* device) {
 void BleRemoteManager::onScanEnd(const NimBLEScanResults& results, int reason) {
   scanning = false;
   std::lock_guard<std::mutex> lock(devicesMutex);
-  LOG_DBG("BLE", "Scan ended, found %zu HID devices", discoveredDevices.size());
+  // Sort: HID-advertising devices first, then by signal strength (strongest first)
+  std::sort(discoveredDevices.begin(), discoveredDevices.end(),
+            [](const BleDiscoveredDevice& a, const BleDiscoveredDevice& b) {
+              if (a.advertisesHid != b.advertisesHid) return a.advertisesHid;
+              return a.rssi > b.rssi;
+            });
+  LOG_DBG("BLE", "Scan ended, found %zu devices", discoveredDevices.size());
 }
 
 void BleRemoteManager::onConnect(NimBLEClient* client) {
