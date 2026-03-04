@@ -56,7 +56,10 @@ size_t parseAndWrapLines(const uint8_t* buffer, size_t chunkSize, size_t fileOff
           while (breakPos > 0 && (line[breakPos] & 0xC0) == 0x80) breakPos--;
         }
       }
-      if (breakPos == 0) breakPos = 1;
+      if (breakPos == 0) {
+        breakPos = 1;
+        while (breakPos < line.length() && (line[breakPos] & 0xC0) == 0x80) breakPos++;
+      }
       outLines.push_back(line.substr(0, breakPos));
       size_t skipChars = breakPos;
       if (breakPos < line.length() && line[breakPos] == ' ') skipChars++;
@@ -526,8 +529,9 @@ bool TxtReaderActivity::loadPageIndexCache() {
   uint32_t numPages;
   serialization::readPod(f, numPages);
   if (numPages > MAX_CACHE_PAGES) {
-    LOG_ERR("TRS", "Cache numPages %u exceeds cap %u, truncating", numPages, MAX_CACHE_PAGES);
-    numPages = MAX_CACHE_PAGES;
+    LOG_ERR("TRS", "Cache numPages %u exceeds cap %u, cache invalid", numPages, MAX_CACHE_PAGES);
+    f.close();
+    return false;
   }
 
   // Read page offsets
@@ -672,8 +676,12 @@ bool TxtReaderActivity::drawCurrentPageToBuffer(const std::string& filePath, Gfx
           uint32_t off;
           serialization::readPod(cacheFile, off);
           if (static_cast<int>(i) == savedPage) {
-            savedOffset = off;
-            offsetKnown = true;
+            if (off < txt.getFileSize()) {
+              savedOffset = off;
+              offsetKnown = true;
+            } else {
+              LOG_DBG("SLP", "TXT: index.bin offset %u out of range (fileSize=%u), ignoring", off, txt.getFileSize());
+            }
           }
         }
       } else {
