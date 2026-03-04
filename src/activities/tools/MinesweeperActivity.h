@@ -6,7 +6,7 @@
 #include "util/ButtonNavigator.h"
 
 // Classic Minesweeper for e-ink. 10x14 grid.
-// D-pad moves cursor. Confirm = reveal. Right = toggle flag. Back = exit.
+// D-pad moves cursor. Confirm tap = reveal. Confirm long-press = toggle flag. Back = exit.
 class MinesweeperActivity final : public Activity {
   ButtonNavigator buttonNavigator;
   static constexpr int COLS = 10;

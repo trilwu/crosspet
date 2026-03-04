@@ -6,7 +6,7 @@
 #include "util/ButtonNavigator.h"
 
 // Classic 9x9 Sudoku puzzle game for e-ink.
-// D-pad moves cursor. Up/Down cycles number (1-9, 0=clear). Confirm = new game. Back = exit.
+// D-pad moves cursor. Confirm cycles number (0-9). Back = exit.
 class SudokuActivity final : public Activity {
   ButtonNavigator buttonNavigator;
   static constexpr int SIZE = 9;

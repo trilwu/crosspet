@@ -117,7 +117,7 @@ void SudokuActivity::loop() {
 
   bool changed = false;
 
-  // Move cursor
+  // D-pad always moves cursor in all 4 directions
   if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
     cursorCol = (cursorCol - 1 + SIZE) % SIZE;
     changed = true;
@@ -126,39 +126,23 @@ void SudokuActivity::loop() {
     cursorCol = (cursorCol + 1) % SIZE;
     changed = true;
   }
+  buttonNavigator.onPrevious([&] {
+    cursorRow = (cursorRow - 1 + SIZE) % SIZE;
+    changed = true;
+  });
+  buttonNavigator.onNext([&] {
+    cursorRow = (cursorRow + 1) % SIZE;
+    changed = true;
+  });
 
-  // Up/Down: cycle number in non-fixed cells
-  if (!fixed[cursorRow][cursorCol]) {
-    buttonNavigator.onNext([&] {
-      // Down = decrease number
-      uint8_t v = puzzle[cursorRow][cursorCol];
-      puzzle[cursorRow][cursorCol] = (v == 0) ? 9 : v - 1;
-      if (puzzle[cursorRow][cursorCol] != 0 && checkCompleted()) completed = true;
-      changed = true;
-    });
-    buttonNavigator.onPrevious([&] {
-      // Up = increase number
+  // Confirm = cycle number on editable cells (0→1→2→...→9→0)
+  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+    if (!fixed[cursorRow][cursorCol]) {
       uint8_t v = puzzle[cursorRow][cursorCol];
       puzzle[cursorRow][cursorCol] = (v >= 9) ? 0 : v + 1;
       if (puzzle[cursorRow][cursorCol] != 0 && checkCompleted()) completed = true;
       changed = true;
-    });
-  } else {
-    // On fixed cells, Up/Down moves cursor vertically
-    buttonNavigator.onNext([&] {
-      cursorRow = (cursorRow + 1) % SIZE;
-      changed = true;
-    });
-    buttonNavigator.onPrevious([&] {
-      cursorRow = (cursorRow - 1 + SIZE) % SIZE;
-      changed = true;
-    });
-  }
-
-  // Confirm on editable cell = move to next row (quick vertical navigation)
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    cursorRow = (cursorRow + 1) % SIZE;
-    changed = true;
+    }
   }
 
   if (changed) requestUpdate();
@@ -261,10 +245,8 @@ void SudokuActivity::render(RenderLock&&) {
   if (completed) {
     btn2 = tr(STR_NEW_GAME);
     btn4 = difficultyLabel();
-  } else if (fixed[cursorRow][cursorCol]) {
-    btn3 = tr(STR_DIR_UP);
-  } else {
-    btn3 = tr(STR_SUDOKU_NUM_HINT);
+  } else if (!fixed[cursorRow][cursorCol]) {
+    btn2 = tr(STR_SUDOKU_NUM_HINT);
   }
 
   const auto labels = mappedInput.mapLabels(btn1, btn2, btn3, btn4);

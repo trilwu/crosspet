@@ -118,6 +118,9 @@ void EpubReaderActivity::onEnter() {
 void EpubReaderActivity::onExit() {
   Activity::onExit();
 
+  // Request full refresh for the next screen to clear reader ghosting
+  renderer.requestNextFullRefresh();
+
   // Accumulate reading time and record book progress before resetting state
   uint8_t progress = 0;
   const char* title = epub ? epub->getTitle().c_str() : nullptr;

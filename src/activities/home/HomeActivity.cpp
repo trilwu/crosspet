@@ -269,10 +269,19 @@ void HomeActivity::renderPetStatusWidget(int headerH) {
     snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_DEFAULT), name);
   }
   const int textW = renderer.getTextWidth(SMALL_FONT_ID, petBuf);
-  // Battery occupies right ~40px of header; place pet status left of it
-  const int x = screenW - 44 - textW;
+  // Calculate right margin: battery icon (15) + right padding (12) + optional percentage text
+  int rightMargin = 12 + BaseMetrics::values.batteryWidth + 4;
+  if (SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS) {
+    // Reserve space for "100%" text (worst case width)
+    rightMargin += renderer.getTextWidth(SMALL_FONT_ID, "100%") + 4;
+  }
+  // Clamp text to available space
+  const int availW = screenW - rightMargin - 4;
+  auto truncated = renderer.truncatedText(SMALL_FONT_ID, petBuf, availW);
+  const int finalW = renderer.getTextWidth(SMALL_FONT_ID, truncated.c_str());
+  const int x = screenW - rightMargin - finalW;
   const int y = 5;  // same y offset as battery
-  renderer.drawText(SMALL_FONT_ID, x, y, petBuf, true);
+  renderer.drawText(SMALL_FONT_ID, x, y, truncated.c_str(), true);
 }
 
 // ── Main render ───────────────────────────────────────────────────────────────

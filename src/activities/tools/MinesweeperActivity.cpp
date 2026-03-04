@@ -123,24 +123,14 @@ void MinesweeperActivity::loop() {
 
   bool changed = false;
 
-  // Cursor movement: Left always moves, Right = flag toggle on hidden/flagged cells
+  // D-pad always moves cursor in all 4 directions
   if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
     cursorCol = (cursorCol - 1 + COLS) % COLS;
     changed = true;
   }
   if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
-    if (state[cursorRow][cursorCol] == CellState::HIDDEN) {
-      state[cursorRow][cursorCol] = CellState::FLAGGED;
-      flagCount++;
-      changed = true;
-    } else if (state[cursorRow][cursorCol] == CellState::FLAGGED) {
-      state[cursorRow][cursorCol] = CellState::HIDDEN;
-      flagCount--;
-      changed = true;
-    } else {
-      cursorCol = (cursorCol + 1) % COLS;
-      changed = true;
-    }
+    cursorCol = (cursorCol + 1) % COLS;
+    changed = true;
   }
   buttonNavigator.onPrevious([&] {
     cursorRow = (cursorRow - 1 + ROWS) % ROWS;
@@ -151,40 +141,55 @@ void MinesweeperActivity::loop() {
     changed = true;
   });
 
-  // Confirm = reveal cell (or chord reveal if already revealed with matching flags)
+  // Confirm: tap = reveal, long-press (>500ms) = toggle flag
+  static constexpr unsigned long FLAG_HOLD_MS = 500;
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    if (state[cursorRow][cursorCol] == CellState::HIDDEN) {
-      if (firstMove) {
-        placeMines(cursorRow, cursorCol);
-        firstMove = false;
-      }
-      if (grid[cursorRow][cursorCol] == 9) {
-        revealAll();
-        gameOver = true;
-      } else {
-        reveal(cursorRow, cursorCol);
-        if (checkWin()) { won = true; revealAll(); }
-      }
-      changed = true;
-    } else if (state[cursorRow][cursorCol] == CellState::REVEALED && grid[cursorRow][cursorCol] > 0) {
-      // Chord: if flags match number, reveal all hidden neighbors
-      if (countAdjacentFlags(cursorRow, cursorCol) == grid[cursorRow][cursorCol]) {
-        for (int dr = -1; dr <= 1; dr++)
-          for (int dc = -1; dc <= 1; dc++) {
-            int r = cursorRow + dr, c = cursorCol + dc;
-            if (r >= 0 && r < ROWS && c >= 0 && c < COLS && state[r][c] == CellState::HIDDEN) {
-              if (grid[r][c] == 9) { revealAll(); gameOver = true; }
-              else reveal(r, c);
-            }
-          }
-        if (!gameOver && checkWin()) { won = true; revealAll(); }
+    if (mappedInput.getHeldTime() >= FLAG_HOLD_MS) {
+      // Long-press: toggle flag
+      if (state[cursorRow][cursorCol] == CellState::HIDDEN) {
+        state[cursorRow][cursorCol] = CellState::FLAGGED;
+        flagCount++;
+        changed = true;
+      } else if (state[cursorRow][cursorCol] == CellState::FLAGGED) {
+        state[cursorRow][cursorCol] = CellState::HIDDEN;
+        flagCount--;
         changed = true;
       }
-    } else if (state[cursorRow][cursorCol] == CellState::FLAGGED) {
-      // Unflag
-      state[cursorRow][cursorCol] = CellState::HIDDEN;
-      flagCount--;
-      changed = true;
+    } else {
+      // Short tap: reveal cell or chord reveal
+      if (state[cursorRow][cursorCol] == CellState::HIDDEN) {
+        if (firstMove) {
+          placeMines(cursorRow, cursorCol);
+          firstMove = false;
+        }
+        if (grid[cursorRow][cursorCol] == 9) {
+          revealAll();
+          gameOver = true;
+        } else {
+          reveal(cursorRow, cursorCol);
+          if (checkWin()) { won = true; revealAll(); }
+        }
+        changed = true;
+      } else if (state[cursorRow][cursorCol] == CellState::REVEALED && grid[cursorRow][cursorCol] > 0) {
+        // Chord: if flags match number, reveal all hidden neighbors
+        if (countAdjacentFlags(cursorRow, cursorCol) == grid[cursorRow][cursorCol]) {
+          for (int dr = -1; dr <= 1; dr++)
+            for (int dc = -1; dc <= 1; dc++) {
+              int r = cursorRow + dr, c = cursorCol + dc;
+              if (r >= 0 && r < ROWS && c >= 0 && c < COLS && state[r][c] == CellState::HIDDEN) {
+                if (grid[r][c] == 9) { revealAll(); gameOver = true; }
+                else reveal(r, c);
+              }
+            }
+          if (!gameOver && checkWin()) { won = true; revealAll(); }
+          changed = true;
+        }
+      } else if (state[cursorRow][cursorCol] == CellState::FLAGGED) {
+        // Tap on flagged = unflag
+        state[cursorRow][cursorCol] = CellState::HIDDEN;
+        flagCount--;
+        changed = true;
+      }
     }
   }
 
@@ -273,8 +278,6 @@ void MinesweeperActivity::render(RenderLock&&) {
     btn4 = difficultyLabel();
   } else {
     btn2 = tr(STR_MINES_REVEAL);
-    btn3 = tr(STR_DIR_UP);
-    btn4 = tr(STR_MINES_FLAG);
   }
 
   const auto labels = mappedInput.mapLabels(btn1, btn2, btn3, btn4);
