@@ -152,7 +152,7 @@ void HomeActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (selectorIndex) {
       case 0: if (!recentBooks.empty()) onSelectBook(recentBooks[0].path); break;
-      case 1: onMyLibraryOpen(); break;
+      case 1: onFileBrowserOpen(); break;
       case 2: onRecentBooksOpen(); break;
       case 3: onFileTransferOpen(); break;
       case 4: onVirtualPetOpen(); break;
@@ -300,7 +300,7 @@ void HomeActivity::render(RenderLock&&) {
 // ── Actions ───────────────────────────────────────────────────────────────────
 
 void HomeActivity::onSelectBook(const std::string& path) { activityManager.goToReader(path); }
-void HomeActivity::onMyLibraryOpen()   { activityManager.goToMyLibrary(); }
+void HomeActivity::onFileBrowserOpen() { activityManager.goToFileBrowser(); }
 void HomeActivity::onRecentBooksOpen() { activityManager.goToRecentBooks(); }
 void HomeActivity::onVirtualPetOpen()  { activityManager.goToVirtualPet(); }
 void HomeActivity::onFileTransferOpen(){ activityManager.goToFileTransfer(); }
