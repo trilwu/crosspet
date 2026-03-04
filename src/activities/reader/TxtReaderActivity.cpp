@@ -521,7 +521,7 @@ bool TxtReaderActivity::loadPageIndexCache() {
   uint32_t numPages;
   serialization::readPod(f, numPages);
   if (numPages > MAX_CACHE_PAGES) {
-    LOG_WRN("TRS", "Cache numPages %u exceeds cap %u, truncating", numPages, MAX_CACHE_PAGES);
+    LOG_ERR("TRS", "Cache numPages %u exceeds cap %u, truncating", numPages, MAX_CACHE_PAGES);
     numPages = MAX_CACHE_PAGES;
   }
 
