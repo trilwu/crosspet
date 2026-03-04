@@ -98,6 +98,9 @@ struct PetState {
   uint8_t avgCareScore = 50;    // rolling average care quality (0-100)
   uint8_t evolutionVariant = 0; // 0=good, 1=chubby, 2=misbehaved
 
+  uint8_t booksFinished = 0;    // total books completed (lifetime)
+  uint8_t streakTier = 0;       // 0-3, derived from currentStreak
+
   bool isAlive() const { return stage != PetStage::DEAD; }
   bool exists() const { return initialized; }
 };
@@ -167,6 +170,21 @@ namespace PetConfig {
     {7,  500,  50},  // Youngster → Companion
     {14, 1500, 60},  // Companion → Elder
   };
+
+  // Streak tier thresholds: pages-per-meal reduction
+  constexpr uint16_t STREAK_PAGES_PER_MEAL[] = {20, 16, 13, 10};
+
+  // Book completion rewards
+  constexpr uint8_t BOOK_FINISH_HAPPINESS = 40;
+  constexpr uint8_t BOOK_FINISH_HUNGER = 20;
+
+  // Pomodoro reward
+  constexpr uint8_t POMODORO_HAPPINESS = 15;
+
+  // Daily goal rewards
+  constexpr uint8_t DAILY_GOAL_PAGES = 20;
+  constexpr uint8_t DAILY_GOAL_HEALTH = 10;
+  constexpr uint8_t DAILY_GOAL_HAPPINESS = 5;
 
   constexpr const char* STATE_PATH = "/.crosspoint/pet/state.json";
   constexpr const char* PET_DIR = "/.crosspoint/pet";

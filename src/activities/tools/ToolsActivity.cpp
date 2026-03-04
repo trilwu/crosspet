@@ -13,6 +13,7 @@
 #include "TwentyFortyEightActivity.h"
 #include "PhotoFrameActivity.h"
 #include "VirtualPetActivity.h"
+#include "PresenterActivity.h"
 #include "../settings/SettingsActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
@@ -69,6 +70,9 @@ void ToolsActivity::loop() {
       case 10:
         activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
         break;
+      case 11:
+        activityManager.pushActivity(std::make_unique<PresenterActivity>(renderer, mappedInput));
+        break;
     }
   }
 
@@ -88,7 +92,8 @@ void ToolsActivity::render(RenderLock&&) {
 
   const char* menuLabels[] = {tr(STR_SETTINGS_TITLE), tr(STR_CLOCK), tr(STR_POMODORO), tr(STR_DAILY_QUOTE),
                                tr(STR_CONFERENCE_BADGE), tr(STR_VIRTUAL_PET), tr(STR_PHOTO_FRAME),
-                               tr(STR_MAZE_GAME), tr(STR_GAME_OF_LIFE), tr(STR_SNAKE), tr(STR_2048)};
+                               tr(STR_MAZE_GAME), tr(STR_GAME_OF_LIFE), tr(STR_SNAKE), tr(STR_2048),
+                               tr(STR_PRESENTER)};
 
   const int menuTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int menuHeight = pageHeight - menuTop - metrics.buttonHintsHeight - metrics.verticalSpacing;

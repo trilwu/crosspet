@@ -92,42 +92,31 @@ EpdFont notosans18BoldItalicFont(&notosans_18_bolditalic);
 EpdFontFamily notosans18FontFamily(&notosans18RegularFont, &notosans18BoldFont, &notosans18ItalicFont,
                                    &notosans18BoldItalicFont);
 
-EpdFont opendyslexic8RegularFont(&opendyslexic_8_regular);
-EpdFont opendyslexic8BoldFont(&opendyslexic_8_bold);
-EpdFont opendyslexic8ItalicFont(&opendyslexic_8_italic);
-EpdFont opendyslexic8BoldItalicFont(&opendyslexic_8_bolditalic);
-EpdFontFamily opendyslexic8FontFamily(&opendyslexic8RegularFont, &opendyslexic8BoldFont, &opendyslexic8ItalicFont,
-                                      &opendyslexic8BoldItalicFont);
-EpdFont opendyslexic10RegularFont(&opendyslexic_10_regular);
-EpdFont opendyslexic10BoldFont(&opendyslexic_10_bold);
-EpdFont opendyslexic10ItalicFont(&opendyslexic_10_italic);
-EpdFont opendyslexic10BoldItalicFont(&opendyslexic_10_bolditalic);
-EpdFontFamily opendyslexic10FontFamily(&opendyslexic10RegularFont, &opendyslexic10BoldFont, &opendyslexic10ItalicFont,
-                                       &opendyslexic10BoldItalicFont);
-EpdFont opendyslexic12RegularFont(&opendyslexic_12_regular);
-EpdFont opendyslexic12BoldFont(&opendyslexic_12_bold);
-EpdFont opendyslexic12ItalicFont(&opendyslexic_12_italic);
-EpdFont opendyslexic12BoldItalicFont(&opendyslexic_12_bolditalic);
-EpdFontFamily opendyslexic12FontFamily(&opendyslexic12RegularFont, &opendyslexic12BoldFont, &opendyslexic12ItalicFont,
-                                       &opendyslexic12BoldItalicFont);
-EpdFont opendyslexic14RegularFont(&opendyslexic_14_regular);
-EpdFont opendyslexic14BoldFont(&opendyslexic_14_bold);
-EpdFont opendyslexic14ItalicFont(&opendyslexic_14_italic);
-EpdFont opendyslexic14BoldItalicFont(&opendyslexic_14_bolditalic);
-EpdFontFamily opendyslexic14FontFamily(&opendyslexic14RegularFont, &opendyslexic14BoldFont, &opendyslexic14ItalicFont,
-                                       &opendyslexic14BoldItalicFont);
 #endif  // OMIT_FONTS
+
+// Bokerlam reader fonts (no BoldItalic available — uses Italic as fallback)
+EpdFont bokerlam12RegularFont(&bokerlam_12_regular);
+EpdFont bokerlam12BoldFont(&bokerlam_12_bold);
+EpdFont bokerlam12ItalicFont(&bokerlam_12_italic);
+EpdFontFamily bokerlam12FontFamily(&bokerlam12RegularFont, &bokerlam12BoldFont, &bokerlam12ItalicFont, &bokerlam12ItalicFont);
+EpdFont bokerlam14RegularFont(&bokerlam_14_regular);
+EpdFont bokerlam14BoldFont(&bokerlam_14_bold);
+EpdFont bokerlam14ItalicFont(&bokerlam_14_italic);
+EpdFontFamily bokerlam14FontFamily(&bokerlam14RegularFont, &bokerlam14BoldFont, &bokerlam14ItalicFont, &bokerlam14ItalicFont);
+EpdFont bokerlam16RegularFont(&bokerlam_16_regular);
+EpdFont bokerlam16BoldFont(&bokerlam_16_bold);
+EpdFont bokerlam16ItalicFont(&bokerlam_16_italic);
+EpdFontFamily bokerlam16FontFamily(&bokerlam16RegularFont, &bokerlam16BoldFont, &bokerlam16ItalicFont, &bokerlam16ItalicFont);
+EpdFont bokerlam18RegularFont(&bokerlam_18_regular);
+EpdFont bokerlam18BoldFont(&bokerlam_18_bold);
+EpdFont bokerlam18ItalicFont(&bokerlam_18_italic);
+EpdFontFamily bokerlam18FontFamily(&bokerlam18RegularFont, &bokerlam18BoldFont, &bokerlam18ItalicFont, &bokerlam18ItalicFont);
 
 EpdFont smallFont(&notosans_8_regular);
 EpdFontFamily smallFontFamily(&smallFont);
 
-EpdFont ui10RegularFont(&ubuntu_10_regular);
-EpdFont ui10BoldFont(&ubuntu_10_bold);
-EpdFontFamily ui10FontFamily(&ui10RegularFont, &ui10BoldFont);
-
-EpdFont ui12RegularFont(&ubuntu_12_regular);
-EpdFont ui12BoldFont(&ubuntu_12_bold);
-EpdFontFamily ui12FontFamily(&ui12RegularFont, &ui12BoldFont);
+// UI fonts use Bokerlam for better Vietnamese rendering
+EpdFontFamily ui12FontFamily(&bokerlam12RegularFont, &bokerlam12BoldFont);
 
 // RTC memory persists across deep sleep — used to restore clock with elapsed time correction.
 // Magic sentinel confirms the values were set by a clean sleep entry (not stale/garbage).
@@ -135,6 +124,48 @@ static constexpr uint32_t SLEEP_RTC_MAGIC = 0x43524C4B;  // "CRLK"
 RTC_DATA_ATTR static uint32_t g_rtcSleepMagic = 0;
 RTC_DATA_ATTR static int64_t  g_rtcUsBeforeSleep = 0;    // esp_clk_rtc_time() before sleep
 RTC_DATA_ATTR static uint32_t g_unixBeforeSleep = 0;     // time(nullptr) before sleep
+
+// SD-based clock backup — reliable fallback when RTC_DATA_ATTR is lost on ESP32-C3.
+// Saves unix timestamp + RTC timer value. On wake, RTC timer is still running so we can
+// compute elapsed sleep duration even without RTC memory.
+static constexpr char CLOCK_BACKUP_PATH[] = "/.crosspoint/clock.bin";
+
+struct ClockBackup {
+  uint32_t unixTime;    // time(nullptr) at sleep entry
+  int64_t  rtcTimeUs;   // esp_clk_rtc_time() at sleep entry
+};
+
+void saveClockToSD() {
+  uint32_t now = (uint32_t)time(nullptr);
+  if (now < 1700000000UL) return;  // don't save invalid time (before ~2023)
+  ClockBackup backup = {now, esp_clk_rtc_time()};
+  FsFile f;
+  if (Storage.openFileForWrite("CLK", CLOCK_BACKUP_PATH, f)) {
+    f.write((const uint8_t*)&backup, sizeof(backup));
+    f.close();
+  }
+}
+
+bool restoreClockFromSD() {
+  FsFile f;
+  if (!Storage.openFileForRead("CLK", CLOCK_BACKUP_PATH, f)) return false;
+  ClockBackup backup = {};
+  bool ok = (f.read((uint8_t*)&backup, sizeof(backup)) == sizeof(backup));
+  f.close();
+  if (!ok || backup.unixTime < 1700000000UL) return false;
+
+  // Compute elapsed time using RTC timer (keeps running during deep sleep)
+  int64_t rtcNow = esp_clk_rtc_time();
+  uint32_t elapsedSec = 0;
+  if (rtcNow > backup.rtcTimeUs) {
+    elapsedSec = (uint32_t)((rtcNow - backup.rtcTimeUs) / 1000000LL);
+  }
+  time_t corrected = (time_t)backup.unixTime + elapsedSec;
+  struct timeval tv = {corrected, 0};
+  settimeofday(&tv, nullptr);
+  LOG_DBG("MAIN", "Clock restored from SD: base=%lu + %us elapsed", (unsigned long)backup.unixTime, elapsedSec);
+  return true;
+}
 
 // measurement of power button press duration calibration value
 unsigned long t1 = 0;
@@ -221,6 +252,9 @@ void enterDeepSleep() {
   g_rtcUsBeforeSleep = esp_clk_rtc_time();
   g_rtcSleepMagic    = SLEEP_RTC_MAGIC;
 
+  // Also save to SD as reliable fallback (RTC_DATA_ATTR can be lost on some ESP32-C3 boards)
+  saveClockToSD();
+
   powerManager.startDeepSleep(gpio);
 }
 
@@ -245,12 +279,12 @@ void setupDisplayAndFonts() {
   renderer.insertFont(NOTOSANS_14_FONT_ID, notosans14FontFamily);
   renderer.insertFont(NOTOSANS_16_FONT_ID, notosans16FontFamily);
   renderer.insertFont(NOTOSANS_18_FONT_ID, notosans18FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_8_FONT_ID, opendyslexic8FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_10_FONT_ID, opendyslexic10FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_12_FONT_ID, opendyslexic12FontFamily);
-  renderer.insertFont(OPENDYSLEXIC_14_FONT_ID, opendyslexic14FontFamily);
+  renderer.insertFont(BOKERLAM_12_FONT_ID, bokerlam12FontFamily);
+  renderer.insertFont(BOKERLAM_14_FONT_ID, bokerlam14FontFamily);
+  renderer.insertFont(BOKERLAM_16_FONT_ID, bokerlam16FontFamily);
+  renderer.insertFont(BOKERLAM_18_FONT_ID, bokerlam18FontFamily);
 #endif  // OMIT_FONTS
-  renderer.insertFont(UI_10_FONT_ID, ui10FontFamily);
+  renderer.insertFont(UI_10_FONT_ID, ui12FontFamily);
   renderer.insertFont(UI_12_FONT_ID, ui12FontFamily);
   renderer.insertFont(SMALL_FONT_ID, smallFontFamily);
   LOG_DBG("MAIN", "Fonts setup");
@@ -289,14 +323,18 @@ void setup() {
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 
-  // Restore system clock after deep sleep with elapsed-time correction.
-  // Uses the RTC timer (runs during sleep) to compute how long the device was asleep.
-  // Cold-boot case (battery died) is handled later by PetPersistence::load() via savedTime in JSON.
-  if (g_rtcSleepMagic == SLEEP_RTC_MAGIC && g_unixBeforeSleep > 0) {
+  // Restore system clock after deep sleep.
+  // Strategy 1: RTC memory + LP timer elapsed correction (most accurate)
+  // Strategy 2: SD card backup (reliable fallback when RTC_DATA_ATTR lost on ESP32-C3)
+  // Strategy 3: Pet state savedTime (last resort, handled in PetPersistence::load())
+  {
     time_t now = time(nullptr);
     struct tm check;
     gmtime_r(&now, &check);
-    if (check.tm_year < 125) {  // year < 2025 → clock lost, needs restore
+    bool clockValid = (check.tm_year >= 125);  // year >= 2025
+
+    if (!clockValid && g_rtcSleepMagic == SLEEP_RTC_MAGIC && g_unixBeforeSleep > 0) {
+      // Strategy 1: RTC memory with elapsed time correction
       int64_t rtcNow      = esp_clk_rtc_time();
       uint32_t elapsedSec = 0;
       if (rtcNow > g_rtcUsBeforeSleep) {
@@ -305,8 +343,15 @@ void setup() {
       time_t corrected = (time_t)g_unixBeforeSleep + elapsedSec;
       struct timeval tv = {corrected, 0};
       settimeofday(&tv, nullptr);
-      LOG_DBG("MAIN", "Clock restored after deep sleep: base=%lu + %us elapsed", g_unixBeforeSleep, elapsedSec);
+      clockValid = true;
+      LOG_DBG("MAIN", "Clock restored via RTC: base=%lu + %us elapsed", g_unixBeforeSleep, elapsedSec);
     }
+
+    if (!clockValid) {
+      // Strategy 2: SD card backup (time will be slightly behind by sleep duration)
+      clockValid = restoreClockFromSD();
+    }
+
     g_rtcSleepMagic = 0;  // consume — next boot treats as cold boot unless we sleep again
   }
 

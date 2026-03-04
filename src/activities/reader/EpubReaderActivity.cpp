@@ -551,6 +551,10 @@ void EpubReaderActivity::render(RenderLock&& lock) {
 
   // Show end of book screen
   if (currentSpineIndex == epub->getSpineItemsCount()) {
+    if (!bookCompletionNotified && PET_MANAGER.exists() && PET_MANAGER.isAlive()) {
+      PET_MANAGER.onBookFinished();
+      bookCompletionNotified = true;
+    }
     renderer.clearScreen();
     renderer.drawCenteredText(UI_12_FONT_ID, 300, tr(STR_END_OF_BOOK), true, EpdFontFamily::BOLD);
     renderer.displayBuffer();

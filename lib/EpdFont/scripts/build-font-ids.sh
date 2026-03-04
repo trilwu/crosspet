@@ -80,53 +80,49 @@ ruby -rdigest -e 'puts [
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define OPENDYSLEXIC_8_FONT_ID ($(
+echo "#define BOKERLAM_12_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./opendyslexic_8_regular.h",
-  "./opendyslexic_8_bold.h",
-  "./opendyslexic_8_bolditalic.h",
-  "./opendyslexic_8_italic.h",
+  "./bokerlam_12_regular.h",
+  "./bokerlam_12_bold.h",
+  "./bokerlam_12_italic.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define OPENDYSLEXIC_10_FONT_ID ($(
+echo "#define BOKERLAM_14_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./opendyslexic_10_regular.h",
-  "./opendyslexic_10_bold.h",
-  "./opendyslexic_10_bolditalic.h",
-  "./opendyslexic_10_italic.h",
+  "./bokerlam_14_regular.h",
+  "./bokerlam_14_bold.h",
+  "./bokerlam_14_italic.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define OPENDYSLEXIC_12_FONT_ID ($(
+echo "#define BOKERLAM_16_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./opendyslexic_12_regular.h",
-  "./opendyslexic_12_bold.h",
-  "./opendyslexic_12_bolditalic.h",
-  "./opendyslexic_12_italic.h",
+  "./bokerlam_16_regular.h",
+  "./bokerlam_16_bold.h",
+  "./bokerlam_16_italic.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define OPENDYSLEXIC_14_FONT_ID ($(
+echo "#define BOKERLAM_18_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./opendyslexic_14_regular.h",
-  "./opendyslexic_14_bold.h",
-  "./opendyslexic_14_bolditalic.h",
-  "./opendyslexic_14_italic.h",
+  "./bokerlam_18_regular.h",
+  "./bokerlam_18_bold.h",
+  "./bokerlam_18_italic.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
 echo "#define UI_10_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./ubuntu_10_regular.h",
-  "./ubuntu_10_bold.h",
+  "./bokerlam_12_regular.h",
+  "./bokerlam_12_bold.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
 echo "#define UI_12_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./ubuntu_12_regular.h",
-  "./ubuntu_12_bold.h",
+  "./bokerlam_12_regular.h",
+  "./bokerlam_12_bold.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 

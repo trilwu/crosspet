@@ -1,7 +1,69 @@
 # Project Changelog
 
 **Format:** Semantic Versioning (MAJOR.MINOR.PATCH)
-**Last Updated:** March 1, 2026
+**Last Updated:** March 2, 2026
+
+---
+
+## [1.3.0] - 2026-03-02
+
+### Major Features
+
+#### Pet-Reading Integration System
+- **Reading streaks drive gameplay:** 0/7/14/30-day thresholds unlock meal cost reductions (20→16→13→10 pages per meal)
+- **Book completion rewards:** +40 happiness, +20 hunger, increments `booksFinished` counter
+- **Daily reading goal bonus:** 20+ pages/day grants +10 health, +5 happiness (once per calendar day)
+- **Pomodoro focus completion:** +15 happiness per session
+- **Enhanced evolution system:**
+  - Three evolution variants now rewritten: 0=Scholar (reading-focused), 1=Balanced, 2=Wild
+  - COMPANION→ELDER evolution gates on streak >= 7 AND booksFinished >= 1
+  - New stage names: "Scholarly Young", "Wild Youngster", "Scholar", "Wild Companion"
+  - Variants determined by reading metrics (pages read, completion count)
+
+#### Game Balance
+- **Streak tiers reduce feeding cost:** Encourages daily reading habit
+- **Goal-based rewards:** Multi-path progression (reading, petting, caring)
+- **Evolution gating:** Ensures meaningful book engagement before elder transformation
+
+### Code Changes
+
+**Modified Files:**
+- `src/pet/PetState.h` - Added `streakDays`, `booksFinished`, `lastGoalBonusDate` fields
+- `src/pet/PetManager.h/cpp` - Streak tracking, goal checking, evolution prerequisite logic
+- `src/pet/PetPersistence.cpp` - Persistence for new fields
+- `src/pet/PetEvolution.cpp` - Variant calculation based on reading metrics
+- `src/activities/EpubReaderActivity.h/cpp` - Book completion integration, goal bonus check, session tracking
+- `src/activities/tools/PomodoroActivity.cpp` - Happiness grant on completion
+
+**New Files:** None
+
+**Deleted Files:** None
+
+### Bug Fixes
+
+- Fixed meal cost calculation to use streak-based page formula
+- Ensured COMPANION→ELDER requires reading engagement (books completed)
+
+### Testing
+
+- Manual gameplay testing: streak progression, meal cost reduction verification
+- Goal bonus timing tested across device calendar boundaries
+- Evolution variant assignment validated against reading metrics
+- Pomodoro completion reward integration verified
+
+### Documentation
+
+- Updated `docs/code-standards.md` with streak and goal bonus mechanics
+- Updated `docs/system-architecture.md` with reading-pet feedback loop
+- Added integration notes to `docs/codebase-summary.md`
+
+### Breaking Changes
+
+None. All new fields have safe defaults; existing pet states gracefully migrate.
+
+### Known Issues
+
+None at time of release.
 
 ---
 

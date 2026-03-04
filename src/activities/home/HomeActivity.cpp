@@ -16,11 +16,11 @@
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
-#include "components/icons/cog.h"
 #include "components/icons/library.h"
 #include "components/icons/pet.h"
 #include "components/icons/recent.h"
 #include "components/icons/settings2.h"
+#include "components/icons/tools.h"
 #include "components/icons/transfer.h"
 #include "fontIds.h"
 #include "util/StringUtils.h"
@@ -267,7 +267,7 @@ void HomeActivity::render(RenderLock&&) {
   renderGridCell(DIVIDER_X, DIVIDER_Y,   cw, rh1, 1, RecentIcon,   tr(STR_MENU_RECENT_BOOKS));
   renderGridCell(0,         GRID_ROW2_Y, cw, rh2, 2, TransferIcon, tr(STR_FILE_TRANSFER));
   renderGridCell(DIVIDER_X, GRID_ROW2_Y, cw, rh2, 3, PetIcon,      tr(STR_VIRTUAL_PET));
-  renderGridCell(0,         GRID_ROW3_Y, cw, rh3, 4, CogIcon,       tr(STR_TOOLS));
+  renderGridCell(0,         GRID_ROW3_Y, cw, rh3, 4, ToolsIcon,     tr(STR_TOOLS));
   renderGridCell(DIVIDER_X, GRID_ROW3_Y, cw, rh3, 5, Settings2Icon, tr(STR_SETTINGS_TITLE));
 
   renderSelectionHighlight(0, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H);

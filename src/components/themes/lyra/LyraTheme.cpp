@@ -21,7 +21,7 @@
 #include "components/icons/image24.h"
 #include "components/icons/library.h"
 #include "components/icons/recent.h"
-#include "components/icons/cog.h"
+#include "components/icons/tools.h"
 #include "components/icons/settings2.h"
 #include "components/icons/text24.h"
 #include "components/icons/transfer.h"
@@ -78,7 +78,7 @@ const uint8_t* iconForName(UIIcon icon, int size) {
       case UIIcon::Hotspot:
         return HotspotIcon;
       case UIIcon::Tools:
-        return CogIcon;
+        return ToolsIcon;
       default:
         return nullptr;
     }

@@ -108,11 +108,24 @@ void PetManager::onPageTurn() {
     state.currentStreak++;
     uint8_t streakBonus = (state.currentStreak > 5) ? 5 : state.currentStreak;
     state.happiness = clampAdd(state.happiness, streakBonus);
+
+    // Recalculate streak tier after streak update
+    if (state.currentStreak >= 30)      state.streakTier = 3;
+    else if (state.currentStreak >= 14) state.streakTier = 2;
+    else if (state.currentStreak >= 7)  state.streakTier = 1;
+    else                                state.streakTier = 0;
   }
 
-  if (state.pageAccumulator >= PetConfig::PAGES_PER_MEAL) {
+  // Daily reading goal reward (fires once when goal is exactly reached)
+  if (state.missionPagesRead == PetConfig::DAILY_GOAL_PAGES) {
+    state.health = clampAdd(state.health, PetConfig::DAILY_GOAL_HEALTH);
+    state.happiness = clampAdd(state.happiness, PetConfig::DAILY_GOAL_HAPPINESS);
+    LOG_DBG("PET", "Daily reading goal met! health=%d happiness=%d", state.health, state.happiness);
+  }
+
+  if (state.pageAccumulator >= getEffectivePagesPerMeal()) {
     state.hunger = clampAdd(state.hunger, PetConfig::HUNGER_PER_MEAL);
-    state.pageAccumulator -= PetConfig::PAGES_PER_MEAL;
+    state.pageAccumulator -= getEffectivePagesPerMeal();
     if (state.health < PetConfig::MAX_STAT && state.hunger > 0)
       state.health = clampAdd(state.health, 5);
 
@@ -183,6 +196,30 @@ bool PetManager::changeType(uint8_t type) {
   if (!state.exists()) return false;
   state.petType = type;
   return save();
+}
+
+// --- Reading rewards ---
+
+uint16_t PetManager::getEffectivePagesPerMeal() const {
+  uint8_t tier = (state.streakTier < 4) ? state.streakTier : 3;
+  return PetConfig::STREAK_PAGES_PER_MEAL[tier];
+}
+
+void PetManager::onBookFinished() {
+  if (!state.exists() || !state.isAlive()) return;
+  state.happiness = clampAdd(state.happiness, PetConfig::BOOK_FINISH_HAPPINESS);
+  state.hunger = clampAdd(state.hunger, PetConfig::BOOK_FINISH_HUNGER);
+  if (state.booksFinished < 255) state.booksFinished++;
+  LOG_DBG("PET", "Book finished! happiness=%d hunger=%d booksFinished=%d",
+          state.happiness, state.hunger, state.booksFinished);
+  save();
+}
+
+void PetManager::onPomodoroComplete() {
+  if (!state.exists() || !state.isAlive()) return;
+  state.happiness = clampAdd(state.happiness, PetConfig::POMODORO_HAPPINESS);
+  LOG_DBG("PET", "Pomodoro complete! happiness=%d", state.happiness);
+  save();
 }
 
 // --- State queries ---

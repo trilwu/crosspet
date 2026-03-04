@@ -75,13 +75,16 @@ void BleRemoteManager::deinit() {
   if (!enabled) return;
 
   stopScan();
-  disconnect();
+  // disconnect() already deletes and nulls client
+  if (client && client->isConnected()) {
+    client->disconnect();
+  }
+  client = nullptr;  // NimBLEDevice::deinit(true) will free all client memory
   NimBLEDevice::deinit(true);
 
   enabled = false;
   connected = false;
   scanning = false;
-  client = nullptr;
   LOG_DBG("BLE", "NimBLE deinitialized");
 }
 
@@ -114,14 +117,17 @@ bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
 
   stopScan();
 
-  // Reuse existing client or create new one
-  client = NimBLEDevice::getClientByPeerAddress(addr);
+  // Always create a fresh client — reusing a stale client after disconnect/deinit
+  // can crash NimBLE. Delete any existing client for this peer first.
+  NimBLEClient* existing = NimBLEDevice::getClientByPeerAddress(addr);
+  if (existing) {
+    NimBLEDevice::deleteClient(existing);
+  }
+
+  client = NimBLEDevice::createClient(addr);
   if (!client) {
-    client = NimBLEDevice::createClient(addr);
-    if (!client) {
-      LOG_ERR("BLE", "Failed to create client");
-      return false;
-    }
+    LOG_ERR("BLE", "Failed to create client");
+    return false;
   }
 
   client->setClientCallbacks(this, false);
@@ -130,19 +136,36 @@ bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
 
   if (!client->connect(addr)) {
     LOG_ERR("BLE", "Connection failed to %s", addr.toString().c_str());
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
+    return false;
+  }
+
+  // Guard: device may have disconnected during connection setup
+  if (!client->isConnected()) {
+    LOG_ERR("BLE", "Client disconnected before service discovery");
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
     return false;
   }
 
   // Discover HID service (UUID 0x1812)
   NimBLERemoteService* hidService = client->getService(NimBLEUUID((uint16_t)0x1812));
-  if (!hidService) {
-    LOG_ERR("BLE", "HID service not found");
+  if (!hidService || !client->isConnected()) {
+    LOG_ERR("BLE", "HID service not found or disconnected");
     client->disconnect();
     return false;
   }
 
   // Subscribe to all HID Report Input characteristics (UUID 0x2A4D)
-  auto& chars = hidService->getCharacteristics(true);
+  // Copy the vector to avoid dangling reference if device disconnects mid-loop
+  const std::vector<NimBLERemoteCharacteristic*> chars = hidService->getCharacteristics(true);
+
+  if (!client->isConnected()) {
+    LOG_ERR("BLE", "Disconnected during characteristic discovery");
+    return false;
+  }
+
   bool subscribed = false;
   for (auto* ch : chars) {
     if (ch->getUUID() == NimBLEUUID((uint16_t)0x2A4D) && ch->canNotify()) {
@@ -167,8 +190,12 @@ bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
 }
 
 void BleRemoteManager::disconnect() {
-  if (client && client->isConnected()) {
-    client->disconnect();
+  if (client) {
+    if (client->isConnected()) {
+      client->disconnect();
+    }
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
   }
   connected = false;
   shouldAutoReconnect = false;

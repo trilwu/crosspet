@@ -7,13 +7,37 @@ open-source firmware for the **Xteink X4** e-paper reader, built with **Platform
 
 ## What's different from CrossPoint?
 
-CrossPet extends the upstream firmware with reading-productivity and personality features:
+CrossPet extends the upstream firmware with reading-productivity, personality, and utility features that turn the X4 into more than just a book reader.
 
+### Reading Experience
 - **Smoother page turns** — anti-aliased text always uses FAST_REFRESH, eliminating the ~1s transition stutter
-- **Reading Stats sleep screen** — shows today's reading time, all-time total, and current book progress with a progress bar; resets daily at midnight
-- **Clock sleep screen** — 7-segment clock + calendar with rotating daily literary quotes
+- **Bokerlam font** — Vietnamese-optimized serif font with full diacritics support, built-in as a selectable reading font
+- **Reading time tracking** — per-session, daily, and all-time reading statistics with binary persistence
+
+### Sleep Screens
+- **Clock sleep screen** — 7-segment digital clock + calendar with lunar date display and rotating daily literary quotes (28 curated literary quotes)
+- **Reading Stats sleep screen** — shows today's reading time, all-time total, and current book progress bar; resets daily at midnight
 - **Reliable sleep display** — clock and reading stats refresh correctly on brief wakeups (no stale timestamp)
-- **Virtual pet** — a tamagotchi-style companion that lives and evolves alongside your reading habit
+- **SD-based clock backup** — preserves accurate time across deep sleep even when ESP32-C3 RTC memory is lost
+
+### Virtual Pet
+- **Tamagotchi-style companion** — lives and evolves alongside your reading habit
+- **Evolution system** — Egg → Hatchling → Juvenile → Adult → Elder, with 3 evolution variants (Scholar/Balanced/Wild) based on reading consistency
+- **8 pet types** — Cat, Dog, Dragon, Bunny, Robot, Bear, Slime (pixel-art sprites loaded from SD)
+- **Mood & needs** — hunger, happiness, energy affected by reading activity and care
+- **Reading streaks** — consecutive reading days boost pet growth and unlock Scholar variant
+
+### Home Screen
+- **Redesigned home** — cover art + reading progress for recent books in top panel, 2×3 grid for quick access to all features
+- **Lunar calendar** — Vietnamese lunar date displayed on clock cells and sleep screen
+
+### Tools & Games
+- **Pomodoro timer** — focus timer with configurable work/break intervals
+- **BLE Presenter** — Bluetooth Low Energy slide controller for presentations
+- **Daily quotes** — curated literary quote viewer
+- **Conference badge** — name badge display mode
+- **Photo frame** — BMP image slideshow from SD card
+- **Games** — Maze, Snake, 2048, Conway's Game of Life
 
 Everything else (EPUB rendering, KOReader Sync, WiFi upload, OTA updates) is inherited from CrossPoint.
 
@@ -44,16 +68,23 @@ No subscriptions. No telemetry. No vendor lock-in.
   - [ ] EPUB picker with cover art
 - [x] Custom sleep screen
   - [x] Cover sleep screen
-  - [x] Clock + calendar sleep screen with daily literary quotes
+  - [x] Clock + calendar + lunar date sleep screen with daily literary quotes
   - [x] Reading Stats sleep screen (today's time, all-time total, last book progress)
 - [x] Wifi book upload
 - [x] Wifi OTA updates
 - [x] KOReader Sync integration for cross-device reading progress
 - [x] Configurable font, layout, and display options
+  - [x] Bokerlam Vietnamese serif font
   - [ ] User provided fonts
   - [ ] Full UTF support
 - [x] Screen rotation
 - [x] Reading time tracking (per-session, daily, all-time)
+- [x] Virtual pet with evolution system and reading-based growth
+- [x] BLE Presenter (Bluetooth slide controller)
+- [x] Pomodoro timer
+- [x] Games: Maze, Snake, 2048, Game of Life
+- [x] Lunar calendar support
+- [x] SD-based clock backup for reliable timekeeping
 
 Multi-language support: Read EPUBs in various languages, including English, Spanish, French, German, Italian, Portuguese, Russian, Ukrainian, Polish, Swedish, Norwegian, [and more](./USER_GUIDE.md#supported-languages).
 

@@ -4,22 +4,28 @@
 
 namespace {
 
-// Determine which variant applies at an evolution branching point.
-// Returns 0=good, 1=chubby, 2=misbehaved.
+// Determine reading-based variant at an evolution branching point.
+// Returns 0=Scholar, 1=Balanced, 2=Wild.
+// Called after state.stage is already advanced; prevStageIdx = new stage index - 1.
 static uint8_t determineVariant(const PetState& state) {
-  if (state.avgCareScore >= 70 &&
-      state.weight >= PetConfig::UNDERWEIGHT_THRESHOLD &&
-      state.weight <= PetConfig::OVERWEIGHT_THRESHOLD &&
-      state.discipline >= 50) {
-    return 0;  // Good care → standard evolution
+  uint8_t prevStageIdx = static_cast<uint8_t>(state.stage) - 1;
+  uint16_t minPages = PetConfig::EVOLUTION[prevStageIdx].minPages;
+  uint16_t scholarThreshold = minPages + (minPages / 2);  // 1.5x
+
+  // Scholar: active reader with streaks and at least one book finished
+  if (state.currentStreak >= 7 &&
+      state.booksFinished >= 1 &&
+      state.totalPagesRead >= scholarThreshold) {
+    return 0;  // Scholar
   }
-  if (state.weight > PetConfig::OVERWEIGHT_THRESHOLD) {
-    return 1;  // Overweight → chubby variant
+
+  // Wild: barely reading, no streak maintenance
+  if (state.currentStreak < 3 &&
+      state.totalPagesRead <= minPages + 50) {
+    return 2;  // Wild
   }
-  if (state.discipline < 30) {
-    return 2;  // Low discipline → misbehaved variant
-  }
-  return 0;  // Default to good
+
+  return 1;  // Balanced (default)
 }
 
 }  // namespace
@@ -34,6 +40,11 @@ void checkEvolution(PetState& state) {
   if (state.daysAtStage < req.minDays ||
       state.totalPagesRead < req.minPages ||
       state.hunger < req.minAvgHunger) return;
+
+  // Additional reading gate for Companion → Elder
+  if (stageIdx == 3) {
+    if (state.currentStreak < 7 || state.booksFinished < 1) return;
+  }
 
   // Advance to next stage
   state.stage = static_cast<PetStage>(stageIdx + 1);
@@ -50,14 +61,14 @@ void checkEvolution(PetState& state) {
 const char* variantStageName(PetStage stage, uint8_t variant) {
   switch (stage) {
     case PetStage::YOUNGSTER:
-      if (variant == 1) return "Pudgy Youngster";
-      if (variant == 2) return "Rowdy Youngster";
+      if (variant == 0) return "Scholarly Young";
+      if (variant == 2) return "Wild Youngster";
       return "Youngster";
     case PetStage::COMPANION:
-      if (variant == 1) return "Chonky Companion";
+      if (variant == 0) return "Scholar";
       if (variant == 2) return "Wild Companion";
       return "Companion";
-    case PetStage::EGG:      return "Egg";
+    case PetStage::EGG:       return "Egg";
     case PetStage::HATCHLING: return "Hatchling";
     case PetStage::ELDER:     return "Elder";
     default:                  return "???";

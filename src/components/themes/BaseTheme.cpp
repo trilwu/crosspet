@@ -687,6 +687,7 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
                         showBatteryPercentage);
   }
 
+
   // Draw Title
   if (!title.empty()) {
     textY -= textYOffset;

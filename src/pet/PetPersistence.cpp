@@ -70,6 +70,8 @@ bool PetManager::load() {
   state.careMistakes     = doc["careMistakes"]     | (uint8_t)0;
   state.avgCareScore     = doc["avgCareScore"]     | (uint8_t)50;
   state.evolutionVariant = doc["evolutionVariant"] | (uint8_t)0;
+  state.booksFinished    = doc["booksFinished"]    | (uint8_t)0;
+  state.streakTier       = doc["streakTier"]       | (uint8_t)0;
 
   // Restore clock if RTC lost time (power cycle) but SD card has a saved timestamp
   uint32_t savedTime = doc["savedTime"] | (uint32_t)0;
@@ -131,6 +133,8 @@ bool PetManager::save() {
   doc["careMistakes"]     = state.careMistakes;
   doc["avgCareScore"]     = state.avgCareScore;
   doc["evolutionVariant"] = state.evolutionVariant;
+  doc["booksFinished"]    = state.booksFinished;
+  doc["streakTier"]       = state.streakTier;
 
   // Persist current timestamp for clock restoration after power cycle
   doc["savedTime"] = (uint32_t)time(nullptr);
