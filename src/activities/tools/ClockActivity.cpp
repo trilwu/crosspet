@@ -190,8 +190,10 @@ void ClockActivity::render(RenderLock&&) {
     struct tm timeinfo;
     getLocalTime(&timeinfo, 0);
 
-    char timeBuf[6];
-    snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+    extern bool g_clockApproximate;
+    char timeBuf[8];
+    snprintf(timeBuf, sizeof(timeBuf), "%s%02d:%02d", g_clockApproximate ? "~" : "",
+             timeinfo.tm_hour, timeinfo.tm_min);
 
     const char* dayNames[] = {tr(STR_DAY_SUN), tr(STR_DAY_MON), tr(STR_DAY_TUE), tr(STR_DAY_WED),
         tr(STR_DAY_THU), tr(STR_DAY_FRI), tr(STR_DAY_SAT)};

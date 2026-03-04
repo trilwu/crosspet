@@ -24,7 +24,6 @@
 
 void SleepActivity::onEnter() {
   Activity::onEnter();
-  GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
   // Persist current time to SD so it survives power cycles
   PET_MANAGER.save();
 
@@ -394,11 +393,12 @@ void SleepActivity::renderClockSleepScreen() const {
     snprintf(timeBuf, sizeof(timeBuf), "--:--");
   }
 
-  // Date line
+  // Date line — prefix with "~" when clock may have drifted from deep sleep
+  extern bool g_clockApproximate;
   char dateBuf[64];
   if (timeValid) {
-    snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s", DAY_NAMES[timeinfo.tm_wday],
-             timeinfo.tm_mday, MONTH_NAMES[timeinfo.tm_mon]);
+    snprintf(dateBuf, sizeof(dateBuf), "%s%s, %d %s", g_clockApproximate ? "~" : "",
+             DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday, MONTH_NAMES[timeinfo.tm_mon]);
   } else {
     snprintf(dateBuf, sizeof(dateBuf), "%s", tr(STR_SYNC_TIME));
   }
