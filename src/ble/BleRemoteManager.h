@@ -36,6 +36,7 @@ class BleRemoteManager : public NimBLEScanCallbacks, public NimBLEClientCallback
   // Connection
   bool connectToDevice(const NimBLEAddress& addr);
   void disconnect();
+  const std::string& getLastError() const { return lastError; }
 
   // Discovered devices (thread-safe access)
   std::vector<BleDiscoveredDevice> getDiscoveredDevices();
@@ -43,6 +44,10 @@ class BleRemoteManager : public NimBLEScanCallbacks, public NimBLEClientCallback
 
   // Auto-reconnect to bonded device (non-blocking)
   void autoReconnect(const char* bondedAddr, uint8_t addrType = 0);
+
+  // Pairing lock — prevents main loop from calling deinit() during pairing
+  void setPairingActive(bool active) { pairingActive = active; }
+  bool isPairingActive() const { return pairingActive; }
 
   // WiFi mutual exclusion
   void suspend();
@@ -57,10 +62,12 @@ class BleRemoteManager : public NimBLEScanCallbacks, public NimBLEClientCallback
   volatile bool connected = false;
   volatile bool scanning = false;
   bool suspended = false;
+  bool pairingActive = false;
   volatile bool reconnectPending = false;
   bool shouldAutoReconnect = false;
   NimBLEAddress reconnectAddress;
   NimBLEClient* client = nullptr;
+  std::string lastError;
 
   std::vector<BleDiscoveredDevice> discoveredDevices;
   std::mutex devicesMutex;

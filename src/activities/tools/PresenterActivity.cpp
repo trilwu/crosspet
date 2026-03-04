@@ -14,7 +14,13 @@ void PresenterActivity::onEnter() {
   Activity::onEnter();
   state = State::ADVERTISING;
   bleManager.suspend();  // only 1 NimBLE connection slot — release central role first
-  presenter.init();
+  vTaskDelay(pdMS_TO_TICKS(500));  // wait for NimBLE host task to fully shut down
+  if (!presenter.init()) {
+    LOG_ERR("PRESENTER", "BLE init failed, exiting");
+    bleManager.resume();
+    finish();
+    return;
+  }
   requestUpdate();
 }
 
@@ -48,11 +54,13 @@ void PresenterActivity::loop() {
       const bool left    = mappedInput.wasReleased(MappedInputManager::Button::Left);
       const bool confirm = mappedInput.wasReleased(MappedInputManager::Button::Confirm);
       const bool back    = mappedInput.wasReleased(MappedInputManager::Button::Back);
+      const bool backLongPress = back && mappedInput.getHeldTime() > 800;
 
       if (right)   presenter.sendKey(0x4F);  // Right Arrow → next slide
       if (left)    presenter.sendKey(0x50);  // Left Arrow  → prev slide
       if (confirm) presenter.sendKey(0x3E);  // F5          → start presentation
-      if (back)    presenter.sendKey(0x29);  // Escape      → end slideshow
+      if (backLongPress) { finish(); return; }  // Long-press Back → exit presenter
+      if (back)    presenter.sendKey(0x29);  // Short-press Back → Escape
 
       // Host disconnected → return to advertising
       if (!presenter.isConnected()) {

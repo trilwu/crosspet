@@ -174,22 +174,22 @@ void VirtualPetActivity::renderAlive() const {
   if (state.petName[0]) {
     // Show custom name and species type (if not Default), plus day/streak
     if (state.petType > 0) {
-      snprintf(infoLine, sizeof(infoLine), "%s (%s)  |  Day %lu  |  Streak %u",
-               state.petName, PetTypeNames::get(state.petType),
+      snprintf(infoLine, sizeof(infoLine), tr(STR_PET_INFO_FMT_NAME_TYPE),
+               state.petName, PetEvolution::typeName(state.petType),
                (unsigned long)PET_MANAGER.getDaysAlive(), (unsigned)state.currentStreak);
     } else {
-      snprintf(infoLine, sizeof(infoLine), "%s (%s)  |  Day %lu  |  Streak %u",
+      snprintf(infoLine, sizeof(infoLine), tr(STR_PET_INFO_FMT_NAME_TYPE),
                state.petName, stageName,
                (unsigned long)PET_MANAGER.getDaysAlive(), (unsigned)state.currentStreak);
     }
   } else {
     // No custom name: show stage (+ type if non-default)
     if (state.petType > 0) {
-      snprintf(infoLine, sizeof(infoLine), "%s %s  |  Day %lu  |  Streak %u",
-               PetTypeNames::get(state.petType), stageName,
+      snprintf(infoLine, sizeof(infoLine), tr(STR_PET_INFO_FMT_TYPE_STAGE),
+               PetEvolution::typeName(state.petType), stageName,
                (unsigned long)PET_MANAGER.getDaysAlive(), (unsigned)state.currentStreak);
     } else {
-      snprintf(infoLine, sizeof(infoLine), "%s  |  Day %lu  |  Streak %u",
+      snprintf(infoLine, sizeof(infoLine), tr(STR_PET_INFO_FMT_STAGE),
                stageName, (unsigned long)PET_MANAGER.getDaysAlive(), (unsigned)state.currentStreak);
     }
   }
@@ -213,7 +213,7 @@ void VirtualPetActivity::renderAlive() const {
   }
 
   // --- Button hints ---
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Select", "Up", "Down");
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
 
@@ -241,9 +241,9 @@ void VirtualPetActivity::renderTypeSelect() const {
     const bool selected = (i == typeSelectIndex);
     if (selected) {
       renderer.fillRect(sideMargin - 4, rowY - 2, listW + 8, rowH, false);
-      renderer.drawText(UI_10_FONT_ID, sideMargin, rowY, PetTypeNames::NAMES[i], /*invert=*/false);
+      renderer.drawText(UI_10_FONT_ID, sideMargin, rowY, PetEvolution::typeName(i), /*invert=*/false);
     } else {
-      renderer.drawText(UI_10_FONT_ID, sideMargin, rowY, PetTypeNames::NAMES[i]);
+      renderer.drawText(UI_10_FONT_ID, sideMargin, rowY, PetEvolution::typeName(i));
     }
   }
 

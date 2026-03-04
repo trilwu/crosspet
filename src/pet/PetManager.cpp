@@ -5,6 +5,7 @@
 #include "PetEvolution.h"
 
 #include <Arduino.h>
+#include <I18n.h>
 #include <Logging.h>
 
 #include <cstring>
@@ -244,9 +245,9 @@ uint32_t PetManager::getDaysAlive() const {
 }
 
 void PetManager::getMissions(PetMission out[3]) const {
-  out[0] = {"Read 20 pages",   state.missionPagesRead, 20, state.missionPagesRead >= 20};
-  out[1] = {"Pet 3 times",     state.missionPetCount,   3, state.missionPetCount  >=  3};
-  out[2] = {"Keep fed (>40%)", state.hunger,            40, state.hunger           >= 40};
+  out[0] = {tr(STR_PET_MISSION_READ), state.missionPagesRead, 20, state.missionPagesRead >= 20};
+  out[1] = {tr(STR_PET_MISSION_PET),  state.missionPetCount,   3, state.missionPetCount  >=  3};
+  out[2] = {tr(STR_PET_MISSION_FED),  state.hunger,            40, state.hunger           >= 40};
 }
 
 // --- Helpers ---

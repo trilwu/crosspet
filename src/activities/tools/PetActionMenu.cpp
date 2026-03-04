@@ -1,5 +1,7 @@
 #include "PetActionMenu.h"
 
+#include <I18n.h>
+
 #include "fontIds.h"
 
 // ---- Navigation ---------------------------------------------------------
@@ -50,17 +52,17 @@ bool PetActionMenu::isActionAvailable(PetAction action, const PetState& state) c
 
 const char* PetActionMenu::actionLabel(PetAction action) {
   switch (action) {
-    case PetAction::FEED_MEAL:     return "Feed Meal";
-    case PetAction::FEED_SNACK:    return "Feed Snack";
-    case PetAction::MEDICINE:      return "Medicine";
-    case PetAction::EXERCISE:      return "Exercise";
-    case PetAction::CLEAN:         return "Clean";
-    case PetAction::SCOLD:         return "Scold";
-    case PetAction::IGNORE_CRY:    return "Ignore";
-    case PetAction::TOGGLE_LIGHTS: return "Lights";
-    case PetAction::PET_PET:       return "Pet";
-    case PetAction::RENAME:        return "Rename";
-    case PetAction::CHANGE_TYPE:   return "Change Type";
+    case PetAction::FEED_MEAL:     return tr(STR_PET_ACTION_FEED_MEAL);
+    case PetAction::FEED_SNACK:    return tr(STR_PET_ACTION_FEED_SNACK);
+    case PetAction::MEDICINE:      return tr(STR_PET_ACTION_MEDICINE);
+    case PetAction::EXERCISE:      return tr(STR_PET_ACTION_EXERCISE);
+    case PetAction::CLEAN:         return tr(STR_PET_ACTION_CLEAN);
+    case PetAction::SCOLD:         return tr(STR_PET_ACTION_SCOLD);
+    case PetAction::IGNORE_CRY:    return tr(STR_PET_ACTION_IGNORE);
+    case PetAction::TOGGLE_LIGHTS: return tr(STR_PET_ACTION_LIGHTS);
+    case PetAction::PET_PET:       return tr(STR_PET_ACTION_PET);
+    case PetAction::RENAME:        return tr(STR_PET_ACTION_RENAME);
+    case PetAction::CHANGE_TYPE:   return tr(STR_PET_ACTION_TYPE);
     default:                       return "???";
   }
 }

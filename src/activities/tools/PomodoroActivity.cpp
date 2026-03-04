@@ -178,16 +178,16 @@ void PomodoroActivity::render(RenderLock&&) {
     const int labelX = pageWidth / 2 - 80;  // left-align labels at ~center-80
 
     struct { const char* name; uint32_t ms; IdleField field; } rows[3] = {
-      {"Focus:      ", focusDurationMs,      IdleField::FOCUS},
-      {"Short break:", shortBreakDurationMs, IdleField::SHORT_BREAK},
-      {"Long break: ", longBreakDurationMs,  IdleField::LONG_BREAK},
+      {tr(STR_POMO_FOCUS_LABEL), focusDurationMs,      IdleField::FOCUS},
+      {tr(STR_POMO_SHORT_BREAK), shortBreakDurationMs, IdleField::SHORT_BREAK},
+      {tr(STR_POMO_LONG_BREAK),  longBreakDurationMs,  IdleField::LONG_BREAK},
     };
 
     for (int i = 0; i < 3; i++) {
       const int y = listTop + i * rowH;
       const bool selected = (rows[i].field == selectedField);
-      char buf[32];
-      snprintf(buf, sizeof(buf), "%s %2lu min", rows[i].name, (unsigned long)(rows[i].ms / 60000));
+      char buf[48];
+      snprintf(buf, sizeof(buf), tr(STR_POMO_DURATION_FMT), rows[i].name, (unsigned long)(rows[i].ms / 60000));
       // Draw selection arrow + bold text for selected row
       if (selected) {
         renderer.drawText(SMALL_FONT_ID, labelX - 14, y, ">");
@@ -224,9 +224,9 @@ void PomodoroActivity::render(RenderLock&&) {
 
   switch (state) {
     case State::IDLE:
-      btn2 = "Select";
+      btn2 = tr(STR_SELECT);
       btn3 = tr(STR_DIR_UP);
-      btn4 = "Start >";
+      btn4 = tr(STR_POMO_START);
       break;
     case State::FOCUS:
     case State::SHORT_BREAK:

@@ -1,5 +1,7 @@
 #include "PetStatsPanel.h"
 
+#include <I18n.h>
+
 #include "fontIds.h"
 
 // ---- Status icons -------------------------------------------------------
@@ -52,19 +54,19 @@ void PetStatsPanel::renderStats(GfxRenderer& renderer, const PetState& state,
                                  int x, int y, int w) const {
   const int barSpacing = renderer.getLineHeight(SMALL_FONT_ID) + 10;
 
-  drawStatBar(renderer, x, y,                     w, "Hunger",     state.hunger);
-  drawStatBar(renderer, x, y + barSpacing,         w, "Happy",      state.happiness);
-  drawStatBar(renderer, x, y + barSpacing * 2,     w, "Health",     state.health);
-  drawStatBar(renderer, x, y + barSpacing * 3,     w, "Weight",     state.weight);
-  drawStatBar(renderer, x, y + barSpacing * 4,     w, "Discipline", state.discipline);
+  drawStatBar(renderer, x, y,                     w, tr(STR_PET_HUNGER),     state.hunger);
+  drawStatBar(renderer, x, y + barSpacing,         w, tr(STR_PET_STAT_HAPPY), state.happiness);
+  drawStatBar(renderer, x, y + barSpacing * 2,     w, tr(STR_PET_HEALTH),     state.health);
+  drawStatBar(renderer, x, y + barSpacing * 3,     w, tr(STR_PET_WEIGHT),     state.weight);
+  drawStatBar(renderer, x, y + barSpacing * 4,     w, tr(STR_PET_DISCIPLINE), state.discipline);
 
   // Reading progress bar: pages accumulated toward next meal (0-PAGES_PER_MEAL)
   const uint8_t readPct = static_cast<uint8_t>(
       state.pageAccumulator * 100u / PetConfig::PAGES_PER_MEAL);
-  drawStatBar(renderer, x, y + barSpacing * 5,     w, "Reading",    readPct);
+  drawStatBar(renderer, x, y + barSpacing * 5,     w, tr(STR_PET_STAT_READING), readPct);
 
   // Care mistakes counter below bars
   char mistakesBuf[24];
-  snprintf(mistakesBuf, sizeof(mistakesBuf), "Mistakes: %d", state.careMistakes);
+  snprintf(mistakesBuf, sizeof(mistakesBuf), tr(STR_PET_MISTAKES_FORMAT), state.careMistakes);
   renderer.drawText(SMALL_FONT_ID, x, y + barSpacing * 6, mistakesBuf);
 }

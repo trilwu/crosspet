@@ -11,11 +11,7 @@
 #include "util/LunarCalendar.h"
 
 namespace {
-const char* DAY_NAMES[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-const char* MONTH_NAMES[] = {"January",   "February", "March",    "April",
-                              "May",       "June",     "July",     "August",
-                              "September", "October",  "November", "December"};
-const char* FIELD_LABELS[] = {"Hour", "Minute", "Day", "Month", "Year"};
+// Day/month/field names use I18n — build arrays at call site via tr()
 static constexpr int FIELD_COUNT = 5;
 
 bool isTimeValid() {
@@ -166,13 +162,18 @@ void ClockActivity::render(RenderLock&&) {
 
     // Date row
     char dateBuf[64];
+    const char* monthNames[] = {tr(STR_MONTH_JAN), tr(STR_MONTH_FEB), tr(STR_MONTH_MAR),
+        tr(STR_MONTH_APR), tr(STR_MONTH_MAY), tr(STR_MONTH_JUN), tr(STR_MONTH_JUL),
+        tr(STR_MONTH_AUG), tr(STR_MONTH_SEP), tr(STR_MONTH_OCT), tr(STR_MONTH_NOV), tr(STR_MONTH_DEC)};
     snprintf(dateBuf, sizeof(dateBuf), "%d %s %d",
-             editTime.tm_mday, MONTH_NAMES[editTime.tm_mon], editTime.tm_year + 1900);
+             editTime.tm_mday, monthNames[editTime.tm_mon], editTime.tm_year + 1900);
     renderer.drawCenteredText(UI_10_FONT_ID, startY + timeH + 12, dateBuf);
 
     // Active field label
+    const char* fieldLabels[] = {tr(STR_FIELD_HOUR), tr(STR_FIELD_MINUTE),
+        tr(STR_FIELD_DAY), tr(STR_FIELD_MONTH), tr(STR_FIELD_YEAR)};
     char fieldBuf[32];
-    snprintf(fieldBuf, sizeof(fieldBuf), "< %s >", FIELD_LABELS[editField]);
+    snprintf(fieldBuf, sizeof(fieldBuf), "< %s >", fieldLabels[editField]);
     renderer.drawCenteredText(SMALL_FONT_ID, startY + timeH + 12 + dateH + 12, fieldBuf);
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_CONFIRM), "", "");
@@ -182,7 +183,7 @@ void ClockActivity::render(RenderLock&&) {
     const int y = (pageHeight - renderer.getLineHeight(UI_10_FONT_ID)) / 2;
     renderer.drawCenteredText(UI_10_FONT_ID, y, tr(STR_CONNECT_WIFI_TIME));
 
-    const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_CLOCK_SET_TIME), "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
   } else {
@@ -192,10 +193,16 @@ void ClockActivity::render(RenderLock&&) {
     char timeBuf[6];
     snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
+    const char* dayNames[] = {tr(STR_DAY_SUN), tr(STR_DAY_MON), tr(STR_DAY_TUE), tr(STR_DAY_WED),
+        tr(STR_DAY_THU), tr(STR_DAY_FRI), tr(STR_DAY_SAT)};
+    const char* monthNames[] = {tr(STR_MONTH_JAN), tr(STR_MONTH_FEB), tr(STR_MONTH_MAR),
+        tr(STR_MONTH_APR), tr(STR_MONTH_MAY), tr(STR_MONTH_JUN), tr(STR_MONTH_JUL),
+        tr(STR_MONTH_AUG), tr(STR_MONTH_SEP), tr(STR_MONTH_OCT), tr(STR_MONTH_NOV), tr(STR_MONTH_DEC)};
+
     char dateBuf[64];
     snprintf(dateBuf, sizeof(dateBuf), "%s, %d %s %d",
-             DAY_NAMES[timeinfo.tm_wday], timeinfo.tm_mday,
-             MONTH_NAMES[timeinfo.tm_mon], timeinfo.tm_year + 1900);
+             dayNames[timeinfo.tm_wday], timeinfo.tm_mday,
+             monthNames[timeinfo.tm_mon], timeinfo.tm_year + 1900);
 
     const int timeHeight = renderer.getLineHeight(UI_12_FONT_ID);
     const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
@@ -213,7 +220,7 @@ void ClockActivity::render(RenderLock&&) {
     renderer.drawCenteredText(UI_10_FONT_ID, startY + timeHeight + 8, dateBuf);
     renderCalendar(startY + timeHeight + 8 + dateHeight + 12, timeinfo);
 
-    const auto labels = mappedInput.mapLabels(tr(STR_BACK), "Set Time", "", "");
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_CLOCK_SET_TIME), "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   }
 
@@ -221,7 +228,8 @@ void ClockActivity::render(RenderLock&&) {
 }
 
 void ClockActivity::renderCalendar(int startY, const struct tm& t) const {
-  static const char* const DAY_HDR[] = {"S", "M", "T", "W", "T", "F", "S"};
+  const char* const DAY_HDR[] = {tr(STR_CAL_SUN), tr(STR_CAL_MON), tr(STR_CAL_TUE),
+      tr(STR_CAL_WED), tr(STR_CAL_THU), tr(STR_CAL_FRI), tr(STR_CAL_SAT)};
   const int pageWidth = renderer.getScreenWidth();
   const int margin = 20;
   const int calW = pageWidth - margin * 2;

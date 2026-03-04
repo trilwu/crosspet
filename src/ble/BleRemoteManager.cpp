@@ -3,6 +3,12 @@
 #include <HalGPIO.h>
 #include <Logging.h>
 
+// Prevent Arduino from releasing BLE controller memory at boot.
+// NimBLE-Arduino 2.x doesn't include esp32-hal-bt-mem.h, so btInUse() returns
+// false and initArduino() frees BLE memory via esp_bt_controller_mem_release().
+// Subsequent NimBLEDevice::init() → esp_bt_controller_init() then crashes.
+extern "C" bool btInUse(void) { return true; }
+
 // USB HID keyboard keycodes (Usage Page 0x07)
 namespace BleHidKeys {
 constexpr uint8_t KEY_ENTER = 0x28;
@@ -63,8 +69,11 @@ bool BleRemoteManager::init() {
   if (enabled) return true;
 
   NimBLEDevice::init("CrossPoint");
-  NimBLEDevice::setSecurityAuth(true, false, true);  // bonding, no MITM, secure connections
-  NimBLEDevice::setPower(ESP_PWR_LVL_P3);
+  // No security requirements during init — NimBLE auto-negotiates encryption
+  // when the remote HID service requires it during characteristic access
+  NimBLEDevice::setSecurityAuth(false, false, false);
+  NimBLEDevice::setSecurityIOCap(BLE_HS_IO_NO_INPUT_OUTPUT);
+  NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // max power for better range
 
   enabled = true;
   LOG_DBG("BLE", "NimBLE initialized");
@@ -113,12 +122,28 @@ void BleRemoteManager::stopScan() {
 }
 
 bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
-  if (!enabled) return false;
+  lastError.clear();
 
-  stopScan();
+  if (!enabled) {
+    // Re-init BLE if it was disabled (e.g. main loop deinit'd while settings toggle is off)
+    if (!init()) {
+      lastError = "E0: BLE init failed";
+      return false;
+    }
+  }
 
-  // Always create a fresh client — reusing a stale client after disconnect/deinit
-  // can crash NimBLE. Delete any existing client for this peer first.
+  // Force-stop scan through NimBLE API directly (not just our wrapper)
+  NimBLEDevice::getScan()->stop();
+  scanning = false;
+  vTaskDelay(pdMS_TO_TICKS(500));
+
+  // Delete ALL existing clients to free the single connection slot
+  if (client) {
+    if (client->isConnected()) client->disconnect();
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
+  }
+  // Also clean up any client NimBLE may have for this address
   NimBLEClient* existing = NimBLEDevice::getClientByPeerAddress(addr);
   if (existing) {
     NimBLEDevice::deleteClient(existing);
@@ -126,43 +151,65 @@ bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
 
   client = NimBLEDevice::createClient(addr);
   if (!client) {
-    LOG_ERR("BLE", "Failed to create client");
+    lastError = "E1: No client slot";
+    LOG_ERR("BLE", "%s", lastError.c_str());
     return false;
   }
 
   client->setClientCallbacks(this, false);
-  client->setConnectionParams(12, 12, 0, 150);
-  client->setConnectTimeout(5);
+  client->setConnectTimeout(8);
 
-  if (!client->connect(addr)) {
-    LOG_ERR("BLE", "Connection failed to %s", addr.toString().c_str());
+  LOG_DBG("BLE", "Connecting to %s (type %d)...", addr.toString().c_str(), addr.getType());
+
+  // Use connect() without address — uses the address passed to createClient
+  if (!client->connect()) {
+    lastError = "E2: Connect timeout";
+    LOG_ERR("BLE", "%s to %s", lastError.c_str(), addr.toString().c_str());
     NimBLEDevice::deleteClient(client);
     client = nullptr;
     return false;
   }
 
-  // Guard: device may have disconnected during connection setup
   if (!client->isConnected()) {
-    LOG_ERR("BLE", "Client disconnected before service discovery");
+    lastError = "E3: Dropped after connect";
+    LOG_ERR("BLE", "%s", lastError.c_str());
     NimBLEDevice::deleteClient(client);
     client = nullptr;
     return false;
   }
 
-  // Discover HID service (UUID 0x1812)
+  LOG_DBG("BLE", "Connected OK, discovering services...");
+  vTaskDelay(pdMS_TO_TICKS(500));
+
+  const auto& services = client->getServices(true);
+  if (!client->isConnected()) {
+    lastError = "E4: Dropped in svc discovery";
+    LOG_ERR("BLE", "%s", lastError.c_str());
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
+    return false;
+  }
+
+  LOG_DBG("BLE", "Found %d services", (int)services.size());
+
   NimBLERemoteService* hidService = client->getService(NimBLEUUID((uint16_t)0x1812));
-  if (!hidService || !client->isConnected()) {
-    LOG_ERR("BLE", "HID service not found or disconnected");
+  if (!hidService) {
+    char buf[48];
+    snprintf(buf, sizeof(buf), "E5: No HID svc (%d svcs)", (int)services.size());
+    lastError = buf;
+    LOG_ERR("BLE", "%s", lastError.c_str());
     client->disconnect();
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
     return false;
   }
 
-  // Subscribe to all HID Report Input characteristics (UUID 0x2A4D)
-  // Copy the vector to avoid dangling reference if device disconnects mid-loop
-  const std::vector<NimBLERemoteCharacteristic*> chars = hidService->getCharacteristics(true);
-
+  const auto& chars = hidService->getCharacteristics(true);
   if (!client->isConnected()) {
-    LOG_ERR("BLE", "Disconnected during characteristic discovery");
+    lastError = "E6: Dropped in char discovery";
+    LOG_ERR("BLE", "%s", lastError.c_str());
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
     return false;
   }
 
@@ -173,14 +220,19 @@ bool BleRemoteManager::connectToDevice(const NimBLEAddress& addr) {
             onHidReport(data, len);
           })) {
         subscribed = true;
-        LOG_DBG("BLE", "Subscribed to HID Report characteristic");
+        LOG_DBG("BLE", "Subscribed to HID Report");
       }
     }
   }
 
   if (!subscribed) {
-    LOG_ERR("BLE", "No HID Report characteristics found");
+    char buf[48];
+    snprintf(buf, sizeof(buf), "E7: No HID reports (%d chars)", (int)chars.size());
+    lastError = buf;
+    LOG_ERR("BLE", "%s", lastError.c_str());
     client->disconnect();
+    NimBLEDevice::deleteClient(client);
+    client = nullptr;
     return false;
   }
 
@@ -251,24 +303,30 @@ void BleRemoteManager::tick() {
 // --- NimBLE Callbacks ---
 
 void BleRemoteManager::onResult(const NimBLEAdvertisedDevice* device) {
-  // Filter: only HID devices (service UUID 0x1812)
-  if (device->isAdvertisingService(NimBLEUUID((uint16_t)0x1812))) {
-    std::lock_guard<std::mutex> lock(devicesMutex);
+  // Show all discovered BLE devices — many keyboards/remotes don't advertise
+  // HID service UUID or appearance. Connection will verify HID support.
+  std::lock_guard<std::mutex> lock(devicesMutex);
 
-    // Avoid duplicates
-    for (const auto& d : discoveredDevices) {
-      if (d.address == device->getAddress()) return;
+  std::string name = device->getName();
+
+  // Update existing entry if we now have a name (scan response arrived later)
+  for (auto& d : discoveredDevices) {
+    if (d.address == device->getAddress()) {
+      if (!name.empty() && d.name.find(':') != std::string::npos) {
+        d.name = name;  // replace address placeholder with real name
+      }
+      d.rssi = device->getRSSI();  // update signal strength
+      return;
     }
-
-    BleDiscoveredDevice d;
-    d.name = device->getName();
-    if (d.name.empty()) d.name = device->getAddress().toString();
-    d.address = device->getAddress();
-    d.rssi = device->getRSSI();
-    discoveredDevices.push_back(d);
-
-    LOG_DBG("BLE", "Found HID device: %s (%d dBm)", d.name.c_str(), d.rssi);
   }
+
+  BleDiscoveredDevice d;
+  d.name = name.empty() ? device->getAddress().toString() : name;
+  d.address = device->getAddress();
+  d.rssi = device->getRSSI();
+  discoveredDevices.push_back(d);
+
+  LOG_DBG("BLE", "Found: %s (%d dBm)", d.name.c_str(), d.rssi);
 }
 
 void BleRemoteManager::onScanEnd(const NimBLEScanResults& results, int reason) {

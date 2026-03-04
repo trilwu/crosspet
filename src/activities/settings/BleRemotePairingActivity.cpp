@@ -17,6 +17,7 @@ extern BleRemoteManager bleManager;
 void BleRemotePairingActivity::onEnter() {
   Activity::onEnter();
 
+  bleManager.setPairingActive(true);  // prevent main loop from deinit'ing BLE
   selectedDeviceIndex = 0;
   idleMenuSelection = 0;
   errorMessage.clear();
@@ -34,10 +35,10 @@ void BleRemotePairingActivity::onEnter() {
 void BleRemotePairingActivity::onExit() {
   Activity::onExit();
 
-  // Stop any in-progress scan when leaving
   if (bleManager.isScanning()) {
     bleManager.stopScan();
   }
+  bleManager.setPairingActive(false);  // allow main loop to manage BLE again
 }
 
 // ---- State helpers ---------------------------------------------------
@@ -50,7 +51,7 @@ void BleRemotePairingActivity::startScanning() {
   requestUpdate();
 
   bleManager.init();
-  bleManager.startScan(10);
+  bleManager.startScan(20);
 }
 
 void BleRemotePairingActivity::connectToSelected() {
@@ -77,9 +78,10 @@ void BleRemotePairingActivity::connectToSelected() {
     state = BleUiState::CONNECTED;
     stateEnteredAt = millis();
   } else {
-    errorMessage = "Connection failed";
+    errorMessage = bleManager.getLastError();
+    if (errorMessage.empty()) errorMessage = "Connection failed";
     state = BleUiState::ERROR;
-    LOG_DBG("BLE", "Connection failed");
+    LOG_DBG("BLE", "Connection failed: %s", errorMessage.c_str());
   }
   requestUpdate();
 }
@@ -150,12 +152,15 @@ void BleRemotePairingActivity::loop() {
         return;
       }
 
-      if (mappedInput.wasPressed(MappedInputManager::Button::Confirm)) {
+      if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
         if (deviceCount > 0) {
-          connectToSelected();
+          if (mappedInput.getHeldTime() > 800) {
+            startScanning();  // Long-press Confirm → rescan
+          } else {
+            connectToSelected();
+          }
         } else {
-          // No devices — retry scan
-          startScanning();
+          startScanning();  // No devices → retry scan
         }
         return;
       }
@@ -314,7 +319,9 @@ void BleRemotePairingActivity::renderScanComplete() const {
   }
 
   const char* confirmLabel = (deviceCount > 0) ? tr(STR_CONFIRM) : tr(STR_RETRY);
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), confirmLabel, tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const char* upLabel = (deviceCount > 0) ? tr(STR_DIR_UP) : "";
+  const char* downLabel = (deviceCount > 0) ? tr(STR_DIR_DOWN) : "";
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), confirmLabel, upLabel, downLabel);
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
 

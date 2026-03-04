@@ -200,17 +200,17 @@ void GameOfLifeActivity::render(RenderLock&&) {
 
   const int textY = hudY + 10;
   char genStr[24];
-  snprintf(genStr, sizeof(genStr), "Gen %lu", (unsigned long)generation);
+  snprintf(genStr, sizeof(genStr), tr(STR_GOL_GEN_FORMAT), (unsigned long)generation);
   renderer.drawText(SMALL_FONT_ID, 8, textY, genStr);
 
   // Center: preset name + alive count
   char centerStr[32];
-  snprintf(centerStr, sizeof(centerStr), "%s | %d alive", PRESET_NAMES[presetIdx], aliveCells);
+  snprintf(centerStr, sizeof(centerStr), tr(STR_GOL_ALIVE_FORMAT), PRESET_NAMES[presetIdx], aliveCells);
   renderer.drawCenteredText(SMALL_FONT_ID, textY, centerStr);
 
-  const char* speedStr = speedIdx == 0 ? "Fast" : speedIdx == 1 ? "Med" :
-                         speedIdx == 2 ? "Slow" : "Slowest";
-  const char* pauseStr = paused ? "Resume" : "Pause";
+  const char* speedStr = speedIdx == 0 ? tr(STR_GOL_SPEED_FAST) : speedIdx == 1 ? tr(STR_GOL_SPEED_MED) :
+                         speedIdx == 2 ? tr(STR_GOL_SPEED_SLOW) : tr(STR_GOL_SPEED_SLOWEST);
+  const char* pauseStr = paused ? tr(STR_RESUME) : tr(STR_PAUSE);
 
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), pauseStr, tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);

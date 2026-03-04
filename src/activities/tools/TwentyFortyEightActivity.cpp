@@ -196,7 +196,7 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
   // Score + best score on one line
   char scoreStr[48];
   const uint32_t bestScore = (score > GAME_SCORES.best2048) ? score : GAME_SCORES.best2048;
-  snprintf(scoreStr, sizeof(scoreStr), "Score: %lu    Best: %lu", (unsigned long)score, (unsigned long)bestScore);
+  snprintf(scoreStr, sizeof(scoreStr), tr(STR_SCORE_FORMAT), (unsigned long)score, (unsigned long)bestScore);
   renderer.drawCenteredText(SMALL_FONT_ID, scoreY, scoreStr);
 
   // Tile grid
@@ -212,10 +212,15 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
         char buf[12];
         snprintf(buf, sizeof(buf), "%lu", (unsigned long)grid[r][c]);
 
-        // Center text within tile using getTextWidth + getLineHeight
-        const int textW = renderer.getTextWidth(UI_10_FONT_ID, buf);
-        const int lineH = renderer.getLineHeight(UI_10_FONT_ID);
-        renderer.drawText(UI_10_FONT_ID,
+        // Auto-scale font: use large font if it fits, otherwise small
+        const int maxW = TILE - 8;  // padding inside tile
+        int fontId = UI_10_FONT_ID;
+        if (renderer.getTextWidth(UI_10_FONT_ID, buf) > maxW) {
+          fontId = SMALL_FONT_ID;
+        }
+        const int textW = renderer.getTextWidth(fontId, buf);
+        const int lineH = renderer.getLineHeight(fontId);
+        renderer.drawText(fontId,
                           x + (TILE - textW) / 2,
                           y + (TILE - lineH) / 2,
                           buf);
@@ -225,10 +230,10 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
 
   // Overlay messages
   if (won && !gameOver) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 - 20, "You Win!");
+    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 - 20, tr(STR_YOU_WIN));
   }
   if (gameOver) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, "Game Over!");
+    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, tr(STR_GAME_OVER));
   }
 
   // Button hints

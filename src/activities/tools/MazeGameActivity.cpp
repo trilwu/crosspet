@@ -163,8 +163,8 @@ void MazeGameActivity::render(RenderLock&&) {
   renderer.fillRect(px - 5, py - 5, 10, 10);
 
   char status[40];
-  if (victory) snprintf(status, sizeof(status), "Done! %d moves", moveCount);
-  else         snprintf(status, sizeof(status), "Moves: %d", moveCount);
+  if (victory) snprintf(status, sizeof(status), tr(STR_MAZE_DONE_FORMAT), moveCount);
+  else         snprintf(status, sizeof(status), tr(STR_MAZE_MOVES_FORMAT), moveCount);
 
   char diffStr[16];
   snprintf(diffStr, sizeof(diffStr), "[%s]", cfg.label);

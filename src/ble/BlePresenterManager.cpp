@@ -56,21 +56,37 @@ struct BlePresenterManager::ServerCb : public NimBLEServerCallbacks {
 };
 
 bool BlePresenterManager::init() {
-  NimBLEDevice::init("CrossPoint Presenter");
-  NimBLEDevice::setSecurityAuth(false, false, false);  // no bonding needed
+  // Caller must ensure NimBLE is fully shut down before calling init()
+  if (NimBLEDevice::isInitialized()) {
+    LOG_ERR("PRESENTER", "NimBLE still initialized — aborting");
+    return false;
+  }
+
+  NimBLEDevice::init("CrossPet_Presenter");
+  NimBLEDevice::setSecurityAuth(false, false, false);
   NimBLEDevice::setPower(ESP_PWR_LVL_P3);
 
   server = NimBLEDevice::createServer();
-  server->setCallbacks(new ServerCb(*this), true);  // true = delete on server deinit
+  if (!server) {
+    LOG_ERR("PRESENTER", "Failed to create BLE server");
+    NimBLEDevice::deinit(true);
+    return false;
+  }
+  server->setCallbacks(new ServerCb(*this), true);
 
-  hid = new NimBLEHIDDevice(server);
+  hid = new (std::nothrow) NimBLEHIDDevice(server);
+  if (!hid) {
+    LOG_ERR("PRESENTER", "Failed to allocate HID device");
+    NimBLEDevice::deinit(true);
+    server = nullptr;
+    return false;
+  }
   hid->setManufacturer("CrossPoint");
   hid->setPnp(0x02, 0x05AC, 0x0256, 0x0110);
-  hid->setHidInfo(0x00, 0x01);  // country=0, flags=normally connectable
+  hid->setHidInfo(0x00, 0x01);
 
   hid->setReportMap((uint8_t*)KEYBOARD_REPORT_MAP, sizeof(KEYBOARD_REPORT_MAP));
-
-  inputReport = hid->getInputReport(1);  // report ID 1
+  inputReport = hid->getInputReport(1);
 
   hid->setBatteryLevel(100);
   hid->startServices();
@@ -83,7 +99,7 @@ bool BlePresenterManager::init() {
   NimBLEDevice::startAdvertising();
   advertising = true;
 
-  LOG_DBG("PRESENTER", "BLE HID peripheral started");
+  LOG_DBG("PRESENTER", "BLE HID started OK");
   return true;
 }
 
@@ -93,10 +109,14 @@ void BlePresenterManager::deinit() {
     advertising = false;
   }
   connected   = false;
+  // Clear pointers before deinit — NimBLEDevice::deinit(true) frees all objects
   server      = nullptr;
   hid         = nullptr;
   inputReport = nullptr;
-  NimBLEDevice::deinit(true);
+  if (NimBLEDevice::isInitialized()) {
+    NimBLEDevice::deinit(true);
+    vTaskDelay(pdMS_TO_TICKS(100));  // let BLE host task fully shut down
+  }
   LOG_DBG("PRESENTER", "BLE HID peripheral stopped");
 }
 

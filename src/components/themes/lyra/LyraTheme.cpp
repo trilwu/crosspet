@@ -218,6 +218,17 @@ void LyraTheme::drawSubHeader(const GfxRenderer& renderer, Rect rect, const char
 
 void LyraTheme::drawTabBar(const GfxRenderer& renderer, Rect rect, const std::vector<TabInfo>& tabs,
                            bool selected) const {
+  const int availableWidth = rect.width - 2 * LyraMetrics::values.contentSidePadding;
+  const int tabPadding = 2 * hPaddingInSelection;
+
+  // Measure total width at normal font; fall back to smaller font if labels overflow
+  int totalWidth = 0;
+  for (const auto& tab : tabs) {
+    totalWidth += renderer.getTextWidth(UI_10_FONT_ID, tab.label, EpdFontFamily::REGULAR) + tabPadding;
+  }
+  totalWidth += (int)(tabs.size() - 1) * LyraMetrics::values.tabSpacing;
+  const int fontId = (totalWidth > availableWidth) ? SMALL_FONT_ID : UI_10_FONT_ID;
+
   int currentX = rect.x + LyraMetrics::values.contentSidePadding;
 
   if (selected) {
@@ -225,24 +236,24 @@ void LyraTheme::drawTabBar(const GfxRenderer& renderer, Rect rect, const std::ve
   }
 
   for (const auto& tab : tabs) {
-    const int textWidth = renderer.getTextWidth(UI_10_FONT_ID, tab.label, EpdFontFamily::REGULAR);
+    const int textWidth = renderer.getTextWidth(fontId, tab.label, EpdFontFamily::REGULAR);
 
     if (tab.selected) {
       if (selected) {
-        renderer.fillRoundedRect(currentX, rect.y + 1, textWidth + 2 * hPaddingInSelection, rect.height - 4,
+        renderer.fillRoundedRect(currentX, rect.y + 1, textWidth + tabPadding, rect.height - 4,
                                  cornerRadius, Color::Black);
       } else {
-        renderer.fillRectDither(currentX, rect.y, textWidth + 2 * hPaddingInSelection, rect.height - 3,
+        renderer.fillRectDither(currentX, rect.y, textWidth + tabPadding, rect.height - 3,
                                 Color::LightGray);
-        renderer.drawLine(currentX, rect.y + rect.height - 3, currentX + textWidth + 2 * hPaddingInSelection,
+        renderer.drawLine(currentX, rect.y + rect.height - 3, currentX + textWidth + tabPadding,
                           rect.y + rect.height - 3, 2, true);
       }
     }
 
-    renderer.drawText(UI_10_FONT_ID, currentX + hPaddingInSelection, rect.y + 6, tab.label, !(tab.selected && selected),
+    renderer.drawText(fontId, currentX + hPaddingInSelection, rect.y + 6, tab.label, !(tab.selected && selected),
                       EpdFontFamily::REGULAR);
 
-    currentX += textWidth + LyraMetrics::values.tabSpacing + 2 * hPaddingInSelection;
+    currentX += textWidth + LyraMetrics::values.tabSpacing + tabPadding;
   }
 
   renderer.drawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width - 1, rect.y + rect.height - 1, true);

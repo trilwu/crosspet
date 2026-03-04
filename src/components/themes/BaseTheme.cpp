@@ -310,13 +310,23 @@ void BaseTheme::drawTabBar(const GfxRenderer& renderer, const Rect rect, const s
   constexpr int underlineHeight = 2;  // Height of selection underline
   constexpr int underlineGap = 4;     // Gap between text and underline
 
-  const int lineHeight = renderer.getLineHeight(UI_12_FONT_ID);
+  const int availableWidth = rect.width - 2 * BaseMetrics::values.contentSidePadding;
 
+  // Measure total width at normal font; fall back to smaller font if labels overflow
+  int totalWidth = 0;
+  for (const auto& tab : tabs) {
+    totalWidth += renderer.getTextWidth(UI_12_FONT_ID, tab.label,
+                                        tab.selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR);
+  }
+  totalWidth += (int)(tabs.size() - 1) * BaseMetrics::values.tabSpacing;
+  const int fontId = (totalWidth > availableWidth) ? UI_10_FONT_ID : UI_12_FONT_ID;
+
+  const int lineHeight = renderer.getLineHeight(fontId);
   int currentX = rect.x + BaseMetrics::values.contentSidePadding;
 
   for (const auto& tab : tabs) {
-    const int textWidth =
-        renderer.getTextWidth(UI_12_FONT_ID, tab.label, tab.selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR);
+    const auto fontStyle = tab.selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR;
+    const int textWidth = renderer.getTextWidth(fontId, tab.label, fontStyle);
 
     // Draw underline for selected tab
     if (tab.selected) {
@@ -328,8 +338,7 @@ void BaseTheme::drawTabBar(const GfxRenderer& renderer, const Rect rect, const s
     }
 
     // Draw tab label
-    renderer.drawText(UI_12_FONT_ID, currentX, rect.y, tab.label, !(tab.selected && selected),
-                      tab.selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR);
+    renderer.drawText(fontId, currentX, rect.y, tab.label, !(tab.selected && selected), fontStyle);
 
     currentX += textWidth + BaseMetrics::values.tabSpacing;
   }

@@ -16,4 +16,7 @@ namespace PetEvolution {
   // Returns display name for stage + variant combination.
   const char* variantStageName(PetStage stage, uint8_t variant);
 
+  // Returns translated display name for pet type index.
+  const char* typeName(uint8_t type);
+
 }  // namespace PetEvolution

@@ -428,7 +428,7 @@ void loop() {
       bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
     }
     bleManager.tick();
-  } else if (bleManager.isEnabled()) {
+  } else if (bleManager.isEnabled() && !bleManager.isPairingActive()) {
     bleManager.deinit();
   }
 

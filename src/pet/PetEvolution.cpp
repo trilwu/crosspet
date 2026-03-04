@@ -1,5 +1,6 @@
 #include "PetEvolution.h"
 
+#include <I18n.h>
 #include <Logging.h>
 
 namespace {
@@ -61,17 +62,31 @@ void checkEvolution(PetState& state) {
 const char* variantStageName(PetStage stage, uint8_t variant) {
   switch (stage) {
     case PetStage::YOUNGSTER:
-      if (variant == 0) return "Scholarly Young";
-      if (variant == 2) return "Wild Youngster";
-      return "Youngster";
+      if (variant == 0) return tr(STR_PET_STAGE_SCHOLARLY_YOUNG);
+      if (variant == 2) return tr(STR_PET_STAGE_WILD_YOUNGSTER);
+      return tr(STR_PET_STAGE_YOUNGSTER);
     case PetStage::COMPANION:
-      if (variant == 0) return "Scholar";
-      if (variant == 2) return "Wild Companion";
-      return "Companion";
-    case PetStage::EGG:       return "Egg";
-    case PetStage::HATCHLING: return "Hatchling";
-    case PetStage::ELDER:     return "Elder";
+      if (variant == 0) return tr(STR_PET_STAGE_SCHOLAR);
+      if (variant == 2) return tr(STR_PET_STAGE_WILD_COMPANION);
+      return tr(STR_PET_STAGE_COMPANION);
+    case PetStage::EGG:       return tr(STR_PET_STAGE_EGG);
+    case PetStage::HATCHLING: return tr(STR_PET_STAGE_HATCHLING);
+    case PetStage::ELDER:     return tr(STR_PET_STAGE_ELDER);
     default:                  return "???";
+  }
+}
+
+const char* typeName(uint8_t type) {
+  switch (type) {
+    case 0: return tr(STR_PET_TYPE_DEFAULT);
+    case 1: return tr(STR_PET_TYPE_CAT);
+    case 2: return tr(STR_PET_TYPE_DOG);
+    case 3: return tr(STR_PET_TYPE_DRAGON);
+    case 4: return tr(STR_PET_TYPE_BUNNY);
+    case 5: return tr(STR_PET_TYPE_ROBOT);
+    case 6: return tr(STR_PET_TYPE_BEAR);
+    case 7: return tr(STR_PET_TYPE_SLIME);
+    default: return tr(STR_PET_TYPE_DEFAULT);
   }
 }
 

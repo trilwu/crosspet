@@ -166,13 +166,13 @@ void SnakeActivity::render(RenderLock&&) {
 
   // Game over: show message + speed-change hint
   if (gameOver) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 - 16, "Game Over!");
-    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 8, "Up/Down: speed");
+    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 - 16, tr(STR_GAME_OVER));
+    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 8, tr(STR_SNAKE_SPEED_HINT));
   }
 
   // Button hints: score + high score in btn3, current speed in btn4
   char scoreStr[32];
-  snprintf(scoreStr, sizeof(scoreStr), "Score:%d Hi:%d", score, highScore);
+  snprintf(scoreStr, sizeof(scoreStr), tr(STR_SNAKE_SCORE_FORMAT), score, highScore);
   char speedStr[16];
   snprintf(speedStr, sizeof(speedStr), "[%s]", SPEED_LABELS[speedIdx]);
 

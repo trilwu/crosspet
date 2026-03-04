@@ -97,8 +97,8 @@ void PhotoFrameActivity::render(RenderLock&&) {
   renderer.clearScreen();
 
   if (photos.empty()) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, "No photos found");
-    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 32, "Place .bmp files in /sleep/");
+    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, tr(STR_NO_PHOTOS));
+    renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 32, tr(STR_PLACE_BMP_HINT));
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), "", "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
     renderer.displayBuffer();
