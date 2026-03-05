@@ -42,7 +42,8 @@ class WeatherActivity final : public Activity {
   bool preventAutoSleep() override { return true; }
 
   // Static cache access for sleep screen (reads from SD)
-  static bool loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char* timeBuf, size_t timeBufLen);
+  static bool loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char* timeBuf, size_t timeBufLen,
+                               char* autoCityBuf = nullptr, size_t autoCityBufLen = 0);
   static const char* weatherCodeToString(int code);
 
   // Silent background refresh: WiFi connect → fetch → cache → WiFi off.

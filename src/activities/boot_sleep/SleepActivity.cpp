@@ -379,6 +379,10 @@ void SleepActivity::renderClockSleepScreen() const {
   const int pageWidth = renderer.getScreenWidth();
   const int pageHeight = renderer.getScreenHeight();
 
+  // Pre-clear: push a blank white frame to wipe previous content ghosting
+  renderer.clearScreen();
+  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+
   renderer.clearScreen();
 
   // Battery percentage — top-right corner
@@ -440,9 +444,14 @@ void SleepActivity::renderClockSleepScreen() const {
     WeatherData wData;
     uint8_t wCity = 0;
     char wTime[8] = "";
-    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+    char autoCity[32] = "";
+    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime),
+                                          autoCity, sizeof(autoCity))) {
+      // Use autoCity for Auto mode (wCity=0), otherwise use manual city name
+      const char* cityName = (wCity == 0 && autoCity[0]) ? autoCity
+                             : WeatherActivity::CITIES[wCity < WeatherActivity::CITY_COUNT ? wCity : 0].name;
       snprintf(weatherLine, sizeof(weatherLine), "%s: %.0f°C  %s  %d%%",
-               WeatherActivity::CITIES[wCity].name,
+               cityName,
                wData.temperature,
                WeatherActivity::weatherCodeToString(wData.weatherCode),
                wData.humidity);
@@ -681,10 +690,10 @@ void SleepActivity::renderClockSleepScreen() const {
     const int qMaxW = qRight - qLeft;
 
     // Author line: "— Author", second line from bottom
-    char authorBuf[32];
+    char authorBuf[48];
     snprintf(authorBuf, sizeof(authorBuf), "— %s", QUOTE_AUTHOR[qIdx]);
 
-    const int authorY = pageHeight - 12;
+    const int authorY = pageHeight - lhQ - 8;  // ensure text fits above screen bottom
     const int quoteY  = authorY - lhQ - 3;
 
     // Truncate quote if it exceeds the available width
@@ -694,8 +703,11 @@ void SleepActivity::renderClockSleepScreen() const {
     const int qW = renderer.getTextWidth(SMALL_FONT_ID, qStr.c_str());
     renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - qW / 2), quoteY, qStr.c_str());
 
-    const int aW = renderer.getTextWidth(SMALL_FONT_ID, authorBuf);
-    renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - aW / 2), authorY, authorBuf);
+    // Truncate author if it exceeds the available width
+    const std::string aStr =
+        renderer.truncatedText(SMALL_FONT_ID, authorBuf, qMaxW, EpdFontFamily::REGULAR);
+    const int aW = renderer.getTextWidth(SMALL_FONT_ID, aStr.c_str());
+    renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - aW / 2), authorY, aStr.c_str());
   }
 
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);

@@ -316,7 +316,8 @@ void WeatherActivity::saveWeatherCache() {
   Storage.writeFile("/.crosspoint/weather_cache.json", json);
 }
 
-bool WeatherActivity::loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char* timeBuf, size_t timeBufLen) {
+bool WeatherActivity::loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char* timeBuf, size_t timeBufLen,
+                                       char* autoCityBuf, size_t autoCityBufLen) {
   String content = Storage.readFile("/.crosspoint/weather_cache.json");
   if (content.isEmpty()) return false;
 
@@ -334,6 +335,12 @@ bool WeatherActivity::loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char*
   const char* t = doc["time"] | "";
   strncpy(timeBuf, t, timeBufLen - 1);
   timeBuf[timeBufLen - 1] = '\0';
+
+  if (autoCityBuf && autoCityBufLen > 0) {
+    const char* ac = doc["autoCity"] | "";
+    strncpy(autoCityBuf, ac, autoCityBufLen - 1);
+    autoCityBuf[autoCityBufLen - 1] = '\0';
+  }
   return true;
 }
 
