@@ -69,8 +69,8 @@
           <div class="flash-step fade-in">
             <div class="step-num" aria-hidden="true">1</div>
             <div class="step-content">
-              <h3 data-i18n="flash.step1.title">Back up your books and progress</h3>
-              <p data-i18n="flash.step1.desc">CrossPet preserves your SD card contents, but flashing firmware resets all device settings. Copy your <code>.crosspoint/</code> folder to your computer if you want to keep reading progress.</p>
+              <h3 data-i18n="flash.step1.title">Back up your settings (optional)</h3>
+              <p data-i18n="flash.step1.desc">This is an OTA update — only the firmware partition is overwritten. Bootloader, partition table, and SD card are untouched. Device settings (NVS) are preserved. Back up <code>.crosspoint/</code> on SD if you want extra safety.</p>
             </div>
           </div>
 
@@ -108,8 +108,11 @@
 
         <!-- Flash button -->
         <div class="flash-btn-area fade-in">
+          <p class="firmware-version-info" style="display: none; text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+            Latest version: <strong id="firmware-version">...</strong>
+          </p>
           <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
-          <esp-web-install-button manifest="firmware/manifest.json">
+          <esp-web-install-button>
             <button slot="activate" class="flash-btn" data-i18n="flash.button">
               ⚡ Flash CrossPet Firmware
             </button>
@@ -121,7 +124,7 @@
             </span>
           </esp-web-install-button>
           <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem; margin-bottom: 0;" data-i18n="flash.installer.note">
-            Installs the latest stable release. The installer will show firmware version before flashing.
+            OTA flash only — preserves bootloader and partition table. Your SD card data is not affected.
           </p>
         </div>
 
@@ -218,6 +221,7 @@ pio run -e gh_release_rc</code></pre>
     </div>
   </footer>
 
+  <script src="js/flash-firmware-loader.js" defer></script>
   <script src="js/i18n-switcher.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
