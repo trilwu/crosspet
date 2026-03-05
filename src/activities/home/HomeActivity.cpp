@@ -23,7 +23,9 @@
 #include "components/icons/tools.h"
 #include "components/icons/transfer.h"
 #include "fontIds.h"
+#include "activities/network/WifiSelectionActivity.h"
 #include "activities/tools/WeatherActivity.h"
+#include "WifiCredentialStore.h"
 #include "ble/BleRemoteManager.h"
 #include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
@@ -156,13 +158,14 @@ void HomeActivity::loop() {
   });
 
 
-  // Back button: refresh weather data silently
+  // Back button: refresh weather + NTP time silently
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
-    weatherRefreshing = true;
-    requestUpdate();  // Show "refreshing" indicator
-    WeatherActivity::silentRefresh();
-    weatherRefreshing = false;
-    coverRendered = false;  // Force full redraw to show updated weather
+    doSync();
+  }
+
+  // Clear sync result message after timeout
+  if (syncResultMsg && millis() > syncResultExpiry) {
+    syncResultMsg = nullptr;
     requestUpdate();
   }
 
@@ -316,9 +319,12 @@ void HomeActivity::renderHeaderClock() {
   const int clockW = renderer.getTextWidth(SMALL_FONT_ID, buf);
   renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
 
-  // Weather temp next to clock
+  // Weather temp next to clock (or sync status)
+  const int weatherX = 10 + clockW + 6;
   if (weatherRefreshing) {
-    renderer.drawText(SMALL_FONT_ID, 10 + clockW + 6, 5, "...");
+    renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
+  } else if (syncResultMsg) {
+    renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
   } else {
     WeatherData wData;
     uint8_t wCity = 0;
@@ -326,7 +332,7 @@ void HomeActivity::renderHeaderClock() {
     if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
       char wBuf[16];
       snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
-      renderer.drawText(SMALL_FONT_ID, 10 + clockW + 6, 5, wBuf);
+      renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
     }
   }
 }
@@ -371,7 +377,7 @@ void HomeActivity::render(RenderLock&&) {
 
   renderSelectionHighlight(0, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H);
 
-  const auto labels = mappedInput.mapLabels("", tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const auto labels = mappedInput.mapLabels("Đồng bộ", tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   renderer.displayBuffer();
 
@@ -394,6 +400,46 @@ void HomeActivity::render(RenderLock&&) {
     recentsLoading = true;
     loadRecentCovers(COVER_H);
   }
+}
+
+// ── Sync ──────────────────────────────────────────────────────────────────────
+
+void HomeActivity::performSyncAfterWifi() {
+  weatherRefreshing = true;
+  requestUpdateAndWait();
+  int rc = WeatherActivity::silentRefresh();
+  bleManager.resume();
+  weatherRefreshing = false;
+  static char syncBuf[24];
+  if (rc == 0) {
+    snprintf(syncBuf, sizeof(syncBuf), "Đồng bộ OK");
+  } else if (rc == 2) {
+    snprintf(syncBuf, sizeof(syncBuf), "WiFi quá hạn");
+  } else {
+    snprintf(syncBuf, sizeof(syncBuf), "Lỗi API %d", rc);
+  }
+  syncResultMsg = syncBuf;
+  syncResultExpiry = millis() + 3000;
+  coverRendered = false;
+  requestUpdate();
+}
+
+void HomeActivity::doSync() {
+  bleManager.suspend();
+  // If no saved WiFi credentials, open WiFi selection UI
+  if (WIFI_STORE.getLastConnectedSsid().empty()) {
+    startActivityForResult(
+        std::make_unique<WifiSelectionActivity>(renderer, mappedInput),
+        [this](const ActivityResult& r) {
+          if (r.isCancelled) {
+            bleManager.resume();
+            return;
+          }
+          performSyncAfterWifi();
+        });
+    return;
+  }
+  performSyncAfterWifi();
 }
 
 // ── Actions ───────────────────────────────────────────────────────────────────

@@ -136,8 +136,10 @@ OtaUpdater::OtaUpdaterError OtaUpdater::checkForUpdate() {
 
   latestVersion = doc["tag_name"].as<std::string>();
 
-  for (int i = 0; i < doc["assets"].size(); i++) {
-    if (doc["assets"][i]["name"] == "firmware.bin") {
+  for (size_t i = 0; i < doc["assets"].size(); i++) {
+    std::string assetName = doc["assets"][i]["name"].as<std::string>();
+    // Match any .bin firmware file (e.g. "firmware.bin", "firmware-x4-v1.6.3.bin")
+    if (assetName.size() > 4 && assetName.substr(assetName.size() - 4) == ".bin") {
       otaUrl = doc["assets"][i]["browser_download_url"].as<std::string>();
       otaSize = doc["assets"][i]["size"].as<size_t>();
       totalSize = otaSize;
@@ -165,9 +167,14 @@ bool OtaUpdater::isUpdateNewer() const {
 
   const auto currentVersion = CROSSPOINT_VERSION;
 
-  // semantic version check (only match on 3 segments)
-  sscanf(latestVersion.c_str(), "%d.%d.%d", &latestMajor, &latestMinor, &latestPatch);
-  sscanf(currentVersion, "%d.%d.%d", &currentMajor, &currentMinor, &currentPatch);
+  // Strip 'v' prefix if present (GitHub tags use "v1.2.3" format)
+  const char* latestStr = latestVersion.c_str();
+  if (latestStr[0] == 'v' || latestStr[0] == 'V') latestStr++;
+  const char* currentStr = currentVersion;
+  if (currentStr[0] == 'v' || currentStr[0] == 'V') currentStr++;
+
+  sscanf(latestStr, "%d.%d.%d", &latestMajor, &latestMinor, &latestPatch);
+  sscanf(currentStr, "%d.%d.%d", &currentMajor, &currentMinor, &currentPatch);
 
   /*
    * Compare major versions.

@@ -21,7 +21,7 @@ class PetSpriteRenderer {
 
   // Draw sprite at (x,y). scale multiplies each logical pixel (default 1 = 48x48, 2 = 96x96).
   // variant selects evolution branch (0=default, 1=chubby, 2=misbehaved).
-  // petType selects built-in pixel-art design (0/1=Cat, 2=Dog, 3=Dragon, 4=Bunny, 5=Robot, 6=Bear, 7=Slime).
+  // petType selects built-in pixel-art design (0=Chicken, 1=Cat, 2=Dog, 3=Dragon, 4=Bunny, 5=Robot, 6=Bear, 7=Slime).
   // Tries {stage}_v{variant}_{mood}.bin first, falls back to {stage}_{mood}.bin, then built-in art.
   static void drawPet(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood,
                       int scale = 1, uint8_t variant = 0, uint8_t petType = 0);

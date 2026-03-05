@@ -11,6 +11,7 @@
 
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
+#include "BookStats.h"
 #include "ReadingStats.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
@@ -727,6 +728,10 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
   const int pageHeight = renderer.getScreenHeight();
   constexpr int MARGIN = 28;
 
+  // Pre-clear: push a blank white frame to wipe previous content ghosting
+  renderer.clearScreen();
+  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+
   renderer.clearScreen();
 
   // Battery — top-right corner
@@ -795,34 +800,73 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
   renderer.fillRect(sepMargin, y, sepW, 1);
   y += 14;
 
-  // --- LAST BOOK ---
+  // --- RECENT BOOKS (per-book time + progress) ---
   renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_LAST_BOOK));
-  y += lhSmall + 4;
+  y += lhSmall + 6;
 
-  if (READ_STATS.lastBookTitle[0] != '\0') {
-    constexpr int BADGE_RESERVE = 64;
-    const int titleMaxW = pageWidth - MARGIN * 2 - BADGE_RESERVE;
-    const std::string titleStr = renderer.truncatedText(
-        UI_10_FONT_ID, READ_STATS.lastBookTitle, titleMaxW, EpdFontFamily::BOLD);
-    renderer.drawText(UI_10_FONT_ID, MARGIN, y, titleStr.c_str(), true, EpdFontFamily::BOLD);
+  const auto& allBooks = BOOK_STATS.getBooks();
+  if (!allBooks.empty()) {
+    // Sort by lastReadTimestamp descending, show up to 5 recent books
+    struct BookRef { const char* title; uint32_t secs; uint8_t progress; uint32_t ts; };
+    BookRef recent[5];
+    int count = 0;
+    for (const auto& kv : allBooks) {
+      const auto& e = kv.second;
+      if (count < 5) {
+        recent[count++] = {e.title, e.totalSeconds, e.progress, e.lastReadTimestamp};
+      } else {
+        // Replace the oldest in our list if this one is newer
+        int minIdx = 0;
+        for (int j = 1; j < 5; j++) {
+          if (recent[j].ts < recent[minIdx].ts) minIdx = j;
+        }
+        if (e.lastReadTimestamp > recent[minIdx].ts) {
+          recent[minIdx] = {e.title, e.totalSeconds, e.progress, e.lastReadTimestamp};
+        }
+      }
+    }
+    // Sort descending by timestamp (simple insertion sort)
+    for (int i = 1; i < count; i++) {
+      BookRef tmp = recent[i];
+      int j = i - 1;
+      while (j >= 0 && recent[j].ts < tmp.ts) { recent[j + 1] = recent[j]; j--; }
+      recent[j + 1] = tmp;
+    }
 
-    char progBuf[8];
-    snprintf(progBuf, sizeof(progBuf), "%u%%", (unsigned)READ_STATS.lastBookProgress);
-    const int progW = renderer.getTextWidth(SMALL_FONT_ID, progBuf);
-    renderer.drawText(SMALL_FONT_ID, pageWidth - MARGIN - progW, y + (lhUi10 - lhSmall) / 2, progBuf);
-
-    y += lhUi10 + 6;
-
-    // Progress bar
-    constexpr int BAR_H = 6;
+    constexpr int BAR_H = 4;
     const int barW = pageWidth - MARGIN * 2;
-    renderer.fillRect(MARGIN,             y,             barW, 1);
-    renderer.fillRect(MARGIN,             y + BAR_H - 1, barW, 1);
-    renderer.fillRect(MARGIN,             y,             1,    BAR_H);
-    renderer.fillRect(MARGIN + barW - 1,  y,             1,    BAR_H);
-    const int filledW = static_cast<int>((barW - 2) * READ_STATS.lastBookProgress / 100);
-    if (filledW > 0) {
-      renderer.fillRect(MARGIN + 1, y + 1, filledW, BAR_H - 2);
+    const int maxY = pageHeight - 100;  // Reserve space for pet sprite
+
+    for (int i = 0; i < count && y < maxY; i++) {
+      // Title (truncated) + reading time on right
+      char timeBuf[24];
+      formatDuration(timeBuf, sizeof(timeBuf), recent[i].secs);
+      const int timeW = renderer.getTextWidth(SMALL_FONT_ID, timeBuf);
+      const int titleMaxW = pageWidth - MARGIN * 2 - timeW - 8;
+      const std::string titleStr = renderer.truncatedText(
+          SMALL_FONT_ID, recent[i].title, titleMaxW, EpdFontFamily::BOLD);
+      renderer.drawText(SMALL_FONT_ID, MARGIN, y, titleStr.c_str(), true, EpdFontFamily::BOLD);
+      renderer.drawText(SMALL_FONT_ID, pageWidth - MARGIN - timeW, y, timeBuf);
+      y += lhSmall + 3;
+
+      // Progress bar + percentage
+      char progBuf[8];
+      snprintf(progBuf, sizeof(progBuf), "%u%%", (unsigned)recent[i].progress);
+      const int progW = renderer.getTextWidth(SMALL_FONT_ID, progBuf);
+      const int progBarW = barW - progW - 8;
+
+      // Draw progress bar outline
+      renderer.fillRect(MARGIN, y, progBarW, 1);
+      renderer.fillRect(MARGIN, y + BAR_H - 1, progBarW, 1);
+      renderer.fillRect(MARGIN, y, 1, BAR_H);
+      renderer.fillRect(MARGIN + progBarW - 1, y, 1, BAR_H);
+      const int filledW = static_cast<int>((progBarW - 2) * recent[i].progress / 100);
+      if (filledW > 0) {
+        renderer.fillRect(MARGIN + 1, y + 1, filledW, BAR_H - 2);
+      }
+      // Percentage text right of bar
+      renderer.drawText(SMALL_FONT_ID, MARGIN + progBarW + 6, y - (lhSmall - BAR_H) / 2, progBuf);
+      y += BAR_H + 10;
     }
   } else {
     renderer.drawText(UI_10_FONT_ID, MARGIN, y, tr(STR_STATS_NO_BOOKS), true, EpdFontFamily::REGULAR);
@@ -849,5 +893,6 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
     }
   }
 
-  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  // Fast clear then content — reduces ghosting without multi-blink full refresh
+  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
 }

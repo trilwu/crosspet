@@ -46,7 +46,8 @@ class WeatherActivity final : public Activity {
   static const char* weatherCodeToString(int code);
 
   // Silent background refresh: WiFi connect → fetch → cache → WiFi off.
-  static bool silentRefresh();
+  // Returns: 0=ok, 1=no saved wifi creds, 2=wifi connect timeout, 3=geo fail, 4=api fail, 5=parse fail
+  static int silentRefresh();
 
  private:
   static constexpr int FORECAST_DAYS = 5;

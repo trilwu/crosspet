@@ -177,8 +177,27 @@ void VirtualPetActivity::renderTypeSelect() const {
   const int lh = renderer.getLineHeight(UI_10_FONT_ID);
   const int rowH = lh + 8;
   const int listTop = contentTop + renderer.getLineHeight(SMALL_FONT_ID) + metrics.verticalSpacing;
-  const int sideMargin = metrics.contentSidePadding;
-  const int listW = pageWidth - sideMargin * 2;
+
+  // Layout: left = sprite preview, right = type list
+  constexpr int PREVIEW_SCALE = 3;
+  const int previewSize = PetSpriteRenderer::displaySize(PREVIEW_SCALE);  // 144px
+  const int previewX = metrics.contentSidePadding;
+  const int previewY = listTop + 8;
+
+  // Draw preview sprite of selected type at COMPANION stage (most recognizable)
+  PetSpriteRenderer::drawPet(renderer, previewX, previewY, PetStage::COMPANION, PetMood::HAPPY,
+                              PREVIEW_SCALE, 0, static_cast<uint8_t>(typeSelectIndex));
+
+  // Draw selected type name below preview
+  const char* selectedName = PetEvolution::typeName(typeSelectIndex);
+  const int nameY = previewY + previewSize + 8;
+  const int nameCenterX = previewX + previewSize / 2;
+  int tw = renderer.getTextWidth(UI_10_FONT_ID, selectedName);
+  renderer.drawText(UI_10_FONT_ID, nameCenterX - tw / 2, nameY, selectedName, false, EpdFontFamily::BOLD);
+
+  // Type list on the right side
+  const int listX = previewX + previewSize + 20;
+  const int listW = pageWidth - listX - metrics.contentSidePadding;
 
   for (int i = 0; i < static_cast<int>(PetTypeNames::COUNT); i++) {
     const int rowY = listTop + i * rowH;
@@ -186,10 +205,10 @@ void VirtualPetActivity::renderTypeSelect() const {
 
     const bool selected = (i == typeSelectIndex);
     if (selected) {
-      renderer.fillRect(sideMargin - 4, rowY - 2, listW + 8, rowH, false);
-      renderer.drawText(UI_10_FONT_ID, sideMargin, rowY, PetEvolution::typeName(i), /*invert=*/false);
+      renderer.fillRect(listX - 4, rowY - 2, listW + 8, rowH, false);
+      renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i), /*invert=*/false);
     } else {
-      renderer.drawText(UI_10_FONT_ID, sideMargin, rowY, PetEvolution::typeName(i));
+      renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i));
     }
   }
 

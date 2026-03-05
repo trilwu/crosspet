@@ -94,6 +94,7 @@ static bool trySilentWifiConnect() {
   const auto* cred = WIFI_STORE.findCredential(ssid);
   if (!cred) return false;
 
+  WiFi.mode(WIFI_STA);
   WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
 
   // Wait up to 10 seconds for connection
@@ -336,15 +337,35 @@ bool WeatherActivity::loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char*
   return true;
 }
 
-bool WeatherActivity::silentRefresh() {
-  if (WiFi.status() != WL_CONNECTED && !trySilentWifiConnect()) return false;
+int WeatherActivity::silentRefresh() {
+  // Returns: 0=ok, 1=no saved wifi creds, 2=wifi connect timeout, 4=api fail, 5=parse fail
+  if (WiFi.status() != WL_CONNECTED) {
+    const auto& ssid = WIFI_STORE.getLastConnectedSsid();
+    if (ssid.empty()) return 1;  // No saved WiFi credentials
+    const auto* cred = WIFI_STORE.findCredential(ssid);
+    if (!cred) return 1;
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
+    bool connected = false;
+    for (int i = 0; i < 100; i++) {
+      if (WiFi.status() == WL_CONNECTED) { connected = true; break; }
+      delay(100);
+    }
+    if (!connected) { WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return 2; }
+    delay(500);  // Allow DNS resolver to initialize after WiFi connect
+  }
 
   configTzTime("ICT-7", "pool.ntp.org", "time.google.com");
+  // Wait for NTP sync (up to 5 seconds)
+  for (int i = 0; i < 50; i++) {
+    time_t t = time(nullptr);
+    if (t > 1700000000) break;
+    delay(100);
+  }
 
   uint8_t city = SETTINGS.weatherCity;
   if (city > CITY_COUNT) city = 0;
 
-  // Determine coordinates
   const char* lat = nullptr;
   const char* lon = nullptr;
   char autoLat[16] = "";
@@ -352,7 +373,6 @@ bool WeatherActivity::silentRefresh() {
   char autoCity[32] = "";
 
   if (city == 0) {
-    // Try IP geolocation
     std::string geoResponse;
     if (HttpDownloader::fetchUrl("http://ip-api.com/json/?fields=lat,lon,city", geoResponse)) {
       JsonDocument geoDoc;
@@ -377,7 +397,7 @@ bool WeatherActivity::silentRefresh() {
 
   char url[256];
   snprintf(url, sizeof(url),
-           "https://api.open-meteo.com/v1/forecast?"
+           "http://api.open-meteo.com/v1/forecast?"
            "latitude=%s&longitude=%s"
            "&current=temperature_2m,relative_humidity_2m,"
            "apparent_temperature,weather_code,wind_speed_10m",
@@ -386,13 +406,13 @@ bool WeatherActivity::silentRefresh() {
   std::string response;
   if (!HttpDownloader::fetchUrl(std::string(url), response)) {
     WiFi.disconnect(false); delay(100); WiFi.mode(WIFI_OFF);
-    return false;
+    return 4;
   }
 
   JsonDocument doc;
-  if (deserializeJson(doc, response)) { WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return false; }
+  if (deserializeJson(doc, response)) { WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return 5; }
   JsonObject current = doc["current"];
-  if (current.isNull()) { WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return false; }
+  if (current.isNull()) { WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return 5; }
 
   JsonDocument out;
   out["temp"]  = current["temperature_2m"] | 0.0f;
@@ -416,7 +436,7 @@ bool WeatherActivity::silentRefresh() {
   Storage.writeFile("/.crosspoint/weather_cache.json", json);
 
   WiFi.disconnect(false); delay(100); WiFi.mode(WIFI_OFF);
-  return true;
+  return 0;
 }
 
 void WeatherActivity::onExit() {

@@ -11,7 +11,30 @@
 namespace {
 
 // ============================================================
-// DEFAULT / CAT (types 0 and 1) — side-view, facing right
+// CHICKEN (type 0) — side-view, facing right
+// Comb on top, beak pointing right, tail feathers left, 2 legs
+// ============================================================
+
+static const uint16_t kChicken[5][12] = {
+  // EGG — round egg with crack line
+  {0x000, 0x0F0, 0x1F8, 0x3FC, 0x7FE, 0x7DE,
+   0x7FE, 0x7FE, 0x3FC, 0x3FC, 0x1F8, 0x0F0},
+  // HATCHLING — tiny chick, small comb, short beak
+  {0x000, 0x000, 0x008, 0x01C, 0x03E, 0x03F,
+   0x027, 0x03E, 0x07C, 0x078, 0x024, 0x024},
+  // YOUNGSTER — growing chicken, comb taller, tail starts
+  {0x008, 0x01C, 0x03E, 0x07E, 0x07F, 0x04F,
+   0x07E, 0x0FC, 0x1F8, 0x1F0, 0x048, 0x048},
+  // COMPANION — full hen/rooster, big comb, tail feathers
+  {0x008, 0x81C, 0xC3E, 0x7FF, 0x7F7, 0x7FE,
+   0x3FE, 0x3FC, 0x3F8, 0x3F0, 0x30C, 0x30C},
+  // ELDER — majestic rooster, large comb, long tail plumes
+  {0x01C, 0x83E, 0xC7F, 0xFFF, 0xFF7, 0x7FE,
+   0x7FE, 0x3FC, 0x3FC, 0x3F8, 0x30C, 0x30C},
+};
+
+// ============================================================
+// CAT (type 1) — side-view, facing right
 // Pointed ear on top-right, tail curves up on left, 2 visible legs
 // ============================================================
 
@@ -204,8 +227,8 @@ inline const uint16_t* getSpriteRows(PetStage stage, uint8_t variant, uint8_t pe
   // Dead sprite is shared across all types
   if (stage == PetStage::DEAD) return kSprite_Dead;
 
-  // Default/Cat: existing sprites with variant support
-  if (petType <= 1) {
+  // Cat (type 1): existing sprites with variant support
+  if (petType == 1) {
     if (variant == 1) {
       if (stage == PetStage::YOUNGSTER) return kSprite_Youngster_v1;
       if (stage == PetStage::COMPANION) return kSprite_Companion_v1;
@@ -227,13 +250,14 @@ inline const uint16_t* getSpriteRows(PetStage stage, uint8_t variant, uint8_t pe
   }
 
   switch (petType) {
+    case 0: return kChicken[idx];   // Chicken (default)
     case 2: return kDog[idx];
     case 3: return kDragon[idx];
     case 4: return kBunny[idx];
     case 5: return kRobot[idx];
     case 6: return kBear[idx];
     case 7: return kSlime[idx];
-    default:  // Default/Cat (0 or 1)
+    default:  // Cat (type 1)
       switch (stage) {
         case PetStage::EGG:       return kSprite_Egg;
         case PetStage::HATCHLING: return kSprite_Hatchling;
