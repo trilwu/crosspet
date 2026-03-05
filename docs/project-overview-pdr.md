@@ -27,13 +27,13 @@
 - Customizable settings (font, layout, display, theme)
 - Responsive input handling (buttons, D-pad)
 
-**Tools & Features (v1.2.0+):**
-- Clock with sleep screen mode
-- Games (Snake, 2048)
-- Virtual Pet (Tamagotchi-style with evolution)
-- Pomodoro timer
-- Photo frame
-- Maze game, Game of Life
+**Tools & Features (v1.4.0+):**
+- Clock with sleep screen mode and daily quotes
+- Games (2048, Sudoku, Minesweeper, Chess, Caro)
+- Virtual Pet (Tamagotchi-style with reading-driven evolution)
+- Pomodoro timer with pet integration
+- Weather display and news reader
+- Daily inspirational quote activity
 
 **Connectivity:**
 - WiFi OTA updates
@@ -108,12 +108,13 @@
 - FR3.6: Waste/bathroom system (generates every 3 meals, requires cleaning)
 - FR3.7: Discipline system (rewards ignoring fake calls, punishes indulgence)
 - FR3.8: Attention calls every ~4 hours (30% fake for discipline testing, 2h expiry)
-- FR3.9: Evolution variants (good/chubby/misbehaved based on care quality)
-- FR3.10: Daily missions (read 20 pages, pet 3x for bonuses)
-- FR3.11: Care mistake tracking (hungry >6h, sick >12h, dirty >4h)
-- FR3.12: 8 user actions (feed meal, feed snack, medicine, exercise, clean, scold, ignore cry, toggle lights)
-- FR3.13: Mood-based sprite rendering (8 moods)
-- FR3.14: Persistent state (33 fields to JSON)
+- FR3.9: Evolution variants (Scholar/Balanced/Wild based on reading metrics & care quality)
+- FR3.10: Reading-driven progression (streaks unlock meal cost reductions, book completions reward bonuses)
+- FR3.11: Daily missions (read 20 pages, pet 3x for bonuses)
+- FR3.12: Care mistake tracking (hungry >6h, sick >12h, dirty >4h)
+- FR3.13: 8 user actions (feed meal, feed snack, medicine, exercise, clean, scold, ignore cry, toggle lights)
+- FR3.14: Mood-based sprite rendering (8 moods)
+- FR3.15: Persistent state (35+ fields to JSON with reading metrics)
 
 **Evolution Thresholds:**
 | Stage | Days | Pages | Avg Hunger |
@@ -132,7 +133,24 @@
 - Test fake call detection and discipline mechanic
 - Power cycle and verify state loads correctly
 
-### FR4: WiFi & OTA
+### FR4: Reading Stats Sleep Screen
+
+**Requirement:** Device shall display reading statistics on sleep screen showing daily progress and lifetime metrics.
+
+**Sub-requirements:**
+- FR4.1: Sleep screen mode READING_STATS=7 displays today's reading time in minutes
+- FR4.2: Display all-time total reading time across all books
+- FR4.3: Show last-read book title and completion progress bar
+- FR4.4: Auto-update on wake from brief power button press
+- FR4.5: Binary persistence to `/.crosspoint/reading_stats.bin`
+- FR4.6: Auto-load stats on device boot
+
+**Test Cases:**
+- Open EPUB and track reading time (5 minutes, verify display)
+- Power cycle device and verify reading stats restored
+- Brief wake (power button) and verify reading stats screen updates
+
+### FR5: WiFi & OTA
 
 **Requirement:** Device shall support wireless connectivity for updates and file management.
 
@@ -149,7 +167,7 @@
 - Download firmware via OTA, verify integrity
 - Change settings via web interface
 
-### FR5: Input & Navigation
+### FR6: Input & Navigation
 
 **Requirement:** Device shall respond to button input with clear navigation feedback.
 
@@ -378,20 +396,33 @@
 - Games (Snake, 2048)
 - Photo frame
 
-### v1.2 (Current - Mar 2026)
+### v1.2 (Released - Mar 1, 2026)
 - Virtual Pet with full gameplay
-- Evolution system (3 variants)
+- Evolution system (3 variants: Good/Chubby/Misbehaved)
 - Care mechanics (weight, sickness, waste, discipline)
 - Attention calls & daily missions
 - Enhanced sleep screen with pet indicator
 
-### v1.3 (Planned)
+### v1.3 (Released - Mar 2, 2026)
+- Reading-driven pet evolution (Scholar/Balanced/Wild variants)
+- Reading streaks with meal cost reductions
+- Book completion bonuses and progression gates
+- Daily reading goal bonuses
+- Pomodoro focus rewards
+- Full Vietnamese i18n
+
+### v1.4 (In Development)
+- New games (Chess, Caro/Gomoku)
+- New tools (Weather, News Reader)
+- Daily quotes on sleep screen
+- Reading stats sleep screen mode
+- Home screen clock header display
+- ToolsActivity expansion to 11 items
+
+### v2.0 (Future)
 - Pet networking (trade with other devices)
 - Cloud backup option
 - Enhanced graphics (more variant sprites)
-- Advanced game modes
-
-### v2.0 (Future)
 - User-provided fonts
 - Full UTF-8 support
 - EPUB3 fixed-layout support

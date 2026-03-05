@@ -6,6 +6,7 @@
 
 #include "ble/BleRemoteManager.h"
 #include "components/UITheme.h"
+#include "components/icons/presenter.h"
 #include "fontIds.h"
 
 extern BleRemoteManager bleManager;
@@ -85,10 +86,17 @@ void PresenterActivity::render(RenderLock&&) {
   const int contentBottom = pageHeight - metrics.buttonHintsHeight;
   const int centerY       = (contentTop + contentBottom) / 2;
 
+  // Draw pen icon centered above content
+  const int iconX = (pageWidth - PRESENTER_ICON_W) / 2;
+  const int iconY = contentTop + 20;
+  renderer.drawIcon(PresenterPenIcon, iconX, iconY, PRESENTER_ICON_W, PRESENTER_ICON_H);
+  const int textAreaTop = iconY + PRESENTER_ICON_H + 16;
+
   if (state == State::ADVERTISING) {
     const int lineH = renderer.getLineHeight(UI_10_FONT_ID);
-    renderer.drawCenteredText(UI_10_FONT_ID, centerY - lineH, tr(STR_PRESENTER_ADVERTISING));
-    renderer.drawCenteredText(SMALL_FONT_ID, centerY + 8, tr(STR_PRESENTER_PAIR_HINT));
+    const int advCenterY = (textAreaTop + contentBottom) / 2;
+    renderer.drawCenteredText(UI_10_FONT_ID, advCenterY - lineH, tr(STR_PRESENTER_ADVERTISING));
+    renderer.drawCenteredText(SMALL_FONT_ID, advCenterY + 8, tr(STR_PRESENTER_PAIR_HINT));
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), "", "", "");
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
@@ -98,7 +106,8 @@ void PresenterActivity::render(RenderLock&&) {
     const int lineH   = renderer.getLineHeight(SMALL_FONT_ID);
     const int spacing = lineH + 6;
     const int blockH  = spacing * 4;
-    int y = centerY - blockH / 2;
+    const int legendCenterY = (textAreaTop + contentBottom) / 2;
+    int y = legendCenterY - blockH / 2;
 
     struct { const char* label; const char* action; } rows[] = {
         {tr(STR_PRESENTER_BTN_NEXT),  tr(STR_PRESENTER_ACT_NEXT)},

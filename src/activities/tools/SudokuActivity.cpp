@@ -117,7 +117,8 @@ void SudokuActivity::loop() {
 
   bool changed = false;
 
-  // D-pad always moves cursor in all 4 directions
+  // D-pad moves cursor — use direct button checks (not ButtonNavigator which
+  // bundles Left with Up and Right with Down, stealing horizontal events)
   if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
     cursorCol = (cursorCol - 1 + SIZE) % SIZE;
     changed = true;
@@ -126,14 +127,14 @@ void SudokuActivity::loop() {
     cursorCol = (cursorCol + 1) % SIZE;
     changed = true;
   }
-  buttonNavigator.onPrevious([&] {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
     cursorRow = (cursorRow - 1 + SIZE) % SIZE;
     changed = true;
-  });
-  buttonNavigator.onNext([&] {
+  }
+  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
     cursorRow = (cursorRow + 1) % SIZE;
     changed = true;
-  });
+  }
 
   // Confirm = cycle number on editable cells (0→1→2→...→9→0)
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {

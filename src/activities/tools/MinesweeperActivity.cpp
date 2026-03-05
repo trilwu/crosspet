@@ -123,7 +123,8 @@ void MinesweeperActivity::loop() {
 
   bool changed = false;
 
-  // D-pad always moves cursor in all 4 directions
+  // D-pad moves cursor — use direct button checks (not ButtonNavigator which
+  // bundles Left with Up and Right with Down, stealing horizontal events)
   if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
     cursorCol = (cursorCol - 1 + COLS) % COLS;
     changed = true;
@@ -132,14 +133,14 @@ void MinesweeperActivity::loop() {
     cursorCol = (cursorCol + 1) % COLS;
     changed = true;
   }
-  buttonNavigator.onPrevious([&] {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
     cursorRow = (cursorRow - 1 + ROWS) % ROWS;
     changed = true;
-  });
-  buttonNavigator.onNext([&] {
+  }
+  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
     cursorRow = (cursorRow + 1) % ROWS;
     changed = true;
-  });
+  }
 
   // Confirm: tap = reveal, long-press (>500ms) = toggle flag
   static constexpr unsigned long FLAG_HOLD_MS = 500;

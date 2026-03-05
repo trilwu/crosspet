@@ -1,7 +1,7 @@
 # System Architecture
 
-**Last Updated:** March 1, 2026
-**Version:** 1.2.0
+**Last Updated:** March 4, 2026
+**Version:** 1.4.0 (In Development)
 
 ## High-Level Architecture
 
@@ -158,11 +158,12 @@ void onExit();         // Cleanup (called when popped)
 **PetEvolution**
 - 5 stages: EGG → HATCHLING → YOUNGSTER → COMPANION → ELDER
 - Stage transitions triggered by: days alive + pages read + hunger average
-- 3 variants per stage (after YOUNGSTER):
-  - Variant 0 (Good): high avg care score
-  - Variant 1 (Chubby): weight >80 at evolution
-  - Variant 2 (Misbehaved): discipline <40 at evolution
+- 3 variants per stage (after YOUNGSTER, v1.3+):
+  - Variant 0 (Scholar): reading-focused, high pages read
+  - Variant 1 (Balanced): moderate care and reading
+  - Variant 2 (Wild): discipline and misbehavior focused
 - Different sprite sets per variant
+- Evolution prerequisites gated on reading: COMPANION→ELDER requires booksFinished >= 1
 
 **PetSpriteRenderer**
 - Mood-based sprite selection (8 moods → different visuals)
@@ -206,7 +207,107 @@ void onExit();         // Cleanup (called when popped)
 - Aging: totalAge, careMistakes
 - Evolution: avgCareScore, evolutionVariant
 
-### 3. EPUB Processing Pipeline
+### 3. Reading Stats Subsystem (src/ReadingStats.h/cpp) [NEW - v1.4.0]
+
+**Location:** `src/ReadingStats.h/cpp`
+
+**Data Flow:**
+
+```
+EpubReaderActivity::onEnter()
+    │
+    ▼
+READ_STATS.startSession()
+    │
+    └─ Record start time, init current session
+
+[User reading EPUB]
+    │
+    ▼
+Main loop (every second check)
+    │
+    └─ Update session elapsed time
+
+EpubReaderActivity::onExit()
+    │
+    ▼
+READ_STATS.endSession(bookPath, progressPercent)
+    │
+    ├─ Calculate session duration
+    ├─ Add to todaysReadingSeconds
+    ├─ Add to lifetimeReadingSeconds
+    ├─ Check for streak continuation
+    ├─ Save to .crosspoint/reading_stats.bin
+    └─ Update daily goals for pet rewards
+
+SleepActivity (READING_STATS mode)
+    │
+    ├─ Load current stats from memory
+    ├─ Display: "Today: XXm | Total: XXXh | Book: <title>"
+    └─ Show progress bar for current book
+```
+
+**Components:**
+
+**ReadingStats Singleton**
+- `startSession()` - Marks session start, resets session timer
+- `endSession(path, pct)` - Records end time, updates totals, saves to disk
+- `loadFromFile()` - Loads binary state on boot
+- `saveToFile()` - Atomic save with temp file + rename
+- `getTodaysSeconds()` - Returns today's reading total (0 if past midnight)
+- `getLifetimeSeconds()` - Returns all-time total
+
+**Persistence (Binary Format):**
+```
+[uint32_t] todaysReadingSeconds
+[uint32_t] lifetimeReadingSeconds
+[uint16_t] currentStreak
+[uint32_t] lastReadTime (for daily reset)
+[256 bytes] lastBookPath
+[uint8_t] lastProgressPercent
+```
+
+**Integration Points:**
+
+1. **Boot (main.cpp):**
+   - `READ_STATS.loadFromFile()` on startup
+
+2. **Reading Session (EpubReaderActivity):**
+   - `READ_STATS.startSession()` on `onEnter()`
+   - `READ_STATS.endSession(path, progress)` on `onExit()`
+
+3. **Sleep Screen (SleepActivity):**
+   - New mode: `SLEEP_SCREEN_MODE::READING_STATS` (enum value 7)
+   - `renderReadingStatsSleepScreen()` displays stats
+
+4. **Clock Refresh (main.cpp):**
+   - `verifyPowerButtonDuration()` re-renders dynamic sleep screens on brief wake
+   - Ensures READING_STATS mode shows updated totals
+
+5. **Pet Integration:**
+   - Reading goals unlock pet streaks and evolution gates
+   - Daily reading bonuses from `READ_STATS.getTodaysSeconds()`
+
+### 4. Daily Quotes Feature (src/activities/tools/DailyQuoteActivity)
+
+**Location:** `src/activities/tools/DailyQuoteActivity.h/cpp`
+
+**Integration:**
+- 28 rotating literary quotes stored in `PetConfig` or activity constants
+- Displayed at bottom of CLOCK sleep screen
+- Quotes rotated daily (based on current date)
+- Text shifted left to avoid pet sprite
+
+**Data:**
+```cpp
+constexpr std::array<const char*, 28> DAILY_QUOTES = {
+  "The only way to do great work is to love what you do. - Steve Jobs",
+  "It is during our darkest moments that we must focus...",
+  // ... 26 more quotes
+};
+```
+
+### 5. EPUB Processing Pipeline
 
 **Location:** `lib/Epub/`
 

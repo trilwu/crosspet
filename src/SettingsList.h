@@ -73,13 +73,13 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN, &CrossPointSettings::shortPwrBtn,
                         {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH}, "shortPwrBtn",
                         StrId::STR_CAT_CONTROLS),
-      SettingInfo::Toggle(StrId::STR_BLE_ENABLED, &CrossPointSettings::bleEnabled,
-                          "bleEnabled", StrId::STR_CAT_CONTROLS),
 
       // --- System ---
       SettingInfo::Enum(StrId::STR_TIME_TO_SLEEP, &CrossPointSettings::sleepTimeout,
                         {StrId::STR_MIN_1, StrId::STR_MIN_5, StrId::STR_MIN_10, StrId::STR_MIN_15, StrId::STR_MIN_30},
                         "sleepTimeout", StrId::STR_CAT_SYSTEM),
+      SettingInfo::Toggle(StrId::STR_BLE_ENABLED, &CrossPointSettings::bleEnabled,
+                          "bleEnabled", StrId::STR_CAT_SYSTEM),
 
       // --- KOReader Sync (web-only, uses KOReaderCredentialStore) ---
       SettingInfo::DynamicString(
@@ -135,6 +135,8 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         {StrId::STR_BOOK, StrId::STR_CHAPTER, StrId::STR_HIDE}, "statusBarTitle",
                         StrId::STR_CUSTOMISE_STATUS_BAR),
       SettingInfo::Toggle(StrId::STR_BATTERY, &CrossPointSettings::statusBarBattery, "statusBarBattery",
+                          StrId::STR_CUSTOMISE_STATUS_BAR),
+      SettingInfo::Toggle(StrId::STR_CLOCK, &CrossPointSettings::statusBarClock, "statusBarClock",
                           StrId::STR_CUSTOMISE_STATUS_BAR),
   };
   return list;

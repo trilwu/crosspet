@@ -23,9 +23,13 @@
 #include "components/icons/tools.h"
 #include "components/icons/transfer.h"
 #include "fontIds.h"
+#include "activities/tools/WeatherActivity.h"
+#include "ble/BleRemoteManager.h"
 #include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
 #include "util/StringUtils.h"
+
+extern BleRemoteManager bleManager;
 
 // ── Layout constants ─────────────────────────────────────────────────────────
 namespace {
@@ -151,14 +155,15 @@ void HomeActivity::loop() {
     requestUpdate();
   });
 
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (selectorIndex) {
       case 0: if (!recentBooks.empty()) onSelectBook(recentBooks[0].path); break;
-      case 1: onFileBrowserOpen(); break;
-      case 2: onRecentBooksOpen(); break;
-      case 3: onFileTransferOpen(); break;
-      case 4: onVirtualPetOpen(); break;
-      case 5: onToolsOpen(); break;
+      case 1: onToolsOpen(); break;
+      case 2: onVirtualPetOpen(); break;
+      case 3: onFileBrowserOpen(); break;
+      case 4: onRecentBooksOpen(); break;
+      case 5: onFileTransferOpen(); break;
       case 6: onSettingsOpen(); break;
     }
   }
@@ -284,6 +289,34 @@ void HomeActivity::renderPetStatusWidget(int headerH) {
   renderer.drawText(SMALL_FONT_ID, x, y, truncated.c_str(), true);
 }
 
+// ── Header clock ─────────────────────────────────────────────────────────────
+
+void HomeActivity::renderHeaderClock() {
+  if (!SETTINGS.statusBarClock) return;
+  time_t now;
+  time(&now);
+  struct tm timeinfo;
+  localtime_r(&now, &timeinfo);
+  char buf[8];
+  if (timeinfo.tm_year >= 125) {
+    snprintf(buf, sizeof(buf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+  } else {
+    snprintf(buf, sizeof(buf), "--:--");
+  }
+  const int clockW = renderer.getTextWidth(SMALL_FONT_ID, buf);
+  renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
+
+  // Weather temp next to clock
+  WeatherData wData;
+  uint8_t wCity = 0;
+  char wTime[8] = "";
+  if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+    char wBuf[16];
+    snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
+    renderer.drawText(SMALL_FONT_ID, 10 + clockW + 6, 5, wBuf);
+  }
+}
+
 // ── Main render ───────────────────────────────────────────────────────────────
 
 void HomeActivity::render(RenderLock&&) {
@@ -292,6 +325,7 @@ void HomeActivity::render(RenderLock&&) {
   if (!coverRendered) {
     renderer.clearScreen();
     GUI.drawHeader(renderer, Rect{0, 0, pageWidth, HEADER_H}, nullptr);
+    renderHeaderClock();
     renderPetStatusWidget(HEADER_H);
     renderer.drawLine(DIVIDER_X, HEADER_H,  DIVIDER_X, DIVIDER_Y,   true);  // top vertical
     renderer.drawLine(0,         DIVIDER_Y, pageWidth,  DIVIDER_Y,   true);  // mid horizontal
@@ -305,6 +339,7 @@ void HomeActivity::render(RenderLock&&) {
   } else {
     restoreCoverBuffer();
     GUI.drawHeader(renderer, Rect{0, 0, pageWidth, HEADER_H}, nullptr);
+    renderHeaderClock();
     renderPetStatusWidget(HEADER_H);
   }
 
@@ -313,11 +348,11 @@ void HomeActivity::render(RenderLock&&) {
   const int rh1 = GRID_ROW2_Y - DIVIDER_Y;
   const int rh2 = GRID_ROW3_Y - GRID_ROW2_Y;
   const int rh3 = GRID_BOTTOM  - GRID_ROW3_Y;
-  renderGridCell(0,         DIVIDER_Y,   cw, rh1, 0, LibraryIcon,  tr(STR_BROWSE_FILES));
-  renderGridCell(DIVIDER_X, DIVIDER_Y,   cw, rh1, 1, RecentIcon,   tr(STR_MENU_RECENT_BOOKS));
-  renderGridCell(0,         GRID_ROW2_Y, cw, rh2, 2, TransferIcon, tr(STR_FILE_TRANSFER));
-  renderGridCell(DIVIDER_X, GRID_ROW2_Y, cw, rh2, 3, PetIcon,      tr(STR_VIRTUAL_PET));
-  renderGridCell(0,         GRID_ROW3_Y, cw, rh3, 4, ToolsIcon,     tr(STR_TOOLS));
+  renderGridCell(0,         DIVIDER_Y,   cw, rh1, 0, ToolsIcon,     tr(STR_TOOLS));
+  renderGridCell(DIVIDER_X, DIVIDER_Y,   cw, rh1, 1, PetIcon,       tr(STR_VIRTUAL_PET));
+  renderGridCell(0,         GRID_ROW2_Y, cw, rh2, 2, LibraryIcon,   tr(STR_BROWSE_FILES));
+  renderGridCell(DIVIDER_X, GRID_ROW2_Y, cw, rh2, 3, RecentIcon,    tr(STR_MENU_RECENT_BOOKS));
+  renderGridCell(0,         GRID_ROW3_Y, cw, rh3, 4, TransferIcon,  tr(STR_FILE_TRANSFER));
   renderGridCell(DIVIDER_X, GRID_ROW3_Y, cw, rh3, 5, Settings2Icon, tr(STR_SETTINGS_TITLE));
 
   renderSelectionHighlight(0, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H);

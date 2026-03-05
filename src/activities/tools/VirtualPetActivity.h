@@ -4,15 +4,15 @@
 #include "util/ButtonNavigator.h"
 
 #include "PetActionMenu.h"
+#include "PetAnimationIcons.h"
 #include "PetStatsPanel.h"
 
 // Main virtual pet interaction screen.
 // Sprite + status icons + scrollable action menu + extended stat bars.
 // Up/Down = navigate menu | Confirm = execute action | Back = exit
 //
+// Animation: idle breathing (Y-offset bob) + egg wobble (X-offset) + action feedback icons.
 // Hatch flow: keyboard entry for name → type selection screen → hatchNew().
-// RENAME action: keyboard entry → renamePet().
-// CHANGE_TYPE action: type selection screen → changeType().
 class VirtualPetActivity final : public Activity {
  public:
   explicit VirtualPetActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
@@ -21,9 +21,9 @@ class VirtualPetActivity final : public Activity {
   void onEnter() override;
   void loop() override;
   void render(RenderLock&&) override;
+  bool skipLoopDelay() override { return animActive(); }
 
  private:
-  // Inline type selection mode (shown after keyboard entry or from action menu)
   enum class ScreenMode { NORMAL, TYPE_SELECT };
 
   void renderNoPet() const;
@@ -31,22 +31,35 @@ class VirtualPetActivity final : public Activity {
   void renderAlive() const;
   void renderTypeSelect() const;
 
-  // Execute the currently selected action via PetManager
   void executeSelectedAction();
 
   // Hatch/customize helpers
-  void startHatchFlow();           // opens keyboard, then type select
-  void startRenameFlow();          // opens keyboard for rename only
-  void startTypeSelectForHatch();  // shows type select, then hatches
-  void startTypeSelectForChange(); // shows type select, then calls changeType()
-  void confirmTypeSelect();        // called when user confirms a type
+  void startHatchFlow();
+  void startRenameFlow();
+  void startTypeSelectForHatch();
+  void startTypeSelectForChange();
+  void confirmTypeSelect();
+
+  // Animation helpers
+  void updateAnimation();
+  void triggerActionIcon(PetAnimIcon icon);
+  bool animActive() const;
 
   ButtonNavigator buttonNavigator;
   PetActionMenu actionMenu;
   PetStatsPanel statsPanel;
 
   ScreenMode screenMode = ScreenMode::NORMAL;
-  char pendingName[20] = {};  // name entered before hatching
+  char pendingName[20] = {};
   int typeSelectIndex = 0;
-  bool hatchAfterTypeSelect = false;  // true if confirming type should hatch
+  bool hatchAfterTypeSelect = false;
+
+  // Animation state
+  uint8_t animFrame = 0;             // 0 or 1 for idle breathing toggle
+  unsigned long lastAnimMs = 0;      // millis() of last frame toggle
+  PetAnimIcon actionIcon = PetAnimIcon::NONE;
+  unsigned long actionIconEndMs = 0; // millis() when icon should disappear
+
+  static constexpr unsigned long ANIM_INTERVAL_MS = 4000;   // idle breathing period
+  static constexpr unsigned long ACTION_ICON_DURATION_MS = 1500;
 };

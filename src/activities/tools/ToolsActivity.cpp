@@ -4,18 +4,15 @@
 #include <I18n.h>
 
 #include "ClockActivity.h"
-#include "DailyQuoteActivity.h"
 #include "PomodoroActivity.h"
-#include "GameOfLifeActivity.h"
-#include "MazeGameActivity.h"
-#include "SnakeActivity.h"
 #include "TwentyFortyEightActivity.h"
-#include "PhotoFrameActivity.h"
 #include "MinesweeperActivity.h"
 #include "SudokuActivity.h"
+#include "CaroActivity.h"
+#include "ChessActivity.h"
 #include "VirtualPetActivity.h"
 #include "PresenterActivity.h"
-#include "../settings/SettingsActivity.h"
+#include "WeatherActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -38,44 +35,37 @@ void ToolsActivity::loop() {
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (selectorIndex) {
+      // -- Utilities --
       case 0:
-        activityManager.pushActivity(std::make_unique<SettingsActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
         break;
       case 1:
-        activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<WeatherActivity>(renderer, mappedInput));
         break;
       case 2:
         activityManager.pushActivity(std::make_unique<PomodoroActivity>(renderer, mappedInput));
         break;
       case 3:
-        activityManager.pushActivity(std::make_unique<DailyQuoteActivity>(renderer, mappedInput));
-        break;
-      case 4:
         activityManager.pushActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
         break;
+      case 4:
+        activityManager.pushActivity(std::make_unique<PresenterActivity>(renderer, mappedInput));
+        break;
+      // -- Games --
       case 5:
-        activityManager.pushActivity(std::make_unique<PhotoFrameActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput));
         break;
       case 6:
-        activityManager.pushActivity(std::make_unique<MazeGameActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput));
         break;
       case 7:
-        activityManager.pushActivity(std::make_unique<GameOfLifeActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<SudokuActivity>(renderer, mappedInput));
         break;
       case 8:
-        activityManager.pushActivity(std::make_unique<SnakeActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<MinesweeperActivity>(renderer, mappedInput));
         break;
       case 9:
         activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
-        break;
-      case 10:
-        activityManager.pushActivity(std::make_unique<SudokuActivity>(renderer, mappedInput));
-        break;
-      case 11:
-        activityManager.pushActivity(std::make_unique<MinesweeperActivity>(renderer, mappedInput));
-        break;
-      case 12:
-        activityManager.pushActivity(std::make_unique<PresenterActivity>(renderer, mappedInput));
         break;
     }
   }
@@ -94,10 +84,9 @@ void ToolsActivity::render(RenderLock&&) {
 
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_TOOLS));
 
-  const char* menuLabels[] = {tr(STR_SETTINGS_TITLE), tr(STR_CLOCK), tr(STR_POMODORO), tr(STR_DAILY_QUOTE),
-                               tr(STR_VIRTUAL_PET), tr(STR_PHOTO_FRAME),
-                               tr(STR_MAZE_GAME), tr(STR_GAME_OF_LIFE), tr(STR_SNAKE), tr(STR_2048),
-                               tr(STR_SUDOKU), tr(STR_MINESWEEPER), tr(STR_PRESENTER)};
+  const char* menuLabels[] = {
+      tr(STR_CLOCK), tr(STR_WEATHER), tr(STR_POMODORO), tr(STR_VIRTUAL_PET), tr(STR_PRESENTER),
+      tr(STR_CHESS), tr(STR_CARO), tr(STR_SUDOKU), tr(STR_MINESWEEPER), tr(STR_2048)};
 
   const int menuTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int menuHeight = pageHeight - menuTop - metrics.buttonHintsHeight - metrics.verticalSpacing;

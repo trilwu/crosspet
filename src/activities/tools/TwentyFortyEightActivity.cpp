@@ -199,31 +199,76 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
   snprintf(scoreStr, sizeof(scoreStr), tr(STR_SCORE_FORMAT), (unsigned long)score, (unsigned long)bestScore);
   renderer.drawCenteredText(SMALL_FONT_ID, scoreY, scoreStr);
 
-  // Tile grid
+  // Tile grid with value-based fill patterns for visual distinction
   for (int r = 0; r < SIZE; r++) {
     for (int c = 0; c < SIZE; c++) {
       const int x = gridLeft + c * (TILE + GAP);
       const int y = gridTop + r * (TILE + GAP);
+      const uint32_t val = grid[r][c];
 
-      // Always draw tile border
+      // Draw tile border
       renderer.drawRect(x, y, TILE, TILE);
 
-      if (grid[r][c]) {
-        char buf[12];
-        snprintf(buf, sizeof(buf), "%lu", (unsigned long)grid[r][c]);
+      // Fill pattern based on tile value (e-ink monochrome: use dot density)
+      if (val >= 128) {
+        // High values: fill background, draw inverted text
+        bool inverted = (val >= 512);  // solid fill for 512+
+        if (inverted) {
+          renderer.fillRect(x + 1, y + 1, TILE - 2, TILE - 2);
+        } else {
+          // 128-256: cross-hatch pattern (every 3rd pixel)
+          for (int py = y + 1; py < y + TILE - 1; py++) {
+            for (int px = x + 1; px < x + TILE - 1; px++) {
+              if ((px + py) % 3 == 0) renderer.drawPixel(px, py, true);
+            }
+          }
+        }
+      } else if (val >= 32) {
+        // 32-64: sparse dot pattern (every 4th pixel in checkerboard)
+        for (int py = y + 2; py < y + TILE - 2; py += 4) {
+          for (int px = x + 2; px < x + TILE - 2; px += 4) {
+            renderer.drawPixel(px, py, true);
+          }
+        }
+      } else if (val >= 8) {
+        // 8-16: very sparse dots (corners and edges hint)
+        for (int py = y + 4; py < y + TILE - 4; py += 8) {
+          for (int px = x + 4; px < x + TILE - 4; px += 8) {
+            renderer.drawPixel(px, py, true);
+          }
+        }
+      }
+      // 2-4: empty (border only) — no fill
 
-        // Auto-scale font: use large font if it fits, otherwise small
-        const int maxW = TILE - 8;  // padding inside tile
-        int fontId = UI_10_FONT_ID;
-        if (renderer.getTextWidth(UI_10_FONT_ID, buf) > maxW) {
-          fontId = SMALL_FONT_ID;
+      if (val) {
+        char buf[12];
+        snprintf(buf, sizeof(buf), "%lu", (unsigned long)val);
+
+        // Font chain: try largest first, fall back for wide numbers
+        const int maxW = TILE - 8;
+        int fontId = UI_12_FONT_ID;
+        if (renderer.getTextWidth(UI_12_FONT_ID, buf) > maxW) {
+          fontId = UI_10_FONT_ID;
+          if (renderer.getTextWidth(UI_10_FONT_ID, buf) > maxW) {
+            fontId = SMALL_FONT_ID;
+          }
         }
         const int textW = renderer.getTextWidth(fontId, buf);
         const int lineH = renderer.getLineHeight(fontId);
-        renderer.drawText(fontId,
-                          x + (TILE - textW) / 2,
-                          y + (TILE - lineH) / 2,
-                          buf);
+
+        if (val >= 512) {
+          // Inverted text on solid background: clear text area then draw
+          const int tx = x + (TILE - textW) / 2;
+          const int ty = y + (TILE - lineH) / 2;
+          // Clear a rect behind text for readability
+          renderer.fillRect(tx - 2, ty - 1, textW + 4, lineH + 2, false);
+          renderer.drawText(fontId, tx, ty, buf);
+        } else {
+          renderer.drawText(fontId,
+                            x + (TILE - textW) / 2,
+                            y + (TILE - lineH) / 2,
+                            buf);
+        }
       }
     }
   }

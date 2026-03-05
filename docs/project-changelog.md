@@ -1,7 +1,86 @@
 # Project Changelog
 
 **Format:** Semantic Versioning (MAJOR.MINOR.PATCH)
-**Last Updated:** March 2, 2026
+**Last Updated:** March 4, 2026
+
+---
+
+## [1.4.0] - Unreleased (In Development)
+
+### Major Features
+
+#### New Games & Tools
+- **Chess:** Full chess game with move validation and AI (ChessActivity)
+- **Caro/Gomoku:** Tile-matching strategy game with AI opponent (CaroActivity)
+- **Weather Display:** Real-time weather information (WeatherActivity)
+- **News Reader:** RSS feed reader for current events (NewsReaderActivity)
+- **Daily Quote:** Rotating literary quotes with daily tracking (DailyQuoteActivity)
+
+#### UI Enhancements
+- **Home Screen Clock:** Display HH:MM in header when `statusBarClock` enabled
+- **ToolsActivity Expansion:** Now 11 items (Clock, Pomodoro, VirtualPet, 2048, Sudoku, Minesweeper, Presenter, Caro, Chess, Weather, News)
+- **Daily Quotes on Sleep Screen:** 28 rotating literary quotes on CLOCK sleep screen (bottom aligned, left-shifted for pet sprite)
+
+#### Reading Integration Features
+- **Reading Stats Sleep Screen:** New sleep mode (READING_STATS=7) showing today's reading time, all-time total, last book title + progress bar
+- **Clock Refresh on Brief Wake:** Brief power button press re-renders dynamic sleep screens (CLOCK, READING_STATS) before re-entering sleep
+- **ReadingStats Persistence:** Binary persistence at `/.crosspoint/reading_stats.bin` with auto-load on boot
+
+### Removed Activities
+- **PhotoFrameActivity** - Removed due to feature consolidation
+- **GameOfLifeActivity** - Removed due to maintenance burden
+- **MazeGameActivity** - Removed due to space constraints
+- **SnakeActivity** - Removed due to redundancy with other games
+
+### Code Changes
+
+**New Files:**
+```
+src/activities/tools/
+├── ChessActivity.h/cpp
+├── CaroActivity.h/cpp
+├── WeatherActivity.h/cpp
+├── NewsReaderActivity.h/cpp
+└── DailyQuoteActivity.h/cpp
+
+src/
+├── ReadingStats.h/cpp (singleton, binary persistence)
+└── ReadingStatsManager.cpp (if split)
+```
+
+**Modified Files:**
+- `src/activities/home/HomeActivity.cpp` - Added renderHeaderClock() method
+- `src/activities/tools/ToolsActivity.cpp/h` - Expanded menu to 11 items
+- `src/activities/boot_sleep/SleepActivity.cpp` - Added daily quotes rendering, reading stats screen
+- `src/main.cpp` - Added ReadingStats load on boot, verifyPowerButtonDuration() for clock refresh
+- `src/CrossPointSettings.h` - Added `statusBarClock` boolean setting
+
+**Deleted Files:**
+- `src/activities/tools/PhotoFrameActivity.h/cpp`
+- `src/activities/tools/GameOfLifeActivity.h/cpp`
+- `src/activities/tools/MazeGameActivity.h/cpp`
+- `src/activities/tools/SnakeActivity.h/cpp`
+
+### Testing
+
+- Manual testing of all 5 new activities on hardware
+- ReadingStats persistence across power cycles verified
+- Clock refresh on brief wake tested
+- Daily quotes rotation validated
+- Home screen clock display alignment checked
+
+### Documentation
+
+- Updated `docs/code-standards.md` with new activity patterns
+- Updated `docs/system-architecture.md` with ReadingStats subsystem
+- Updated `docs/codebase-summary.md` with complete tools list
+- Updated `docs/project-overview-pdr.md` with v1.3 release status
+
+### Known Issues
+
+- Weather data source not yet implemented (placeholder)
+- News feeds require WiFi connectivity
+- ReadingStats binary format not yet documented (see file-formats.md TODO)
 
 ---
 

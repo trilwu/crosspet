@@ -67,6 +67,7 @@ void applyReaderOrientation(GfxRenderer& renderer, const uint8_t orientation) {
 
 void EpubReaderActivity::onEnter() {
   Activity::onEnter();
+  renderer.requestNextFullRefresh();  // clear e-ink ghosting from previous content
 
   if (!epub) {
     return;
@@ -127,7 +128,8 @@ void EpubReaderActivity::onExit() {
     progress = static_cast<uint8_t>(
         clampPercent(static_cast<int>(epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f + 0.5f)));
   }
-  READ_STATS.endSession(title, progress);
+  const char* bookPath = epub ? epub->getPath().c_str() : nullptr;
+  READ_STATS.endSession(title, progress, bookPath);
 
   // Reset orientation back to portrait for the rest of the UI
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);

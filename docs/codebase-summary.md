@@ -1,18 +1,19 @@
 # CrossPoint Reader - Codebase Summary
 
-**Last Updated:** March 1, 2026
-**Version:** 1.2.0
-**Total Files:** 479 | **Total Tokens:** 18.5M | **Languages:** C++, Python, HTML
+**Last Updated:** March 4, 2026
+**Version:** 1.4.0 (In Development)
+**Total Files:** 495 | **Total Tokens:** 19.2M | **Languages:** C++, Python, HTML
 
 ## Project Overview
 
 CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device built on PlatformIO (ESP32-C3). It provides:
 - Full EPUB 2/3 parsing and rendering with image support
-- Custom sleep screens and interactive tools (clock, games, virtual pet)
+- Custom sleep screens and interactive tools (clock, games, virtual pet, weather, news)
 - WiFi-based OTA updates and file uploads
 - KOReader Sync integration for cross-device reading progress
-- Multi-language support (18+ languages)
+- Multi-language support (18 languages)
 - Customizable UI themes and layouts
+- Reading statistics tracking and sleep screen display
 
 **Key Architecture Principle:** Aggressive SD card caching to minimize ESP32-C3 RAM usage (380KB available).
 
@@ -69,8 +70,9 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 **Key Activities:**
 - `OpdsBookBrowserActivity` - EPUB reader (main)
 - `VirtualPetActivity` - Interactive pet with action menu + stats panel
-- `ToolsActivity` - Launcher for Clock, Pomodoro, Games, Pet
+- `ToolsActivity` - Launcher for 11 tools (Clock, Pomodoro, VirtualPet, 2048, Sudoku, Minesweeper, Presenter, Caro, Chess, Weather, News)
 - `SettingsActivity` - Device configuration screens
+- `HomeActivity` - Home screen with cover panel, recent books, grid menu, optional header clock
 
 ### 2. Virtual Pet Subsystem (src/pet/) [NEW - v1.2.0]
 **Purpose:** Tamagotchi-style interactive pet with full gameplay loop
@@ -105,7 +107,37 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - Discipline system: rewards ignoring fake calls, punishes indulgence
 - Daily missions (reset each day): read 20 pages, pet 3x
 
-### 3. EPUB Processing (lib/Epub/)
+### 3. Reading Stats System (src/ReadingStats.h/cpp) [NEW - v1.4.0]
+**Purpose:** Track daily and lifetime reading metrics, display on sleep screen
+
+**Features:**
+- Session tracking: `READ_STATS.startSession()` (on EpubReaderActivity entry), `READ_STATS.endSession()` (on exit)
+- Binary persistence at `/.crosspoint/reading_stats.bin`
+- Daily reset at midnight boundary
+- Sleep screen display mode: `READING_STATS=7` shows today's total, all-time total, last book + progress
+- Auto-load on boot in `main.cpp`
+- Clock refresh: Brief power button press re-renders dynamic sleep screens
+
+**Fields:**
+- `todaysReadingSeconds` - Reset daily
+- `lifetimeReadingSeconds` - Cumulative across all sessions
+- `currentStreak` - Consecutive days with reading activity
+- `currentSession` - In-progress session with start/end times
+
+### 4. Game & Tool Activities (src/activities/tools/) [v1.4.0]
+**New Tools (5 activities):**
+- **ChessActivity** - Full chess with move validation and AI
+- **CaroActivity** - Caro/Gomoku tile-matching strategy game
+- **WeatherActivity** - Real-time weather display (network-dependent)
+- **NewsReaderActivity** - RSS feed reader for news
+- **DailyQuoteActivity** - 28 rotating literary quotes, daily tracking
+- Plus existing: Clock, Pomodoro, VirtualPet, 2048, Sudoku, Minesweeper, Presenter
+
+**ToolsActivity UI:**
+- Launcher menu with 11 items
+- Sleep screen: Daily quotes (28 rotating) at bottom of CLOCK mode, shifted left for pet sprite
+
+### 5. EPUB Processing (lib/Epub/)
 **Flow:**
 1. Parse EPUB archive & OPF metadata
 2. Extract spine (reading order) & table of contents

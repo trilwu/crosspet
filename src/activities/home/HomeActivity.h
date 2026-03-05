@@ -38,6 +38,7 @@ class HomeActivity final : public Activity {
   void renderGridCell(int cellX, int cellY, int cellW, int cellH, int gridIdx, const uint8_t* icon, const char* label);
   void renderSelectionHighlight(int panelX, int panelY, int panelW, int panelH);
   void renderPetStatusWidget(int headerH);
+  void renderHeaderClock();
 
  public:
   explicit HomeActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)

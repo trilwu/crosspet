@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include "activities/tools/WeatherActivity.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
 #include "components/icons/book.h"

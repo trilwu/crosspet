@@ -17,6 +17,7 @@
 #include "images/Logo120.h"
 #include "pet/PetManager.h"
 #include "pet/PetSpriteRenderer.h"
+#include "activities/tools/WeatherActivity.h"
 #include "util/LunarCalendar.h"
 #include "util/StringUtils.h"
 
@@ -167,7 +168,7 @@ void SleepActivity::renderDefaultSleepScreen() const {
     renderer.invertScreen();
   }
 
-  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
 
 void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
@@ -222,7 +223,7 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
     renderer.invertScreen();
   }
 
-  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 
   if (hasGreyscale) {
     bitmap.rewindToData();
@@ -431,6 +432,23 @@ void SleepActivity::renderClockSleepScreen() const {
   const int clockW = 4 * DW + 2 * DGAP + CW;
   const int clockX = (pageWidth - clockW) / 2;
 
+  // Pre-load weather cache to include in vertical layout calculation
+  char weatherLine[80] = "";
+  int weatherLineH = 0;
+  {
+    WeatherData wData;
+    uint8_t wCity = 0;
+    char wTime[8] = "";
+    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+      snprintf(weatherLine, sizeof(weatherLine), "%s: %.0f°C  %s  %d%%",
+               WeatherActivity::CITIES[wCity].name,
+               wData.temperature,
+               WeatherActivity::weatherCodeToString(wData.weatherCode),
+               wData.humidity);
+      weatherLineH = renderer.getLineHeight(SMALL_FONT_ID) + 4;
+    }
+  }
+
   const int timeHeight = DH;
   const int dateHeight = renderer.getLineHeight(UI_10_FONT_ID);
   const int lunarHeight = renderer.getLineHeight(SMALL_FONT_ID);
@@ -438,7 +456,7 @@ void SleepActivity::renderClockSleepScreen() const {
   const int cellH = renderer.getLineHeight(SMALL_FONT_ID) + 6;
   const int calH = monthHdrH + 6 + cellH * 7;  // month header + day headers + max 6 body rows
 
-  const int blockH = timeHeight + 14 + dateHeight + 6 + lunarHeight + 10 + calH;
+  const int blockH = timeHeight + 14 + dateHeight + 6 + lunarHeight + weatherLineH + 10 + calH;
   const int startY = (pageHeight - blockH) / 2;
 
   // Draw large 7-segment time digits
@@ -466,12 +484,19 @@ void SleepActivity::renderClockSleepScreen() const {
     renderer.drawCenteredText(SMALL_FONT_ID, startY + timeHeight + 14 + dateHeight + 6, lunarBuf);
   }
 
+  // Weather line below lunar date
+  if (weatherLine[0]) {
+    renderer.drawCenteredText(SMALL_FONT_ID,
+                              startY + timeHeight + 14 + dateHeight + 6 + lunarHeight + 2,
+                              weatherLine);
+  }
+
   // Calendar grid
   const int margin = 20;
   const int calW = pageWidth - margin * 2;
   const int cellW = calW / 7;
   const int x0 = margin;
-  int calTop = startY + timeHeight + 14 + dateHeight + 6 + lunarHeight + 10;
+  int calTop = startY + timeHeight + 14 + dateHeight + 6 + lunarHeight + weatherLineH + 10;
 
   // Thin separator between time area and calendar
   renderer.fillRect(margin + 20, calTop - 8, calW - 40, 1);
@@ -672,12 +697,12 @@ void SleepActivity::renderClockSleepScreen() const {
     renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - aW / 2), authorY, authorBuf);
   }
 
-  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
 
 void SleepActivity::renderBlankSleepScreen() const {
   renderer.clearScreen();
-  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }
 
 // Format a duration in seconds into a human-readable string.
@@ -714,54 +739,73 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
   const int lhSmall = renderer.getLineHeight(SMALL_FONT_ID);
   const int lhUi10  = renderer.getLineHeight(UI_10_FONT_ID);
   const int lhUi12  = renderer.getLineHeight(UI_12_FONT_ID);
+  const int sepMargin = MARGIN + 20;
+  const int sepW = pageWidth - 2 * sepMargin;
 
   int y = 60;
   renderer.drawCenteredText(UI_12_FONT_ID, y, tr(STR_READING_STATS), true, EpdFontFamily::BOLD);
   y += lhUi12 + 6;
-
-  // Thin separator under header
-  renderer.fillRect(MARGIN + 20, y, pageWidth - 2 * (MARGIN + 20), 1);
-  y += 18;
+  renderer.fillRect(sepMargin, y, sepW, 1);
+  y += 14;
 
   // --- TODAY ---
-  renderer.drawText(SMALL_FONT_ID, MARGIN, y, "TODAY");
+  renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_TODAY));
   y += lhSmall + 4;
 
   char todayBuf[32];
   formatDuration(todayBuf, sizeof(todayBuf), READ_STATS.todayReadSeconds);
   renderer.drawText(UI_10_FONT_ID, MARGIN, y, todayBuf, true, EpdFontFamily::BOLD);
-  y += lhUi10 + 20;
-
-  // Thin separator
-  renderer.fillRect(MARGIN + 20, y, pageWidth - 2 * (MARGIN + 20), 1);
-  y += 18;
+  y += lhUi10 + 14;
+  renderer.fillRect(sepMargin, y, sepW, 1);
+  y += 14;
 
   // --- ALL TIME ---
-  renderer.drawText(SMALL_FONT_ID, MARGIN, y, "ALL TIME");
+  renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_ALL_TIME));
   y += lhSmall + 4;
 
   char totalBuf[32];
   formatDuration(totalBuf, sizeof(totalBuf), READ_STATS.totalReadSeconds);
   renderer.drawText(UI_10_FONT_ID, MARGIN, y, totalBuf, true, EpdFontFamily::BOLD);
-  y += lhUi10 + 20;
+  y += lhUi10 + 14;
+  renderer.fillRect(sepMargin, y, sepW, 1);
+  y += 14;
 
-  // Thin separator
-  renderer.fillRect(MARGIN + 20, y, pageWidth - 2 * (MARGIN + 20), 1);
-  y += 18;
+  // --- STATS GRID: Sessions | Books | Streak | Best ---
+  {
+    const int colW = (pageWidth - MARGIN * 2) / 4;
+    const char* labels[] = {tr(STR_STATS_SESSIONS), tr(STR_STATS_BOOKS_DONE),
+                            tr(STR_STATS_STREAK), tr(STR_STATS_BEST_STREAK)};
+    char values[4][16];
+    snprintf(values[0], sizeof(values[0]), "%u", (unsigned)READ_STATS.totalSessions);
+    snprintf(values[1], sizeof(values[1]), "%u", (unsigned)READ_STATS.booksFinished);
+    snprintf(values[2], sizeof(values[2]), tr(STR_STATS_DAYS), (unsigned)READ_STATS.currentStreak);
+    snprintf(values[3], sizeof(values[3]), tr(STR_STATS_DAYS), (unsigned)READ_STATS.longestStreak);
+
+    for (int i = 0; i < 4; i++) {
+      int cx = MARGIN + i * colW + colW / 2;
+      // Value (bold, centered in column)
+      int vw = renderer.getTextWidth(UI_10_FONT_ID, values[i]);
+      renderer.drawText(UI_10_FONT_ID, cx - vw / 2, y, values[i], true, EpdFontFamily::BOLD);
+      // Label (small, centered below)
+      int lw = renderer.getTextWidth(SMALL_FONT_ID, labels[i]);
+      renderer.drawText(SMALL_FONT_ID, cx - lw / 2, y + lhUi10 + 2, labels[i]);
+    }
+    y += lhUi10 + lhSmall + 14;
+  }
+  renderer.fillRect(sepMargin, y, sepW, 1);
+  y += 14;
 
   // --- LAST BOOK ---
-  renderer.drawText(SMALL_FONT_ID, MARGIN, y, "LAST BOOK");
+  renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_LAST_BOOK));
   y += lhSmall + 4;
 
   if (READ_STATS.lastBookTitle[0] != '\0') {
-    // Truncate title to fit width (leave room for progress badge on the right)
     constexpr int BADGE_RESERVE = 64;
     const int titleMaxW = pageWidth - MARGIN * 2 - BADGE_RESERVE;
     const std::string titleStr = renderer.truncatedText(
         UI_10_FONT_ID, READ_STATS.lastBookTitle, titleMaxW, EpdFontFamily::BOLD);
     renderer.drawText(UI_10_FONT_ID, MARGIN, y, titleStr.c_str(), true, EpdFontFamily::BOLD);
 
-    // Progress percentage badge — right-aligned on same baseline
     char progBuf[8];
     snprintf(progBuf, sizeof(progBuf), "%u%%", (unsigned)READ_STATS.lastBookProgress);
     const int progW = renderer.getTextWidth(SMALL_FONT_ID, progBuf);
@@ -769,21 +813,19 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
 
     y += lhUi10 + 6;
 
-    // Progress bar: bordered outline + filled progress portion
+    // Progress bar
     constexpr int BAR_H = 6;
     const int barW = pageWidth - MARGIN * 2;
-    // Border
-    renderer.fillRect(MARGIN,             y,             barW, 1);          // top
-    renderer.fillRect(MARGIN,             y + BAR_H - 1, barW, 1);          // bottom
-    renderer.fillRect(MARGIN,             y,             1,    BAR_H);       // left
-    renderer.fillRect(MARGIN + barW - 1,  y,             1,    BAR_H);       // right
-    // Inner fill for progress portion
+    renderer.fillRect(MARGIN,             y,             barW, 1);
+    renderer.fillRect(MARGIN,             y + BAR_H - 1, barW, 1);
+    renderer.fillRect(MARGIN,             y,             1,    BAR_H);
+    renderer.fillRect(MARGIN + barW - 1,  y,             1,    BAR_H);
     const int filledW = static_cast<int>((barW - 2) * READ_STATS.lastBookProgress / 100);
     if (filledW > 0) {
       renderer.fillRect(MARGIN + 1, y + 1, filledW, BAR_H - 2);
     }
   } else {
-    renderer.drawText(UI_10_FONT_ID, MARGIN, y, "No books read yet", true, EpdFontFamily::REGULAR);
+    renderer.drawText(UI_10_FONT_ID, MARGIN, y, tr(STR_STATS_NO_BOOKS), true, EpdFontFamily::REGULAR);
   }
 
   // Pet sprite — bottom-right corner (same as other screens)
@@ -807,5 +849,5 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
     }
   }
 
-  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }

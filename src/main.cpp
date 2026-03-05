@@ -517,11 +517,15 @@ void loop() {
   }
 
   // Short power button press = full screen refresh (clears e-ink ghosting)
-  // Use deferred requestUpdate() so it merges with any activity render into a single refresh
+  // Debounce: ignore repeated triggers within 2s to prevent multiple refreshes
   if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::SCREEN_REFRESH &&
       gpio.wasReleased(HalGPIO::BTN_POWER)) {
-    renderer.requestNextFullRefresh();
-    activityManager.requestUpdate();
+    static unsigned long lastRefreshMs = 0;
+    if (millis() - lastRefreshMs > 2000) {
+      lastRefreshMs = millis();
+      renderer.requestNextFullRefresh();
+      activityManager.requestUpdate();
+    }
   }
 
   const unsigned long activityStartTime = millis();

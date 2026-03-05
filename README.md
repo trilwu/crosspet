@@ -1,97 +1,65 @@
-# CrossPet
+# CrossPet Reader
 
-**CrossPet** is a personal fork of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader) —
-open-source firmware for the **Xteink X4** e-paper reader, built with **PlatformIO** on **ESP32-C3**.
+**Your pocket e-reader — with a virtual chicken.**
 
-![](./docs/images/cover.jpg)
+CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader) — open-source firmware for the **Xteink X4** e-paper reader, built with **PlatformIO** on **ESP32-C3**.
 
-## What's different from CrossPoint?
+![](./docs/images/crosspet.png)
 
-CrossPet extends the upstream firmware with reading-productivity, personality, and utility features that turn the X4 into more than just a book reader.
+## Hardware
+
+| Spec | Detail |
+|------|--------|
+| MCU | ESP32-C3 RISC-V @ 160MHz |
+| RAM | ~380KB (no PSRAM) |
+| Flash | 16MB |
+| Display | 800×480 E-Ink (SSD1677) |
+| Storage | SD Card |
+| Wireless | WiFi 802.11 b/g/n, BLE 5.0 |
+
+## What makes CrossPet special
+
+### Virtual Chicken Companion
+Your chicken grows with every page you read. Evolution system: Egg → Hatchling → Juvenile → Adult → Elder, with 3 variants (Scholar/Balanced/Wild) based on reading consistency. Hunger, happiness, and energy are affected by reading activity and care.
 
 ### Reading Experience
-- **Smoother page turns** — anti-aliased text always uses FAST_REFRESH, eliminating the ~1s transition stutter
-- **Bokerlam font** — Vietnamese-optimized serif font with full diacritics support, built-in as a selectable reading font
-- **Reading time tracking** — per-session, daily, and all-time reading statistics with binary persistence
+- **EPUB 2 & 3** with image support
+- **Anti-aliased grayscale** text rendering
+- **3 font families**, 4 sizes, 4 styles (including Bokerlam Vietnamese serif)
+- **Multi-language hyphenation**
+- **Reading statistics & streaks** — per-session, daily, all-time tracking
+- **KOReader Sync** cross-device progress
+- **4 screen orientations**, remappable buttons
 
 ### Sleep Screens
-- **Clock sleep screen** — 7-segment digital clock + calendar with lunar date display and rotating daily literary quotes (28 curated literary quotes)
-- **Reading Stats sleep screen** — shows today's reading time, all-time total, and current book progress bar; resets daily at midnight
-- **Reliable sleep display** — clock and reading stats refresh correctly on brief wakeups (no stale timestamp)
-- **SD-based clock backup** — preserves accurate time across deep sleep even when ESP32-C3 RTC memory is lost
+- **Clock** — 7-segment digital clock + calendar with lunar date and 28 rotating literary quotes
+- **Reading Stats** — today's reading time, all-time total, current book progress
+- **Cover** — book cover art display
+- **Reliable refresh** — clock and stats update correctly on brief wakeups
 
-### Virtual Pet
-- **Tamagotchi-style companion** — lives and evolves alongside your reading habit
-- **Evolution system** — Egg → Hatchling → Juvenile → Adult → Elder, with 3 evolution variants (Scholar/Balanced/Wild) based on reading consistency
-- **8 pet types** — Cat, Dog, Dragon, Bunny, Robot, Bear, Slime (pixel-art sprites loaded from SD)
-- **Mood & needs** — hunger, happiness, energy affected by reading activity and care
-- **Reading streaks** — consecutive reading days boost pet growth and unlock Scholar variant
+### Tools
+- **Weather** — current weather via Open-Meteo API
+- **Clock with lunar calendar** — month navigation with Vietnamese lunar dates
+- **Pomodoro timer** — configurable work/break intervals
+- **BLE Presenter** — wireless slide controller for presentations
+- **5 mini games** — Chess, Caro (Gomoku), Sudoku, Minesweeper, 2048
 
 ### Home Screen
-- **Redesigned home** — cover art + reading progress for recent books in top panel, 2×3 grid for quick access to all features
-- **Lunar calendar** — Vietnamese lunar date displayed on clock cells and sleep screen
+- Cover art + reading progress for recent books in top panel
+- 3-row grid: Tools, Pet | Library, Recent | Transfer, Settings
+- Header clock and cached weather temperature
 
-### Tools & Games
-- **Pomodoro timer** — focus timer with configurable work/break intervals
-- **BLE Presenter** — Bluetooth Low Energy slide controller for presentations
-- **Daily quotes** — curated literary quote viewer
-- **Conference badge** — name badge display mode
-- **Photo frame** — BMP image slideshow from SD card
-- **Games** — Maze, Snake, 2048, Conway's Game of Life
+### Connectivity
+- **WiFi book upload** and Calibre/OPDS browser
+- **WiFi OTA updates**
+- **BLE 5.0** remote control and presenter mode
+- **SD-first layout caching** for performance
 
-Everything else (EPUB rendering, KOReader Sync, WiFi upload, OTA updates) is inherited from CrossPoint.
+Everything else (EPUB rendering, KOReader Sync, WiFi upload) is inherited from CrossPoint.
 
 > Fork of [crosspoint-reader/crosspoint-reader](https://github.com/crosspoint-reader/crosspoint-reader). Not affiliated with Xteink.
 
 ---
-
-## Why CrossPoint? (upstream)
-
-Most affordable e-paper readers ship locked-down firmware. The Xteink X4 is capable hardware with a closed ecosystem.
-CrossPoint opened it up:
-
-- **Fully open-source** EPUB firmware for constrained embedded hardware (ESP32-C3, 800×480 e-ink)
-- **Distraction-free reading** — configurable fonts, layouts, margins, anti-aliased text
-- **KOReader Sync** — cross-device progress sync
-- **Openness** — flash via browser, OTA over WiFi, web-based book upload
-
-No subscriptions. No telemetry. No vendor lock-in.
-
-## Features & Usage
-
-- [x] EPUB parsing and rendering (EPUB 2 and EPUB 3)
-- [x] Image support within EPUB
-- [x] Saved reading position
-- [x] File explorer with file picker
-  - [x] Basic EPUB picker from root directory
-  - [x] Support nested folders
-  - [ ] EPUB picker with cover art
-- [x] Custom sleep screen
-  - [x] Cover sleep screen
-  - [x] Clock + calendar + lunar date sleep screen with daily literary quotes
-  - [x] Reading Stats sleep screen (today's time, all-time total, last book progress)
-- [x] Wifi book upload
-- [x] Wifi OTA updates
-- [x] KOReader Sync integration for cross-device reading progress
-- [x] Configurable font, layout, and display options
-  - [x] Bokerlam Vietnamese serif font
-  - [ ] User provided fonts
-  - [ ] Full UTF support
-- [x] Screen rotation
-- [x] Reading time tracking (per-session, daily, all-time)
-- [x] Virtual pet with evolution system and reading-based growth
-- [x] BLE Presenter (Bluetooth slide controller)
-- [x] Pomodoro timer
-- [x] Games: Maze, Snake, 2048, Game of Life
-- [x] Lunar calendar support
-- [x] SD-based clock backup for reliable timekeeping
-
-Multi-language support: Read EPUBs in various languages, including English, Spanish, French, German, Italian, Portuguese, Russian, Ukrainian, Polish, Swedish, Norwegian, [and more](./USER_GUIDE.md#supported-languages).
-
-See [the user guide](./USER_GUIDE.md) for instructions on operating CrossPoint, including the
-[KOReader Sync quick setup](./USER_GUIDE.md#365-koreader-sync-quick-setup).
-
-For more details about the scope of the project, see the [SCOPE.md](SCOPE.md) document.
 
 ## Installing
 
@@ -99,15 +67,6 @@ For more details about the scope of the project, see the [SCOPE.md](SCOPE.md) do
 
 1. Connect your Xteink X4 to your computer via USB-C and wake/unlock the device
 2. Go to https://xteink.dve.al/ and click "Flash CrossPoint firmware"
-
-To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
-back to the other partition using the "Swap boot partition" button here https://xteink.dve.al/debug.
-
-### Web (specific firmware version)
-
-1. Connect your Xteink X4 to your computer via USB-C
-2. Download the `firmware.bin` file from the release of your choice via the [releases page](https://github.com/crosspoint-reader/crosspoint-reader/releases)
-3. Go to https://xteink.dve.al/ and flash the firmware file using the "OTA fast flash controls" section
 
 To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
 back to the other partition using the "Swap boot partition" button here https://xteink.dve.al/debug.
@@ -127,97 +86,71 @@ See [Development](#development) below.
 
 ### Checking out the code
 
-CrossPoint uses PlatformIO for building and flashing the firmware. To get started, clone the repository:
-
 ```
-git clone --recursive https://github.com/crosspoint-reader/crosspoint-reader
-
-# Or, if you've already cloned without --recursive:
-git submodule update --init --recursive
+git clone --recursive https://github.com/trilwu/crosspet
 ```
 
 ### Flashing your device
 
-Connect your Xteink X4 to your computer via USB-C and run the following command.
+Connect your Xteink X4 to your computer via USB-C and run:
 
 ```sh
 pio run --target upload
 ```
+
 ### Debugging
 
-After flashing the new features, it’s recommended to capture detailed logs from the serial port.
-
-First, make sure all required Python packages are installed:
+Capture detailed logs from the serial port:
 
 ```python
 python3 -m pip install pyserial colorama matplotlib
 ```
-after that run the script:
+
 ```sh
-# For Linux
-# This was tested on Debian and should work on most Linux systems.
+# Linux
 python3 scripts/debugging_monitor.py
 
-# For macOS
+# macOS
 python3 scripts/debugging_monitor.py /dev/cu.usbmodem2101
 ```
-Minor adjustments may be required for Windows.
 
 ## Internals
 
-CrossPoint Reader is pretty aggressive about caching data down to the SD card to minimise RAM usage. The ESP32-C3 only
-has ~380KB of usable RAM, so we have to be careful. A lot of the decisions made in the design of the firmware were based
-on this constraint.
+The ESP32-C3 only has ~380KB of usable RAM. CrossPoint aggressively caches data to the SD card to minimize RAM usage.
 
 ### Data caching
 
-The first time chapters of a book are loaded, they are cached to the SD card. Subsequent loads are served from the 
-cache. This cache directory exists at `.crosspoint` on the SD card. The structure is as follows:
-
+The first time chapters of a book are loaded, they are cached to the SD card at `.crosspoint/`:
 
 ```
 .crosspoint/
-├── epub_12471232/       # Each EPUB is cached to a subdirectory named `epub_<hash>`
-│   ├── progress.bin     # Stores reading progress (chapter, page, etc.)
-│   ├── cover.bmp        # Book cover image (once generated)
-│   ├── book.bin         # Book metadata (title, author, spine, table of contents, etc.)
-│   └── sections/        # All chapter data is stored in the sections subdirectory
-│       ├── 0.bin        # Chapter data (screen count, all text layout info, etc.)
-│       ├── 1.bin        #     files are named by their index in the spine
+├── epub_12471232/       # Each EPUB cached to epub_<hash>
+│   ├── progress.bin     # Reading progress
+│   ├── cover.bmp        # Book cover image
+│   ├── book.bin         # Book metadata
+│   └── sections/        # Chapter data
+│       ├── 0.bin
+│       ├── 1.bin
 │       └── ...
-│
-└── epub_189013891/
+├── reading_stats.bin    # Reading statistics (v2)
+└── weather_cache.json   # Weather data cache
 ```
 
-Deleting the `.crosspoint` directory will clear the entire cache. 
+Deleting `.crosspoint/` clears the entire cache. Moving a book file resets its reading progress.
 
-Due the way it's currently implemented, the cache is not automatically cleared when a book is deleted and moving a book
-file will use a new cache directory, resetting the reading progress.
-
-For more details on the internal file structures, see the [file formats document](./docs/file-formats.md).
+For more details, see [file formats](./docs/file-formats.md).
 
 ## Contributing
 
-Contributions are very welcome!
-
-If you are new to the codebase, start with the [contributing docs](./docs/contributing/README.md).
-
-If you're looking for a way to help out, take a look at the [ideas discussion board](https://github.com/crosspoint-reader/crosspoint-reader/discussions/categories/ideas).
-If there's something there you'd like to work on, leave a comment so that we can avoid duplicated effort.
-
-Everyone here is a volunteer, so please be respectful and patient. For more details on our goverance and community 
-principles, please see [GOVERNANCE.md](GOVERNANCE.md).
-
-### To submit a contribution:
+Contributions welcome! See [contributing docs](./docs/contributing/README.md).
 
 1. Fork the repo
-2. Create a branch (`feature/dithering-improvement`)
+2. Create a branch (`feature/your-feature`)
 3. Make changes
 4. Submit a PR
 
 ---
 
-CrossPoint Reader is **not affiliated with Xteink or any manufacturer of the X4 hardware**.
+CrossPet Reader is **not affiliated with Xteink or any manufacturer of the X4 hardware**.
 
-Huge shoutout to [**diy-esp32-epub-reader** by atomic14](https://github.com/atomic14/diy-esp32-epub-reader), which was a project I took a lot of inspiration from as I
-was making CrossPoint.
+Based on [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader). Inspired by [diy-esp32-epub-reader](https://github.com/atomic14/diy-esp32-epub-reader) by atomic14.

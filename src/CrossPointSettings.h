@@ -153,6 +153,7 @@ class CrossPointSettings {
   uint8_t statusBarProgressBarThickness = PROGRESS_BAR_NORMAL;
   uint8_t statusBarTitle = CHAPTER_TITLE;
   uint8_t statusBarBattery = 1;
+  uint8_t statusBarClock = 1;
   // Text rendering settings
   uint8_t extraParagraphSpacing = 1;
   uint8_t textAntiAliasing = 1;
@@ -201,6 +202,9 @@ class CrossPointSettings {
   uint8_t showHiddenFiles = 0;
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
+
+  // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
+  uint8_t weatherCity = 0;
 
   // BLE Remote settings
   uint8_t bleEnabled = 0;                  // 0=disabled, 1=enabled

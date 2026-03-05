@@ -8,6 +8,41 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 
+#include <cmath>
+
+// Draw a circular progress ring. Progress 0.0–1.0, starts from 12 o'clock clockwise.
+// Draws a full background ring (outline), then fills the progress arc.
+static void drawProgressRing(GfxRenderer& renderer, int cx, int cy, int radius, int thickness, float progress) {
+  const int outerR = radius;
+  const int innerR = radius - thickness;
+  const int outerSq = outerR * outerR;
+  const int innerSq = innerR * innerR;
+
+  for (int dy = -outerR; dy <= outerR; dy++) {
+    for (int dx = -outerR; dx <= outerR; dx++) {
+      const int distSq = dx * dx + dy * dy;
+      if (distSq > outerSq || distSq < innerSq) continue;
+
+      // Angle from 12 o'clock, clockwise: atan2(dx, -dy)
+      float angle = atan2f((float)dx, (float)-dy);  // -pi to pi, 0 = top
+      if (angle < 0) angle += 2.0f * M_PI;
+      const float progressAngle = progress * 2.0f * M_PI;
+
+      if (angle <= progressAngle) {
+        // Filled progress portion
+        renderer.drawPixel(cx + dx, cy + dy, true);
+      } else {
+        // Background ring: draw only the outline (outermost and innermost pixels)
+        const int distSqInner1 = (innerR + 1) * (innerR + 1);
+        const int distSqOuter1 = (outerR - 1) * (outerR - 1);
+        if (distSq >= distSqOuter1 || distSq <= distSqInner1) {
+          renderer.drawPixel(cx + dx, cy + dy, true);
+        }
+      }
+    }
+  }
+}
+
 uint32_t PomodoroActivity::getRemainingMs() const {
   if (state == State::IDLE) return totalDurationMs;
   if (state == State::PAUSED) return totalDurationMs - pausedElapsedMs;
@@ -100,8 +135,15 @@ void PomodoroActivity::loop() {
     }
   }
 
-  // In IDLE: Up/Down adjusts the selected duration field; Right = Start
+  // In IDLE: Right = Start (check FIRST to avoid button conflict with navigator);
+  // Up/Down adjusts the selected duration field
   if (state == State::IDLE) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
+      startTimer(State::FOCUS, focusDurationMs);
+      return;
+    }
+
+    // Use direct Up/Down checks — NOT buttonNavigator which also triggers on Right
     auto adjustField = [&](int delta) {
       constexpr uint32_t STEP = 5 * 60 * 1000;
       constexpr uint32_t MIN_MS = 5 * 60 * 1000;
@@ -117,13 +159,8 @@ void PomodoroActivity::loop() {
         requestUpdate();
       }
     };
-    buttonNavigator.onNext([&] { adjustField(-1); });    // Up = decrease
-    buttonNavigator.onPrevious([&] { adjustField(+1); }); // Down = increase
-
-    if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
-      startTimer(State::FOCUS, focusDurationMs);
-      return;
-    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Up))   adjustField(-1);
+    if (mappedInput.wasReleased(MappedInputManager::Button::Down)) adjustField(+1);
   }
 
   // Skip button (Right) during running or paused states
@@ -197,17 +234,35 @@ void PomodoroActivity::render(RenderLock&&) {
       }
     }
   } else {
-    // Running / paused: show state label + large countdown + session dots
-    renderer.drawCenteredText(UI_10_FONT_ID, blockTop, getStateLabel(), true, EpdFontFamily::BOLD);
+    // Running / paused: circular progress ring with countdown inside + session dots
 
+    // Calculate progress (0.0 = just started, 1.0 = done)
     uint32_t remaining = getRemainingMs();
+    float elapsed = (float)(totalDurationMs - remaining);
+    float progress = totalDurationMs > 0 ? elapsed / (float)totalDurationMs : 0.0f;
+    if (progress > 1.0f) progress = 1.0f;
+
+    // Ring dimensions
+    constexpr int RING_RADIUS = 100;
+    constexpr int RING_THICKNESS = 8;
+    const int ringCenterX = pageWidth / 2;
+    const int ringCenterY = contentCenter - 20;
+
+    // Draw progress ring
+    drawProgressRing(renderer, ringCenterX, ringCenterY, RING_RADIUS, RING_THICKNESS, progress);
+
+    // State label inside ring (above center)
+    renderer.drawCenteredText(UI_10_FONT_ID, ringCenterY - timeHeight / 2 - labelHeight - 2, getStateLabel(), true, EpdFontFamily::BOLD);
+
+    // Countdown inside ring (centered)
     int minutes = remaining / 60000;
     int seconds = (remaining % 60000) / 1000;
     char timeBuf[6];
     snprintf(timeBuf, sizeof(timeBuf), "%02d:%02d", minutes, seconds);
-    renderer.drawCenteredText(UI_12_FONT_ID, blockTop + labelHeight + 10, timeBuf, true, EpdFontFamily::BOLD);
+    renderer.drawCenteredText(UI_12_FONT_ID, ringCenterY - timeHeight / 2, timeBuf, true, EpdFontFamily::BOLD);
 
-    const int dotsY = blockTop + labelHeight + 10 + timeHeight + 20;
+    // Session dots below ring
+    const int dotsY = ringCenterY + RING_RADIUS + 20;
     const int totalDotsWidth = SESSIONS_BEFORE_LONG_BREAK * dotSize + (SESSIONS_BEFORE_LONG_BREAK - 1) * dotSpacing;
     const int dotsX = (pageWidth - totalDotsWidth) / 2;
     for (int i = 0; i < SESSIONS_BEFORE_LONG_BREAK; i++) {

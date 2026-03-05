@@ -1,6 +1,6 @@
 # Code Standards & Best Practices
 
-**Last Updated:** March 1, 2026
+**Last Updated:** March 4, 2026
 **Language:** C++17 (ESP32 firmware)
 
 ## File Organization
@@ -315,9 +315,10 @@ struct PetState {
   uint16_t totalAge = 0;
   uint8_t careMistakes = 0;
 
-  // Evolution quality
+  // Evolution quality (v1.3+)
   uint8_t avgCareScore = 50;
-  uint8_t evolutionVariant = 0;  // 0=good, 1=chubby, 2=misbehaved
+  uint8_t evolutionVariant = 0;  // 0=Scholar, 1=Balanced, 2=Wild (reading-driven v1.3+)
+  uint16_t booksFinished = 0;    // Book completion counter for evolution gates
 
   // Helpers
   bool isAlive() const { return stage != PetStage::DEAD; }
@@ -516,6 +517,53 @@ bool PetPersistence::load(PetState& state) {
   return true;
 }
 ```
+
+## Reading Stats System (src/ReadingStats.h/cpp)
+
+**Purpose:** Track daily and lifetime reading statistics with binary persistence.
+
+**Data Structure:**
+```cpp
+struct ReadingSession {
+  uint32_t startTime = 0;           // Unix timestamp
+  uint32_t endTime = 0;
+  uint32_t totalSeconds = 0;        // Duration of reading session
+  char lastBookPath[256] = "";      // Last-read EPUB file path
+  uint8_t lastProgressPercent = 0;  // Book progress at session end
+};
+
+class ReadingStats {  // Singleton
+  uint32_t todaysReadingSeconds = 0;   // Reset at midnight
+  uint32_t lifetimeReadingSeconds = 0; // Cumulative total
+  uint16_t currentStreak = 0;          // Consecutive days reading
+  ReadingSession currentSession;       // In-progress session
+};
+```
+
+**Usage Pattern:**
+```cpp
+// Start reading session (on EpubReaderActivity::onEnter)
+READ_STATS.startSession();
+
+// End reading session (on EpubReaderActivity::onExit)
+READ_STATS.endSession(bookPath, progressPercent);
+
+// Load stats on boot (in main.cpp setup)
+READ_STATS.loadFromFile();
+
+// Display on sleep screen
+SleepActivity::renderReadingStatsSleepScreen();
+```
+
+**Persistence:**
+- **File:** `/.crosspoint/reading_stats.bin` (binary format)
+- **Load on boot:** Automatically in main.cpp
+- **Save on session end:** Atomic write with temp file + rename
+- **Reset daily:** Midnight boundary check (using RTC time)
+
+**Files:**
+- `src/ReadingStats.h` - Header (data structures, API)
+- `src/ReadingStats.cpp` - Implementation (load, save, session tracking)
 
 ## Internationalization (i18n)
 
