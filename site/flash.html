@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Flash CrossPet Reader firmware to your Xteink X4 e-reader using the browser-based Web Serial installer or PlatformIO CLI.">
+  <meta property="og:title" content="Flash CrossPet Reader Firmware">
+  <meta property="og:type" content="website">
+  <title>Flash — CrossPet Reader</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    esp-web-install-button { display: contents; }
+  </style>
+  <script src="js/i18n-translations.js"></script>
+  <script src="js/dark-mode-toggle.js"></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="pet-icon" aria-hidden="true">🐔</span>
+        CrossPet Reader
+      </a>
+      <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-menu" role="list">
+        <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+        <li><a href="architecture.html" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="flash.html" aria-current="page" data-i18n="nav.flash">Flash</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <span class="icon-sun" aria-hidden="true">☀</span>
+          <span class="icon-moon" aria-hidden="true">☾</span>
+        </button>
+        <div class="lang-switcher" role="group" aria-label="Language switcher">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button class="lang-btn active" data-lang="vi">VI</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <section class="flash-hero">
+      <div class="container">
+        <p class="hero-eyebrow" data-i18n="flash.eyebrow">Browser-based installer</p>
+        <h1 data-i18n="flash.title">Flash CrossPet Firmware</h1>
+        <p class="hero-sub" data-i18n="flash.subtitle">Install CrossPet firmware on your Xteink X4 in minutes. No drivers, no command line required. Works on Chrome and Edge on desktop.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Steps -->
+    <section aria-labelledby="steps-heading">
+      <div class="container">
+        <h2 id="steps-heading" data-i18n="flash.steps.heading">Before you flash</h2>
+        <div class="flash-steps">
+
+          <div class="flash-step fade-in">
+            <div class="step-num" aria-hidden="true">1</div>
+            <div class="step-content">
+              <h3 data-i18n="flash.step1.title">Back up your books and progress</h3>
+              <p data-i18n="flash.step1.desc">CrossPet preserves your SD card contents, but flashing firmware resets all device settings. Copy your <code>.crosspoint/</code> folder to your computer if you want to keep reading progress.</p>
+            </div>
+          </div>
+
+          <div class="flash-step fade-in">
+            <div class="step-num" aria-hidden="true">2</div>
+            <div class="step-content">
+              <h3 data-i18n="flash.step2.title">Connect your Xteink X4 via USB-C</h3>
+              <p data-i18n="flash.step2.desc">Use a data-capable USB-C cable (not charge-only). The device should appear as a serial port. If it doesn't, wake the device first and try again.</p>
+            </div>
+          </div>
+
+          <div class="flash-step fade-in">
+            <div class="step-num" aria-hidden="true">3</div>
+            <div class="step-content">
+              <h3 data-i18n="flash.step3.title">Wake and unlock the device</h3>
+              <p data-i18n="flash.step3.desc">Press the power button to wake from deep sleep. The USB serial interface is only active while the device is awake. You do not need to put it into bootloader mode — the installer handles that automatically.</p>
+            </div>
+          </div>
+
+          <div class="flash-step fade-in">
+            <div class="step-num" aria-hidden="true">4</div>
+            <div class="step-content">
+              <h3 data-i18n="flash.step4.title">Click "Flash CrossPet Firmware" below</h3>
+              <p data-i18n="flash.step4.desc">Your browser will ask you to select the serial port. Choose the one labelled "USB JTAG/serial debug unit" or similar ESP32-C3 entry. The installer will download the firmware and flash all partitions automatically.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Browser warning (shown by JS if Web Serial unavailable) -->
+        <div class="browser-warning" role="alert" aria-live="polite">
+          <strong data-i18n="flash.browser-warning">Your browser does not support Web Serial. Please use Chrome or Edge.</strong>
+          <span data-i18n="flash.browser-warning.detail">Firefox and Safari do not support Web Serial. Please open this page in Chrome or Edge on a desktop computer, or use the community flasher at xteink.dve.al.</span>
+        </div>
+
+        <!-- Flash button -->
+        <div class="flash-btn-area fade-in">
+          <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+          <esp-web-install-button manifest="firmware/manifest.json">
+            <button slot="activate" class="flash-btn" data-i18n="flash.button">
+              ⚡ Flash CrossPet Firmware
+            </button>
+            <span slot="unsupported">
+              <p style="color: var(--accent); font-size: 1rem;">
+                Web Serial is not supported in this browser.
+                Use Chrome or Edge, or see the manual instructions below.
+              </p>
+            </span>
+          </esp-web-install-button>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem; margin-bottom: 0;" data-i18n="flash.installer.note">
+            Installs the latest stable release. The installer will show firmware version before flashing.
+          </p>
+        </div>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 1rem; margin-top: 1.5rem;" data-i18n="flash.community-flasher">
+          Or use the community flasher at
+          <a href="https://xteink.dve.al" rel="noopener">xteink.dve.al</a>
+        </p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Manual / PlatformIO -->
+    <section aria-labelledby="manual-heading">
+      <div class="container">
+        <h2 id="manual-heading" data-i18n="flash.manual.title">Manual Installation (PlatformIO)</h2>
+        <p style="color: var(--text-muted);" data-i18n="flash.manual.desc">For developers who want to build and flash from source.</p>
+
+        <h3 style="margin: 2rem 0 0.75rem;" data-i18n="flash.manual.prereqs">Prerequisites</h3>
+        <ul style="padding-left: 1.5rem; line-height: 2; font-size: 1rem; color: var(--text-secondary);">
+          <li>Python 3.8+ and <a href="https://platformio.org/install/cli" rel="noopener">PlatformIO CLI</a></li>
+          <li>USB-C data cable</li>
+          <li>Git</li>
+        </ul>
+
+        <h3 style="margin: 2rem 0 0.75rem;" data-i18n="flash.manual.steps">Steps</h3>
+        <pre><code># Clone the repository
+git clone https://github.com/trilwu/crosspet.git
+cd crosspoint-reader
+
+# Create local config (set your serial port)
+cat &gt; platformio.local.ini &lt;&lt;'EOF'
+[env:default]
+upload_port = /dev/ttyUSB0   # Linux: /dev/ttyUSB0, macOS: /dev/cu.usbmodem*, Windows: COM3
+monitor_port = /dev/ttyUSB0
+EOF
+
+# Build and flash (wake your device first)
+pio run -t upload
+
+# Optional: open serial monitor
+pio device monitor</code></pre>
+
+        <h3 style="margin: 2rem 0 0.75rem;" data-i18n="flash.manual.envs">Build Environments</h3>
+        <pre><code># Development build (full logging)
+pio run
+
+# Production build (logging stripped)
+pio run -e gh_release
+
+# Release candidate (minimal logging)
+pio run -e gh_release_rc</code></pre>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Reverting -->
+    <section aria-labelledby="revert-heading">
+      <div class="container">
+        <h2 id="revert-heading" data-i18n="flash.revert.title">Reverting to Official Firmware</h2>
+        <p style="color: var(--text-muted);" data-i18n="flash.revert.desc">CrossPet does not modify the bootloader or partition table, so reverting is straightforward.</p>
+        <ol style="padding-left: 1.5rem; line-height: 2.2; font-size: 1rem; color: var(--text-secondary);">
+          <li>Download the official Xteink X4 firmware from <a href="https://xteink.dve.al" rel="noopener">xteink.dve.al</a></li>
+          <li>Connect your device via USB-C and wake it</li>
+          <li>Use the official flasher tool or <code>esptool.py</code> to write the original firmware image</li>
+          <li>Your SD card books are unaffected — only device settings reset</li>
+        </ol>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 1rem;" data-i18n="flash.revert.bootloader-tip">
+          If the device fails to boot after flashing, hold the <strong>Up</strong> side button while connecting USB to enter bootloader mode, then re-flash.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <ul class="footer-links" role="list">
+        <li><a href="https://github.com/trilwu/crosspet" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/discussions" rel="noopener" data-i18n="footer.link.discussions">Discussions</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/issues" rel="noopener" data-i18n="footer.link.issues">Issues</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/blob/master/LICENSE" rel="noopener" data-i18n="footer.link.license">GPL License</a></li>
+        <li><a href="index.html" data-i18n="footer.link.home">Home</a></li>
+        <li><a href="architecture.html" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <p class="footer-note">
+        <span data-i18n="footer.disclaimer">CrossPet Reader is a personal Vietnamese fork of</span>
+        <a href="https://github.com/crosspoint-reader/crosspoint-reader" rel="noopener" data-i18n="footer.upstream">CrossPoint Reader</a>.<br>
+        <span data-i18n="footer.warranty">Use at your own risk. Flashing custom firmware may void your warranty.</span>
+      </p>
+      <p class="footer-tagline" data-i18n="footer.love">Built with ♥ on 380KB of RAM</p>
+    </div>
+  </footer>
+
+  <script src="js/i18n-switcher.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

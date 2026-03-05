@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CrossPet Reader technical architecture — ESP32-C3 constraints, activity lifecycle, e-ink rendering pipeline, SD caching, and EPUB layout engine.">
+  <meta property="og:title" content="CrossPet Reader — Technical Architecture">
+  <meta property="og:type" content="website">
+  <title>Architecture — CrossPet Reader</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/i18n-translations.js"></script>
+  <script src="js/dark-mode-toggle.js"></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="pet-icon" aria-hidden="true">🐔</span>
+        CrossPet Reader
+      </a>
+      <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-menu" role="list">
+        <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+        <li><a href="architecture.html" aria-current="page" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="flash.html" data-i18n="nav.flash">Flash</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <span class="icon-sun" aria-hidden="true">☀</span>
+          <span class="icon-moon" aria-hidden="true">☾</span>
+        </button>
+        <div class="lang-switcher" role="group" aria-label="Language switcher">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button class="lang-btn active" data-lang="vi">VI</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <section class="flash-hero">
+      <div class="container">
+        <p class="hero-eyebrow" data-i18n="arch.eyebrow">Technical Deep-Dive</p>
+        <h1 data-i18n="arch.title">Architecture</h1>
+        <p class="hero-sub" data-i18n="arch.subtitle">CrossPet runs on an ESP32-C3 with ~380KB of usable RAM and no PSRAM. Every design decision flows from that constraint — aggressive SD caching, single-buffer rendering, careful heap discipline, and a tight activity lifecycle.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Hardware Specs -->
+    <section aria-labelledby="hw-heading">
+      <div class="container">
+        <div class="arch-specs-card fade-in">
+          <h2 id="hw-heading" data-i18n="arch.specs.title">Hardware Specifications</h2>
+          <div class="specs-grid">
+            <div class="spec-row">
+              <span class="spec-label">MCU</span>
+              <span class="spec-value">ESP32-C3 — Single-core RISC-V @ 160MHz</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">RAM</span>
+              <span class="spec-value">~380KB usable DRAM (no PSRAM)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Flash</span>
+              <span class="spec-value">16MB — instruction + static data storage</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Display</span>
+              <span class="spec-value">800×480 E-Ink, SSD1677 controller</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Framebuffer</span>
+              <span class="spec-value">48,000 bytes (800 × 480 ÷ 8, single buffer)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Storage</span>
+              <span class="spec-value">SD Card — books + aggressive layout cache</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">WiFi</span>
+              <span class="spec-value">802.11 b/g/n (2.4GHz)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Bluetooth</span>
+              <span class="spec-value">BLE 5.0 only — no Classic BT</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Buttons</span>
+              <span class="spec-value">4 front + 4 side, all remappable</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Build system</span>
+              <span class="spec-value">PlatformIO, C++20, no exceptions / no RTTI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Architecture concepts -->
+    <section aria-labelledby="concepts-heading">
+      <div class="container">
+        <h2 id="concepts-heading" class="section-title" data-i18n="arch.concepts.title">CrossPoint Core Architecture</h2>
+        <p class="section-lead" data-i18n="arch.concepts.lead">The foundation inherited from CrossPoint Reader — the open-source firmware that makes everything possible.</p>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.activity.title">Activity Lifecycle</summary>
+          <div class="details-body">
+            <p data-i18n="arch.activity.p1">CrossPet's UI is structured around <em>Activities</em> — heap-allocated objects each responsible for one screen or interaction. The activity manager holds a single pointer to the current activity and calls <code>onEnter()</code>, <code>loop()</code>, and <code>onExit()</code> in sequence.</p>
+            <p data-i18n="arch.activity.p2">Navigation is a <strong>delete-then-new</strong> pattern: the outgoing activity's <code>onExit()</code> frees all resources it allocated (buffers, FreeRTOS tasks, open file handles), then the object is <code>delete</code>d. The next activity is heap-allocated and its <code>onEnter()</code> runs immediately.</p>
+            <p data-i18n="arch.activity.p3">Because the ESP32-C3 has no garbage collector and no exceptions, every allocation in <code>onEnter()</code> must have a matching free in <code>onExit()</code> — in reverse order. FreeRTOS tasks are deleted <em>before</em> the activity is destroyed to prevent dangling-pointer callbacks.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.cache.title">SD-First Caching</summary>
+          <div class="details-body">
+            <p data-i18n="arch.cache.p1">With only 380KB of RAM — shared between the framebuffer (48KB), stack, heap, and FreeRTOS — there is no room to hold a parsed EPUB layout in memory. CrossPet offloads the result of every expensive operation to the SD card's <code>.crosspoint/</code> directory.</p>
+            <p data-i18n="arch.cache.p2">Each book gets a directory keyed by a hash of its file path. Inside: <code>book.bin</code> (metadata and spine), <code>progress.bin</code> (reading position), <code>cover.bmp</code> (pre-scaled cover art), and a <code>sections/</code> folder containing one binary per EPUB section. Sections store the complete rendered layout — character positions, line breaks, image coordinates — so that page turns require only a fast sequential read from SD, not a full re-parse.</p>
+            <p data-i18n="arch.cache.p3">Cache invalidation is automatic: a version number in each binary triggers full regeneration when the firmware's layout engine changes, or when the user adjusts font size, family, line spacing, or screen orientation.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.eink.title">E-Ink Rendering Pipeline</summary>
+          <div class="details-body">
+            <p data-i18n="arch.eink.p1">E-ink displays are slow to refresh and prone to ghosting. CrossPet uses a single framebuffer (48KB) and a three-phase rendering pipeline to produce clean grayscale anti-aliased text without double-buffering.</p>
+            <p data-i18n="arch.eink.p2"><strong>Phase 1 — BW Fast Refresh:</strong> A low-latency black-and-white waveform clears the previous content and renders a coarse version of the new page. This gives immediate visual feedback (~200ms).</p>
+            <p data-i18n="arch.eink.p3"><strong>Phase 2 — Grayscale LUT:</strong> A custom lookup-table waveform drives the display through multiple voltage levels, setting each pixel to one of 16 gray shades. The anti-aliased glyph data (computed during layout) maps sub-pixel coverage percentages to gray levels.</p>
+            <p data-i18n="arch.eink.p4">Full page refreshes are triggered on activity transitions to eliminate ghosting. Fast refreshes are used for page turns when anti-aliasing is disabled, giving a snappier feel at the cost of some ghosting accumulation.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.memory.title">Memory Safety</summary>
+          <div class="details-body">
+            <p data-i18n="arch.memory.p1">CrossPet compiles with <strong>no C++ exceptions and no RTTI</strong>. Error propagation uses the <code>LOG_ERR + return false</code> pattern throughout. This eliminates the exception unwinding tables from the binary — a meaningful saving on a 16MB flash budget — and keeps control flow explicit.</p>
+            <p data-i18n="arch.memory.p2">The string policy prohibits <code>std::string</code> and Arduino <code>String</code> in hot paths. Read-only string access uses <code>std::string_view</code>; construction uses <code>snprintf</code> into fixed-size stack buffers. Every <code>std::vector</code> calls <code>.reserve(N)</code> before any <code>push_back</code> loop to avoid heap fragmentation from growth reallocations.</p>
+            <p data-i18n="arch.memory.p3">Large temporary buffers (cover images, text chunks, OTA blocks) are <code>malloc</code>d, null-checked, used immediately, and <code>free</code>d — never held across multiple operations. Smart pointers use <code>std::unique_ptr</code>; <code>std::shared_ptr</code> is avoided because its atomic reference count is unnecessary overhead on a single-core MCU.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.epub.title">EPUB Pipeline</summary>
+          <div class="details-body">
+            <p data-i18n="arch.epub.p1">Processing an EPUB is a multi-stage pipeline. First, the ZIP archive is opened on SD and its OPF manifest parsed to extract the spine order and resource map. Each spine item's XHTML is parsed, CSS rules extracted, and inline styling resolved into a flat sequence of styled text runs.</p>
+            <p data-i18n="arch.epub.p2">The layout engine performs a word-wrap pass using the selected font's glyph metrics, inserting soft hyphens according to the language's hyphenation dictionary. Each output line is stored as a compact struct (font ID, x/y offset, glyph range) in the section cache binary.</p>
+            <p data-i18n="arch.epub.p3">Images are decoded from their base64 or binary representation, scaled to fit the viewport using a nearest-neighbour or bilinear filter, and stored as pre-scaled bitmaps in the cache. This means rendering a page is a pure cache-read + blit operation — no parsing, no scaling, no layout math at read time.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.build.title">Build System &amp; Environments</summary>
+          <div class="details-body">
+            <p data-i18n="arch.build.p1">CrossPet uses <strong>PlatformIO</strong> with a C++20 toolchain targeting the ESP32-C3 RISC-V architecture. Four build environments cover the full development-to-release lifecycle:</p>
+            <ul style="padding-left: 1.5rem; margin: 0.75rem 0; line-height: 1.9; font-size: 1rem;">
+              <li data-i18n="arch.build.env.default"><code>default</code> — Development build. Full serial logging (LOG_LEVEL=2), debug assertions enabled.</li>
+              <li data-i18n="arch.build.env.release"><code>gh_release</code> — Production. Logging stripped (LOG_LEVEL=0), size-optimised.</li>
+              <li data-i18n="arch.build.env.rc"><code>gh_release_rc</code> — Release candidate. Minimal logging (LOG_LEVEL=1) for field testing.</li>
+              <li data-i18n="arch.build.env.slim"><code>slim</code> — Minimal build with no serial output, smallest possible binary.</li>
+            </ul>
+            <p data-i18n="arch.build.p2">I18n strings are generated from YAML translation files by <code>scripts/gen_i18n.py</code> into C++ headers. HTML pages served over WiFi are compiled into <code>.generated.h</code> headers by <code>scripts/build_html.py</code> at build time — neither file is hand-edited.</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- CrossPet Additions -->
+    <section aria-labelledby="crosspet-heading">
+      <div class="container">
+        <h2 id="crosspet-heading" class="section-title" data-i18n="arch.crosspet.title">CrossPet Additions</h2>
+        <p class="section-lead" data-i18n="arch.crosspet.lead">Features built on top of CrossPoint — the reason this fork exists.</p>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.pet.title">Virtual Pet System</summary>
+          <div class="details-body">
+            <p data-i18n="arch.pet.p1">A full tamagotchi-style virtual pet that lives on the sleep screen and in the Tools menu. The pet tracks reading sessions via the Reading Stats system — reading more causes the pet to evolve through 4 stages (egg → chick → hen → rooster). Pet mood reflects recent reading activity; long gaps make it listless.</p>
+            <p data-i18n="arch.pet.p2">Pet sprites are rendered via <code>PetSpriteRenderer</code> using 16×16 pixel art at 2× scale. The pet's name, type, and evolution state are persisted on SD card. Daily missions encourage consistent reading habits. The system is purely cosmetic — zero impact on reading performance.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.stats.title">Reading Stats & Gamification</summary>
+          <div class="details-body">
+            <p data-i18n="arch.stats.p1">A binary stats file (<code>.crosspoint/reading_stats.bin</code>, v2) tracks: today's reading time, all-time total, session count, books finished, current streak, and longest streak. Sessions are started in reader <code>onEnter()</code> and ended in <code>onExit()</code> with book title and progress.</p>
+            <p data-i18n="arch.stats.p2">A dedicated Reading Stats sleep screen renders a dashboard: today/all-time time, session grid, streak display, and a progress bar for the last book read. Stats feed into the pet evolution system to reward consistent reading.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.weather.title">Weather & Clock</summary>
+          <div class="details-body">
+            <p data-i18n="arch.weather.p1">Weather data from Open-Meteo HTTPS API, fetched silently on WiFi connect. Cached to <code>.crosspoint/weather_cache.json</code> on SD. Displayed in header bar, clock sleep screen, and dedicated Weather activity. NTP time sync via <code>configTzTime()</code> on WiFi connect.</p>
+            <p data-i18n="arch.weather.p2">Clock activity includes a monthly calendar grid with Left/Right month navigation, Vietnamese lunar calendar integration (showing lunar dates in cells and "Âm lịch" range in header), and 28 rotating daily literary quotes on the clock sleep screen.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.games.title">Mini Games</summary>
+          <div class="details-body">
+            <p data-i18n="arch.games.p1">Five games in the Tools menu: Chess (with AI opponent), Caro/Gomoku, Sudoku (4 difficulty levels with auto-save), Minesweeper, and 2048. All rendered on the 800×480 e-ink display using physical button controls.</p>
+            <p data-i18n="arch.games.p2">Games are standard Activities — they only load when navigated to and are fully freed on exit. No background memory usage. Each game uses the shared <code>GfxRenderer</code> and <code>MappedInputManager</code> for consistent input/output across all screen orientations.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.ble.title">BLE Remote & Presenter</summary>
+          <div class="details-body">
+            <p data-i18n="arch.ble.p1">ESP32-C3 supports BLE 5.0 only (no Classic Bluetooth). Two BLE HID profiles: "CrossPoint" keyboard remote for page turning from a distance, and "CrossPet_Presenter" slide controller for presentations. Only one connection at a time (<code>CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1</code>).</p>
+            <p data-i18n="arch.ble.p2">BLE controller memory is preserved at boot via <code>extern "C" bool btInUse(void) { return true; }</code> to prevent Arduino from releasing it. Scan shows all BLE devices (no filter), connection validates HID service. Security uses NimBLE auto-negotiation with no-input-output capability.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="arch.i18n.title">Vietnamese i18n</summary>
+          <div class="details-body">
+            <p data-i18n="arch.i18n.p1">Full Vietnamese support across all UI: games, tools, pet system, clock, pomodoro, sleep screens. Vietnamese glyphs in all 3 font families with NotoSans fallback for Ubuntu UI fonts. YAML source files in <code>lib/I18n/translations/</code> auto-generate C++ headers via <code>gen_i18n.py</code>.</p>
+            <p data-i18n="arch.i18n.p2">Deep sleep screen re-render on wake ensures dynamic content (clock, reading stats) stays current after the RTC elapsed-time correction. Lunar calendar uses an embedded algorithm — no network required.</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Cache structure -->
+    <section aria-labelledby="cache-heading">
+      <div class="container">
+        <h2 id="cache-heading" data-i18n="arch.cache-structure.title">SD Cache Structure</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;" data-i18n="arch.cache-structure.desc">All persistent cache lives in <code>.crosspoint/</code> at the SD card root. Deleting this directory forces a full regeneration on next boot — safe to do at any time.</p>
+        <pre><code>.crosspoint/
+├── reading_stats.bin          # Global reading stats (v2)
+└── epub_&lt;path-hash&gt;/          # One directory per book
+    ├── book.bin               # Metadata + spine (v5)
+    ├── progress.bin           # Reading position
+    ├── cover.bmp              # Pre-scaled cover art
+    └── sections/
+        ├── 000.bin            # Rendered layout, section 0 (v12)
+        ├── 001.bin
+        └── ...</code></pre>
+        <p style="color: var(--text-muted); font-size: 0.95rem;" data-i18n="arch.cache-structure.note">Cache keys are <code>std::hash&lt;std::string&gt;</code> of the book's full SD path. Renaming or moving a file creates a new cache entry and loses reading progress for that book.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <ul class="footer-links" role="list">
+        <li><a href="https://github.com/trilwu/crosspet" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/discussions" rel="noopener" data-i18n="footer.link.discussions">Discussions</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/issues" rel="noopener" data-i18n="footer.link.issues">Issues</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/blob/master/LICENSE" rel="noopener" data-i18n="footer.link.license">GPL License</a></li>
+        <li><a href="index.html" data-i18n="footer.link.home">Home</a></li>
+        <li><a href="flash.html" data-i18n="nav.flash">Flash</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <p class="footer-note">
+        <span data-i18n="footer.disclaimer">CrossPet Reader is a personal Vietnamese fork of</span>
+        <a href="https://github.com/crosspoint-reader/crosspoint-reader" rel="noopener" data-i18n="footer.upstream">CrossPoint Reader</a>.<br>
+        <span data-i18n="footer.warranty">Use at your own risk. Flashing custom firmware may void your warranty.</span>
+      </p>
+      <p class="footer-tagline" data-i18n="footer.love">Built with ♥ on 380KB of RAM</p>
+    </div>
+  </footer>
+
+  <script src="js/i18n-switcher.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
