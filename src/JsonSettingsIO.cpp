@@ -254,7 +254,7 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   s.bleBondedDeviceName[sizeof(s.bleBondedDeviceName) - 1] = '\0';
   s.bleBondedDeviceAddrType = doc["bleBondedDeviceAddrType"] | (uint8_t)0;
   s.weatherCity = doc["weatherCity"] | (uint8_t)0;
-  if (s.weatherCity > 2) s.weatherCity = 0;
+  if (s.weatherCity > 63) s.weatherCity = 0;  // 0=Auto, 1-63=manual cities
 
   LOG_DBG("CPS", "Settings loaded from file");
 

@@ -17,9 +17,20 @@ struct WeatherData {
   float windSpeed = 0;
 };
 
+struct DailyForecast {
+  int weatherCode = 0;
+  float tempMax = 0;
+  float tempMin = 0;
+  char dayLabel[4] = "";  // "Mon", "Tue", etc.
+};
+
 class WeatherActivity final : public Activity {
  public:
-  enum State { WIFI_CONNECTING, FETCHING, DISPLAYING, FETCH_ERROR };
+  enum State { WIFI_CONNECTING, FETCHING, DISPLAYING, FETCH_ERROR, SELECTING_CITY };
+
+  // selectedCity index: 0 = Auto (IP geolocation), 1..CITY_COUNT = manual cities
+  static constexpr int CITY_COUNT = 63;
+  static const CityCoord CITIES[CITY_COUNT];
 
   explicit WeatherActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
       : Activity("Weather", renderer, mappedInput) {}
@@ -31,24 +42,33 @@ class WeatherActivity final : public Activity {
   bool preventAutoSleep() override { return true; }
 
   // Static cache access for sleep screen (reads from SD)
-  static constexpr int CITY_COUNT = 3;
-  static const CityCoord CITIES[CITY_COUNT];
   static bool loadWeatherCache(WeatherData& out, uint8_t& cityIdx, char* timeBuf, size_t timeBufLen);
   static const char* weatherCodeToString(int code);
 
   // Silent background refresh: WiFi connect → fetch → cache → WiFi off.
-  // Blocks for up to ~15s. Returns true if cache was updated.
   static bool silentRefresh();
 
  private:
+  static constexpr int FORECAST_DAYS = 5;
   State state = WIFI_CONNECTING;
   WeatherData weather;
-  uint8_t selectedCity = 0;
+  DailyForecast forecast[FORECAST_DAYS];
+  int forecastCount = 0;
+  uint8_t selectedCity = 0;  // 0 = Auto, 1..63 = manual
   std::string statusMessage;
   char lastUpdateTime[8] = "";
+  char detectedCityName[32] = "";
+  char detectedLat[16] = "";
+  char detectedLon[16] = "";
+
+  int cityCursor = 0;      // Cursor in city list (0=Auto, 1..63=cities)
+  int cityScrollTop = 0;   // First visible item in city list
 
   void onWifiConnected();
   void fetchWeather();
   bool parseWeather(const std::string& json);
   void saveWeatherCache();
+  bool detectLocation();
+  const char* getCurrentCityName() const;
+  void renderCityList();
 };

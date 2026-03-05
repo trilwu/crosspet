@@ -28,8 +28,6 @@ constexpr unsigned long goHomeMs = 1000;
 
 void XtcReaderActivity::onEnter() {
   Activity::onEnter();
-  renderer.requestNextFullRefresh();  // clear e-ink ghosting from previous content
-
   if (!xtc) {
     return;
   }

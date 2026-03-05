@@ -428,7 +428,7 @@ void setup() {
     activityManager.goToReader(path);
   }
 
-  // Ensure we're not still holding the power button before leaving setup
+  // Ensure we're not still holding the power button before leaving setup.
   waitForPowerRelease();
 }
 
@@ -523,7 +523,7 @@ void loop() {
     static unsigned long lastRefreshMs = 0;
     if (millis() - lastRefreshMs > 2000) {
       lastRefreshMs = millis();
-      renderer.requestNextFullRefresh();
+      renderer.requestNextHalfRefresh();
       activityManager.requestUpdate();
     }
   }

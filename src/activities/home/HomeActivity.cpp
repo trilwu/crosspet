@@ -156,6 +156,16 @@ void HomeActivity::loop() {
   });
 
 
+  // Back button: refresh weather data silently
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
+    weatherRefreshing = true;
+    requestUpdate();  // Show "refreshing" indicator
+    WeatherActivity::silentRefresh();
+    weatherRefreshing = false;
+    coverRendered = false;  // Force full redraw to show updated weather
+    requestUpdate();
+  }
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (selectorIndex) {
       case 0: if (!recentBooks.empty()) onSelectBook(recentBooks[0].path); break;
@@ -307,13 +317,17 @@ void HomeActivity::renderHeaderClock() {
   renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
 
   // Weather temp next to clock
-  WeatherData wData;
-  uint8_t wCity = 0;
-  char wTime[8] = "";
-  if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
-    char wBuf[16];
-    snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
-    renderer.drawText(SMALL_FONT_ID, 10 + clockW + 6, 5, wBuf);
+  if (weatherRefreshing) {
+    renderer.drawText(SMALL_FONT_ID, 10 + clockW + 6, 5, "...");
+  } else {
+    WeatherData wData;
+    uint8_t wCity = 0;
+    char wTime[8] = "";
+    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+      char wBuf[16];
+      snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
+      renderer.drawText(SMALL_FONT_ID, 10 + clockW + 6, 5, wBuf);
+    }
   }
 }
 

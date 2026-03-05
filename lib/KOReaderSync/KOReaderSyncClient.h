@@ -31,6 +31,9 @@ class KOReaderSyncClient {
  public:
   enum Error { OK = 0, NO_CREDENTIALS, NETWORK_ERROR, AUTH_FAILED, SERVER_ERROR, JSON_ERROR, NOT_FOUND };
 
+  // Last HTTP response code (for debugging network errors)
+  static int lastHttpCode;
+
   /**
    * Authenticate with the sync server (validate credentials).
    * @return OK on success, error code on failure

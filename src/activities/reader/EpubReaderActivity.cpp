@@ -67,8 +67,6 @@ void applyReaderOrientation(GfxRenderer& renderer, const uint8_t orientation) {
 
 void EpubReaderActivity::onEnter() {
   Activity::onEnter();
-  renderer.requestNextFullRefresh();  // clear e-ink ghosting from previous content
-
   if (!epub) {
     return;
   }

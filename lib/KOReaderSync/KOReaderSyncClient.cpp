@@ -4,11 +4,13 @@
 #include <HTTPClient.h>
 #include <Logging.h>
 #include <WiFi.h>
-#include <WiFiClientSecure.h>
+#include <NetworkClientSecure.h>
 
 #include <ctime>
 
 #include "KOReaderCredentialStore.h"
+
+int KOReaderSyncClient::lastHttpCode = 0;
 
 namespace {
 // Device identifier for CrossPoint reader
@@ -38,11 +40,14 @@ KOReaderSyncClient::Error KOReaderSyncClient::authenticate() {
   LOG_DBG("KOSync", "Authenticating: %s", url.c_str());
 
   HTTPClient http;
-  std::unique_ptr<WiFiClientSecure> secureClient;
-  WiFiClient plainClient;
+  std::unique_ptr<NetworkClientSecure> secureClient;
+  NetworkClient plainClient;
+
+  http.setConnectTimeout(10000);  // 10s connect timeout
+  http.setTimeout(15000);         // 15s response timeout
 
   if (isHttpsUrl(url)) {
-    secureClient.reset(new WiFiClientSecure);
+    secureClient.reset(new NetworkClientSecure);
     secureClient->setInsecure();
     http.begin(*secureClient, url.c_str());
   } else {
@@ -51,6 +56,7 @@ KOReaderSyncClient::Error KOReaderSyncClient::authenticate() {
   addAuthHeaders(http);
 
   const int httpCode = http.GET();
+  lastHttpCode = httpCode;
   http.end();
 
   LOG_DBG("KOSync", "Auth response: %d", httpCode);
@@ -76,11 +82,14 @@ KOReaderSyncClient::Error KOReaderSyncClient::getProgress(const std::string& doc
   LOG_DBG("KOSync", "Getting progress: %s", url.c_str());
 
   HTTPClient http;
-  std::unique_ptr<WiFiClientSecure> secureClient;
-  WiFiClient plainClient;
+  std::unique_ptr<NetworkClientSecure> secureClient;
+  NetworkClient plainClient;
+
+  http.setConnectTimeout(10000);  // 10s connect timeout
+  http.setTimeout(15000);         // 15s response timeout
 
   if (isHttpsUrl(url)) {
-    secureClient.reset(new WiFiClientSecure);
+    secureClient.reset(new NetworkClientSecure);
     secureClient->setInsecure();
     http.begin(*secureClient, url.c_str());
   } else {
@@ -89,6 +98,7 @@ KOReaderSyncClient::Error KOReaderSyncClient::getProgress(const std::string& doc
   addAuthHeaders(http);
 
   const int httpCode = http.GET();
+  lastHttpCode = httpCode;
 
   if (httpCode == 200) {
     // Parse JSON response from response string
@@ -138,11 +148,14 @@ KOReaderSyncClient::Error KOReaderSyncClient::updateProgress(const KOReaderProgr
   LOG_DBG("KOSync", "Updating progress: %s", url.c_str());
 
   HTTPClient http;
-  std::unique_ptr<WiFiClientSecure> secureClient;
-  WiFiClient plainClient;
+  std::unique_ptr<NetworkClientSecure> secureClient;
+  NetworkClient plainClient;
+
+  http.setConnectTimeout(10000);  // 10s connect timeout
+  http.setTimeout(15000);         // 15s response timeout
 
   if (isHttpsUrl(url)) {
-    secureClient.reset(new WiFiClientSecure);
+    secureClient.reset(new NetworkClientSecure);
     secureClient->setInsecure();
     http.begin(*secureClient, url.c_str());
   } else {
@@ -165,6 +178,7 @@ KOReaderSyncClient::Error KOReaderSyncClient::updateProgress(const KOReaderProgr
   LOG_DBG("KOSync", "Request body: %s", body.c_str());
 
   const int httpCode = http.PUT(body.c_str());
+  lastHttpCode = httpCode;
   http.end();
 
   LOG_DBG("KOSync", "Update progress response: %d", httpCode);
@@ -180,17 +194,21 @@ KOReaderSyncClient::Error KOReaderSyncClient::updateProgress(const KOReaderProgr
 }
 
 const char* KOReaderSyncClient::errorString(Error error) {
+  // Use static buffer to include HTTP code in network errors
+  static char buf[64];
   switch (error) {
     case OK:
       return "Success";
     case NO_CREDENTIALS:
       return "No credentials configured";
     case NETWORK_ERROR:
-      return "Network error";
+      snprintf(buf, sizeof(buf), "Network error (HTTP %d)", lastHttpCode);
+      return buf;
     case AUTH_FAILED:
       return "Authentication failed";
     case SERVER_ERROR:
-      return "Server error (try again later)";
+      snprintf(buf, sizeof(buf), "Server error %d", lastHttpCode);
+      return buf;
     case JSON_ERROR:
       return "JSON parse error";
     case NOT_FOUND:

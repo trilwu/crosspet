@@ -820,6 +820,10 @@ void GfxRenderer::displayBuffer(const HalDisplay::RefreshMode refreshMode) const
   if (nextRefreshFull) {
     mode = HalDisplay::FULL_REFRESH;
     nextRefreshFull = false;
+    nextRefreshHalf = false;
+  } else if (nextRefreshHalf) {
+    mode = HalDisplay::HALF_REFRESH;
+    nextRefreshHalf = false;
   }
   display.displayBuffer(mode, fadingFix);
 }
