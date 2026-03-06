@@ -75,12 +75,13 @@ bool ZipFile::loadAllFileStatSlims() {
     file.read(&k, 2);
     file.seekCur(8);
     file.read(&fileStat.localHeaderOffset, 4);
+
     if (nameLen < sizeof(itemName)) {
       file.read(itemName, nameLen);
       itemName[nameLen] = '\0';
       fileStatSlimCache.emplace(itemName, fileStat);
     } else {
-      // Skip over oversized entry names to avoid writing past fixed buffer
+      // Skip over oversized entry names to avoid writing past fixed buffer.
       file.seekCur(nameLen);
     }
 
