@@ -358,6 +358,13 @@ void LyraTheme::drawButtonHints(GfxRenderer& renderer, const char* btn1, const c
   const GfxRenderer::Orientation orig_orientation = renderer.getOrientation();
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
 
+  // In PortraitInverted, the device is flipped 180° so physical button positions are reversed.
+  // Swap label order so each label aligns with its physical button when rendered in Portrait coords.
+  if (orig_orientation == GfxRenderer::Orientation::PortraitInverted) {
+    std::swap(btn1, btn4);
+    std::swap(btn2, btn3);
+  }
+
   const int pageHeight = renderer.getScreenHeight();
   constexpr int buttonWidth = 80;
   constexpr int smallButtonHeight = 15;

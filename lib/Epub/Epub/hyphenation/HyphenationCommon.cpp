@@ -54,6 +54,17 @@ bool isLatinLetter(const uint32_t cp) {
     return true;
   }
 
+  // Vietnamese Ơ/ơ (U+01A0/01A1) and Ư/ư (U+01AF/01B0) not in Latin-1 range
+  if (cp == 0x01A0 || cp == 0x01A1 || cp == 0x01AF || cp == 0x01B0) {
+    return true;
+  }
+
+  // Latin Extended Additional (U+1E00-U+1EFF) — covers all Vietnamese precomposed
+  // characters: ắ ặ ầ ẩ ẫ ậ ấ ề ể ễ ệ ế ờ ở ỡ ợ ớ ừ ử ữ ự ứ ỳ ỵ ỷ ỹ etc.
+  if (cp >= 0x1E00 && cp <= 0x1EFF) {
+    return true;
+  }
+
   switch (cp) {
     case 0x0152:  // Œ
     case 0x0153:  // œ
@@ -374,6 +385,17 @@ std::vector<CodepointInfo> collectCodepoints(const std::string& word) {
               break;
           }
           break;
+        // Vietnamese combining diacritics — must never become a break-point boundary.
+        // Whether or not composition into a precomposed form succeeds, we absorb
+        // the mark into the previous codepoint's entry by not pushing a new one.
+        // This prevents mid-grapheme cluster splits like "ngư|ỡng" → "ng ỡng".
+        case 0x0309:  // combining hook above (ả ẻ ỏ ủ ỷ etc.)
+        case 0x031B:  // combining horn (ơ ư — adds horn to base vowel)
+        case 0x0323:  // combining dot below (ạ ẹ ọ ụ ỵ etc.)
+          // Always continue without pushing a separate CodepointInfo entry.
+          // The mark's bytes are implicitly covered by the previous entry's range
+          // since break-point offsets are derived from consecutive entry positions.
+          continue;
         default:
           break;
       }

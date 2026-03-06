@@ -541,8 +541,12 @@ bool Epub::generateCoverBmp(bool cropped) const {
     return false;
   }
 
-  if (coverImageHref.substr(coverImageHref.length() - 4) == ".jpg" ||
-      coverImageHref.substr(coverImageHref.length() - 5) == ".jpeg") {
+  const auto len = coverImageHref.length();
+  const bool isJpg = (len >= 4 && coverImageHref.substr(len - 4) == ".jpg") ||
+                     (len >= 5 && coverImageHref.substr(len - 5) == ".jpeg");
+  const bool isPng = len >= 4 && coverImageHref.substr(len - 4) == ".png";
+
+  if (isJpg) {
     LOG_DBG("EBP", "Generating BMP from JPG cover image (%s mode)", cropped ? "cropped" : "fit");
     const auto coverJpgTempPath = getCachePath() + "/.cover.jpg";
 
@@ -575,7 +579,7 @@ bool Epub::generateCoverBmp(bool cropped) const {
     return success;
   }
 
-  if (coverImageHref.substr(coverImageHref.length() - 4) == ".png") {
+  if (isPng) {
     LOG_DBG("EBP", "Generating BMP from PNG cover image (%s mode)", cropped ? "cropped" : "fit");
     const auto coverPngTempPath = getCachePath() + "/.cover.png";
 
@@ -627,10 +631,14 @@ bool Epub::generateThumbBmp(int height) const {
   }
 
   const auto coverImageHref = bookMetadataCache->coreMetadata.coverItemHref;
+  const auto thumbLen = coverImageHref.length();
+  const bool thumbIsJpg = (thumbLen >= 4 && coverImageHref.substr(thumbLen - 4) == ".jpg") ||
+                          (thumbLen >= 5 && coverImageHref.substr(thumbLen - 5) == ".jpeg");
+  const bool thumbIsPng = thumbLen >= 4 && coverImageHref.substr(thumbLen - 4) == ".png";
+
   if (coverImageHref.empty()) {
     LOG_DBG("EBP", "No known cover image for thumbnail");
-  } else if (coverImageHref.substr(coverImageHref.length() - 4) == ".jpg" ||
-             coverImageHref.substr(coverImageHref.length() - 5) == ".jpeg") {
+  } else if (thumbIsJpg) {
     LOG_DBG("EBP", "Generating thumb BMP from JPG cover image");
     const auto coverJpgTempPath = getCachePath() + "/.cover.jpg";
 
@@ -666,7 +674,7 @@ bool Epub::generateThumbBmp(int height) const {
     }
     LOG_DBG("EBP", "Generated thumb BMP from JPG cover image, success: %s", success ? "yes" : "no");
     return success;
-  } else if (coverImageHref.substr(coverImageHref.length() - 4) == ".png") {
+  } else if (thumbIsPng) {
     LOG_DBG("EBP", "Generating thumb BMP from PNG cover image");
     const auto coverPngTempPath = getCachePath() + "/.cover.png";
 
@@ -803,7 +811,7 @@ int Epub::getSpineIndexForTocIndex(const int tocIndex) const {
   const int spineIndex = bookMetadataCache->getTocEntry(tocIndex).spineIndex;
   if (spineIndex < 0) {
     LOG_DBG("EBP", "Section not found for TOC index %d", tocIndex);
-    return 0;
+    return -1;  // caller checks for -1; returning 0 was silently jumping to chapter 0
   }
 
   return spineIndex;

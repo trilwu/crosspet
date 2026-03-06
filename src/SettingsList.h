@@ -35,6 +35,12 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         StrId::STR_CAT_DISPLAY),
       SettingInfo::Toggle(StrId::STR_SUNLIGHT_FADING_FIX, &CrossPointSettings::fadingFix, "fadingFix",
                           StrId::STR_CAT_DISPLAY),
+      SettingInfo::Toggle(StrId::STR_HOME_CLOCK, &CrossPointSettings::homeShowClock, "homeShowClock",
+                          StrId::STR_CAT_DISPLAY),
+      SettingInfo::Toggle(StrId::STR_HOME_WEATHER, &CrossPointSettings::homeShowWeather, "homeShowWeather",
+                          StrId::STR_CAT_DISPLAY),
+      SettingInfo::Toggle(StrId::STR_HOME_PET_STATUS, &CrossPointSettings::homeShowPetStatus, "homeShowPetStatus",
+                          StrId::STR_CAT_DISPLAY),
 
       // --- Reader ---
       SettingInfo::Enum(StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,
@@ -71,7 +77,7 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Toggle(StrId::STR_LONG_PRESS_SKIP, &CrossPointSettings::longPressChapterSkip, "longPressChapterSkip",
                           StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN, &CrossPointSettings::shortPwrBtn,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH}, "shortPwrBtn",
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP}, "shortPwrBtn",
                         StrId::STR_CAT_CONTROLS),
 
       // --- System ---
