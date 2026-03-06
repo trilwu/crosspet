@@ -17,6 +17,7 @@
 #include <esp_private/esp_clk.h>
 #include <esp_sntp.h>
 
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "KOReaderCredentialStore.h"
@@ -328,6 +329,7 @@ void setup() {
   }
 
   SETTINGS.loadFromFile();
+  PET_SETTINGS.loadFromFile();
   I18N.loadSettings();
   KOREADER_STORE.loadFromFile();
   READ_STATS.loadFromFile();   // loaded early so abort-to-sleep paths show correct stats

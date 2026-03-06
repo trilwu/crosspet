@@ -1,5 +1,6 @@
 #include "Epub.h"
 
+#include <Arduino.h>  // yield()
 #include <FsHelpers.h>
 #include <HalStorage.h>
 #include <JpegToBmpConverter.h>
@@ -396,6 +397,7 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
     return false;
   }
   LOG_DBG("EBP", "OPF pass completed in %lu ms", millis() - opfStart);
+  yield();  // Feed watchdog between heavy parsing passes
 
   // TOC Pass - try EPUB 3 nav first, fall back to NCX
   const uint32_t tocStart = millis();
@@ -428,6 +430,7 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
     return false;
   }
   LOG_DBG("EBP", "TOC pass completed in %lu ms", millis() - tocStart);
+  yield();  // Feed watchdog between heavy parsing passes
 
   // Close the cache files
   if (!bookMetadataCache->endWrite()) {
@@ -442,6 +445,7 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
     return false;
   }
   LOG_DBG("EBP", "buildBookBin completed in %lu ms", millis() - buildStart);
+  yield();  // Feed watchdog after heavy I/O
   LOG_DBG("EBP", "Total indexing completed in %lu ms", millis() - indexingStart);
 
   if (!bookMetadataCache->cleanupTmpFiles()) {

@@ -204,7 +204,7 @@ void WeatherActivity::fetchWeather() {
 
   char url[384];
   snprintf(url, sizeof(url),
-           "https://api.open-meteo.com/v1/forecast?"
+           "http://api.open-meteo.com/v1/forecast?"
            "latitude=%s&longitude=%s"
            "&current=temperature_2m,relative_humidity_2m,"
            "apparent_temperature,weather_code,wind_speed_10m"

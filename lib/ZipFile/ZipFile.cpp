@@ -1,9 +1,11 @@
 #include "ZipFile.h"
 
+#include <Esp.h>
 #include <HalStorage.h>
 #include <InflateReader.h>
 #include <Logging.h>
 
+#include <Arduino.h>  // yield()
 #include <algorithm>
 
 struct ZipInflateCtx {
@@ -54,9 +56,11 @@ bool ZipFile::loadAllFileStatSlims() {
   fileStatSlimCache.clear();
   fileStatSlimCache.reserve(zipDetails.totalEntries);
 
+  int entryCount = 0;
   while (file.available()) {
     file.read(&sig, 4);
     if (sig != 0x02014b50) break;  // End of list
+    if (++entryCount % 50 == 0) yield();  // Feed watchdog on large zips
 
     FileStatSlim fileStat = {};
 
@@ -411,6 +415,16 @@ uint8_t* ZipFile::readFileToMemory(const char* filename, size_t* size, const boo
 
   const auto deflatedDataSize = fileStat.compressedSize;
   const auto inflatedDataSize = fileStat.uncompressedSize;
+
+  // Guard: on ESP32, check that largest contiguous block can fit the buffers
+  // to avoid crash/reboot on large files (e.g. 20MB epub with big chapters)
+  const size_t maxAlloc = ESP.getMaxAllocHeap();
+  if (inflatedDataSize > maxAlloc) {
+    LOG_ERR("ZIP", "Insufficient heap for readFileToMemory: inflated %zu > maxAlloc %zu", (size_t)inflatedDataSize, maxAlloc);
+    if (!wasOpen) { close(); }
+    return nullptr;
+  }
+
   const auto dataSize = trailingNullByte ? inflatedDataSize + 1 : inflatedDataSize;
   const auto data = static_cast<uint8_t*>(malloc(dataSize));
   if (data == nullptr) {
@@ -519,6 +533,7 @@ bool ZipFile::readFileToStream(const char* filename, Print& out, const size_t ch
     }
 
     size_t remaining = inflatedDataSize;
+    int readCount = 0;
     while (remaining > 0) {
       const size_t dataRead = file.read(buffer, remaining < chunkSize ? remaining : chunkSize);
       if (dataRead == 0) {
@@ -532,6 +547,7 @@ bool ZipFile::readFileToStream(const char* filename, Print& out, const size_t ch
 
       out.write(buffer, dataRead);
       remaining -= dataRead;
+      if (++readCount % 32 == 0) yield();  // Feed watchdog on large files
     }
 
     if (!wasOpen) {
@@ -580,10 +596,12 @@ bool ZipFile::readFileToStream(const char* filename, Print& out, const size_t ch
 
     bool success = false;
     size_t totalProduced = 0;
+    int chunkCount = 0;
 
     while (true) {
       size_t produced;
       const InflateStatus status = ctx.reader.readAtMost(outputBuffer, chunkSize, &produced);
+      if (++chunkCount % 32 == 0) yield();  // Feed watchdog on large files
 
       totalProduced += produced;
       if (totalProduced > static_cast<size_t>(inflatedDataSize)) {

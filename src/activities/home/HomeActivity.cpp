@@ -12,6 +12,7 @@
 #include <cstring>
 #include <vector>
 
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
@@ -159,7 +160,7 @@ void HomeActivity::loop() {
   });
 
 
-  // Long-press Back: refresh weather + NTP time silently (avoid accidental triggers)
+  // Back button long-press (800ms) = sync (home screen has no "go back")
   if (mappedInput.wasReleased(MappedInputManager::Button::Back) && mappedInput.getHeldTime() > 800) {
     doSync();
   }
@@ -260,7 +261,7 @@ void HomeActivity::renderSelectionHighlight(int panelX, int panelY, int panelW, 
 // ── Pet status widget (drawn over header left side) ──────────────────────
 
 void HomeActivity::renderPetStatusWidget(int headerH) {
-  if (!SETTINGS.homeShowPetStatus || !PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
+  if (!PET_SETTINGS.homeShowPetStatus || !PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
 
   const auto& ps = PET_MANAGER.getState();
   const PetMood mood = PET_MANAGER.getMood();
@@ -306,7 +307,7 @@ void HomeActivity::renderPetStatusWidget(int headerH) {
 // ── Header clock ─────────────────────────────────────────────────────────────
 
 void HomeActivity::renderHeaderClock() {
-  if (!SETTINGS.homeShowClock) return;
+  if (!PET_SETTINGS.homeShowClock) return;
   time_t now;
   time(&now);
   struct tm timeinfo;
@@ -321,7 +322,7 @@ void HomeActivity::renderHeaderClock() {
   renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
 
   // Weather temp next to clock (or sync status) — conditional on setting
-  if (SETTINGS.homeShowWeather) {
+  if (PET_SETTINGS.homeShowWeather) {
     const int weatherX = 10 + clockW + 6;
     if (weatherRefreshing) {
       renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");

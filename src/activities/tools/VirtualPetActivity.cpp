@@ -105,7 +105,7 @@ void VirtualPetActivity::updateAnimation() {
   // Idle breathing / wobble toggle
   if (now - lastAnimMs >= ANIM_INTERVAL_MS) {
     lastAnimMs = now;
-    animFrame = 1 - animFrame;
+    animFrame = (animFrame + 1) % 3;
     requestUpdate();
   }
 }

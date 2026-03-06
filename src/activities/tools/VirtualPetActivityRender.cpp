@@ -55,7 +55,7 @@ void VirtualPetActivity::renderDead() const {
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int centerY = contentTop + (pageHeight - contentTop - metrics.buttonHintsHeight) / 2;
 
-  constexpr int PET_SCALE = 2;
+  constexpr int PET_SCALE = 3;
   const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
   const int spriteX = (renderer.getScreenWidth() - petSize) / 2;
   PetSpriteRenderer::drawPet(renderer, spriteX, centerY - petSize - lh,
@@ -75,21 +75,24 @@ void VirtualPetActivity::renderAlive() const {
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int contentBottom = pageHeight - metrics.buttonHintsHeight - metrics.verticalSpacing;
 
-  // --- Pet sprite (96x96) centered at top, with idle animation offset ---
-  constexpr int PET_SCALE = 2;
+  // --- Pet sprite (144x144) centered at top, with idle animation offset ---
+  constexpr int PET_SCALE = 3;
   const int petSize = PetSpriteRenderer::displaySize(PET_SCALE);
   int spriteX = (pageWidth - petSize) / 2;
   int spriteY = contentTop;
 
-  // Idle animation: egg wobbles horizontally, living pets bob vertically
+  // Idle animation: 3-frame cycle (0→1→2→0)
+  // Egg wobbles left/center/right; living pets bob up/down/up
+  static const int EGG_WOBBLE[3] = {-2, 0, 2};
+  static const int BOB[3] = {0, 3, 0};
   if (state.stage == PetStage::EGG) {
-    spriteX += (animFrame == 1) ? 3 : -3;
+    spriteX += EGG_WOBBLE[animFrame];
   } else {
-    spriteY += (animFrame == 1) ? 3 : 0;
+    spriteY += BOB[animFrame];
   }
 
   PetSpriteRenderer::drawPet(renderer, spriteX, spriteY, state.stage, mood, PET_SCALE,
-                              state.evolutionVariant, state.petType);
+                              state.evolutionVariant, state.petType, animFrame);
 
   // Draw action feedback icon next to sprite (top-right)
   if (actionIcon != PetAnimIcon::NONE) {
@@ -206,7 +209,7 @@ void VirtualPetActivity::renderTypeSelect() const {
     const bool selected = (i == typeSelectIndex);
     if (selected) {
       renderer.fillRect(listX - 4, rowY - 2, listW + 8, rowH, false);
-      renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i), /*invert=*/false);
+      renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i), /*invert=*/true);
     } else {
       renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i));
     }

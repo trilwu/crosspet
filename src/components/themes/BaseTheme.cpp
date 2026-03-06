@@ -1,5 +1,7 @@
 #include "BaseTheme.h"
 
+#include "CrossPetSettings.h"
+
 #include <GfxRenderer.h>
 #include <HalPowerManager.h>
 #include <HalStorage.h>
@@ -697,7 +699,7 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
 
   // Draw Clock (left-most element)
   int clockWidth = 0;
-  if (SETTINGS.statusBarClock && SETTINGS.homeShowClock) {
+  if (SETTINGS.statusBarClock && PET_SETTINGS.homeShowClock) {
     time_t now;
     time(&now);
     struct tm timeinfo;

@@ -206,11 +206,6 @@ class CrossPointSettings {
   // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
   uint8_t weatherCity = 0;
 
-  // Show clock/weather on home screen header (1=show, 0=hide)
-  uint8_t homeShowClock = 1;
-  uint8_t homeShowWeather = 1;
-  uint8_t homeShowPetStatus = 1;
-
   // BLE Remote settings
   uint8_t bleEnabled = 0;                  // 0=disabled, 1=enabled
   char bleBondedDeviceAddr[18] = "";       // "XX:XX:XX:XX:XX:XX" format

@@ -112,6 +112,20 @@ struct SettingInfo {
     return s;
   }
 
+  // DynamicToggle: TOGGLE type backed by external getter/setter (not CrossPointSettings member pointer).
+  // Setter is responsible for saving if the owning store differs from CrossPointSettings.
+  static SettingInfo DynamicToggle(StrId nameId, std::function<uint8_t()> getter, std::function<void(uint8_t)> setter,
+                                   const char* key = nullptr, StrId category = StrId::STR_NONE_OPT) {
+    SettingInfo s;
+    s.nameId = nameId;
+    s.type = SettingType::TOGGLE;
+    s.valueGetter = std::move(getter);
+    s.valueSetter = std::move(setter);
+    s.key = key;
+    s.category = category;
+    return s;
+  }
+
   static SettingInfo DynamicEnum(StrId nameId, std::vector<StrId> values, std::function<uint8_t()> getter,
                                  std::function<void(uint8_t)> setter, const char* key = nullptr,
                                  StrId category = StrId::STR_NONE_OPT) {

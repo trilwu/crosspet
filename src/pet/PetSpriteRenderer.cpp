@@ -60,13 +60,15 @@ size_t PetSpriteRenderer::loadSprite(const char* path, size_t expectedBytes) {
 // ---- Fallback renderer (pixel-art from PetSpriteData.h) -----------------
 
 void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int scale,
-                                     PetStage stage, uint8_t variant, uint8_t petType) {
-  const int cell = 4 * scale;
-  const uint16_t* rows = getSpriteRows(stage, variant, petType);
-  for (int row = 0; row < 12; row++) {
-    uint16_t mask = rows[row];
-    for (int col = 0; col < 12; col++) {
-      if (mask & (1u << (11 - col))) {
+                                     PetStage stage, uint8_t variant, uint8_t petType,
+                                     uint8_t animFrame) {
+  // 24x24 grid; each logical pixel = (2*scale) physical pixels
+  const int cell = 2 * scale;
+  const uint32_t* rows = getSpriteRows(stage, variant, petType, animFrame);
+  for (int row = 0; row < 24; row++) {
+    uint32_t mask = rows[row];
+    for (int col = 0; col < 24; col++) {
+      if (mask & (1u << (23 - col))) {
         renderer.fillRect(x + col * cell, y + row * cell, cell, cell);
       }
     }
@@ -76,9 +78,10 @@ void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int sc
 // ---- Public API ---------------------------------------------------------
 
 void PetSpriteRenderer::drawPet(GfxRenderer& renderer, int x, int y, PetStage stage,
-                                 PetMood mood, int scale, uint8_t variant, uint8_t petType) {
+                                 PetMood mood, int scale, uint8_t variant, uint8_t petType,
+                                 uint8_t animFrame) {
   char path[80];
-  // Try variant-specific SD card file first
+  // SD card sprites are 48x48 binary — only used at scale==1, no animFrame
   if (variant > 0) {
     snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/%s_v%d_%s.bin",
              stageName(stage), (int)variant, moodName(mood));
@@ -87,13 +90,12 @@ void PetSpriteRenderer::drawPet(GfxRenderer& renderer, int x, int y, PetStage st
       return;
     }
   }
-  // Default SD card path
   snprintf(path, sizeof(path), "/.crosspoint/pet/sprites/%s_%s.bin", stageName(stage),
            moodName(mood));
   if (loadSprite(path, SPRITE_BYTES) == SPRITE_BYTES && scale == 1) {
     renderer.drawImage(spriteBuffer, x, y, SPRITE_W, SPRITE_H);
   } else {
-    drawFallback(renderer, x, y, scale, stage, variant, petType);
+    drawFallback(renderer, x, y, scale, stage, variant, petType, animFrame);
   }
 }
 
@@ -115,6 +117,6 @@ void PetSpriteRenderer::drawMini(GfxRenderer& renderer, int x, int y, PetStage s
   if (loadSprite(path, MINI_BYTES) == MINI_BYTES) {
     renderer.drawImage(spriteBuffer, x, y, MINI_W, MINI_H);
   } else {
-    drawFallback(renderer, x, y, /*scale=*/1, stage, variant, petType);
+    drawFallback(renderer, x, y, /*scale=*/1, stage, variant, petType, /*animFrame=*/0);
   }
 }

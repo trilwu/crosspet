@@ -154,6 +154,11 @@ void SettingsActivity::toggleCurrentSetting() {
     // Toggle the boolean value using the member pointer
     const bool currentValue = SETTINGS.*(setting.valuePtr);
     SETTINGS.*(setting.valuePtr) = !currentValue;
+  } else if (setting.type == SettingType::TOGGLE && setting.valueGetter && setting.valueSetter) {
+    // DynamicToggle: backed by external getter/setter (e.g. CrossPetSettings)
+    const uint8_t currentValue = setting.valueGetter();
+    setting.valueSetter(currentValue ? 0 : 1);
+    return;  // setter is responsible for saving; skip SETTINGS.saveToFile() below
   } else if (setting.type == SettingType::ENUM && setting.valuePtr != nullptr) {
     const uint8_t currentValue = SETTINGS.*(setting.valuePtr);
     SETTINGS.*(setting.valuePtr) = (currentValue + 1) % static_cast<uint8_t>(setting.enumValues.size());
@@ -251,6 +256,9 @@ void SettingsActivity::render(RenderLock&&) {
         if (setting.type == SettingType::TOGGLE && setting.valuePtr != nullptr) {
           const bool value = SETTINGS.*(setting.valuePtr);
           valueText = value ? tr(STR_STATE_ON) : tr(STR_STATE_OFF);
+        } else if (setting.type == SettingType::TOGGLE && setting.valueGetter) {
+          // DynamicToggle: backed by external getter (e.g. CrossPetSettings)
+          valueText = setting.valueGetter() ? tr(STR_STATE_ON) : tr(STR_STATE_OFF);
         } else if (setting.type == SettingType::ENUM && setting.valuePtr != nullptr) {
           const uint8_t value = SETTINGS.*(setting.valuePtr);
           valueText = I18N.get(setting.enumValues[value]);

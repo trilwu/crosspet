@@ -55,7 +55,7 @@ class VirtualPetActivity final : public Activity {
   bool hatchAfterTypeSelect = false;
 
   // Animation state
-  uint8_t animFrame = 0;             // 0 or 1 for idle breathing toggle
+  uint8_t animFrame = 0;             // 0, 1, or 2 — cycles through 3 animation frames
   unsigned long lastAnimMs = 0;      // millis() of last frame toggle
   PetAnimIcon actionIcon = PetAnimIcon::NONE;
   unsigned long actionIconEndMs = 0; // millis() when icon should disappear

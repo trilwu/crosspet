@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "KOReaderCredentialStore.h"
 #include "activities/settings/SettingsActivity.h"
@@ -35,12 +36,22 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         StrId::STR_CAT_DISPLAY),
       SettingInfo::Toggle(StrId::STR_SUNLIGHT_FADING_FIX, &CrossPointSettings::fadingFix, "fadingFix",
                           StrId::STR_CAT_DISPLAY),
-      SettingInfo::Toggle(StrId::STR_HOME_CLOCK, &CrossPointSettings::homeShowClock, "homeShowClock",
-                          StrId::STR_CAT_DISPLAY),
-      SettingInfo::Toggle(StrId::STR_HOME_WEATHER, &CrossPointSettings::homeShowWeather, "homeShowWeather",
-                          StrId::STR_CAT_DISPLAY),
-      SettingInfo::Toggle(StrId::STR_HOME_PET_STATUS, &CrossPointSettings::homeShowPetStatus, "homeShowPetStatus",
-                          StrId::STR_CAT_DISPLAY),
+      // CrossPet-specific home screen widgets — stored in crosspet.json, not settings.json
+      SettingInfo::DynamicToggle(
+          StrId::STR_HOME_CLOCK,
+          [] { return PET_SETTINGS.homeShowClock; },
+          [](uint8_t v) { PET_SETTINGS.homeShowClock = v; PET_SETTINGS.saveToFile(); },
+          "homeShowClock", StrId::STR_CAT_DISPLAY),
+      SettingInfo::DynamicToggle(
+          StrId::STR_HOME_WEATHER,
+          [] { return PET_SETTINGS.homeShowWeather; },
+          [](uint8_t v) { PET_SETTINGS.homeShowWeather = v; PET_SETTINGS.saveToFile(); },
+          "homeShowWeather", StrId::STR_CAT_DISPLAY),
+      SettingInfo::DynamicToggle(
+          StrId::STR_HOME_PET_STATUS,
+          [] { return PET_SETTINGS.homeShowPetStatus; },
+          [](uint8_t v) { PET_SETTINGS.homeShowPetStatus = v; PET_SETTINGS.saveToFile(); },
+          "homeShowPetStatus", StrId::STR_CAT_DISPLAY),
 
       // --- Reader ---
       SettingInfo::Enum(StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,

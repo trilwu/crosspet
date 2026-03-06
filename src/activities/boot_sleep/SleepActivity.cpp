@@ -213,6 +213,12 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
   }
 
   LOG_DBG("SLP", "drawing to %d x %d", x, y);
+
+  // Pre-clear: push a blank white frame to reset e-ink panel charge state.
+  // Without this, black pixels fade lighter after ~1s due to residual charge.
+  renderer.clearScreen();
+  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+
   renderer.clearScreen();
 
   const bool hasGreyscale = bitmap.hasGreyscale() &&
@@ -224,6 +230,9 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
     renderer.invertScreen();
   }
 
+  // Double HALF_REFRESH: first pass drives pixels, second reinforces blacks.
+  // This avoids FULL_REFRESH flicker while preventing black fading after ~1s.
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 
   if (hasGreyscale) {
