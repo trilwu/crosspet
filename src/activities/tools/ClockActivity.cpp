@@ -131,24 +131,29 @@ void ClockActivity::loop() {
   if (timeAvailable) {
     if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
       monthOffset--;
+      lastUpdateMs = 0;  // Force immediate time refresh on next loop
       requestUpdate();
       return;
     }
     if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
       monthOffset++;
+      lastUpdateMs = 0;  // Force immediate time refresh on next loop
       requestUpdate();
       return;
     }
   }
 
-  // Normal clock mode: re-check time validity
+  // Normal clock mode: re-check time validity; trigger immediate update on transition
   if (!timeAvailable) {
-    timeAvailable = isTimeValid();
-    if (timeAvailable) requestUpdate();
+    if (isTimeValid()) {
+      timeAvailable = true;
+      lastUpdateMs = 0;
+      requestUpdate();
+    }
   }
 
-  // Refresh every 60 seconds
-  if (timeAvailable && millis() - lastUpdateMs >= 60000) {
+  // Refresh every 10 seconds
+  if (timeAvailable && millis() - lastUpdateMs >= 10000) {
     lastUpdateMs = millis();
     requestUpdate();
   }

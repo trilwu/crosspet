@@ -64,6 +64,9 @@ void TxtReaderActivity::onEnter() {
 void TxtReaderActivity::onExit() {
   Activity::onExit();
 
+  // Request half refresh for the next screen to clear accumulated reader ghosting
+  renderer.requestNextHalfRefresh();
+
   // Reset orientation back to portrait for the rest of the UI
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
 

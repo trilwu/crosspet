@@ -26,6 +26,7 @@
 #include "activities/network/WifiSelectionActivity.h"
 #include "activities/tools/WeatherActivity.h"
 #include "WifiCredentialStore.h"
+#include <WiFi.h>
 #include "ble/BleRemoteManager.h"
 #include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
@@ -158,8 +159,8 @@ void HomeActivity::loop() {
   });
 
 
-  // Back button: refresh weather + NTP time silently
-  if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
+  // Long-press Back: refresh weather + NTP time silently (avoid accidental triggers)
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) && mappedInput.getHeldTime() > 800) {
     doSync();
   }
 
@@ -259,7 +260,7 @@ void HomeActivity::renderSelectionHighlight(int panelX, int panelY, int panelW, 
 // ── Pet status widget (drawn over header left side) ──────────────────────
 
 void HomeActivity::renderPetStatusWidget(int headerH) {
-  if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
+  if (!SETTINGS.homeShowPetStatus || !PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
 
   const auto& ps = PET_MANAGER.getState();
   const PetMood mood = PET_MANAGER.getMood();
@@ -305,7 +306,7 @@ void HomeActivity::renderPetStatusWidget(int headerH) {
 // ── Header clock ─────────────────────────────────────────────────────────────
 
 void HomeActivity::renderHeaderClock() {
-  if (!SETTINGS.statusBarClock) return;
+  if (!SETTINGS.homeShowClock) return;
   time_t now;
   time(&now);
   struct tm timeinfo;
@@ -319,20 +320,22 @@ void HomeActivity::renderHeaderClock() {
   const int clockW = renderer.getTextWidth(SMALL_FONT_ID, buf);
   renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
 
-  // Weather temp next to clock (or sync status)
-  const int weatherX = 10 + clockW + 6;
-  if (weatherRefreshing) {
-    renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
-  } else if (syncResultMsg) {
-    renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
-  } else {
-    WeatherData wData;
-    uint8_t wCity = 0;
-    char wTime[8] = "";
-    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
-      char wBuf[16];
-      snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
-      renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
+  // Weather temp next to clock (or sync status) — conditional on setting
+  if (SETTINGS.homeShowWeather) {
+    const int weatherX = 10 + clockW + 6;
+    if (weatherRefreshing) {
+      renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
+    } else if (syncResultMsg) {
+      renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
+    } else {
+      WeatherData wData;
+      uint8_t wCity = 0;
+      char wTime[8] = "";
+      if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+        char wBuf[16];
+        snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
+        renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
+      }
     }
   }
 }
@@ -377,7 +380,7 @@ void HomeActivity::render(RenderLock&&) {
 
   renderSelectionHighlight(0, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H);
 
-  const auto labels = mappedInput.mapLabels("Đồng bộ", tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const auto labels = mappedInput.mapLabels(tr(STR_SYNC), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   renderer.displayBuffer();
 
@@ -405,18 +408,44 @@ void HomeActivity::render(RenderLock&&) {
 // ── Sync ──────────────────────────────────────────────────────────────────────
 
 void HomeActivity::performSyncAfterWifi() {
+  static char syncBuf[24];
   weatherRefreshing = true;
   requestUpdateAndWait();
+
+  // Pre-check WiFi with 8s timeout — fail fast before silentRefresh blocks for 10s
+  if (WiFi.status() != WL_CONNECTED) {
+    const auto& ssid = WIFI_STORE.getLastConnectedSsid();
+    const auto* cred = ssid.empty() ? nullptr : WIFI_STORE.findCredential(ssid);
+    if (cred) {
+      WiFi.mode(WIFI_STA);
+      WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
+      const unsigned long connectStart = millis();
+      while (WiFi.status() != WL_CONNECTED && millis() - connectStart < 8000) {
+        delay(100);
+      }
+      if (WiFi.status() != WL_CONNECTED) {
+        WiFi.disconnect(false);
+        WiFi.mode(WIFI_OFF);
+        bleManager.resume();
+        weatherRefreshing = false;
+        snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_CONN_FAILED));
+        syncResultMsg = syncBuf;
+        syncResultExpiry = millis() + 3000;
+        requestUpdate();
+        return;
+      }
+    }
+  }
+
   int rc = WeatherActivity::silentRefresh();
   bleManager.resume();
   weatherRefreshing = false;
-  static char syncBuf[24];
   if (rc == 0) {
-    snprintf(syncBuf, sizeof(syncBuf), "Đồng bộ OK");
+    snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
   } else if (rc == 2) {
-    snprintf(syncBuf, sizeof(syncBuf), "WiFi quá hạn");
+    snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
   } else {
-    snprintf(syncBuf, sizeof(syncBuf), "Lỗi API %d", rc);
+    snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), rc);
   }
   syncResultMsg = syncBuf;
   syncResultExpiry = millis() + 3000;
@@ -425,20 +454,16 @@ void HomeActivity::performSyncAfterWifi() {
 }
 
 void HomeActivity::doSync() {
-  bleManager.suspend();
-  // If no saved WiFi credentials, open WiFi selection UI
+  static char syncBuf2[24];
+  // No saved WiFi — show error immediately, don't open WiFi selection UI
   if (WIFI_STORE.getLastConnectedSsid().empty()) {
-    startActivityForResult(
-        std::make_unique<WifiSelectionActivity>(renderer, mappedInput),
-        [this](const ActivityResult& r) {
-          if (r.isCancelled) {
-            bleManager.resume();
-            return;
-          }
-          performSyncAfterWifi();
-        });
+    snprintf(syncBuf2, sizeof(syncBuf2), "%s", tr(STR_WIFI_CONN_FAILED));
+    syncResultMsg = syncBuf2;
+    syncResultExpiry = millis() + 3000;
+    requestUpdate();
     return;
   }
+  bleManager.suspend();
   performSyncAfterWifi();
 }
 

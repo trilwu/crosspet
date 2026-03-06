@@ -23,16 +23,21 @@ LanguageHyphenator spanishHyphenator(es_patterns, isLatinLetter, toLowerLatin);
 LanguageHyphenator italianHyphenator(it_patterns, isLatinLetter, toLowerLatin);
 LanguageHyphenator ukrainianHyphenator(uk_patterns, isCyrillicLetter, toLowerCyrillic);
 
-using EntryArray = std::array<LanguageEntry, 7>;
+using EntryArray = std::array<LanguageEntry, 8>;
 
 const EntryArray& entries() {
+  // Vietnamese is monosyllabic — standard Liang hyphenation doesn't apply.
+  // We register it with a null hyphenator so that letter recognition via
+  // isLatinLetter() (which covers U+01A0/01A1, U+01AF/01B0, U+1E00-U+1EFF)
+  // still works, and no fallback word-splits occur for "vi" documents.
   static const EntryArray kEntries = {{{"english", "en", &englishHyphenator},
                                        {"french", "fr", &frenchHyphenator},
                                        {"german", "de", &germanHyphenator},
                                        {"russian", "ru", &russianHyphenator},
                                        {"spanish", "es", &spanishHyphenator},
                                        {"italian", "it", &italianHyphenator},
-                                       {"ukrainian", "uk", &ukrainianHyphenator}}};
+                                       {"ukrainian", "uk", &ukrainianHyphenator},
+                                       {"vietnamese", "vi", nullptr}}};
   return kEntries;
 }
 

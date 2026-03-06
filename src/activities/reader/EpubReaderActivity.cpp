@@ -117,6 +117,9 @@ void EpubReaderActivity::onEnter() {
 void EpubReaderActivity::onExit() {
   Activity::onExit();
 
+  // Request half refresh for the next screen to clear accumulated reader ghosting
+  renderer.requestNextHalfRefresh();
+
   // Accumulate reading time and record book progress before resetting state
   uint8_t progress = 0;
   const char* title = epub ? epub->getTitle().c_str() : nullptr;
@@ -153,6 +156,8 @@ void EpubReaderActivity::loop() {
                          mappedInput.wasReleased(MappedInputManager::Button::PageBack);
     if (millis() - chapterPopupTime > 2000 || anyBtn) {
       showChapterPopup = false;
+      // Request half refresh to clear popup ghosting on next render
+      renderer.requestNextHalfRefresh();
       // Check for milestone that fired during chapter popup
       if (!showMilestoneToast) {
         auto milestone = PET_MANAGER.consumePendingMilestone();
@@ -218,8 +223,17 @@ void EpubReaderActivity::loop() {
       bookProgress = epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f;
     }
     const int bookProgressPercent = clampPercent(static_cast<int>(bookProgress + 0.5f));
+    // Resolve current chapter title for menu; fall back to book title if no TOC entry
+    std::string menuTitle = epub->getTitle();
+    const int menuTocIdx = epub->getTocIndexForSpineIndex(currentSpineIndex);
+    if (menuTocIdx != -1) {
+      const auto menuTocItem = epub->getTocItem(menuTocIdx);
+      if (!menuTocItem.title.empty()) {
+        menuTitle = menuTocItem.title;
+      }
+    }
     startActivityForResult(std::make_unique<EpubReaderMenuActivity>(
-                               renderer, mappedInput, epub->getTitle(), currentPage, totalPages, bookProgressPercent,
+                               renderer, mappedInput, menuTitle, currentPage, totalPages, bookProgressPercent,
                                SETTINGS.orientation, !currentPageFootnotes.empty()),
                            [this](const ActivityResult& result) {
                              // Always apply orientation change even if the menu was cancelled

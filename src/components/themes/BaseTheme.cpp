@@ -109,6 +109,13 @@ void BaseTheme::drawButtonHints(GfxRenderer& renderer, const char* btn1, const c
   const GfxRenderer::Orientation orig_orientation = renderer.getOrientation();
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
 
+  // In PortraitInverted, the device is flipped 180° so physical button positions are reversed.
+  // Swap label order so each label aligns with its physical button when rendered in Portrait coords.
+  if (orig_orientation == GfxRenderer::Orientation::PortraitInverted) {
+    std::swap(btn1, btn4);
+    std::swap(btn2, btn3);
+  }
+
   const int pageHeight = renderer.getScreenHeight();
   constexpr int buttonWidth = 106;
   constexpr int buttonHeight = BaseMetrics::values.buttonHintsHeight;
@@ -690,7 +697,7 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
 
   // Draw Clock (left-most element)
   int clockWidth = 0;
-  if (SETTINGS.statusBarClock) {
+  if (SETTINGS.statusBarClock && SETTINGS.homeShowClock) {
     time_t now;
     time(&now);
     struct tm timeinfo;

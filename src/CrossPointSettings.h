@@ -128,7 +128,7 @@ class CrossPointSettings {
   };
 
   // Short power button press actions
-  enum SHORT_PWRBTN { IGNORE = 0, SLEEP = 1, PAGE_TURN = 2, SCREEN_REFRESH = 3, SHORT_PWRBTN_COUNT };
+  enum SHORT_PWRBTN { IGNORE = 0, SLEEP = 1, PAGE_TURN = 2, SCREEN_REFRESH = 3, READING_STATS_VIEW = 4, SHORT_PWRBTN_COUNT };
 
   // Hide battery percentage
   enum HIDE_BATTERY_PERCENTAGE { HIDE_NEVER = 0, HIDE_READER = 1, HIDE_ALWAYS = 2, HIDE_BATTERY_PERCENTAGE_COUNT };
@@ -205,6 +205,11 @@ class CrossPointSettings {
 
   // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
   uint8_t weatherCity = 0;
+
+  // Show clock/weather on home screen header (1=show, 0=hide)
+  uint8_t homeShowClock = 1;
+  uint8_t homeShowWeather = 1;
+  uint8_t homeShowPetStatus = 1;
 
   // BLE Remote settings
   uint8_t bleEnabled = 0;                  // 0=disabled, 1=enabled

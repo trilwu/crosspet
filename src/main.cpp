@@ -32,6 +32,7 @@
 #include "fontIds.h"
 #include "util/ButtonNavigator.h"
 #include "util/ScreenshotUtil.h"
+#include "activities/tools/ReadingStatsActivity.h"
 
 HalDisplay display;
 HalGPIO gpio;
@@ -526,6 +527,12 @@ void loop() {
       renderer.requestNextHalfRefresh();
       activityManager.requestUpdate();
     }
+  }
+
+  // Short power button press = open reading stats activity
+  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW &&
+      gpio.wasReleased(HalGPIO::BTN_POWER)) {
+    activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInputManager));
   }
 
   const unsigned long activityStartTime = millis();

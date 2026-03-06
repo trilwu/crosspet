@@ -43,7 +43,15 @@ std::unique_ptr<Epub> ReaderActivity::loadEpub(const std::string& path) {
     return epub;
   }
 
-  LOG_ERR("READER", "Failed to load epub");
+  // Retry once with fresh cache (stale cache from different firmware can cause load failure)
+  LOG_ERR("READER", "Failed to load epub, clearing cache and retrying");
+  epub->clearCache();
+  epub = std::unique_ptr<Epub>(new Epub(path, "/.crosspoint"));
+  if (epub->load(true, SETTINGS.embeddedStyle == 0)) {
+    return epub;
+  }
+
+  LOG_ERR("READER", "Failed to load epub after cache clear");
   return nullptr;
 }
 
@@ -58,7 +66,15 @@ std::unique_ptr<Xtc> ReaderActivity::loadXtc(const std::string& path) {
     return xtc;
   }
 
-  LOG_ERR("READER", "Failed to load XTC");
+  // Retry once with fresh cache (stale cache from different firmware can cause load failure)
+  LOG_ERR("READER", "Failed to load XTC, clearing cache and retrying");
+  xtc->clearCache();
+  xtc = std::unique_ptr<Xtc>(new Xtc(path, "/.crosspoint"));
+  if (xtc->load()) {
+    return xtc;
+  }
+
+  LOG_ERR("READER", "Failed to load XTC after cache clear");
   return nullptr;
 }
 

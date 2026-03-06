@@ -20,6 +20,8 @@ constexpr SideLayoutMap kSideLayouts[] = {
 bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint8_t) const) const {
   const auto sideLayout = static_cast<CrossPointSettings::SIDE_BUTTON_LAYOUT>(SETTINGS.sideButtonLayout);
   const auto& side = kSideLayouts[sideLayout];
+  // In PortraitInverted, the device is flipped 180° so the physical up/down side buttons are reversed.
+  const bool invertedOrientation = (SETTINGS.orientation == CrossPointSettings::ORIENTATION::INVERTED);
 
   switch (button) {
     case Button::Back:
@@ -44,11 +46,13 @@ bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint
       // Power button bypasses remapping.
       return (gpio.*fn)(HalGPIO::BTN_POWER);
     case Button::PageBack:
-      // Reader page navigation uses side buttons and can be swapped via settings.
-      return (gpio.*fn)(side.pageBack);
+      // Reader page navigation uses side buttons, swappable via settings.
+      // In PortraitInverted, device is flipped so physical up/down are reversed — swap accordingly.
+      return (gpio.*fn)(invertedOrientation ? side.pageForward : side.pageBack);
     case Button::PageForward:
-      // Reader page navigation uses side buttons and can be swapped via settings.
-      return (gpio.*fn)(side.pageForward);
+      // Reader page navigation uses side buttons, swappable via settings.
+      // In PortraitInverted, device is flipped so physical up/down are reversed — swap accordingly.
+      return (gpio.*fn)(invertedOrientation ? side.pageBack : side.pageForward);
   }
 
   return false;
@@ -85,6 +89,13 @@ MappedInputManager::Labels MappedInputManager::mapLabels(const char* back, const
     }
     return "";
   };
+
+  // In PortraitInverted, the device is flipped 180° so the physical button order is reversed.
+  // Swap the hardware positions so labels match what the user physically sees.
+  if (SETTINGS.orientation == CrossPointSettings::ORIENTATION::INVERTED) {
+    return {labelForHardware(HalGPIO::BTN_RIGHT), labelForHardware(HalGPIO::BTN_LEFT),
+            labelForHardware(HalGPIO::BTN_CONFIRM), labelForHardware(HalGPIO::BTN_BACK)};
+  }
 
   return {labelForHardware(HalGPIO::BTN_BACK), labelForHardware(HalGPIO::BTN_CONFIRM),
           labelForHardware(HalGPIO::BTN_LEFT), labelForHardware(HalGPIO::BTN_RIGHT)};
