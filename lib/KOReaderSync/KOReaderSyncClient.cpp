@@ -4,7 +4,7 @@
 #include <HTTPClient.h>
 #include <Logging.h>
 #include <WiFi.h>
-#include <NetworkClientSecure.h>
+#include <WiFiClientSecure.h>
 
 #include <ctime>
 
@@ -37,18 +37,19 @@ KOReaderSyncClient::Error KOReaderSyncClient::authenticate() {
   }
 
   std::string url = KOREADER_STORE.getBaseUrl() + "/users/auth";
-  LOG_DBG("KOSync", "Authenticating: %s", url.c_str());
+  LOG_DBG("KOSync", "Authenticating: %s (heap: %u)", url.c_str(), (unsigned)ESP.getFreeHeap());
 
   HTTPClient http;
-  std::unique_ptr<NetworkClientSecure> secureClient;
-  NetworkClient plainClient;
+  std::unique_ptr<WiFiClientSecure> secureClient;
+  WiFiClient plainClient;
 
   http.setConnectTimeout(10000);  // 10s connect timeout
   http.setTimeout(15000);         // 15s response timeout
 
   if (isHttpsUrl(url)) {
-    secureClient.reset(new NetworkClientSecure);
+    secureClient.reset(new WiFiClientSecure);
     secureClient->setInsecure();
+    secureClient->setHandshakeTimeout(15);
     http.begin(*secureClient, url.c_str());
   } else {
     http.begin(plainClient, url.c_str());
@@ -79,18 +80,19 @@ KOReaderSyncClient::Error KOReaderSyncClient::getProgress(const std::string& doc
   }
 
   std::string url = KOREADER_STORE.getBaseUrl() + "/syncs/progress/" + documentHash;
-  LOG_DBG("KOSync", "Getting progress: %s", url.c_str());
+  LOG_DBG("KOSync", "Getting progress: %s (heap: %u)", url.c_str(), (unsigned)ESP.getFreeHeap());
 
   HTTPClient http;
-  std::unique_ptr<NetworkClientSecure> secureClient;
-  NetworkClient plainClient;
+  std::unique_ptr<WiFiClientSecure> secureClient;
+  WiFiClient plainClient;
 
   http.setConnectTimeout(10000);  // 10s connect timeout
   http.setTimeout(15000);         // 15s response timeout
 
   if (isHttpsUrl(url)) {
-    secureClient.reset(new NetworkClientSecure);
+    secureClient.reset(new WiFiClientSecure);
     secureClient->setInsecure();
+    secureClient->setHandshakeTimeout(15);
     http.begin(*secureClient, url.c_str());
   } else {
     http.begin(plainClient, url.c_str());
@@ -148,15 +150,16 @@ KOReaderSyncClient::Error KOReaderSyncClient::updateProgress(const KOReaderProgr
   LOG_DBG("KOSync", "Updating progress: %s", url.c_str());
 
   HTTPClient http;
-  std::unique_ptr<NetworkClientSecure> secureClient;
-  NetworkClient plainClient;
+  std::unique_ptr<WiFiClientSecure> secureClient;
+  WiFiClient plainClient;
 
   http.setConnectTimeout(10000);  // 10s connect timeout
   http.setTimeout(15000);         // 15s response timeout
 
   if (isHttpsUrl(url)) {
-    secureClient.reset(new NetworkClientSecure);
+    secureClient.reset(new WiFiClientSecure);
     secureClient->setInsecure();
+    secureClient->setHandshakeTimeout(15);
     http.begin(*secureClient, url.c_str());
   } else {
     http.begin(plainClient, url.c_str());
