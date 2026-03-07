@@ -28,6 +28,15 @@ void addAuthHeaders(HTTPClient& http) {
 }
 
 bool isHttpsUrl(const std::string& url) { return url.rfind("https://", 0) == 0; }
+
+// Downgrade HTTPS to HTTP to avoid TLS heap exhaustion on ESP32-C3.
+// KOSync API data is already authenticated via x-auth-key header.
+std::string toHttpUrl(const std::string& url) {
+  if (isHttpsUrl(url)) {
+    return "http://" + url.substr(8);
+  }
+  return url;
+}
 }  // namespace
 
 KOReaderSyncClient::Error KOReaderSyncClient::authenticate() {
@@ -36,7 +45,7 @@ KOReaderSyncClient::Error KOReaderSyncClient::authenticate() {
     return NO_CREDENTIALS;
   }
 
-  std::string url = KOREADER_STORE.getBaseUrl() + "/users/auth";
+  std::string url = toHttpUrl(KOREADER_STORE.getBaseUrl() + "/users/auth");
   LOG_DBG("KOSync", "Authenticating: %s (heap: %u)", url.c_str(), (unsigned)ESP.getFreeHeap());
 
   HTTPClient http;
@@ -79,7 +88,7 @@ KOReaderSyncClient::Error KOReaderSyncClient::getProgress(const std::string& doc
     return NO_CREDENTIALS;
   }
 
-  std::string url = KOREADER_STORE.getBaseUrl() + "/syncs/progress/" + documentHash;
+  std::string url = toHttpUrl(KOREADER_STORE.getBaseUrl() + "/syncs/progress/" + documentHash);
   LOG_DBG("KOSync", "Getting progress: %s (heap: %u)", url.c_str(), (unsigned)ESP.getFreeHeap());
 
   HTTPClient http;
@@ -146,7 +155,7 @@ KOReaderSyncClient::Error KOReaderSyncClient::updateProgress(const KOReaderProgr
     return NO_CREDENTIALS;
   }
 
-  std::string url = KOREADER_STORE.getBaseUrl() + "/syncs/progress";
+  std::string url = toHttpUrl(KOREADER_STORE.getBaseUrl() + "/syncs/progress");
   LOG_DBG("KOSync", "Updating progress: %s", url.c_str());
 
   HTTPClient http;
