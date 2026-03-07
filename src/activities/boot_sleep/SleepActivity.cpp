@@ -456,11 +456,11 @@ void SleepActivity::renderOverlaySleepScreen() const {
     const auto& path = APP_STATE.openEpubPath;
     bool rendered = false;
 
-    if (StringUtils::checkFileExtension(path, ".xtc") || StringUtils::checkFileExtension(path, ".xtch")) {
+    if (FsHelpers::checkFileExtension(path, ".xtc") || FsHelpers::checkFileExtension(path, ".xtch")) {
       rendered = XtcReaderActivity::drawCurrentPageToBuffer(path, renderer);
-    } else if (StringUtils::checkFileExtension(path, ".txt")) {
+    } else if (FsHelpers::checkFileExtension(path, ".txt")) {
       rendered = TxtReaderActivity::drawCurrentPageToBuffer(path, renderer);
-    } else if (StringUtils::checkFileExtension(path, ".epub")) {
+    } else if (FsHelpers::checkFileExtension(path, ".epub")) {
       rendered = EpubReaderActivity::drawCurrentPageToBuffer(path, renderer);
     }
 
@@ -569,8 +569,8 @@ void SleepActivity::renderOverlaySleepScreen() const {
         file.close();
         continue;
       }
-      const bool isBmp = StringUtils::checkFileExtension(filename, ".bmp");
-      const bool isPng = StringUtils::checkFileExtension(filename, ".png");
+      const bool isBmp = FsHelpers::checkFileExtension(filename, ".bmp");
+      const bool isPng = FsHelpers::checkFileExtension(filename, ".png");
       if (!isBmp && !isPng) {
         file.close();
         continue;
@@ -594,7 +594,7 @@ void SleepActivity::renderOverlaySleepScreen() const {
       APP_STATE.lastSleepImage = randomFileIndex;
       APP_STATE.saveToFile();
       const std::string selected = "/sleep/" + files[randomFileIndex];
-      if (StringUtils::checkFileExtension(selected, ".png")) {
+      if (FsHelpers::checkFileExtension(selected, ".png")) {
         overlayDrawn = tryDrawPngOverlay(selected);
       } else {
         overlayDrawn = tryDrawOverlay(selected);
