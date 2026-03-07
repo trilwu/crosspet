@@ -111,6 +111,9 @@
           <p class="firmware-version-info" style="display: none; text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
             Latest version: <strong id="firmware-version">...</strong>
           </p>
+          <div id="flash-error" style="display: none; text-align: center; color: var(--accent); font-size: 0.9rem; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--accent); border-radius: var(--radius);">
+            <span id="flash-error-msg"></span>
+          </div>
           <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
           <esp-web-install-button>
             <button slot="activate" class="flash-btn" data-i18n="flash.button">
@@ -126,6 +129,15 @@
           <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem; margin-bottom: 0;" data-i18n="flash.installer.note">
             OTA flash only — preserves bootloader and partition table. Your SD card data is not affected.
           </p>
+          <!-- Direct download fallback -->
+          <div id="firmware-download" style="display: none; margin-top: 1.25rem;">
+            <a id="firmware-download-link" href="#" class="btn" style="font-size: 0.9rem;" data-i18n="flash.download">
+              Download firmware .bin
+            </a>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.5rem; margin-bottom: 0;" data-i18n="flash.download.note">
+              Manual flash: download the .bin file, then use esptool.py or the community flasher.
+            </p>
+          </div>
         </div>
 
         <p style="text-align: center; color: var(--text-muted); font-size: 1rem; margin-top: 1.5rem;" data-i18n="flash.community-flasher">

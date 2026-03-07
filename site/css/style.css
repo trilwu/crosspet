@@ -768,6 +768,19 @@ section { padding: 4rem 0; }
 .check { color: var(--check-color); font-weight: 700; font-size: 1rem; }
 .cross { color: var(--cross-color); font-size: 1rem; }
 
+/* ── Device Comparison ── */
+.device-comparison { background: var(--bg-primary); }
+.device-comparison .section-title { margin-bottom: 0.5rem; }
+.device-compare-note {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ── Hardware Banner ── */
 .hw-banner {
   background: var(--text-primary);

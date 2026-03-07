@@ -54,14 +54,15 @@
       <div class="container">
         <p class="hero-eyebrow">Open-source · ESP32-C3 · Xteink X4</p>
         <h1 data-i18n="hero.tagline">Your pocket e-reader —<br>with a virtual chicken.</h1>
-        <div class="fork-badge" data-i18n="hero.fork-badge">✨ Vietnamese fork of CrossPoint Reader — always synced with upstream</div>
-        <p class="hero-sub" data-i18n="hero.subtitle">A personal Vietnamese fork of CrossPoint Reader for the Xteink X4. Continuously synced with the latest upstream reading features. Plus: virtual chicken, mini games, reading stats, weather & lunar calendar. 380KB of RAM. Infinite stories.</p>
+        <div class="fork-badge" data-i18n="hero.fork-badge">✨ Custom firmware for the Xteink X4 e-reader — built on CrossPoint Reader</div>
+        <p class="hero-sub" data-i18n="hero.subtitle">Open-source firmware for the Xteink X4 — a $69 pocket e-reader with physical buttons, SD card, and weeks of battery. CrossPet adds Vietnamese UI, a virtual chicken pet, mini games, reading stats, weather & lunar calendar.</p>
         <div class="hero-actions">
           <a href="#features" class="btn btn-primary btn-large" data-i18n="hero.cta.features">Explore Features</a>
-          <a href="flash.html" class="btn btn-large" data-i18n="hero.cta.flash">Flash Your Device</a>
+          <a href="flash.html" class="btn btn-large" data-i18n="hero.cta.flash">Install Firmware</a>
+          <a href="https://github.com/trilwu/crosspet/releases/latest" class="btn btn-large" rel="noopener" data-i18n="hero.cta.download">GitHub Releases</a>
         </div>
         <div class="hero-specs">
-          ESP32-C3 RISC-V @ 160MHz &nbsp;·&nbsp; ~380KB RAM &nbsp;·&nbsp; 16MB Flash &nbsp;·&nbsp; 800×480 E-Ink &nbsp;·&nbsp; SD Card &nbsp;·&nbsp; WiFi + BLE
+          4.7" E-Ink &nbsp;·&nbsp; Physical buttons &nbsp;·&nbsp; SD Card &nbsp;·&nbsp; WiFi + BLE &nbsp;·&nbsp; Weeks of battery &nbsp;·&nbsp; 100g pocket-sized
         </div>
       </div>
 
@@ -124,13 +125,13 @@
           <article class="card fade-in">
             <span class="card-icon" aria-hidden="true">☀️</span>
             <h3 data-i18n="usecase.commuter.title">The Commuter</h3>
-            <p data-i18n="usecase.commuter.desc">Sunlight-readable e-ink display. Weeks of battery life. Resume exactly where you left off with KOReader Sync across all your devices.</p>
+            <p data-i18n="usecase.commuter.desc">Sunlight-readable e-ink display. Weeks of battery life. Resume exactly where you left off — even across multiple devices.</p>
           </article>
 
           <article class="card fade-in">
-            <span class="card-icon" aria-hidden="true">🌙</span>
-            <h3 data-i18n="usecase.nightowl.title">The Night Owl</h3>
-            <p data-i18n="usecase.nightowl.desc">Anti-aliased text rendering for comfortable reading. Three font families including OpenDyslexic. Adjustable spacing and margins.</p>
+            <span class="card-icon" aria-hidden="true">📖</span>
+            <h3 data-i18n="usecase.bookworm.title">The Bookworm</h3>
+            <p data-i18n="usecase.bookworm.desc">Anti-aliased text with 3 font families including OpenDyslexic. Adjustable spacing, margins, and 4 font sizes. Your eyes will thank you.</p>
           </article>
 
           <article class="card fade-in">
@@ -353,6 +354,116 @@
         </div>
       </div>
     </section>
+
+    <!-- Device Comparison: Xteink X4 vs Others -->
+    <section class="device-comparison" id="device-comparison" aria-labelledby="device-compare-heading">
+      <div class="container">
+        <h2 class="section-title" id="device-compare-heading" data-i18n="device.compare.title">Xteink X4 — honest comparison</h2>
+        <p class="section-lead" data-i18n="device.compare.lead">Not the best screen. Not the most features. But the only one you can hack, pocket, and make truly yours.</p>
+        <div class="fade-in" style="overflow-x: auto;">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="device.th.spec">Spec</th>
+                <th scope="col">Xteink X4 + CrossPet</th>
+                <th scope="col">Kindle Paperwhite</th>
+                <th scope="col">Boox Page</th>
+                <th scope="col" data-i18n="device.th.phone">Smartphone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="device.price">Price</td>
+                <td class="check" data-i18n="device.price.x4">$69</td>
+                <td>~$150</td>
+                <td>~$250</td>
+                <td>$200–1200</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.screen">Screen</td>
+                <td data-i18n="device.screen.x4">4.7" E-Ink 800×480 — small but sharp enough</td>
+                <td data-i18n="device.screen.kindle">6.8" E-Ink 1236×1648 — bigger, sharper</td>
+                <td data-i18n="device.screen.boox">7" E-Ink 1264×1680 — best resolution</td>
+                <td data-i18n="device.screen.phone">6"+ LCD/OLED — high brightness, more eye strain</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.battery">Battery</td>
+                <td class="check" data-i18n="device.battery.x4">Weeks (no backlight, ultra-low power)</td>
+                <td data-i18n="device.battery.kindle">Weeks</td>
+                <td data-i18n="device.battery.boox">Days–Week (Android drains faster)</td>
+                <td class="cross" data-i18n="device.battery.phone">Hours</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.backlight">Backlight</td>
+                <td class="cross" data-i18n="device.backlight.x4">None — can't read in the dark</td>
+                <td class="check" data-i18n="device.backlight.kindle">Warm light, adjustable</td>
+                <td class="check" data-i18n="device.backlight.boox">Warm + cold light</td>
+                <td class="check" data-i18n="device.backlight.phone">Full brightness</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.touchscreen">Touchscreen</td>
+                <td class="cross" data-i18n="device.touchscreen.x4">None — buttons only</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.weight">Weight</td>
+                <td class="check">~100g</td>
+                <td>205g</td>
+                <td>195g</td>
+                <td>150–230g</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.opensource">Open-source firmware</td>
+                <td class="check" data-i18n="device.opensource.x4">CrossPet — fully open source, fully customizable</td>
+                <td class="cross" data-i18n="device.opensource.kindle">Locked down, Amazon controls</td>
+                <td class="cross" data-i18n="device.opensource.boox">Android, partially open</td>
+                <td class="cross" data-i18n="device.opensource.phone">Locked ecosystem</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.sideload">Sideload books</td>
+                <td class="check" data-i18n="device.sideload.x4">SD card + WiFi upload</td>
+                <td data-i18n="device.sideload.kindle">Send-to-Kindle, limited formats</td>
+                <td class="check" data-i18n="device.sideload.boox">Full Android, any app</td>
+                <td class="check">Yes</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.ads">Ads</td>
+                <td class="check" data-i18n="device.ads.x4">None, ever</td>
+                <td class="cross" data-i18n="device.ads.kindle">Yes (pay extra to remove)</td>
+                <td class="check" data-i18n="device.ads.boox">None</td>
+                <td class="cross" data-i18n="device.ads.phone">Common in free apps</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.storage">Storage</td>
+                <td class="check" data-i18n="device.storage.x4">SD card — swap anytime, unlimited</td>
+                <td data-i18n="device.storage.kindle">8–32GB fixed, no expansion</td>
+                <td data-i18n="device.storage.boox">64GB fixed</td>
+                <td data-i18n="device.storage.phone">64–512GB</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.personality">Personality</td>
+                <td class="check" data-i18n="device.personality.x4">Virtual chicken, games, lunar calendar, weather</td>
+                <td class="cross" data-i18n="device.personality.kindle">Standard UI, limited customization</td>
+                <td data-i18n="device.personality.boox">Android apps, but generic</td>
+                <td data-i18n="device.personality.phone">Many apps, but easy to get distracted</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.pocketsize">Pocket-sized</td>
+                <td class="check" data-i18n="device.pocketsize.x4">Fits in any pocket</td>
+                <td class="cross" data-i18n="device.pocketsize.kindle">Too large for pockets</td>
+                <td class="cross" data-i18n="device.pocketsize.boox">Too large for pockets</td>
+                <td data-i18n="device.pocketsize.phone">Varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="device-compare-note" data-i18n="device.compare.note">No backlight, no touchscreen, small screen — but at $69, you get an open-source e-ink reader that fits in your pocket, runs for weeks, and has a virtual chicken. Trade-offs worth making.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
 
     <!-- Hardware Banner -->
     <div class="hw-banner" role="complementary" aria-label="Hardware specifications">
