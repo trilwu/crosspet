@@ -17,12 +17,6 @@
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
-#include "components/icons/library.h"
-#include "components/icons/pet.h"
-#include "components/icons/recent.h"
-#include "components/icons/settings2.h"
-#include "components/icons/tools.h"
-#include "components/icons/transfer.h"
 #include "fontIds.h"
 #include "activities/network/WifiSelectionActivity.h"
 #include "activities/tools/WeatherActivity.h"
@@ -34,21 +28,6 @@
 #include "util/StringUtils.h"
 
 extern BleRemoteManager bleManager;
-
-// ── Layout constants ─────────────────────────────────────────────────────────
-namespace {
-constexpr int HEADER_H    = 56;   // homeTopPadding (LyraMetrics)
-constexpr int DIVIDER_X   = 240;  // left/right split
-constexpr int DIVIDER_Y   = 408;  // top section / grid split
-constexpr int GRID_ROW2_Y = 525;  // grid row-1 / row-2 boundary
-constexpr int GRID_ROW3_Y = 642;  // grid row-2 / row-3 boundary
-constexpr int GRID_BOTTOM = 760;  // grid bottom (button hints start)
-constexpr int COVER_H     = 280;  // max cover height in left panel
-constexpr int PAD         = 12;
-constexpr int PROGRESS_BAR_H = 5;
-constexpr int GRID_ICON_SIZE = 32;
-constexpr int ITEM_COUNT  = 7;    // selectorIndex 0..6  (0=cover, 1-6=grid)
-}  // namespace
 
 // ── Buffer management ─────────────────────────────────────────────────────────
 
@@ -122,7 +101,6 @@ void HomeActivity::loadRecentCovers(int coverHeight) {
 
   recentsLoaded = true;
   recentsLoading = false;
-  // Only trigger re-render if new thumbnails were generated
   if (anyChanged) {
     coverRendered = false;
     requestUpdate();
@@ -147,262 +125,92 @@ void HomeActivity::onExit() {
   freeCoverBuffer();
 }
 
-// ── Input ─────────────────────────────────────────────────────────────────────
+// ── Input / Render dispatchers ────────────────────────────────────────────────
 
 void HomeActivity::loop() {
-  buttonNavigator.onNext([this] {
-    selectorIndex = ButtonNavigator::nextIndex(selectorIndex, ITEM_COUNT);
-    requestUpdate();
-  });
-  buttonNavigator.onPrevious([this] {
-    selectorIndex = ButtonNavigator::previousIndex(selectorIndex, ITEM_COUNT);
-    requestUpdate();
-  });
-
-
-  // Back button long-press (800ms) = sync (home screen has no "go back")
-  if (mappedInput.wasReleased(MappedInputManager::Button::Back) && mappedInput.getHeldTime() > 800) {
-    doSync();
-  }
-
-  // Clear sync result message after timeout
-  if (syncResultMsg && millis() > syncResultExpiry) {
-    syncResultMsg = nullptr;
-    requestUpdate();
-  }
-
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    switch (selectorIndex) {
-      case 0: if (!recentBooks.empty()) onSelectBook(recentBooks[0].path); break;
-      case 1: onToolsOpen(); break;
-      case 2: onVirtualPetOpen(); break;
-      case 3: onFileBrowserOpen(); break;
-      case 4: onRecentBooksOpen(); break;
-      case 5: onFileTransferOpen(); break;
-      case 6: onSettingsOpen(); break;
-    }
-  }
+  if (SETTINGS.uiTheme <= CrossPointSettings::LYRA_3_COVERS)
+    loopOriginal();
+  else if (SETTINGS.uiTheme == CrossPointSettings::CROSSPET_CLASSIC)
+    loopClassic();
+  else
+    loopCrossPet();
 }
 
-// ── Render helpers ────────────────────────────────────────────────────────────
-
-void HomeActivity::renderCoverPanel(int panelX, int panelY, int panelW, int panelH, int coverH) {
-  if (recentBooks.empty()) {
-    renderer.drawText(UI_12_FONT_ID, panelX + PAD,
-                      panelY + (panelH - renderer.getLineHeight(UI_12_FONT_ID)) / 2,
-                      tr(STR_NO_RECENT_BOOKS), true);
-    return;
-  }
-  const RecentBook& book = recentBooks[0];
-  if (!book.coverBmpPath.empty()) {
-    const std::string thumbPath = UITheme::getCoverThumbPath(book.coverBmpPath, coverH);
-    FsFile f;
-    if (Storage.openFileForRead("HOME", thumbPath, f)) {
-      Bitmap bmp(f);
-      if (bmp.parseHeaders() == BmpReaderError::Ok) {
-        const int bmpW = bmp.getWidth();
-        const int availH = panelH - 28;
-        renderer.drawBitmap(bmp, panelX + (panelW - bmpW) / 2,
-                            panelY + (availH - coverH) / 2, bmpW, coverH);
-      }
-      f.close();
-    }
-  }
-  const int lineH = renderer.getLineHeight(UI_12_FONT_ID);
-  const int lblW = renderer.getTextWidth(UI_12_FONT_ID, tr(STR_CONTINUE_READING), EpdFontFamily::BOLD);
-  renderer.drawText(UI_12_FONT_ID, panelX + (panelW - lblW) / 2,
-                    panelY + panelH - lineH - 4, tr(STR_CONTINUE_READING), true, EpdFontFamily::BOLD);
+void HomeActivity::render(RenderLock&&) {
+  if (SETTINGS.uiTheme <= CrossPointSettings::LYRA_3_COVERS)
+    renderOriginal();
+  else if (SETTINGS.uiTheme == CrossPointSettings::CROSSPET_CLASSIC)
+    renderClassic();
+  else
+    renderCrossPet();
 }
 
-void HomeActivity::renderProgressPanel(int panelX, int panelY, int panelW, int panelH) {
-  const int lineH = renderer.getLineHeight(SMALL_FONT_ID);
-  renderer.drawText(UI_12_FONT_ID, panelX + PAD, panelY + PAD, tr(STR_RECENTS), true, EpdFontFamily::BOLD);
-
-  const int booksY = panelY + PAD + renderer.getLineHeight(UI_12_FONT_ID) + 8;
-  const int maxBooks = std::min(static_cast<int>(recentBooks.size()), 4);
-  if (maxBooks == 0) return;
-  const int rowH = (panelH - (booksY - panelY)) / maxBooks;
-  const int barW = panelW - PAD * 2;
-
-  for (int i = 0; i < maxBooks; i++) {
-    const RecentBook& b = recentBooks[i];
-    const int rowY = booksY + i * rowH;
-    auto title = renderer.truncatedText(SMALL_FONT_ID, b.title.c_str(), barW - 28);
-    renderer.drawText(SMALL_FONT_ID, panelX + PAD, rowY, title.c_str(), true);
-    char pct[8];
-    snprintf(pct, sizeof(pct), "%d%%", b.progressPercent);
-    const int pctW = renderer.getTextWidth(SMALL_FONT_ID, pct);
-    renderer.drawText(SMALL_FONT_ID, panelX + panelW - PAD - pctW, rowY, pct, true);
-    const int barY = rowY + lineH + 3;
-    renderer.drawRect(panelX + PAD, barY, barW, PROGRESS_BAR_H);
-    const int fillW = barW * b.progressPercent / 100;
-    if (fillW > 2) renderer.fillRect(panelX + PAD + 1, barY + 1, fillW - 2, PROGRESS_BAR_H - 2);
-  }
-}
-
-void HomeActivity::renderGridCell(int cellX, int cellY, int cellW, int cellH,
-                                  int gridIdx, const uint8_t* icon, const char* label) {
-  const bool selected = (selectorIndex == gridIdx + 1);
-  if (selected) renderer.fillRoundedRect(cellX + 2, cellY + 2, cellW - 4, cellH - 4, 8, Color::LightGray);
-  const int lineH = renderer.getLineHeight(UI_12_FONT_ID);
-  const int totalH = (icon ? GRID_ICON_SIZE + 6 : 0) + lineH;
-  const int startY = cellY + (cellH - totalH) / 2;
-  if (icon) renderer.drawIcon(icon, cellX + (cellW - GRID_ICON_SIZE) / 2, startY, GRID_ICON_SIZE, GRID_ICON_SIZE);
-  const int lblW = renderer.getTextWidth(UI_12_FONT_ID, label);
-  renderer.drawText(UI_12_FONT_ID, cellX + (cellW - lblW) / 2,
-                    startY + (icon ? GRID_ICON_SIZE + 6 : 0), label, true);
-}
-
-void HomeActivity::renderSelectionHighlight(int panelX, int panelY, int panelW, int panelH) {
-  if (selectorIndex != 0) return;
-  renderer.drawRoundedRect(panelX + 2, panelY + 2, panelW - 4, panelH - 4, 2, 8, true);
-}
-
-// ── Pet status widget (drawn over header left side) ──────────────────────
+// ── Shared render helpers ─────────────────────────────────────────────────────
 
 void HomeActivity::renderPetStatusWidget(int headerH) {
-  if (!PET_SETTINGS.homeShowPetStatus || !PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
+  if (!PET_SETTINGS.homeShowPetStatus) return;
+  if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
 
   const auto& ps = PET_MANAGER.getState();
   const PetMood mood = PET_MANAGER.getMood();
   const int screenW = renderer.getScreenWidth();
 
-  // Context-aware motivational status message (i18n)
   const char* name = ps.petName[0] ? ps.petName : PetEvolution::variantStageName(ps.stage, ps.evolutionVariant);
   char petBuf[64];
 
-  if (ps.hunger < 30) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HUNGRY), name);
-  } else if (mood == PetMood::SAD) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SAD), name);
-  } else if (mood == PetMood::SICK) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SICK), name);
-  } else if (mood == PetMood::NEEDY) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_NEEDY), name);
-  } else if (mood == PetMood::SLEEPING) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SLEEPING), name);
-  } else if (ps.currentStreak > 7) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_STREAK), name, ps.currentStreak);
-  } else if (mood == PetMood::HAPPY) {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HAPPY), name);
-  } else {
-    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_DEFAULT), name);
-  }
-  const int textW = renderer.getTextWidth(SMALL_FONT_ID, petBuf);
-  // Calculate right margin: battery icon (15) + right padding (12) + optional percentage text
+  if (ps.hunger < 30)                 snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HUNGRY), name);
+  else if (mood == PetMood::SAD)      snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SAD), name);
+  else if (mood == PetMood::SICK)     snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SICK), name);
+  else if (mood == PetMood::NEEDY)    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_NEEDY), name);
+  else if (mood == PetMood::SLEEPING) snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SLEEPING), name);
+  else if (ps.currentStreak > 7)      snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_STREAK), name, ps.currentStreak);
+  else if (mood == PetMood::HAPPY)    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HAPPY), name);
+  else                                snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_DEFAULT), name);
+
   int rightMargin = 12 + BaseMetrics::values.batteryWidth + 4;
   if (SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS) {
-    // Reserve space for "100%" text (worst case width)
     rightMargin += renderer.getTextWidth(SMALL_FONT_ID, "100%") + 4;
   }
-  // Clamp text to available space
   const int availW = screenW - rightMargin - 4;
   auto truncated = renderer.truncatedText(SMALL_FONT_ID, petBuf, availW);
   const int finalW = renderer.getTextWidth(SMALL_FONT_ID, truncated.c_str());
   const int x = screenW - rightMargin - finalW;
-  const int y = 5;  // same y offset as battery
-  renderer.drawText(SMALL_FONT_ID, x, y, truncated.c_str(), true);
+  renderer.drawText(SMALL_FONT_ID, x, 5, truncated.c_str(), true);
 }
-
-// ── Header clock ─────────────────────────────────────────────────────────────
 
 void HomeActivity::renderHeaderClock() {
   if (!PET_SETTINGS.homeShowClock) return;
+
   time_t now;
   time(&now);
   struct tm timeinfo;
   localtime_r(&now, &timeinfo);
   char buf[8];
-  if (timeinfo.tm_year >= 125) {
+  if (timeinfo.tm_year >= 125)
     snprintf(buf, sizeof(buf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-  } else {
+  else
     snprintf(buf, sizeof(buf), "--:--");
-  }
+
   const int clockW = renderer.getTextWidth(SMALL_FONT_ID, buf);
   renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
 
-  // Weather temp next to clock (or sync status) — conditional on setting
-  if (PET_SETTINGS.homeShowWeather) {
-    const int weatherX = 10 + clockW + 6;
-    if (weatherRefreshing) {
-      renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
-    } else if (syncResultMsg) {
-      renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
-    } else {
-      WeatherData wData;
-      uint8_t wCity = 0;
-      char wTime[8] = "";
-      if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
-        char wBuf[16];
-        snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
-        renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
-      }
-    }
-  }
-}
+  if (!PET_SETTINGS.homeShowWeather) return;
 
-// ── Main render ───────────────────────────────────────────────────────────────
-
-void HomeActivity::render(RenderLock&&) {
-  const int pageWidth = renderer.getScreenWidth();
-
-  if (!coverRendered) {
-    renderer.clearScreen();
-    GUI.drawHeader(renderer, Rect{0, 0, pageWidth, HEADER_H}, nullptr);
-    renderHeaderClock();
-    renderPetStatusWidget(HEADER_H);
-    renderer.drawLine(DIVIDER_X, HEADER_H,  DIVIDER_X, DIVIDER_Y,   true);  // top vertical
-    renderer.drawLine(0,         DIVIDER_Y, pageWidth,  DIVIDER_Y,   true);  // mid horizontal
-    renderer.drawLine(DIVIDER_X, DIVIDER_Y, DIVIDER_X, GRID_BOTTOM, true);  // grid vertical
-    renderer.drawLine(0,         GRID_ROW2_Y, pageWidth, GRID_ROW2_Y, true); // grid row 2
-    renderer.drawLine(0,         GRID_ROW3_Y, pageWidth, GRID_ROW3_Y, true); // grid row 3
-    renderCoverPanel(0, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H, COVER_H);
-    renderProgressPanel(DIVIDER_X, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H);
-    coverBufferStored = storeCoverBuffer();
-    coverRendered = coverBufferStored;
+  // Weather temp or sync status next to clock
+  const int weatherX = 10 + clockW + 6;
+  if (weatherRefreshing) {
+    renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
+  } else if (syncResultMsg) {
+    renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
   } else {
-    restoreCoverBuffer();
-    GUI.drawHeader(renderer, Rect{0, 0, pageWidth, HEADER_H}, nullptr);
-    renderHeaderClock();
-    renderPetStatusWidget(HEADER_H);
-  }
-
-  // Grid cells (redrawn each frame for selection state)
-  const int cw = DIVIDER_X;
-  const int rh1 = GRID_ROW2_Y - DIVIDER_Y;
-  const int rh2 = GRID_ROW3_Y - GRID_ROW2_Y;
-  const int rh3 = GRID_BOTTOM  - GRID_ROW3_Y;
-  renderGridCell(0,         DIVIDER_Y,   cw, rh1, 0, ToolsIcon,     tr(STR_TOOLS));
-  renderGridCell(DIVIDER_X, DIVIDER_Y,   cw, rh1, 1, PetIcon,       tr(STR_VIRTUAL_PET));
-  renderGridCell(0,         GRID_ROW2_Y, cw, rh2, 2, LibraryIcon,   tr(STR_BROWSE_FILES));
-  renderGridCell(DIVIDER_X, GRID_ROW2_Y, cw, rh2, 3, RecentIcon,    tr(STR_MENU_RECENT_BOOKS));
-  renderGridCell(0,         GRID_ROW3_Y, cw, rh3, 4, TransferIcon,  tr(STR_FILE_TRANSFER));
-  renderGridCell(DIVIDER_X, GRID_ROW3_Y, cw, rh3, 5, Settings2Icon, tr(STR_SETTINGS_TITLE));
-
-  renderSelectionHighlight(0, HEADER_H, DIVIDER_X, DIVIDER_Y - HEADER_H);
-
-  const auto labels = mappedInput.mapLabels(tr(STR_SYNC), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
-  GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
-  renderer.displayBuffer();
-
-  if (!firstRenderDone) {
-    firstRenderDone = true;
-    // Only trigger cover loading if thumbnails are missing
-    bool needsLoad = false;
-    for (const auto& b : recentBooks) {
-      if (!b.coverBmpPath.empty() &&
-          !Storage.exists(UITheme::getCoverThumbPath(b.coverBmpPath, COVER_H).c_str())) {
-        needsLoad = true; break;
-      }
+    WeatherData wData;
+    uint8_t wCity = 0;
+    char wTime[8] = "";
+    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+      char wBuf[16];
+      snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
+      renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
     }
-    if (needsLoad) {
-      requestUpdate();  // will trigger loadRecentCovers on next render
-    } else {
-      recentsLoaded = true;  // thumbnails already exist, skip loading
-    }
-  } else if (!recentsLoaded && !recentsLoading) {
-    recentsLoading = true;
-    loadRecentCovers(COVER_H);
   }
 }
 
@@ -413,7 +221,6 @@ void HomeActivity::performSyncAfterWifi() {
   weatherRefreshing = true;
   requestUpdateAndWait();
 
-  // Pre-check WiFi with 8s timeout — fail fast before silentRefresh blocks for 10s
   if (WiFi.status() != WL_CONNECTED) {
     const auto& ssid = WIFI_STORE.getLastConnectedSsid();
     const auto* cred = ssid.empty() ? nullptr : WIFI_STORE.findCredential(ssid);
@@ -441,13 +248,9 @@ void HomeActivity::performSyncAfterWifi() {
   int rc = WeatherActivity::silentRefresh();
   bleManager.resume();
   weatherRefreshing = false;
-  if (rc == 0) {
-    snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
-  } else if (rc == 2) {
-    snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
-  } else {
-    snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), rc);
-  }
+  if (rc == 0)      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
+  else if (rc == 2) snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
+  else              snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), rc);
   syncResultMsg = syncBuf;
   syncResultExpiry = millis() + 3000;
   coverRendered = false;
@@ -456,7 +259,6 @@ void HomeActivity::performSyncAfterWifi() {
 
 void HomeActivity::doSync() {
   static char syncBuf2[24];
-  // No saved WiFi — show error immediately, don't open WiFi selection UI
   if (WIFI_STORE.getLastConnectedSsid().empty()) {
     snprintf(syncBuf2, sizeof(syncBuf2), "%s", tr(STR_WIFI_CONN_FAILED));
     syncResultMsg = syncBuf2;

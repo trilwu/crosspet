@@ -118,8 +118,8 @@ EpdFontFamily bokerlam18FontFamily(&bokerlam18RegularFont, &bokerlam18BoldFont, 
 EpdFont smallFont(&notosans_8_regular);
 EpdFontFamily smallFontFamily(&smallFont);
 
-// UI fonts use Bokerlam for better Vietnamese rendering
-EpdFontFamily ui12FontFamily(&bokerlam12RegularFont, &bokerlam12BoldFont);
+// UI fonts use Noto Sans for full glyph coverage (symbols, Vietnamese)
+EpdFontFamily ui12FontFamily(&notosans12RegularFont, &notosans12BoldFont);
 
 // RTC memory persists across deep sleep — used to restore clock with elapsed time correction.
 // Magic sentinel confirms the values were set by a clean sleep entry (not stale/garbage).

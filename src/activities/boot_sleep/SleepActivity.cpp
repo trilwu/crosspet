@@ -230,10 +230,11 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
     renderer.invertScreen();
   }
 
-  // Double HALF_REFRESH: first pass drives pixels, second reinforces blacks.
-  // This avoids FULL_REFRESH flicker while preventing black fading after ~1s.
+  // Turn off display controller after final refresh to prevent charge drift fading.
+  // When the analog drivers stay on, residual voltage causes blacks to lighten over ~1s.
+  renderer.setFadingFix(true);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
 
   if (hasGreyscale) {
     bitmap.rewindToData();
