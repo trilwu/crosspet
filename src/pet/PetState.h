@@ -37,9 +37,9 @@ enum class PetNeed : uint8_t {
 // Pet species types — cosmetic label for the pet
 namespace PetTypeNames {
   constexpr const char* NAMES[] = {
-    "Chicken", "Cat", "Dog", "Dragon", "Bunny", "Robot", "Bear", "Slime"
+    "Chicken", "Cat", "Dog", "Dragon", "Bunny"
   };
-  constexpr uint8_t COUNT = 8;
+  constexpr uint8_t COUNT = 5;
   inline const char* get(uint8_t t) { return (t < COUNT) ? NAMES[t] : NAMES[0]; }
 }
 

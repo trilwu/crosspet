@@ -83,9 +83,6 @@ const char* typeName(uint8_t type) {
     case 2: return tr(STR_PET_TYPE_DOG);
     case 3: return tr(STR_PET_TYPE_DRAGON);
     case 4: return tr(STR_PET_TYPE_BUNNY);
-    case 5: return tr(STR_PET_TYPE_ROBOT);
-    case 6: return tr(STR_PET_TYPE_BEAR);
-    case 7: return tr(STR_PET_TYPE_SLIME);
     default: return tr(STR_PET_TYPE_DEFAULT);
   }
 }

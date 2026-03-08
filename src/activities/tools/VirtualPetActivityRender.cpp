@@ -208,8 +208,8 @@ void VirtualPetActivity::renderTypeSelect() const {
 
     const bool selected = (i == typeSelectIndex);
     if (selected) {
-      renderer.fillRect(listX - 4, rowY - 2, listW + 8, rowH, false);
-      renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i), /*invert=*/true);
+      renderer.fillRect(listX - 4, rowY - 2, listW + 8, rowH, true);
+      renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i), /*black=*/false);
     } else {
       renderer.drawText(UI_10_FONT_ID, listX, rowY, PetEvolution::typeName(i));
     }
