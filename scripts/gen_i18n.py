@@ -222,6 +222,7 @@ LANG_ABBREVIATIONS = {
     "עברית": "HE", "hebrew": "HE",
     "فارسی": "FA", "persian": "FA",
     "čeština": "CS",
+    "türkçe": "TR", "turkish": "TR",
 }
 
 
