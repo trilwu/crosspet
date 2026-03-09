@@ -15,6 +15,7 @@ constexpr SideLayoutMap kSideLayouts[] = {
     {HalGPIO::BTN_UP, HalGPIO::BTN_DOWN},
     {HalGPIO::BTN_DOWN, HalGPIO::BTN_UP},
 };
+
 }  // namespace
 
 bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint8_t) const) const {
@@ -53,6 +54,16 @@ bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint
       // Reader page navigation uses side buttons, swappable via settings.
       // In PortraitInverted, device is flipped so physical up/down are reversed — swap accordingly.
       return (gpio.*fn)(invertedOrientation ? side.pageBack : side.pageForward);
+    case Button::FrontPageBack:
+      // Front page navigation uses Left/Right buttons and can be swapped via settings.
+      return SETTINGS.frontPageButtonLayout == CrossPointSettings::FRONT_LEFT_PREV
+                 ? (gpio.*fn)(SETTINGS.frontButtonLeft)
+                 : (gpio.*fn)(SETTINGS.frontButtonRight);
+    case Button::FrontPageForward:
+      // Front page navigation uses Left/Right buttons and can be swapped via settings.
+      return SETTINGS.frontPageButtonLayout == CrossPointSettings::FRONT_LEFT_PREV
+                 ? (gpio.*fn)(SETTINGS.frontButtonRight)
+                 : (gpio.*fn)(SETTINGS.frontButtonLeft);
   }
 
   return false;
