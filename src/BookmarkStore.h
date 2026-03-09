@@ -58,22 +58,33 @@ class BookmarkStore {
       return;
     }
 
+    if (bookmarks.size() > UINT16_MAX) {
+      LOG_ERR("BKM", "Too many bookmarks to save: %u", static_cast<unsigned>(bookmarks.size()));
+      return;
+    }
+
     FsFile f;
     if (!Storage.openFileForWrite("BKM", getFilePath(), f)) {
       LOG_ERR("BKM", "Failed to save bookmarks");
       return;
     }
 
-    serialization::writePod(f, FILE_VERSION);
+    auto writePodChecked = [&f](const auto& value) {
+      return f.write(reinterpret_cast<const uint8_t*>(&value), sizeof(value)) == sizeof(value);
+    };
+
     const uint16_t count = static_cast<uint16_t>(bookmarks.size());
-    serialization::writePod(f, count);
+    bool ok = writePodChecked(FILE_VERSION) && writePodChecked(count);
 
     for (const auto& bm : bookmarks) {
-      serialization::writePod(f, bm.spineIndex);
-      serialization::writePod(f, bm.pageNumber);
+      ok = ok && writePodChecked(bm.spineIndex) && writePodChecked(bm.pageNumber);
     }
 
-    f.close();
+    ok = ok && f.close();
+    if (!ok) {
+      LOG_ERR("BKM", "Failed while writing bookmarks");
+      return;
+    }
     dirty = false;
     LOG_DBG("BKM", "Saved %d bookmarks", count);
   }

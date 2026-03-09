@@ -27,12 +27,13 @@ std::string StarredPagesActivity::getItemLabel(int index) const {
     if (tocIndex != -1) {
       const auto tocItem = epub->getTocItem(tocIndex);
       snprintf(buf, sizeof(buf), "%d. ", index + 1);
-      return std::string(buf) + tocItem.title + " - p" + std::to_string(bm.pageNumber + 1);
+      return std::string(buf) + tocItem.title + " - " + tr(STR_PAGE_PREFIX) + std::to_string(bm.pageNumber + 1);
     }
-    snprintf(buf, sizeof(buf), "%d. Section %d, p%d", index + 1, bm.spineIndex + 1, bm.pageNumber + 1);
+    snprintf(buf, sizeof(buf), "%d. %s%d, %s%d", index + 1, tr(STR_SECTION_PREFIX), bm.spineIndex + 1,
+             tr(STR_PAGE_PREFIX), bm.pageNumber + 1);
   } else {
     // TXT file: just page number (spineIndex is always 0)
-    snprintf(buf, sizeof(buf), "%d. Page %d", index + 1, bm.pageNumber + 1);
+    snprintf(buf, sizeof(buf), "%d. %s%d", index + 1, tr(STR_PAGE_PREFIX), bm.pageNumber + 1);
   }
   return std::string(buf);
 }
