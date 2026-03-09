@@ -1,6 +1,7 @@
 #include "RecentBooksStore.h"
 
 #include <Epub.h>
+#include <FsHelpers.h>
 #include <HalStorage.h>
 #include <JsonSettingsIO.h>
 #include <Logging.h>
@@ -8,8 +9,6 @@
 #include <Xtc.h>
 
 #include <algorithm>
-
-#include "util/StringUtils.h"
 
 namespace {
 constexpr uint8_t RECENT_BOOKS_FILE_VERSION = 3;
@@ -23,15 +22,17 @@ RecentBooksStore RecentBooksStore::instance;
 
 void RecentBooksStore::addBook(const std::string& path, const std::string& title, const std::string& author,
                                const std::string& coverBmpPath) {
-  // Remove existing entry if present
+  // Preserve existing progress percent when moving book to front
+  uint8_t existingProgress = 0;
   auto it =
       std::find_if(recentBooks.begin(), recentBooks.end(), [&](const RecentBook& book) { return book.path == path; });
   if (it != recentBooks.end()) {
+    existingProgress = it->progressPercent;
     recentBooks.erase(it);
   }
 
-  // Add to front
-  recentBooks.insert(recentBooks.begin(), {path, title, author, coverBmpPath});
+  // Add to front, preserving progress so home screen doesn't flash 0% on re-open
+  recentBooks.insert(recentBooks.begin(), {path, title, author, coverBmpPath, existingProgress});
 
   // Trim to max size
   if (recentBooks.size() > MAX_RECENT_BOOKS) {
@@ -80,19 +81,17 @@ RecentBook RecentBooksStore::getDataFromBook(std::string path) const {
   // If epub, try to load the metadata for title/author and cover.
   // Use buildIfMissing=false to avoid heavy epub loading on boot; getTitle()/getAuthor() may be
   // blank until the book is opened, and entries with missing title are omitted from recent list.
-  if (StringUtils::checkFileExtension(lastBookFileName, ".epub")) {
+  if (FsHelpers::hasEpubExtension(lastBookFileName)) {
     Epub epub(path, "/.crosspoint");
     epub.load(false, true);
     return RecentBook{path, epub.getTitle(), epub.getAuthor(), epub.getThumbBmpPath()};
-  } else if (StringUtils::checkFileExtension(lastBookFileName, ".xtch") ||
-             StringUtils::checkFileExtension(lastBookFileName, ".xtc")) {
+  } else if (FsHelpers::hasXtcExtension(lastBookFileName)) {
     // Handle XTC file
     Xtc xtc(path, "/.crosspoint");
     if (xtc.load()) {
       return RecentBook{path, xtc.getTitle(), xtc.getAuthor(), xtc.getThumbBmpPath()};
     }
-  } else if (StringUtils::checkFileExtension(lastBookFileName, ".txt") ||
-             StringUtils::checkFileExtension(lastBookFileName, ".md")) {
+  } else if (FsHelpers::hasTxtExtension(lastBookFileName) || FsHelpers::hasMarkdownExtension(lastBookFileName)) {
     return RecentBook{path, lastBookFileName, "", ""};
   }
   return RecentBook{path, "", "", ""};

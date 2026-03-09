@@ -2,7 +2,6 @@
 
 #include "BookStats.h"
 
-#include <Arduino.h>
 #include <HalStorage.h>
 #include <Logging.h>
 #include <Serialization.h>
@@ -18,20 +17,22 @@ constexpr char STATS_FILE[] = "/.crosspoint/reading_stats.bin";
 ReadingStats ReadingStats::instance;
 
 void ReadingStats::startSession() {
-  sessionStartMs = millis();
+  sessionStartTime = time(nullptr);
   sessionActive = true;
 }
 
 void ReadingStats::endSession(const char* title, uint8_t progress, const char* bookPath) {
   if (!sessionActive) return;
 
-  // Check for day rollover; reset today's counter and update streak
+  // Check for day rollover; reset today's counter and update streak.
+  // Only do this when we have a valid wall-clock time (NTP synced, >= 2024).
+  constexpr time_t MIN_VALID_TIME = 1704067200;  // 2024-01-01 00:00:00 UTC
   time_t now = time(nullptr);
   struct tm timeinfo = {};
   localtime_r(&now, &timeinfo);
   const int16_t curYear = static_cast<int16_t>(timeinfo.tm_year);
   const int16_t curDay  = static_cast<int16_t>(timeinfo.tm_yday);
-  if (curDay != lastReadDayOfYear || curYear != lastReadYear) {
+  if (now >= MIN_VALID_TIME && (curDay != lastReadDayOfYear || curYear != lastReadYear)) {
     // Check if this is the next consecutive day (streak continues)
     bool isConsecutive = false;
     if (lastReadDayOfYear >= 0) {
@@ -54,11 +55,16 @@ void ReadingStats::endSession(const char* title, uint8_t progress, const char* b
     lastReadDayOfYear = curDay;
   }
 
-  // Accumulate session duration; cap at 24 h to guard against millis() wrap
-  const unsigned long elapsed = millis() - sessionStartMs;
-  uint32_t elapsedSecs = static_cast<uint32_t>(elapsed / 1000UL);
+  // Accumulate session duration using wall-clock time (survives deep sleep unlike millis()).
+  // Guard: if either timestamp is before 2024-01-01 (NTP not synced), skip accumulation.
   constexpr uint32_t MAX_SESSION_SECS = 86400;
-  if (elapsedSecs > MAX_SESSION_SECS) elapsedSecs = MAX_SESSION_SECS;
+  uint32_t elapsedSecs = 0;
+  if (sessionStartTime >= MIN_VALID_TIME && now >= MIN_VALID_TIME) {
+    const int64_t diff = static_cast<int64_t>(now) - static_cast<int64_t>(sessionStartTime);
+    if (diff > 0 && diff < static_cast<int64_t>(MAX_SESSION_SECS)) {
+      elapsedSecs = static_cast<uint32_t>(diff);
+    }
+  }
 
   todayReadSeconds += elapsedSecs;
   totalReadSeconds += elapsedSecs;

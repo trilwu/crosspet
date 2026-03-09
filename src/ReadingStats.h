@@ -1,11 +1,12 @@
 #pragma once
 #include <cstdint>
+#include <ctime>
 
 // Tracks reading session time and book progress for the Reading Stats sleep screen.
 // Stats are accumulated each time the reader activity exits (including on sleep entry).
 class ReadingStats {
   static ReadingStats instance;
-  unsigned long sessionStartMs = 0;
+  time_t sessionStartTime = 0;  // Wall-clock time of session start (survives deep sleep, unlike millis())
   bool sessionActive = false;
 
  public:

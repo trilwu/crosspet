@@ -697,9 +697,9 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
                       true);
   }
 
-  // Draw Clock (left-most element)
+  // Draw Clock (left-most element) — respects statusBarClock toggle for all themes
   int clockWidth = 0;
-  if (SETTINGS.statusBarClock && (SETTINGS.uiTheme == CrossPointSettings::CROSSPET || SETTINGS.uiTheme == CrossPointSettings::CROSSPET_CLASSIC)) {
+  if (SETTINGS.statusBarClock) {
     time_t now;
     time(&now);
     struct tm timeinfo;

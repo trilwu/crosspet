@@ -19,6 +19,7 @@
 #include "KOReaderSyncActivity.h"
 #include "MappedInputManager.h"
 #include "QrDisplayActivity.h"
+#include "ReaderUtils.h"
 #include "RecentBooksStore.h"
 #include "ReadingStats.h"
 #include "components/UITheme.h"
@@ -29,8 +30,8 @@ namespace {
 // pagesPerRefresh now comes from SETTINGS.getRefreshFrequency()
 constexpr unsigned long skipChapterMs = 700;
 constexpr unsigned long goHomeMs = 1000;
-// pages per minute, first item is 1 to prevent division by zero if accessed
-const std::vector<int> PAGE_TURN_LABELS = {1, 1, 3, 6, 12};
+// Max pages per minute for auto-turn (setting range 1-20)
+constexpr uint8_t AUTO_TURN_MAX_PPM = 20;
 
 int clampPercent(int percent) {
   if (percent < 0) {
@@ -40,27 +41,6 @@ int clampPercent(int percent) {
     return 100;
   }
   return percent;
-}
-
-// Apply the logical reader orientation to the renderer.
-// This centralizes orientation mapping so we don't duplicate switch logic elsewhere.
-void applyReaderOrientation(GfxRenderer& renderer, const uint8_t orientation) {
-  switch (orientation) {
-    case CrossPointSettings::ORIENTATION::PORTRAIT:
-      renderer.setOrientation(GfxRenderer::Orientation::Portrait);
-      break;
-    case CrossPointSettings::ORIENTATION::LANDSCAPE_CW:
-      renderer.setOrientation(GfxRenderer::Orientation::LandscapeClockwise);
-      break;
-    case CrossPointSettings::ORIENTATION::INVERTED:
-      renderer.setOrientation(GfxRenderer::Orientation::PortraitInverted);
-      break;
-    case CrossPointSettings::ORIENTATION::LANDSCAPE_CCW:
-      renderer.setOrientation(GfxRenderer::Orientation::LandscapeCounterClockwise);
-      break;
-    default:
-      break;
-  }
 }
 
 }  // namespace
@@ -73,7 +53,10 @@ void EpubReaderActivity::onEnter() {
 
   // Configure screen orientation based on settings
   // NOTE: This affects layout math and must be applied before any render calls.
-  applyReaderOrientation(renderer, SETTINGS.orientation);
+  ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
+
+  // Apply text darkness setting for grayscale/AA rendering
+  renderer.setTextDarkness(SETTINGS.textDarkness);
 
   epub->setupCacheDir();
 
@@ -109,6 +92,11 @@ void EpubReaderActivity::onEnter() {
 
   // Begin tracking how long this reading session lasts
   READ_STATS.startSession();
+
+  // Auto-activate page turn if persistent setting is configured
+  if (SETTINGS.autoPageTurnSpeed > 0) {
+    toggleAutoPageTurn(SETTINGS.autoPageTurnSpeed);
+  }
 
   // Trigger first update
   requestUpdate();
@@ -191,6 +179,9 @@ void EpubReaderActivity::loop() {
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
         mappedInput.wasReleased(MappedInputManager::Button::Back)) {
       automaticPageTurnActive = false;
+      // Persist cancellation so auto-turn does not re-activate on next session
+      SETTINGS.autoPageTurnSpeed = 0;
+      SETTINGS.saveToFile();
       // updates chapter title space to indicate page turn disabled
       requestUpdate();
       return;
@@ -234,12 +225,18 @@ void EpubReaderActivity::loop() {
     }
     startActivityForResult(std::make_unique<EpubReaderMenuActivity>(
                                renderer, mappedInput, menuTitle, currentPage, totalPages, bookProgressPercent,
-                               SETTINGS.orientation, !currentPageFootnotes.empty()),
+                               SETTINGS.orientation, !currentPageFootnotes.empty(),
+                               automaticPageTurnActive ? SETTINGS.autoPageTurnSpeed : 0),
                            [this](const ActivityResult& result) {
                              // Always apply orientation change even if the menu was cancelled
                              const auto& menu = std::get<MenuResult>(result.data);
                              applyOrientation(menu.orientation);
                              toggleAutoPageTurn(menu.pageTurnOption);
+                             // Persist auto-turn speed so it survives across sessions
+                             if (SETTINGS.autoPageTurnSpeed != menu.pageTurnOption) {
+                               SETTINGS.autoPageTurnSpeed = menu.pageTurnOption;
+                               SETTINGS.saveToFile();
+                             }
                              if (!result.isCancelled) {
                                onReaderMenuConfirm(static_cast<EpubReaderMenuActivity::MenuAction>(menu.action));
                              }
@@ -247,13 +244,14 @@ void EpubReaderActivity::loop() {
   }
 
   // Long press BACK (1s+) goes to file selection
-  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= goHomeMs) {
+  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= ReaderUtils::GO_HOME_MS) {
     activityManager.goToFileBrowser(epub ? epub->getPath() : "");
     return;
   }
 
   // Short press BACK goes directly to home (or restores position if viewing footnote)
-  if (mappedInput.wasReleased(MappedInputManager::Button::Back) && mappedInput.getHeldTime() < goHomeMs) {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) &&
+      mappedInput.getHeldTime() < ReaderUtils::GO_HOME_MS) {
     if (footnoteDepth > 0) {
       restoreSavedPosition();
       return;
@@ -262,19 +260,7 @@ void EpubReaderActivity::loop() {
     return;
   }
 
-  // When long-press chapter skip is disabled, turn pages on press instead of release.
-  const bool usePressForPageTurn = !SETTINGS.longPressChapterSkip;
-  const bool prevTriggered = usePressForPageTurn ? (mappedInput.wasPressed(MappedInputManager::Button::PageBack) ||
-                                                    mappedInput.wasPressed(MappedInputManager::Button::FrontPageBack))
-                                                 : (mappedInput.wasReleased(MappedInputManager::Button::PageBack) ||
-                                                    mappedInput.wasReleased(MappedInputManager::Button::FrontPageBack));
-  const bool powerPageTurn = SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::PAGE_TURN &&
-                             mappedInput.wasReleased(MappedInputManager::Button::Power);
-  const bool nextTriggered = usePressForPageTurn
-                                 ? (mappedInput.wasPressed(MappedInputManager::Button::PageForward) || powerPageTurn ||
-                                    mappedInput.wasPressed(MappedInputManager::Button::FrontPageForward))
-                                 : (mappedInput.wasReleased(MappedInputManager::Button::PageForward) || powerPageTurn ||
-                                    mappedInput.wasReleased(MappedInputManager::Button::FrontPageForward));
+  auto [prevTriggered, nextTriggered] = ReaderUtils::detectPageTurn(mappedInput);
 
   if (!prevTriggered && !nextTriggered) {
     return;
@@ -523,7 +509,7 @@ void EpubReaderActivity::applyOrientation(const uint8_t orientation) {
     SETTINGS.saveToFile();
 
     // Update renderer orientation to match the new logical coordinate system.
-    applyReaderOrientation(renderer, SETTINGS.orientation);
+    ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
 
     // Reset section to force re-layout in the new orientation.
     section.reset();
@@ -531,14 +517,15 @@ void EpubReaderActivity::applyOrientation(const uint8_t orientation) {
 }
 
 void EpubReaderActivity::toggleAutoPageTurn(const uint8_t selectedPageTurnOption) {
-  if (selectedPageTurnOption == 0 || selectedPageTurnOption >= PAGE_TURN_LABELS.size()) {
+  // selectedPageTurnOption is now a direct pages-per-minute value (0=off, 1-20=ppm)
+  if (selectedPageTurnOption == 0 || selectedPageTurnOption > AUTO_TURN_MAX_PPM) {
     automaticPageTurnActive = false;
     return;
   }
 
   lastPageTurnTime = millis();
-  // calculates page turn duration by dividing by number of pages
-  pageTurnDuration = (1UL * 60 * 1000) / PAGE_TURN_LABELS[selectedPageTurnOption];
+  // Calculate milliseconds per page from pages-per-minute
+  pageTurnDuration = (1UL * 60 * 1000) / selectedPageTurnOption;
   automaticPageTurnActive = true;
 
   const uint8_t statusBarHeight = UITheme::getInstance().getStatusBarHeight();
@@ -739,6 +726,16 @@ void EpubReaderActivity::render(RenderLock&& lock) {
       section->currentPage = nextPageNumber;
     }
 
+    if (!pendingAnchor.empty()) {
+      if (const auto page = section->getPageForAnchor(pendingAnchor)) {
+        section->currentPage = *page;
+        LOG_DBG("ERS", "Resolved anchor '%s' to page %d", pendingAnchor.c_str(), *page);
+      } else {
+        LOG_DBG("ERS", "Anchor '%s' not found in section %d", pendingAnchor.c_str(), currentSpineIndex);
+      }
+      pendingAnchor.clear();
+    }
+
     // handles changes in reader settings and reset to approximate position based on cached progress
     if (cachedChapterTotalPageCount > 0) {
       // only goes to relative position if spine index matches cached value
@@ -872,12 +869,8 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderer.displayBuffer(HalDisplay::HALF_REFRESH);
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
-  } else if (pagesUntilFullRefresh <= 1) {
-    renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-    pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
   } else {
-    renderer.displayBuffer();
-    pagesUntilFullRefresh--;
+    ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
   }
 
   // Save bw buffer to reset buffer state after grayscale data sync
@@ -953,12 +946,18 @@ void EpubReaderActivity::navigateToHref(const std::string& hrefStr, const bool s
     LOG_DBG("ERS", "Saved position [%d]: spine %d, page %d", footnoteDepth, currentSpineIndex, section->currentPage);
   }
 
+  // Extract fragment anchor (e.g. "#note1" or "chapter2.xhtml#note1")
+  std::string anchor;
+  const auto hashPos = hrefStr.find('#');
+  if (hashPos != std::string::npos && hashPos + 1 < hrefStr.size()) {
+    anchor = hrefStr.substr(hashPos + 1);
+  }
+
   // Check for same-file anchor reference (#anchor only)
   bool sameFile = !hrefStr.empty() && hrefStr[0] == '#';
 
   int targetSpineIndex;
   if (sameFile) {
-    // Same file — navigate to page 0 of current spine item
     targetSpineIndex = currentSpineIndex;
   } else {
     targetSpineIndex = epub->resolveHrefToSpineIndex(hrefStr);
@@ -972,6 +971,7 @@ void EpubReaderActivity::navigateToHref(const std::string& hrefStr, const bool s
 
   {
     RenderLock lock(*this);
+    pendingAnchor = std::move(anchor);
     currentSpineIndex = targetSpineIndex;
     nextPageNumber = 0;
     section.reset();

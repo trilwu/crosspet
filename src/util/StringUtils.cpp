@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cstring>
 
+
 namespace StringUtils {
 
 void formatReadingDuration(char* buf, size_t size, uint32_t secs) {
@@ -60,32 +61,6 @@ std::string sanitizeFilename(const std::string& name, size_t maxBytes) {
   }
 
   return result.empty() ? "book" : result;
-}
-
-bool checkFileExtension(const std::string& fileName, const char* extension) {
-  if (fileName.length() < strlen(extension)) {
-    return false;
-  }
-
-  const std::string fileExt = fileName.substr(fileName.length() - strlen(extension));
-  for (size_t i = 0; i < fileExt.length(); i++) {
-    if (tolower(fileExt[i]) != tolower(extension[i])) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool checkFileExtension(const String& fileName, const char* extension) {
-  if (fileName.length() < strlen(extension)) {
-    return false;
-  }
-
-  String localFile(fileName);
-  String localExtension(extension);
-  localFile.toLowerCase();
-  localExtension.toLowerCase();
-  return localFile.endsWith(localExtension);
 }
 
 }  // namespace StringUtils

@@ -8,10 +8,10 @@
 #include "KOReaderSyncClient.h"
 #include "MappedInputManager.h"
 #include "activities/network/WifiSelectionActivity.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 
-extern BleRemoteManager bleManager;
+extern BluetoothHIDManager btHidManager;
 #include "fontIds.h"
 
 void KOReaderAuthActivity::onWifiSelectionComplete(const bool success) {
@@ -55,7 +55,7 @@ void KOReaderAuthActivity::onEnter() {
   Activity::onEnter();
 
   // Suspend BLE before WiFi — shared 2.4GHz radio
-  bleManager.suspend();
+  btHidManager.suspend();
 
   // Turn on WiFi
   WiFi.mode(WIFI_STA);
@@ -81,7 +81,7 @@ void KOReaderAuthActivity::onExit() {
   delay(100);
 
   // Resume BLE now that WiFi is off
-  bleManager.resume();
+  btHidManager.resume();
 }
 
 void KOReaderAuthActivity::render(RenderLock&&) {

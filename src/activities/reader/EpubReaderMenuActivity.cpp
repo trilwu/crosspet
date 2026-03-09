@@ -10,11 +10,12 @@
 EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,
                                                const std::string& title, const int currentPage, const int totalPages,
                                                const int bookProgressPercent, const uint8_t currentOrientation,
-                                               const bool hasFootnotes)
+                                               const bool hasFootnotes, const uint8_t currentPageTurnOption)
     : Activity("EpubReaderMenu", renderer, mappedInput),
       menuItems(buildMenuItems(hasFootnotes)),
       title(title),
       pendingOrientation(currentOrientation),
+      selectedPageTurnOption(currentPageTurnOption),
       currentPage(currentPage),
       totalPages(totalPages),
       bookProgressPercent(bookProgressPercent) {}
@@ -66,7 +67,8 @@ void EpubReaderMenuActivity::loop() {
     }
 
     if (selectedAction == MenuAction::AUTO_PAGE_TURN) {
-      selectedPageTurnOption = (selectedPageTurnOption + 1) % pageTurnLabels.size();
+      // Cycle 0(off) -> 1 -> 2 -> ... -> AUTO_TURN_MAX_PPM -> 0
+      selectedPageTurnOption = (selectedPageTurnOption >= AUTO_TURN_MAX_PPM) ? 0 : selectedPageTurnOption + 1;
       requestUpdate();
       return;
     }
@@ -142,8 +144,10 @@ void EpubReaderMenuActivity::render(RenderLock&&) {
     }
 
     if (menuItems[i].action == MenuAction::AUTO_PAGE_TURN) {
-      // Render current page turn value on the right edge of the content area.
-      const auto value = pageTurnLabels[selectedPageTurnOption];
+      // Render current pages-per-minute value (0=off, 1-20=ppm)
+      const char* value = (selectedPageTurnOption == 0) ? I18N.get(StrId::STR_STATE_OFF)
+                                                        : (snprintf(pageTurnValueBuf, sizeof(pageTurnValueBuf), "%d",
+                                                                    selectedPageTurnOption), pageTurnValueBuf);
       const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
       renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, displayY, value, !isSelected);
     }

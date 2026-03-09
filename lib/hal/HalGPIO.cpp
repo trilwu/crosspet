@@ -8,32 +8,42 @@ void HalGPIO::begin() {
 }
 
 void HalGPIO::update() {
+  // Save previous virtual button state for release detection
+  previousVirtualButtonEvents = virtualButtonEvents;
+
+  // Promote queued virtual buttons to current frame, then clear queue.
+  // This gives activities exactly one frame to see wasPressed() before auto-release.
+  virtualButtonEvents = virtualButtonQueue;
+  virtualButtonQueue = 0;
+
   inputMgr.update();
-
-  // Detect BLE button press/release edges
-  uint8_t currentBle = bleState;
-  bleWasPressed = currentBle & ~prevBleState;   // newly pressed bits
-  bleWasReleased = prevBleState & ~currentBle;  // newly released bits
-  prevBleState = currentBle;
 }
 
-bool HalGPIO::isPressed(uint8_t buttonIndex) const {
-  return inputMgr.isPressed(buttonIndex) || (prevBleState & (1 << buttonIndex));
-}
+bool HalGPIO::isPressed(uint8_t buttonIndex) const { return inputMgr.isPressed(buttonIndex); }
 
 bool HalGPIO::wasPressed(uint8_t buttonIndex) const {
-  return inputMgr.wasPressed(buttonIndex) || (bleWasPressed & (1 << buttonIndex));
+  return inputMgr.wasPressed(buttonIndex) || (virtualButtonEvents & (1 << buttonIndex));
 }
 
-bool HalGPIO::wasAnyPressed() const { return inputMgr.wasAnyPressed() || (bleWasPressed != 0); }
+bool HalGPIO::wasAnyPressed() const { return inputMgr.wasAnyPressed() || (virtualButtonEvents > 0); }
 
 bool HalGPIO::wasReleased(uint8_t buttonIndex) const {
-  return inputMgr.wasReleased(buttonIndex) || (bleWasReleased & (1 << buttonIndex));
+  // Virtual release = was pressed last frame but not this frame
+  const uint8_t virtualRelease = previousVirtualButtonEvents & ~virtualButtonEvents;
+  return inputMgr.wasReleased(buttonIndex) || (virtualRelease & (1 << buttonIndex));
 }
 
-bool HalGPIO::wasAnyReleased() const { return inputMgr.wasAnyReleased() || (bleWasReleased != 0); }
+bool HalGPIO::wasAnyReleased() const {
+  const uint8_t virtualRelease = previousVirtualButtonEvents & ~virtualButtonEvents;
+  return inputMgr.wasAnyReleased() || (virtualRelease > 0);
+}
 
 unsigned long HalGPIO::getHeldTime() const { return inputMgr.getHeldTime(); }
+
+void HalGPIO::injectButtonPress(uint8_t buttonIndex) {
+  // Queue the button for next update() cycle — one-shot pulse
+  virtualButtonQueue |= (1 << buttonIndex);
+}
 
 bool HalGPIO::isUsbConnected() const {
   // U0RXD/GPIO20 reads HIGH when USB is connected

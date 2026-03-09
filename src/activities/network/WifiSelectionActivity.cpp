@@ -12,17 +12,17 @@
 #include "MappedInputManager.h"
 #include "WifiCredentialStore.h"
 #include "activities/util/KeyboardEntryActivity.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
-extern BleRemoteManager bleManager;
+extern BluetoothHIDManager btHidManager;
 
 void WifiSelectionActivity::onEnter() {
   Activity::onEnter();
 
   // Suspend BLE — WiFi and BLE share the 2.4GHz radio
-  bleManager.suspend();
+  btHidManager.suspend();
 
   // Load saved WiFi credentials - SD card operations need lock as we use SPI
   // for both

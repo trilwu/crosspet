@@ -13,7 +13,7 @@
 #include "NetworkModeSelectionActivity.h"
 #include "WifiSelectionActivity.h"
 #include "activities/network/CalibreConnectActivity.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/QrUtils.h"
@@ -33,13 +33,13 @@ DNSServer* dnsServer = nullptr;
 constexpr uint16_t DNS_PORT = 53;
 }  // namespace
 
-extern BleRemoteManager bleManager;
+extern BluetoothHIDManager btHidManager;
 
 void CrossPointWebServerActivity::onEnter() {
   Activity::onEnter();
 
   // Suspend BLE before any WiFi usage — shared 2.4GHz radio
-  bleManager.suspend();
+  btHidManager.suspend();
 
   LOG_DBG("WEBACT", "Free heap at onEnter: %d bytes", ESP.getFreeHeap());
 
@@ -103,7 +103,7 @@ void CrossPointWebServerActivity::onExit() {
   delay(30);  // Allow WiFi hardware to power down
 
   // Resume BLE now that WiFi is off
-  bleManager.resume();
+  btHidManager.resume();
 
   LOG_DBG("WEBACT", "Free heap at onExit end: %d bytes", ESP.getFreeHeap());
 }

@@ -11,13 +11,13 @@
 #include "CrossPointSettings.h"
 #include "WifiCredentialStore.h"
 #include "activities/network/WifiSelectionActivity.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "components/icons/weather.h"
 #include "fontIds.h"
 #include "network/HttpDownloader.h"
 
-extern BleRemoteManager bleManager;
+extern BluetoothHIDManager btHidManager;
 
 // All 63 provinces/cities of Vietnam, sorted alphabetically
 const CityCoord WeatherActivity::CITIES[CITY_COUNT] = {
@@ -115,7 +115,7 @@ void WeatherActivity::onEnter() {
   detectedLat[0] = '\0';
   detectedLon[0] = '\0';
 
-  bleManager.suspend();
+  btHidManager.suspend();
   state = WIFI_CONNECTING;
   statusMessage = tr(STR_FETCHING_WEATHER);
   requestUpdate(true);
@@ -138,9 +138,7 @@ void WeatherActivity::onEnter() {
 }
 
 void WeatherActivity::onWifiConnected() {
-  configTzTime("ICT-7", "pool.ntp.org", "time.google.com");
-
-  // Auto-detect location by IP if selectedCity == 0
+  // Auto-detect location by IP if selectedCity == 0 (also detects timezone offset)
   if (selectedCity == 0) {
     state = FETCHING;
     statusMessage = tr(STR_FETCHING_WEATHER);
@@ -152,15 +150,29 @@ void WeatherActivity::onWifiConnected() {
     }
   }
 
+  // Use detected timezone (or default ICT-7) for NTP sync
+  configTzTime(detectedTz, "pool.ntp.org", "time.google.com");
+
   state = FETCHING;
   statusMessage = tr(STR_FETCHING_WEATHER);
   requestUpdate(true);
   fetchWeather();
 }
 
+// Build POSIX TZ string from UTC offset in seconds (e.g. 25200 → "UTC-7")
+// POSIX sign convention is reversed: UTC+7 → sign negative in TZ string
+static void buildPosixTz(int offsetSeconds, char* buf, size_t len) {
+  int offsetHours = offsetSeconds / 3600;
+  int offsetMins = (offsetSeconds < 0 ? -offsetSeconds : offsetSeconds) % 3600 / 60;
+  if (offsetMins)
+    snprintf(buf, len, "UTC%+d:%02d", -offsetHours, offsetMins);
+  else
+    snprintf(buf, len, "UTC%+d", -offsetHours);
+}
+
 bool WeatherActivity::detectLocation() {
   std::string response;
-  if (!HttpDownloader::fetchUrl("http://ip-api.com/json/?fields=lat,lon,city", response)) {
+  if (!HttpDownloader::fetchUrl("http://ip-api.com/json/?fields=lat,lon,city,offset", response)) {
     return false;
   }
 
@@ -170,6 +182,7 @@ bool WeatherActivity::detectLocation() {
   float lat = doc["lat"] | 0.0f;
   float lon = doc["lon"] | 0.0f;
   const char* city = doc["city"] | "";
+  int offset = doc["offset"] | 25200;  // default UTC+7
 
   if (lat == 0.0f && lon == 0.0f) return false;
 
@@ -177,8 +190,9 @@ bool WeatherActivity::detectLocation() {
   snprintf(detectedLon, sizeof(detectedLon), "%.4f", lon);
   strncpy(detectedCityName, city, sizeof(detectedCityName) - 1);
   detectedCityName[sizeof(detectedCityName) - 1] = '\0';
+  buildPosixTz(offset, detectedTz, sizeof(detectedTz));
 
-  LOG_DBG("WEATHER", "IP geolocation: %s (%.4f, %.4f)", detectedCityName, lat, lon);
+  LOG_DBG("WEATHER", "IP geolocation: %s (%.4f, %.4f) TZ=%s", detectedCityName, lat, lon, detectedTz);
   return true;
 }
 
@@ -309,6 +323,7 @@ void WeatherActivity::saveWeatherCache() {
     doc["autoLat"] = detectedLat;
     doc["autoLon"] = detectedLon;
   }
+  doc["tz"] = detectedTz;
 
   String json;
   serializeJson(doc, json);
@@ -362,14 +377,6 @@ int WeatherActivity::silentRefresh() {
     delay(500);  // Allow DNS resolver to initialize after WiFi connect
   }
 
-  configTzTime("ICT-7", "pool.ntp.org", "time.google.com");
-  // Wait for NTP sync (up to 5 seconds)
-  for (int i = 0; i < 50; i++) {
-    time_t t = time(nullptr);
-    if (t > 1700000000) break;
-    delay(100);
-  }
-
   uint8_t city = SETTINGS.weatherCity;
   if (city > CITY_COUNT) city = 0;
 
@@ -378,15 +385,17 @@ int WeatherActivity::silentRefresh() {
   char autoLat[16] = "";
   char autoLon[16] = "";
   char autoCity[32] = "";
+  char tz[16] = "ICT-7";  // POSIX TZ, detected from ip-api offset
 
   if (city == 0) {
     std::string geoResponse;
-    if (HttpDownloader::fetchUrl("http://ip-api.com/json/?fields=lat,lon,city", geoResponse)) {
+    if (HttpDownloader::fetchUrl("http://ip-api.com/json/?fields=lat,lon,city,offset", geoResponse)) {
       JsonDocument geoDoc;
       if (!deserializeJson(geoDoc, geoResponse)) {
         float gLat = geoDoc["lat"] | 0.0f;
         float gLon = geoDoc["lon"] | 0.0f;
         const char* gCity = geoDoc["city"] | "";
+        int gOffset = geoDoc["offset"] | 25200;
         if (gLat != 0.0f || gLon != 0.0f) {
           snprintf(autoLat, sizeof(autoLat), "%.4f", gLat);
           snprintf(autoLon, sizeof(autoLon), "%.4f", gLon);
@@ -394,12 +403,21 @@ int WeatherActivity::silentRefresh() {
           lat = autoLat;
           lon = autoLon;
         }
+        buildPosixTz(gOffset, tz, sizeof(tz));
       }
     }
     if (!lat) { lat = CITIES[0].lat; lon = CITIES[0].lon; }
   } else {
     lat = CITIES[city - 1].lat;
     lon = CITIES[city - 1].lon;
+  }
+
+  configTzTime(tz, "pool.ntp.org", "time.google.com");
+  // Wait for NTP sync (up to 5 seconds)
+  for (int i = 0; i < 50; i++) {
+    time_t t = time(nullptr);
+    if (t > 1700000000) break;
+    delay(100);
   }
 
   char url[256];
@@ -428,6 +446,7 @@ int WeatherActivity::silentRefresh() {
   out["code"]  = current["weather_code"] | 0;
   out["wind"]  = current["wind_speed_10m"] | 0.0f;
   out["city"]  = city;
+  out["tz"]    = tz;
   if (autoCity[0]) out["autoCity"] = autoCity;
   if (autoLat[0]) { out["autoLat"] = autoLat; out["autoLon"] = autoLon; }
 
@@ -453,7 +472,7 @@ void WeatherActivity::onExit() {
   delay(100);
   WiFi.mode(WIFI_OFF);
   delay(100);
-  bleManager.resume();
+  btHidManager.resume();
   Activity::onExit();
 }
 
@@ -618,12 +637,12 @@ void WeatherActivity::render(RenderLock&&) {
     y += ICON_DISPLAY_SIZE + 8;
 
     // Large temperature
-    snprintf(buf, sizeof(buf), "%.0f°", weather.temperature);
+    snprintf(buf, sizeof(buf), "%.0f%s", convertTemp(weather.temperature), tempUnitSuffix());
     renderer.drawCenteredText(NOTOSANS_18_FONT_ID, y, buf, true, EpdFontFamily::BOLD);
     y += renderer.getLineHeight(NOTOSANS_18_FONT_ID) + 4;
 
     // Feels like
-    snprintf(buf, sizeof(buf), "%s %.0f°", tr(STR_FEELS_LIKE), weather.feelsLike);
+    snprintf(buf, sizeof(buf), "%s %.0f%s", tr(STR_FEELS_LIKE), convertTemp(weather.feelsLike), tempUnitSuffix());
     renderer.drawCenteredText(UI_10_FONT_ID, y, buf);
     y += renderer.getLineHeight(UI_10_FONT_ID) + 16;
 
@@ -673,11 +692,11 @@ void WeatherActivity::render(RenderLock&&) {
         renderer.drawIcon(fIcon, cx - WEATHER_ICON_SIZE / 2, y + 20, WEATHER_ICON_SIZE, WEATHER_ICON_SIZE);
 
         // High/Low temp
-        snprintf(buf, sizeof(buf), "%.0f°", f.tempMax);
+        snprintf(buf, sizeof(buf), "%.0f%s", convertTemp(f.tempMax), tempUnitSuffix());
         tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
         renderer.drawText(SMALL_FONT_ID, cx - tw / 2, y + 56, buf, true, EpdFontFamily::BOLD);
 
-        snprintf(buf, sizeof(buf), "%.0f°", f.tempMin);
+        snprintf(buf, sizeof(buf), "%.0f%s", convertTemp(f.tempMin), tempUnitSuffix());
         tw = renderer.getTextWidth(SMALL_FONT_ID, buf);
         renderer.drawText(SMALL_FONT_ID, cx - tw / 2, y + 74, buf);
       }

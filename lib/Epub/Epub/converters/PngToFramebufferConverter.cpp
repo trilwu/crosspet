@@ -1,5 +1,6 @@
 #include "PngToFramebufferConverter.h"
 
+#include <FsHelpers.h>
 #include <GfxRenderer.h>
 #include <HalStorage.h>
 #include <Logging.h>
@@ -411,9 +412,5 @@ bool PngToFramebufferConverter::decodeToFramebuffer(const std::string& imagePath
 }
 
 bool PngToFramebufferConverter::supportsFormat(const std::string& extension) {
-  std::string ext = extension;
-  for (auto& c : ext) {
-    c = tolower(c);
-  }
-  return (ext == ".png");
+  return FsHelpers::hasPngExtension(extension);
 }

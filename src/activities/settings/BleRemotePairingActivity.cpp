@@ -5,19 +5,19 @@
 #include <Logging.h>
 
 #include "CrossPointSettings.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
-// Reference to the global BLE manager defined in main.cpp
-extern BleRemoteManager bleManager;
+// Reference to the global BLE HID manager defined in main.cpp
+extern BluetoothHIDManager btHidManager;
 
 // ---- Lifecycle -------------------------------------------------------
 
 void BleRemotePairingActivity::onEnter() {
   Activity::onEnter();
 
-  bleManager.setPairingActive(true);  // prevent main loop from deinit'ing BLE
+  btHidManager.setPairingActive(true);  // prevent main loop from deinit'ing BLE
   selectedDeviceIndex = 0;
   idleMenuSelection = 0;
   errorMessage.clear();
@@ -35,27 +35,27 @@ void BleRemotePairingActivity::onEnter() {
 void BleRemotePairingActivity::onExit() {
   Activity::onExit();
 
-  if (bleManager.isScanning()) {
-    bleManager.stopScan();
+  if (btHidManager.isScanning()) {
+    btHidManager.stopScan();
   }
-  bleManager.setPairingActive(false);  // allow main loop to manage BLE again
+  btHidManager.setPairingActive(false);  // allow main loop to manage BLE again
 }
 
 // ---- State helpers ---------------------------------------------------
 
 void BleRemotePairingActivity::startScanning() {
-  bleManager.clearDiscoveredDevices();
+  btHidManager.clearDiscoveredDevices();
   selectedDeviceIndex = 0;
   state = BleUiState::SCANNING;
   stateEnteredAt = millis();
   requestUpdate();
 
-  bleManager.init();
-  bleManager.startScan(20);
+  btHidManager.init();
+  btHidManager.startScan(20);
 }
 
 void BleRemotePairingActivity::connectToSelected() {
-  auto devices = bleManager.getDiscoveredDevices();
+  auto devices = btHidManager.getDiscoveredDevices();
   if (selectedDeviceIndex >= (int)devices.size()) return;
 
   state = BleUiState::CONNECTING;
@@ -65,7 +65,7 @@ void BleRemotePairingActivity::connectToSelected() {
   const auto& device = devices[selectedDeviceIndex];
   LOG_DBG("BLE", "Connecting to %s (%s)", device.name.c_str(), device.address.toString().c_str());
 
-  if (bleManager.connectToDevice(device.address)) {
+  if (btHidManager.connectToDevice(device.address)) {
     // Persist bonded device info (including address type for reliable reconnect)
     strncpy(SETTINGS.bleBondedDeviceAddr, device.address.toString().c_str(),
             sizeof(SETTINGS.bleBondedDeviceAddr) - 1);
@@ -73,12 +73,13 @@ void BleRemotePairingActivity::connectToSelected() {
     strncpy(SETTINGS.bleBondedDeviceName, device.name.c_str(), sizeof(SETTINGS.bleBondedDeviceName) - 1);
     SETTINGS.bleBondedDeviceName[sizeof(SETTINGS.bleBondedDeviceName) - 1] = '\0';
     SETTINGS.bleBondedDeviceAddrType = device.address.getType();
+    SETTINGS.bleEnabled = 1;  // Auto-enable BLE when pairing succeeds
     SETTINGS.saveToFile();
 
     state = BleUiState::CONNECTED;
     stateEnteredAt = millis();
   } else {
-    errorMessage = bleManager.getLastError();
+    errorMessage = btHidManager.getLastError();
     if (errorMessage.empty()) errorMessage = "Connection failed";
     state = BleUiState::ERROR;
     LOG_DBG("BLE", "Connection failed: %s", errorMessage.c_str());
@@ -87,7 +88,7 @@ void BleRemotePairingActivity::connectToSelected() {
 }
 
 void BleRemotePairingActivity::forgetDevice() {
-  bleManager.disconnect();
+  btHidManager.disconnect();
   SETTINGS.bleBondedDeviceAddr[0] = '\0';
   SETTINGS.bleBondedDeviceName[0] = '\0';
   SETTINGS.bleBondedDeviceAddrType = 0;
@@ -101,17 +102,17 @@ void BleRemotePairingActivity::loop() {
   switch (state) {
     case BleUiState::SCANNING: {
       // Poll until scan finishes
-      if (!bleManager.isScanning()) {
+      if (!btHidManager.isScanning()) {
         state = BleUiState::SCAN_COMPLETE;
         requestUpdate();
       }
       if (mappedInput.wasPressed(MappedInputManager::Button::Back)) {
-        bleManager.stopScan();
+        btHidManager.stopScan();
         finish();
       }
       // Long-press Confirm → restart scan
       if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) && mappedInput.getHeldTime() > 800) {
-        bleManager.stopScan();
+        btHidManager.stopScan();
         startScanning();
       }
       return;
@@ -148,7 +149,7 @@ void BleRemotePairingActivity::loop() {
     }
 
     case BleUiState::SCAN_COMPLETE: {
-      auto devices = bleManager.getDiscoveredDevices();
+      auto devices = btHidManager.getDiscoveredDevices();
       const int deviceCount = (int)devices.size();
 
       if (mappedInput.wasPressed(MappedInputManager::Button::Back)) {
@@ -304,7 +305,7 @@ void BleRemotePairingActivity::renderScanComplete() const {
   const int contentTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int contentHeight = pageHeight - contentTop - metrics.buttonHintsHeight - metrics.verticalSpacing;
 
-  auto devices = bleManager.getDiscoveredDevices();
+  auto devices = btHidManager.getDiscoveredDevices();
   const int deviceCount = (int)devices.size();
 
   if (deviceCount == 0) {
@@ -339,7 +340,7 @@ void BleRemotePairingActivity::renderConnecting() const {
 
   renderer.drawCenteredText(UI_12_FONT_ID, top - 20, tr(STR_BLE_CONNECTING), true, EpdFontFamily::BOLD);
 
-  auto devices = bleManager.getDiscoveredDevices();
+  auto devices = btHidManager.getDiscoveredDevices();
   if (selectedDeviceIndex < (int)devices.size()) {
     std::string nameInfo = devices[selectedDeviceIndex].name;
     if (nameInfo.length() > 28) {

@@ -67,6 +67,21 @@ class XtcParser {
                              std::function<void(const uint8_t* data, size_t size, size_t offset)> callback,
                              size_t chunkSize = 1024);
 
+  /**
+   * Load a contiguous range of columns from one bit-plane of a 2-bit page.
+   * Used for strip-based rendering to avoid loading the full 96KB page buffer.
+   *
+   * @param pageIndex  Page index (0-based)
+   * @param plane      Bit-plane index: 0 = plane1 (Bit1), 1 = plane2 (Bit2)
+   * @param colStart   First column to read (file column order, 0 = rightmost screen pixel)
+   * @param colCount   Number of consecutive columns to read
+   * @param colBytes   Bytes per column = (height+7)/8
+   * @param buffer     Output buffer, must be at least colCount*colBytes bytes
+   * @return true on success
+   */
+  bool loadPagePlaneStrip(uint32_t pageIndex, uint8_t plane, size_t colStart, size_t colCount,
+                          size_t colBytes, uint8_t* buffer);
+
   // Get title/author from metadata
   std::string getTitle() const { return m_title; }
   std::string getAuthor() const { return m_author; }

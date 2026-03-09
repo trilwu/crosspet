@@ -212,9 +212,16 @@ class CrossPointSettings {
   uint8_t showHiddenFiles = 0;
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
+  // Text darkness: 0=normal, 1=dark (light gray→dark gray), 2=extra dark (all→black)
+  uint8_t textDarkness = 0;
 
   // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
   uint8_t weatherCity = 0;
+  // Temperature display unit: 0=Celsius, 1=Fahrenheit
+  uint8_t temperatureUnit = 0;
+
+  // Auto page turn speed: 0=off, 1-20=pages per minute
+  uint8_t autoPageTurnSpeed = 0;
 
   // BLE Remote settings
   uint8_t bleEnabled = 0;                  // 0=disabled, 1=enabled

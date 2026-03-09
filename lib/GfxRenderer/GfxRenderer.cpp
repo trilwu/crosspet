@@ -113,7 +113,16 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
           // the direct bit from the font is 0 -> white, 1 -> light gray, 2 -> dark gray, 3 -> black
           // we swap this to better match the way images and screen think about colors:
           // 0 -> black, 1 -> dark grey, 2 -> light grey, 3 -> white
-          const uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
+          uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
+
+          // Apply text darkness setting (only meaningful in grayscale/AA mode)
+          // Extra dark: all non-white → black; Dark: light gray → dark gray
+          const uint8_t darkness = renderer.getTextDarkness();
+          if (darkness == 2 && bmpVal < 3) {
+            bmpVal = 0;  // extra dark: all non-white → black
+          } else if (darkness == 1 && bmpVal == 2) {
+            bmpVal = 1;  // dark: light gray → dark gray
+          }
 
           if (renderMode == GfxRenderer::BW && bmpVal < 3) {
             // Black (also paints over the grays in BW mode)

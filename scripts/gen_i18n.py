@@ -493,7 +493,6 @@ def generate_strings_header(
 
     lines.append("")
     lines.append("}  // namespace i18n_strings")
-
     _write_file(output_path, lines)
 
 

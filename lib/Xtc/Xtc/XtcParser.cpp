@@ -440,6 +440,48 @@ XtcError XtcParser::loadPageStreaming(uint32_t pageIndex,
   return XtcError::OK;
 }
 
+bool XtcParser::loadPagePlaneStrip(uint32_t pageIndex, uint8_t plane, size_t colStart, size_t colCount,
+                                    size_t colBytes, uint8_t* buffer) {
+  if (!m_isOpen) {
+    return false;
+  }
+  if (pageIndex >= m_header.pageCount) {
+    return false;
+  }
+  if (m_bitDepth != 2) {
+    return false;
+  }
+  if (plane > 1 || colCount == 0 || !buffer) {
+    return false;
+  }
+
+  const PageInfo& page = m_pageTable[pageIndex];
+
+  // Page data layout after the XtgPageHeader:
+  // [plane1: width*colBytes bytes][plane2: width*colBytes bytes]
+  // File offset to bitmap start = page.offset + sizeof(XtgPageHeader)
+  const size_t bitmapStart = static_cast<size_t>(page.offset) + sizeof(XtgPageHeader);
+  const size_t planeSize = colBytes * m_defaultWidth;  // bytes per plane
+  const size_t stripOffset = bitmapStart + plane * planeSize + colStart * colBytes;
+
+  if (!m_file.seek(stripOffset)) {
+    LOG_DBG("XTC", "loadPagePlaneStrip: seek failed to offset %lu", (unsigned long)stripOffset);
+    m_lastError = XtcError::READ_ERROR;
+    return false;
+  }
+
+  const size_t toRead = colCount * colBytes;
+  size_t bytesRead = m_file.read(buffer, toRead);
+  if (bytesRead != toRead) {
+    LOG_DBG("XTC", "loadPagePlaneStrip: read %lu/%lu bytes", (unsigned long)bytesRead, (unsigned long)toRead);
+    m_lastError = XtcError::READ_ERROR;
+    return false;
+  }
+
+  m_lastError = XtcError::OK;
+  return true;
+}
+
 bool XtcParser::isValidXtcFile(const char* filepath) {
   FsFile file;
   if (!Storage.openFileForRead("XTC", filepath, file)) {

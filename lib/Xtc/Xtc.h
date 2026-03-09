@@ -94,6 +94,22 @@ class Xtc {
                                   std::function<void(const uint8_t* data, size_t size, size_t offset)> callback,
                                   size_t chunkSize = 1024) const;
 
+  /**
+   * Load a strip of columns from one bit-plane of a 2-bit page.
+   * Memory-efficient alternative to loading the full 96KB page buffer.
+   * Only valid for 2-bit (XTCH) files.
+   *
+   * @param pageIndex  Page index (0-based)
+   * @param plane      0 = Bit1 plane, 1 = Bit2 plane
+   * @param colStart   Starting file column index (0 = rightmost screen pixel)
+   * @param colCount   Number of columns to read
+   * @param colBytes   Bytes per column = (height+7)/8
+   * @param buffer     Caller-provided buffer of at least colCount*colBytes bytes
+   * @return true on success
+   */
+  bool loadPagePlaneStrip(uint32_t pageIndex, uint8_t plane, size_t colStart, size_t colCount,
+                          size_t colBytes, uint8_t* buffer) const;
+
   // Progress calculation
   uint8_t calculateProgress(uint32_t currentPage) const;
 

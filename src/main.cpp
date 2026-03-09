@@ -28,13 +28,14 @@
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "pet/PetManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ButtonNavigator.h"
 #include "util/ScreenshotUtil.h"
 #include "activities/tools/ReadingStatsActivity.h"
+#include <ArduinoJson.h>
 
 HalDisplay display;
 HalGPIO gpio;
@@ -42,7 +43,7 @@ MappedInputManager mappedInputManager(gpio);
 GfxRenderer renderer(display);
 ActivityManager activityManager(renderer, mappedInputManager);
 FontDecompressor fontDecompressor;
-BleRemoteManager bleManager(gpio);
+BluetoothHIDManager btHidManager(gpio);
 
 // Fonts
 EpdFont bookerly14RegularFont(&bookerly_14_regular);
@@ -255,7 +256,7 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
-  bleManager.deinit();
+  btHidManager.deinit();
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
@@ -379,10 +380,21 @@ void setup() {
     g_rtcSleepMagic = 0;  // consume — next boot treats as cold boot unless we sleep again
   }
 
-  // Set timezone to UTC+7 (ICT — Indochina Time) so localtime_r() returns local time.
+  // Load cached timezone from weather data, fallback to ICT-7 (Indochina Time).
   // This must happen after settimeofday() and before any localtime_r() calls.
-  setenv("TZ", "ICT-7", 1);
-  tzset();
+  {
+    char cachedTz[16] = "ICT-7";
+    String content = Storage.readFile("/.crosspoint/weather_cache.json");
+    if (!content.isEmpty()) {
+      JsonDocument tzDoc;
+      if (!deserializeJson(tzDoc, content)) {
+        const char* tz = tzDoc["tz"] | "";
+        if (tz[0]) strncpy(cachedTz, tz, sizeof(cachedTz) - 1);
+      }
+    }
+    setenv("TZ", cachedTz, 1);
+    tzset();
+  }
 
   // Load virtual pet state and apply time-based decay
   PET_MANAGER.load();
@@ -390,8 +402,8 @@ void setup() {
 
   // Initialize BLE remote if enabled and has bonded device
   if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
-    bleManager.init();
-    bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
+    btHidManager.init();
+    btHidManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
   }
 
   switch (gpio.getWakeupReason()) {
@@ -452,13 +464,13 @@ void loop() {
   // configured can fault at 0x00000000. Pairing activity calls init() explicitly.
   // Skip init if suspended for WiFi — resume() handles re-init.
   if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
-    if (!bleManager.isEnabled() && !bleManager.isSuspended()) {
-      bleManager.init();
-      bleManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
+    if (!btHidManager.isEnabled() && !btHidManager.isSuspended()) {
+      btHidManager.init();
+      btHidManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
     }
-    bleManager.tick();
-  } else if (bleManager.isEnabled() && !bleManager.isPairingActive()) {
-    bleManager.deinit();
+    btHidManager.tick();
+  } else if (btHidManager.isEnabled() && !btHidManager.isPairingActive()) {
+    btHidManager.deinit();
   }
 
   renderer.setFadingFix(SETTINGS.fadingFix);

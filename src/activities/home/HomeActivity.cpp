@@ -2,6 +2,7 @@
 
 #include <Bitmap.h>
 #include <Epub.h>
+#include <FsHelpers.h>
 #include <GfxRenderer.h>
 #include <HalStorage.h>
 #include <I18n.h>
@@ -22,12 +23,12 @@
 #include "activities/tools/WeatherActivity.h"
 #include "WifiCredentialStore.h"
 #include <WiFi.h>
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
 #include "util/StringUtils.h"
 
-extern BleRemoteManager bleManager;
+extern BluetoothHIDManager btHidManager;
 
 // ── Buffer management ─────────────────────────────────────────────────────────
 
@@ -73,18 +74,26 @@ void HomeActivity::loadRecentCovers(int coverHeight) {
 
   for (RecentBook& book : recentBooks) {
     if (!book.coverBmpPath.empty()) {
-      std::string thumbPath = UITheme::getCoverThumbPath(book.coverBmpPath, coverHeight);
-      if (!Storage.exists(thumbPath.c_str())) {
+      std::string coverPath = UITheme::getCoverThumbPath(book.coverBmpPath, coverHeight);
+      if (!Storage.exists(coverPath.c_str())) {
         bool generated = false;
-        if (StringUtils::checkFileExtension(book.path, ".epub")) {
+        // If epub, try to load the metadata for title/author and cover
+        if (FsHelpers::hasEpubExtension(book.path)) {
           Epub epub(book.path, "/.crosspoint");
           epub.load(false, true);
+
+          // Try to generate thumbnail image for Continue Reading card
           if (!showingLoading) { showingLoading = true; popup = GUI.drawPopup(renderer, tr(STR_LOADING_POPUP)); }
           GUI.fillPopupProgress(renderer, popup, 10 + progress * (90 / (int)recentBooks.size()));
           generated = epub.generateThumbBmp(coverHeight);
-          if (!generated) { RECENT_BOOKS.updateBook(book.path, book.title, book.author, ""); book.coverBmpPath = ""; }
-        } else if (StringUtils::checkFileExtension(book.path, ".xtch") ||
-                   StringUtils::checkFileExtension(book.path, ".xtc")) {
+          if (!generated) {
+            RECENT_BOOKS.updateBook(book.path, book.title, book.author, "");
+            book.coverBmpPath = "";
+          }
+          coverRendered = false;
+          requestUpdate();
+        } else if (FsHelpers::hasXtcExtension(book.path)) {
+          // Handle XTC file
           Xtc xtc(book.path, "/.crosspoint");
           if (xtc.load()) {
             if (!showingLoading) { showingLoading = true; popup = GUI.drawPopup(renderer, tr(STR_LOADING_POPUP)); }
@@ -208,7 +217,7 @@ void HomeActivity::renderHeaderClock() {
     char wTime[8] = "";
     if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
       char wBuf[16];
-      snprintf(wBuf, sizeof(wBuf), "%.0f°C", wData.temperature);
+      snprintf(wBuf, sizeof(wBuf), "%.0f%s", WeatherActivity::convertTemp(wData.temperature), WeatherActivity::tempUnitSuffix());
       renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
     }
   }
@@ -234,7 +243,7 @@ void HomeActivity::performSyncAfterWifi() {
       if (WiFi.status() != WL_CONNECTED) {
         WiFi.disconnect(false);
         WiFi.mode(WIFI_OFF);
-        bleManager.resume();
+        btHidManager.resume();
         weatherRefreshing = false;
         snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_CONN_FAILED));
         syncResultMsg = syncBuf;
@@ -246,7 +255,7 @@ void HomeActivity::performSyncAfterWifi() {
   }
 
   int rc = WeatherActivity::silentRefresh();
-  bleManager.resume();
+  btHidManager.resume();
   weatherRefreshing = false;
   if (rc == 0)      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
   else if (rc == 2) snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
@@ -266,7 +275,7 @@ void HomeActivity::doSync() {
     requestUpdate();
     return;
   }
-  bleManager.suspend();
+  btHidManager.suspend();
   performSyncAfterWifi();
 }
 

@@ -606,6 +606,15 @@ xtc::XtcError Xtc::loadPageStreaming(uint32_t pageIndex,
   return const_cast<xtc::XtcParser*>(parser.get())->loadPageStreaming(pageIndex, callback, chunkSize);
 }
 
+bool Xtc::loadPagePlaneStrip(uint32_t pageIndex, uint8_t plane, size_t colStart, size_t colCount,
+                              size_t colBytes, uint8_t* buffer) const {
+  if (!loaded || !parser) {
+    return false;
+  }
+  return const_cast<xtc::XtcParser*>(parser.get())
+      ->loadPagePlaneStrip(pageIndex, plane, colStart, colCount, colBytes, buffer);
+}
+
 uint8_t Xtc::calculateProgress(uint32_t currentPage) const {
   if (!loaded || !parser || parser->getPageCount() == 0) {
     return 0;

@@ -10,10 +10,10 @@
 #include "KOReaderDocumentId.h"
 #include "MappedInputManager.h"
 #include "activities/network/WifiSelectionActivity.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 
-extern BleRemoteManager bleManager;
+extern BluetoothHIDManager btHidManager;
 #include "fontIds.h"
 
 namespace {
@@ -198,7 +198,7 @@ void KOReaderSyncActivity::onEnter() {
   Activity::onEnter();
 
   // Suspend BLE before WiFi — shared 2.4GHz radio
-  bleManager.suspend();
+  btHidManager.suspend();
 
   // Check for credentials first
   if (!KOREADER_STORE.hasCredentials()) {
@@ -226,7 +226,7 @@ void KOReaderSyncActivity::onExit() {
   wifiOff();
 
   // Resume BLE now that WiFi is off
-  bleManager.resume();
+  btHidManager.resume();
 }
 
 void KOReaderSyncActivity::render(RenderLock&&) {

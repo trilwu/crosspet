@@ -16,7 +16,7 @@
 #include "SettingsList.h"
 #include "StatusBarSettingsActivity.h"
 #include "activities/network/WifiSelectionActivity.h"
-#include "ble/BleRemoteManager.h"
+#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -186,13 +186,13 @@ void SettingsActivity::toggleCurrentSetting() {
         startActivityForResult(std::make_unique<CalibreSettingsActivity>(renderer, mappedInput), resultHandler);
         break;
       case SettingAction::Network: {
-        extern BleRemoteManager bleManager;
+        extern BluetoothHIDManager btHidManager;
         startActivityForResult(std::make_unique<WifiSelectionActivity>(renderer, mappedInput, false),
                                [this](const ActivityResult&) {
                                  // WifiSelectionActivity doesn't own WiFi lifecycle — clean up here
                                  WiFi.disconnect(false);
                                  WiFi.mode(WIFI_OFF);
-                                 bleManager.resume();
+                                 btHidManager.resume();
                                  SETTINGS.saveToFile();
                                });
         break;
