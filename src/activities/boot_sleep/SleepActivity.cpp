@@ -53,6 +53,23 @@ void SleepActivity::onEnter() {
 }
 
 void SleepActivity::renderCustomSleepScreen() const {
+  // If a specific sleep image is pinned, load it directly
+  if (SETTINGS.sleepImagePath[0] != '\0') {
+    FsFile pinnedFile;
+    if (Storage.openFileForRead("SLP", SETTINGS.sleepImagePath, pinnedFile)) {
+      Bitmap bitmap(pinnedFile, true);
+      if (bitmap.parseHeaders() == BmpReaderError::Ok) {
+        LOG_DBG("SLP", "Loading pinned sleep image: %s", SETTINGS.sleepImagePath);
+        renderBitmapSleepScreen(bitmap);
+        pinnedFile.close();
+        return;
+      }
+      pinnedFile.close();
+    }
+    LOG_ERR("SLP", "Pinned sleep image not found: %s", SETTINGS.sleepImagePath);
+    // Fall through to random selection
+  }
+
   // Check if we have a /.sleep (preferred) or /sleep directory
   const char* sleepDir = nullptr;
   auto dir = Storage.open("/.sleep");

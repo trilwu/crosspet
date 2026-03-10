@@ -115,25 +115,33 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
           // 0 -> black, 1 -> dark grey, 2 -> light grey, 3 -> white
           uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
 
-          // Apply text darkness setting (only meaningful in grayscale/AA mode)
-          // Extra dark: all non-white → black; Dark: light gray → dark gray
-          const uint8_t darkness = renderer.getTextDarkness();
-          if (darkness == 2 && bmpVal < 3) {
-            bmpVal = 0;  // extra dark: all non-white → black
-          } else if (darkness == 1 && bmpVal == 2) {
-            bmpVal = 1;  // dark: light gray → dark gray
-          }
-
-          if (renderMode == GfxRenderer::BW && bmpVal < 3) {
-            // Black (also paints over the grays in BW mode)
-            renderer.drawPixel(screenX, screenY, pixelState);
-          } else if (renderMode == GfxRenderer::GRAYSCALE_MSB && (bmpVal == 1 || bmpVal == 2)) {
-            // Light gray (also mark the MSB if it's going to be a dark gray too)
-            // We have to flag pixels in reverse for the gray buffers, as 0 leave alone, 1 update
-            renderer.drawPixel(screenX, screenY, false);
-          } else if (renderMode == GfxRenderer::GRAYSCALE_LSB && bmpVal == 1) {
-            // Dark gray
-            renderer.drawPixel(screenX, screenY, false);
+          if (renderMode == GfxRenderer::BW) {
+            if (bmpVal < 3) renderer.drawPixel(screenX, screenY, pixelState);
+          } else if (renderMode == GfxRenderer::GRAYSCALE_MSB) {
+            // Text darkness shifts more AA pixels into the "draw" bucket for bolder text.
+            // Dark mode swaps LUT direction — fringes go white→black instead of black→white.
+            const uint8_t darkness = renderer.getTextDarkness();
+            bool hit;
+            if (renderer.isDarkMode()) {
+              hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
+                    : (darkness == 1) ? (bmpVal == 1 || bmpVal == 2)
+                    : (bmpVal == 2);
+            } else {
+              hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
+                    : (bmpVal == 1 || bmpVal == 2);
+            }
+            if (hit) renderer.drawPixel(screenX, screenY, false);
+          } else if (renderMode == GfxRenderer::GRAYSCALE_LSB) {
+            const uint8_t darkness = renderer.getTextDarkness();
+            bool hit;
+            if (renderer.isDarkMode()) {
+              hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
+                    : (bmpVal == 1 || bmpVal == 2);
+            } else {
+              hit = (darkness >= 2) ? (bmpVal == 1 || bmpVal == 2)
+                    : (bmpVal == 1);
+            }
+            if (hit) renderer.drawPixel(screenX, screenY, false);
           }
         }
       }
@@ -182,7 +190,11 @@ void GfxRenderer::drawPixel(const int x, const int y, const bool state) const {
   const uint16_t byteIndex = phyY * HalDisplay::DISPLAY_WIDTH_BYTES + (phyX / 8);
   const uint8_t bitPosition = 7 - (phyX % 8);  // MSB first
 
-  if (state) {
+  // Dark mode: invert pixel state in BW mode so all drawing is automatically inverted.
+  // This keeps BW RAM and RED RAM coherent, avoiding ghosting on differential refresh.
+  const bool effectiveState = (darkMode && renderMode == BW) ? !state : state;
+
+  if (effectiveState) {
     frameBuffer[byteIndex] &= ~(1 << bitPosition);  // Clear bit
   } else {
     frameBuffer[byteIndex] |= 1 << bitPosition;  // Set bit
@@ -808,7 +820,9 @@ static unsigned long start_ms = 0;
 
 void GfxRenderer::clearScreen(const uint8_t color) const {
   start_ms = millis();
-  display.clearScreen(color);
+  // Dark mode: invert clear color in BW mode (white→black background)
+  const uint8_t effectiveColor = (darkMode && renderMode == BW) ? ~color : color;
+  display.clearScreen(effectiveColor);
 }
 
 void GfxRenderer::invertScreen() const {

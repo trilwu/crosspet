@@ -866,9 +866,19 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderStatusBar();
       renderer.displayBuffer(HalDisplay::FAST_REFRESH);
     } else {
-      renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+      // Fallback: FAST_REFRESH only — HALF_REFRESH causes ghosting with AA grayscale
+      renderer.displayBuffer(HalDisplay::FAST_REFRESH);
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
+  } else if (SETTINGS.textAntiAliasing) {
+    // Anti-aliasing on: always use FAST_REFRESH for BW pass.
+    // HALF_REFRESH sets e-ink particles too firmly, preventing the subsequent
+    // grayscale LUT from adjusting them — causing ghost artifacts on next page.
+    renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+    pagesUntilFullRefresh--;
+    if (pagesUntilFullRefresh <= 0) {
+      pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
+    }
   } else {
     ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
   }

@@ -6,7 +6,7 @@ class ToolsActivity final : public Activity {
   ButtonNavigator buttonNavigator;
   int selectorIndex = 0;
 
-  static constexpr int MENU_COUNT = 11;
+  static constexpr int MENU_COUNT = 12;
 
  public:
   explicit ToolsActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)

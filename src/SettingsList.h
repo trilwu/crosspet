@@ -36,6 +36,8 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         "uiTheme", StrId::STR_CAT_DISPLAY),
       SettingInfo::Toggle(StrId::STR_SUNLIGHT_FADING_FIX, &CrossPointSettings::fadingFix, "fadingFix",
                           StrId::STR_CAT_DISPLAY),
+      SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode, "darkMode",
+                          StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
                         {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CAT_DISPLAY),
       // CrossPet home screen widgets — stored in crosspet.json

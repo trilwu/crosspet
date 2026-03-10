@@ -206,6 +206,10 @@ class CrossPointSettings {
   uint8_t uiTheme = CROSSPET;
   // Sunlight fading compensation
   uint8_t fadingFix = 0;
+  // Dark mode: invert display colors (white text on black background)
+  uint8_t darkMode = 0;
+  // Sleep image path — selected via SleepImagePickerActivity
+  char sleepImagePath[64] = "";
   // Use book's embedded CSS styles for EPUB rendering (1 = enabled, 0 = disabled)
   uint8_t embeddedStyle = 1;
   // Show hidden files/directories (starting with '.') in the file browser (0 = hidden, 1 = show)

@@ -258,9 +258,12 @@ void WifiSelectionActivity::checkConnectionStatus() {
     connectedIP = ipStr;
     autoConnecting = false;
 
-    // Start NTP sync so Clock activity shows correct time after WiFi connects
+    // Start NTP sync with the cached timezone (set by main.cpp on boot from
+    // weather_cache.json, or ICT-7 default).  configTzTime reads the TZ env var
+    // that was set at startup, so localtime_r() returns local time immediately.
     if (!esp_sntp_enabled()) {
-      configTime(0, 0, "pool.ntp.org", "time.google.com");
+      const char* tz = getenv("TZ");
+      configTzTime(tz ? tz : "ICT-7", "pool.ntp.org", "time.google.com");
     }
 
     // Save this as the last connected network - SD card operations need lock as

@@ -36,6 +36,7 @@ class GfxRenderer {
   RenderMode renderMode;
   Orientation orientation;
   bool fadingFix;
+  bool darkMode;
   uint8_t textDarkness = 0;  // 0=normal, 1=dark, 2=extra dark
   mutable bool nextRefreshFull = false;  // if true, next displayBuffer() upgrades to FULL_REFRESH
   mutable bool nextRefreshHalf = false;  // if true, next displayBuffer() upgrades to HALF_REFRESH
@@ -51,7 +52,7 @@ class GfxRenderer {
 
  public:
   explicit GfxRenderer(HalDisplay& halDisplay)
-      : display(halDisplay), renderMode(BW), orientation(Portrait), fadingFix(false) {}
+      : display(halDisplay), renderMode(BW), orientation(Portrait), fadingFix(false), darkMode(false) {}
   ~GfxRenderer() { freeBwBufferChunks(); }
 
   static constexpr int VIEWABLE_MARGIN_TOP = 9;
@@ -73,6 +74,10 @@ class GfxRenderer {
 
   // Fading fix control
   void setFadingFix(const bool enabled) { fadingFix = enabled; }
+
+  // Dark mode: invert framebuffer on display (white text on black)
+  void setDarkMode(const bool enabled) { darkMode = enabled; }
+  bool isDarkMode() const { return darkMode; }
 
   // Text darkness control (0=normal, 1=dark, 2=extra dark; only affects AA/grayscale rendering)
   void setTextDarkness(const uint8_t d) { textDarkness = d; }

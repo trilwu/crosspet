@@ -14,6 +14,7 @@
 #include "PresenterActivity.h"
 #include "WeatherActivity.h"
 #include "ReadingStatsActivity.h"
+#include "SleepImagePickerActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -55,20 +56,23 @@ void ToolsActivity::loop() {
       case 5:
         activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInput));
         break;
-      // -- Games --
       case 6:
+        activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
+        break;
+      // -- Games --
+      case 7:
         activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput));
         break;
-      case 7:
+      case 8:
         activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput));
         break;
-      case 8:
+      case 9:
         activityManager.pushActivity(std::make_unique<SudokuActivity>(renderer, mappedInput));
         break;
-      case 9:
+      case 10:
         activityManager.pushActivity(std::make_unique<MinesweeperActivity>(renderer, mappedInput));
         break;
-      case 10:
+      case 11:
         activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
         break;
     }
@@ -89,8 +93,8 @@ void ToolsActivity::render(RenderLock&&) {
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_TOOLS));
 
   const char* menuLabels[] = {
-      tr(STR_CLOCK), tr(STR_WEATHER), tr(STR_POMODORO), tr(STR_VIRTUAL_PET), tr(STR_PRESENTER),
-      tr(STR_READING_STATS_APP),
+      tr(STR_CLOCK), tr(STR_WEATHER), tr(STR_POMODORO), tr(STR_VIRTUAL_PET),
+      tr(STR_PRESENTER), tr(STR_READING_STATS_APP), tr(STR_SLEEP_IMAGE_PICKER),
       tr(STR_CHESS), tr(STR_CARO), tr(STR_SUDOKU), tr(STR_MINESWEEPER), tr(STR_2048)};
 
   const int menuTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
