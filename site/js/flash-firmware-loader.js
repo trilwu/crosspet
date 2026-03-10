@@ -1,70 +1,150 @@
-/* Flash firmware loader for CrossPet Reader.
-   Uses static manifest at /firmware/manifest.json (same-origin, no CORS).
-   Firmware binary is deployed alongside the manifest by the release workflow.
-   Falls back to GitHub Releases download link if manifest fetch fails. */
+/* CrossPet firmware flasher using esptool-js directly.
+   Writes firmware to app partition (0x10000) with compress + no full erase.
+   Same approach as xteink.dve.al flasher. */
 
-(function () {
-  'use strict';
+import { ESPLoader, Transport } from 'https://unpkg.com/esptool-js@0.5.7/bundle.js';
 
-  var REPO = 'trilwu/crosspet';
-  var MANIFEST_PATH = 'firmware/manifest.json';
-  var FALLBACK_VERSION = 'v1.6.10';
+var FIRMWARE_URL = 'firmware/firmware.bin';
+var MANIFEST_URL = 'firmware/manifest.json';
+var APP_OFFSET = 0x10000;
+// ESP32-C3 built-in USB JTAG/serial
+var USB_VENDOR_ID = 12346;
+var USB_PRODUCT_ID = 4097;
 
-  var installBtn = document.querySelector('esp-web-install-button');
-  var versionEl = document.getElementById('firmware-version');
-  var downloadEl = document.getElementById('firmware-download');
-  var downloadLink = document.getElementById('firmware-download-link');
-  var errorEl = document.getElementById('flash-error');
-  var errorMsg = document.getElementById('flash-error-msg');
+var flashBtn = document.getElementById('flash-btn');
+var progressEl = document.getElementById('flash-progress');
+var progressFill = document.getElementById('flash-progress-fill');
+var statusEl = document.getElementById('flash-status');
+var versionEl = document.getElementById('firmware-version');
+var downloadEl = document.getElementById('firmware-download');
+var errorEl = document.getElementById('flash-error');
+var errorMsg = document.getElementById('flash-error-msg');
+var unsupportedEl = document.getElementById('flash-unsupported');
 
-  if (!installBtn) return;
+// Check Web Serial support
+if (!('serial' in navigator && navigator.serial)) {
+  if (flashBtn) flashBtn.style.display = 'none';
+  if (unsupportedEl) unsupportedEl.style.display = '';
+}
 
-  // Point esp-web-tools to static manifest (same origin — no CORS)
-  installBtn.setAttribute('manifest', MANIFEST_PATH);
+// Load manifest to show version and download link
+fetch(MANIFEST_URL)
+  .then(function (res) { return res.ok ? res.json() : null; })
+  .then(function (m) {
+    if (!m) return;
+    if (versionEl) {
+      versionEl.textContent = 'v' + m.version;
+      versionEl.closest('.firmware-version-info').style.display = '';
+    }
+    if (downloadEl) downloadEl.style.display = '';
+  })
+  .catch(function () {});
 
-  // Fetch manifest to display version and set up download link
-  fetch(MANIFEST_PATH)
-    .then(function (res) {
-      if (!res.ok) throw new Error('Manifest not found');
-      return res.json();
-    })
-    .then(function (manifest) {
-      var version = manifest.version || '0.0.0';
+// Flash button handler
+if (flashBtn) {
+  flashBtn.addEventListener('click', startFlash);
+}
 
-      // Show version
-      if (versionEl) {
-        versionEl.textContent = 'v' + version;
-        versionEl.closest('.firmware-version-info').style.display = '';
-      }
+async function startFlash() {
+  flashBtn.disabled = true;
+  flashBtn.textContent = 'Flashing...';
+  showProgress('Requesting serial port...');
+  clearError();
 
-      // Show direct download link (same-origin firmware binary)
-      if (downloadLink && downloadEl) {
-        downloadLink.href = 'firmware/firmware.bin';
-        downloadLink.setAttribute('download', 'firmware-x4-crosspet-v' + version + '.bin');
-        downloadEl.style.display = '';
-      }
-    })
-    .catch(function (err) {
-      console.warn('[flash] Manifest fetch failed, using GitHub fallback:', err.message);
+  var transport = null;
 
-      // Fallback: link to GitHub Releases for manual download
-      var ghUrl = 'https://github.com/' + REPO + '/releases/download/' +
-        FALLBACK_VERSION + '/firmware-x4-crosspet-' + FALLBACK_VERSION + '.bin';
+  try {
+    // Request serial port with ESP32-C3 USB filter
+    var port = await navigator.serial.requestPort({
+      filters: [{ usbVendorId: USB_VENDOR_ID, usbProductId: USB_PRODUCT_ID }]
+    });
 
-      if (downloadLink && downloadEl) {
-        downloadLink.href = ghUrl;
-        downloadLink.setAttribute('download', 'firmware-x4-crosspet-' + FALLBACK_VERSION + '.bin');
-        downloadEl.style.display = '';
-      }
+    // Connect via esptool
+    showProgress('Connecting to ESP32-C3...');
+    transport = new Transport(port, false);
+    var loader = new ESPLoader({
+      transport: transport,
+      baudrate: 115200,
+      romBaudrate: 115200,
+      enableTracing: false
+    });
 
-      if (versionEl) {
-        versionEl.textContent = FALLBACK_VERSION;
-        versionEl.closest('.firmware-version-info').style.display = '';
-      }
+    await loader.main();
+    showProgress('Connected. Downloading firmware...');
 
-      if (errorEl && errorMsg) {
-        errorMsg.textContent = 'Firmware not yet deployed to this site. Use the download link or community flasher.';
-        errorEl.style.display = '';
+    // Download firmware binary
+    var res = await fetch(FIRMWARE_URL);
+    if (!res.ok) throw new Error('Failed to download firmware: ' + res.status);
+    var firmwareData = await res.arrayBuffer();
+    var firmwareStr = loader.ui8ToBstr(new Uint8Array(firmwareData));
+
+    showProgress('Writing firmware (' + (firmwareData.byteLength / 1024 / 1024).toFixed(1) + ' MB)...');
+
+    // Write firmware to app partition — no full erase, with compression
+    await loader.writeFlash({
+      fileArray: [{ data: firmwareStr, address: APP_OFFSET }],
+      flashSize: 'keep',
+      flashMode: 'keep',
+      flashFreq: 'keep',
+      eraseAll: false,
+      compress: true,
+      reportProgress: function (_fileIndex, written, total) {
+        var pct = Math.round((written / total) * 100);
+        setProgress(pct);
+        statusEl.textContent = 'Writing: ' + pct + '% (' +
+          Math.round(written / 1024) + ' / ' + Math.round(total / 1024) + ' KB)';
       }
     });
-})();
+
+    // Hard reset to boot new firmware
+    showProgress('Resetting device...');
+    await loader.after('hard_reset');
+    await transport.disconnect();
+    transport = null;
+
+    // Success
+    setProgress(100);
+    statusEl.textContent = 'Flash complete! Device is rebooting.';
+    statusEl.className = 'flash-status success';
+    flashBtn.textContent = 'Flash CrossPet Firmware';
+    flashBtn.disabled = false;
+
+  } catch (err) {
+    console.error('[flash]', err);
+    showError(err.message || 'Unknown error');
+    hideProgress();
+    flashBtn.textContent = 'Flash CrossPet Firmware';
+    flashBtn.disabled = false;
+
+    // Try to clean up transport
+    if (transport) {
+      try { await transport.disconnect(); } catch (_) {}
+    }
+  }
+}
+
+function showProgress(msg) {
+  progressEl.classList.add('active');
+  statusEl.textContent = msg;
+  statusEl.className = 'flash-status';
+}
+
+function setProgress(pct) {
+  progressFill.style.width = pct + '%';
+}
+
+function hideProgress() {
+  progressEl.classList.remove('active');
+  progressFill.style.width = '0%';
+}
+
+function showError(msg) {
+  if (errorEl && errorMsg) {
+    errorMsg.textContent = msg;
+    errorEl.style.display = '';
+  }
+}
+
+function clearError() {
+  if (errorEl) errorEl.style.display = 'none';
+}
