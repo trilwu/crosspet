@@ -96,15 +96,15 @@ async function startFlash() {
       }
     });
 
-    // Hard reset to boot new firmware
-    showProgress('Resetting device...');
-    await loader.after('hard_reset');
+    // ESP32-C3 USB JTAG doesn't support DTR/RTS hard_reset properly —
+    // it locks up the device. Use no_reset and tell user to power cycle.
+    await loader.after('no_reset');
     await transport.disconnect();
     transport = null;
 
     // Success
     setProgress(100);
-    statusEl.textContent = 'Flash complete! Device is rebooting.';
+    statusEl.innerHTML = 'Flash complete! <strong>Press the power button</strong> to reboot your device.';
     statusEl.className = 'flash-status success';
     flashBtn.textContent = 'Flash CrossPet Firmware';
     flashBtn.disabled = false;
