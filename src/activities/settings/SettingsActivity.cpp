@@ -4,7 +4,6 @@
 #include <Logging.h>
 #include <WiFi.h>
 
-#include "BleRemotePairingActivity.h"
 #include "ButtonRemapActivity.h"
 #include "CalibreSettingsActivity.h"
 #include "ClearCacheActivity.h"
@@ -16,7 +15,6 @@
 #include "SettingsList.h"
 #include "StatusBarSettingsActivity.h"
 #include "activities/network/WifiSelectionActivity.h"
-#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -49,8 +47,6 @@ void SettingsActivity::onEnter() {
   // Append device-only ACTION items
   controlsSettings.insert(controlsSettings.begin(),
                           SettingInfo::Action(StrId::STR_REMAP_FRONT_BUTTONS, SettingAction::RemapFrontButtons));
-  // BLE pairing is in System section (next to BLE toggle and WiFi)
-  systemSettings.push_back(SettingInfo::Action(StrId::STR_BLE_PAIR_DEVICE, SettingAction::BleRemote));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_WIFI_NETWORKS, SettingAction::Network));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_KOREADER_SYNC, SettingAction::KOReaderSync));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_OPDS_BROWSER, SettingAction::OPDSBrowser));
@@ -186,13 +182,11 @@ void SettingsActivity::toggleCurrentSetting() {
         startActivityForResult(std::make_unique<CalibreSettingsActivity>(renderer, mappedInput), resultHandler);
         break;
       case SettingAction::Network: {
-        extern BluetoothHIDManager btHidManager;
         startActivityForResult(std::make_unique<WifiSelectionActivity>(renderer, mappedInput, false),
                                [this](const ActivityResult&) {
                                  // WifiSelectionActivity doesn't own WiFi lifecycle — clean up here
                                  WiFi.disconnect(false);
                                  WiFi.mode(WIFI_OFF);
-                                 btHidManager.resume();
                                  SETTINGS.saveToFile();
                                });
         break;
@@ -205,11 +199,6 @@ void SettingsActivity::toggleCurrentSetting() {
         break;
       case SettingAction::Language:
         startActivityForResult(std::make_unique<LanguageSelectActivity>(renderer, mappedInput), resultHandler);
-        break;
-      case SettingAction::BleRemote:
-        startActivityForResult(
-            std::make_unique<BleRemotePairingActivity>(renderer, mappedInput),
-            resultHandler);
         break;
       case SettingAction::None:
         // Do nothing

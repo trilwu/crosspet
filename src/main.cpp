@@ -28,7 +28,6 @@
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
-#include "ble/BluetoothHIDManager.h"
 #include "pet/PetManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
@@ -43,7 +42,6 @@ MappedInputManager mappedInputManager(gpio);
 GfxRenderer renderer(display);
 ActivityManager activityManager(renderer, mappedInputManager);
 FontDecompressor fontDecompressor;
-BluetoothHIDManager btHidManager(gpio);
 
 // Fonts
 EpdFont bookerly14RegularFont(&bookerly_14_regular);
@@ -256,7 +254,6 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
-  btHidManager.deinit();
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
@@ -400,12 +397,6 @@ void setup() {
   PET_MANAGER.load();
   PET_MANAGER.tick();
 
-  // Initialize BLE remote if enabled and has bonded device
-  if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
-    btHidManager.init();
-    btHidManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
-  }
-
   switch (gpio.getWakeupReason()) {
     case HalGPIO::WakeupReason::PowerButton:
       // For normal wakeups, verify power button press duration
@@ -458,20 +449,6 @@ void loop() {
   static unsigned long lastMemPrint = 0;
 
   gpio.update();
-
-  // Handle BLE enable/disable from settings toggle.
-  // Only auto-init when a bonded device exists — init() without NimBLE stack
-  // configured can fault at 0x00000000. Pairing activity calls init() explicitly.
-  // Skip init if suspended for WiFi — resume() handles re-init.
-  if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
-    if (!btHidManager.isEnabled() && !btHidManager.isSuspended()) {
-      btHidManager.init();
-      btHidManager.autoReconnect(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceAddrType);
-    }
-    btHidManager.tick();
-  } else if (btHidManager.isEnabled() && !btHidManager.isPairingActive()) {
-    btHidManager.deinit();
-  }
 
   renderer.setFadingFix(SETTINGS.fadingFix);
   {

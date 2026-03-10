@@ -6,14 +6,15 @@
 #include <WiFi.h>
 #include <esp_sntp.h>
 
+#include <FontDecompressor.h>
+
 #include "KOReaderCredentialStore.h"
 #include "KOReaderDocumentId.h"
 #include "MappedInputManager.h"
 #include "activities/network/WifiSelectionActivity.h"
-#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 
-extern BluetoothHIDManager btHidManager;
+extern FontDecompressor fontDecompressor;
 #include "fontIds.h"
 
 namespace {
@@ -110,6 +111,12 @@ void KOReaderSyncActivity::performSync() {
   }
   requestUpdateAndWait();
 
+  // Free font cache to reclaim heap for TLS handshake (~12-48KB)
+  // ESP32-C3 has ~46KB free after WiFi; TLS needs ~50KB for 16KB buffers + handshake state.
+  // Font cache refills lazily on next render.
+  fontDecompressor.clearCache();
+  LOG_DBG("KOSync", "Cleared font cache, heap: %u", (unsigned)ESP.getFreeHeap());
+
   // Fetch remote progress
   const auto result = KOReaderSyncClient::getProgress(documentHash, remoteProgress);
 
@@ -175,6 +182,9 @@ void KOReaderSyncActivity::performUpload() {
   progress.progress = koPos.xpath;
   progress.percentage = koPos.percentage;
 
+  // Free font cache for TLS heap (same as performSync)
+  fontDecompressor.clearCache();
+
   const auto result = KOReaderSyncClient::updateProgress(progress);
 
   if (result != KOReaderSyncClient::OK) {
@@ -198,9 +208,6 @@ void KOReaderSyncActivity::performUpload() {
 
 void KOReaderSyncActivity::onEnter() {
   Activity::onEnter();
-
-  // Suspend BLE before WiFi — shared 2.4GHz radio
-  btHidManager.suspend();
 
   // Check for credentials first
   if (!KOREADER_STORE.hasCredentials()) {
@@ -226,9 +233,6 @@ void KOReaderSyncActivity::onExit() {
   Activity::onExit();
 
   wifiOff();
-
-  // Resume BLE now that WiFi is off
-  btHidManager.resume();
 }
 
 void KOReaderSyncActivity::render(RenderLock&&) {

@@ -3,8 +3,6 @@
 #include <NimBLEHIDDevice.h>
 
 // BLE HID peripheral — presents device to a host as a keyboard for slide control.
-// Cannot coexist with BluetoothHIDManager (both share the single NimBLE stack).
-// Call BluetoothHIDManager::suspend() before init(), and resume() after deinit().
 class BlePresenterManager {
  public:
   bool init();

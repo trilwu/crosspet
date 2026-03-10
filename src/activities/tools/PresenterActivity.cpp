@@ -4,21 +4,15 @@
 #include <I18n.h>
 #include <Logging.h>
 
-#include "ble/BluetoothHIDManager.h"
 #include "components/UITheme.h"
 #include "components/icons/presenter.h"
 #include "fontIds.h"
 
-extern BluetoothHIDManager btHidManager;
-
 void PresenterActivity::onEnter() {
   Activity::onEnter();
   state = State::ADVERTISING;
-  btHidManager.suspend();  // only 1 NimBLE connection slot — release central role first
-  vTaskDelay(pdMS_TO_TICKS(500));  // wait for NimBLE host task to fully shut down
   if (!presenter.init()) {
     LOG_ERR("PRESENTER", "BLE init failed, exiting");
-    btHidManager.resume();
     finish();
     return;
   }
@@ -27,7 +21,6 @@ void PresenterActivity::onEnter() {
 
 void PresenterActivity::cleanup() {
   presenter.deinit();
-  btHidManager.resume();
 }
 
 void PresenterActivity::onExit() {

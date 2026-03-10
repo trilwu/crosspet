@@ -192,7 +192,10 @@ void SleepActivity::renderDefaultSleepScreen() const {
     renderer.invertScreen();
   }
 
+  // Power off analog drivers after refresh to prevent charge drift fading.
+  renderer.setFadingFix(true);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
 }
 
 void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
@@ -253,13 +256,14 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
     renderer.invertScreen();
   }
 
-  // Turn off display controller after final refresh to prevent charge drift fading.
-  // When the analog drivers stay on, residual voltage causes blacks to lighten over ~1s.
+  // Power off analog drivers after final refresh to prevent charge drift fading.
   renderer.setFadingFix(true);
-  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-  renderer.setFadingFix(SETTINGS.fadingFix);
 
   if (hasGreyscale) {
+    // BW layer first (no fadingFix yet — grayscale layer is the final render)
+    renderer.setFadingFix(false);
+    renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+
     bitmap.rewindToData();
     renderer.clearScreen(0x00);
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_LSB);
@@ -272,9 +276,15 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
     renderer.drawBitmap(bitmap, x, y, pageWidth, pageHeight, cropX, cropY);
     renderer.copyGrayscaleMsbBuffers();
 
+    // Grayscale is the final render — apply fadingFix here to power off display
+    renderer.setFadingFix(true);
     renderer.displayGrayBuffer();
     renderer.setRenderMode(GfxRenderer::BW);
+  } else {
+    renderer.displayBuffer(HalDisplay::HALF_REFRESH);
   }
+
+  renderer.setFadingFix(SETTINGS.fadingFix);
 }
 
 void SleepActivity::renderCoverSleepScreen() const {
@@ -743,12 +753,16 @@ void SleepActivity::renderClockSleepScreen() const {
     renderer.drawText(SMALL_FONT_ID, std::max(qLeft, qCenterX - aW / 2), authorY, aStr.c_str());
   }
 
+  renderer.setFadingFix(true);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
 }
 
 void SleepActivity::renderBlankSleepScreen() const {
   renderer.clearScreen();
+  renderer.setFadingFix(true);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
 }
 
 // Format a duration in seconds into a human-readable string.
@@ -938,5 +952,7 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
     }
   }
 
+  renderer.setFadingFix(true);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
 }

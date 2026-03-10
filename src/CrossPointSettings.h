@@ -227,12 +227,6 @@ class CrossPointSettings {
   // Auto page turn speed: 0=off, 1-20=pages per minute
   uint8_t autoPageTurnSpeed = 0;
 
-  // BLE Remote settings
-  uint8_t bleEnabled = 0;                  // 0=disabled, 1=enabled
-  char bleBondedDeviceAddr[18] = "";       // "XX:XX:XX:XX:XX:XX" format
-  char bleBondedDeviceName[32] = "";       // Display name of bonded remote
-  uint8_t bleBondedDeviceAddrType = 0;     // BLE address type (0=public, 1=random)
-
   ~CrossPointSettings() = default;
 
   // Get singleton instance

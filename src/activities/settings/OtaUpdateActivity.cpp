@@ -8,10 +8,7 @@
 #include "activities/network/WifiSelectionActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
-#include "ble/BluetoothHIDManager.h"
 #include "network/OtaUpdater.h"
-
-extern BluetoothHIDManager btHidManager;
 
 void OtaUpdateActivity::onWifiSelectionComplete(const bool success) {
   if (!success) {
@@ -56,9 +53,6 @@ void OtaUpdateActivity::onWifiSelectionComplete(const bool success) {
 void OtaUpdateActivity::onEnter() {
   Activity::onEnter();
 
-  // Suspend BLE before WiFi — shared 2.4GHz radio
-  btHidManager.suspend();
-
   // Turn on WiFi immediately
   LOG_DBG("OTA", "Turning on WiFi...");
   WiFi.mode(WIFI_STA);
@@ -77,9 +71,6 @@ void OtaUpdateActivity::onExit() {
   delay(100);              // Allow disconnect frame to be sent
   WiFi.mode(WIFI_OFF);
   delay(100);  // Allow WiFi hardware to fully power down
-
-  // Resume BLE now that WiFi is off
-  btHidManager.resume();
 }
 
 void OtaUpdateActivity::render(RenderLock&&) {

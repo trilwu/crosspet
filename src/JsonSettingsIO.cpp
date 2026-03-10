@@ -136,10 +136,6 @@ bool JsonSettingsIO::saveSettings(const CrossPointSettings& s, const char* path)
   doc["uiTheme"] = s.uiTheme;
   doc["fadingFix"] = s.fadingFix;
   doc["embeddedStyle"] = s.embeddedStyle;
-  doc["bleEnabled"] = s.bleEnabled;
-  doc["bleBondedDeviceAddr"] = s.bleBondedDeviceAddr;
-  doc["bleBondedDeviceName"] = s.bleBondedDeviceName;
-  doc["bleBondedDeviceAddrType"] = s.bleBondedDeviceAddrType;
   doc["statusBarChapterPageCount"] = s.statusBarChapterPageCount;
   doc["statusBarBookProgressPercentage"] = s.statusBarBookProgressPercentage;
   doc["statusBarProgressBar"] = s.statusBarProgressBar;
@@ -244,16 +240,6 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   s.uiTheme = doc["uiTheme"] | (uint8_t)S::CROSSPET;
   s.fadingFix = doc["fadingFix"] | (uint8_t)0;
   s.embeddedStyle = doc["embeddedStyle"] | (uint8_t)1;
-  s.bleEnabled = doc["bleEnabled"] | (uint8_t)0;
-
-  const char* bleAddr = doc["bleBondedDeviceAddr"] | "";
-  strncpy(s.bleBondedDeviceAddr, bleAddr, sizeof(s.bleBondedDeviceAddr) - 1);
-  s.bleBondedDeviceAddr[sizeof(s.bleBondedDeviceAddr) - 1] = '\0';
-
-  const char* bleName = doc["bleBondedDeviceName"] | "";
-  strncpy(s.bleBondedDeviceName, bleName, sizeof(s.bleBondedDeviceName) - 1);
-  s.bleBondedDeviceName[sizeof(s.bleBondedDeviceName) - 1] = '\0';
-  s.bleBondedDeviceAddrType = doc["bleBondedDeviceAddrType"] | (uint8_t)0;
   s.weatherCity = doc["weatherCity"] | (uint8_t)0;
   if (s.weatherCity > 63) s.weatherCity = 0;  // 0=Auto, 1-63=manual cities
 
