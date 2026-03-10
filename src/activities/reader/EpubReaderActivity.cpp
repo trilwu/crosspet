@@ -866,8 +866,12 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderStatusBar();
       renderer.displayBuffer(HalDisplay::FAST_REFRESH);
     } else {
-      // Fallback: FAST_REFRESH only — HALF_REFRESH causes ghosting with AA grayscale
-      renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+      // Fallback when bounding box unavailable: AA needs FAST_REFRESH to avoid ghosting
+      if (SETTINGS.textAntiAliasing) {
+        renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+      } else {
+        renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+      }
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
   } else if (SETTINGS.textAntiAliasing) {

@@ -263,7 +263,7 @@ void WifiSelectionActivity::checkConnectionStatus() {
     // that was set at startup, so localtime_r() returns local time immediately.
     if (!esp_sntp_enabled()) {
       const char* tz = getenv("TZ");
-      configTzTime(tz ? tz : "ICT-7", "pool.ntp.org", "time.google.com");
+      configTzTime(tz ? tz : "UTC0", "pool.ntp.org", "time.google.com");
     }
 
     // Save this as the last connected network - SD card operations need lock as

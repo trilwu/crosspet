@@ -474,8 +474,18 @@ void loop() {
   }
 
   renderer.setFadingFix(SETTINGS.fadingFix);
-  renderer.setDarkMode(SETTINGS.darkMode);
-  renderer.setTextDarkness(SETTINGS.textDarkness);
+  {
+    static uint8_t lastDarkMode = 0xFF;
+    static uint8_t lastTextDarkness = 0xFF;
+    if (SETTINGS.darkMode != lastDarkMode) {
+      renderer.setDarkMode(SETTINGS.darkMode);
+      lastDarkMode = SETTINGS.darkMode;
+    }
+    if (SETTINGS.textDarkness != lastTextDarkness) {
+      renderer.setTextDarkness(SETTINGS.textDarkness);
+      lastTextDarkness = SETTINGS.textDarkness;
+    }
+  }
 
   if (Serial && millis() - lastMemPrint >= 10000) {
     LOG_INF("MEM", "Free: %d bytes, Total: %d bytes, Min Free: %d bytes, MaxAlloc: %d bytes", ESP.getFreeHeap(),
