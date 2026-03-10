@@ -2,7 +2,6 @@
 
 #include <HalStorage.h>
 #include <Logging.h>
-#include <Serialization.h>
 
 #include <algorithm>
 #include <cstdint>
@@ -30,21 +29,28 @@ class BookmarkStore {
     }
 
     uint8_t version;
-    serialization::readPod(f, version);
-    if (version != FILE_VERSION) {
-      LOG_DBG("BKM", "Bookmark version mismatch (%d != %d), ignoring", version, FILE_VERSION);
+    if (f.read(reinterpret_cast<uint8_t*>(&version), sizeof(version)) != sizeof(version) || version != FILE_VERSION) {
       f.close();
       return;
     }
 
     uint16_t count;
-    serialization::readPod(f, count);
-    bookmarks.reserve(count);
+    if (f.read(reinterpret_cast<uint8_t*>(&count), sizeof(count)) != sizeof(count) || count > MAX_BOOKMARKS) {
+      LOG_ERR("BKM", "Invalid bookmark count: %u", static_cast<unsigned>(count));
+      f.close();
+      return;
+    }
 
+    bookmarks.reserve(count);
     for (uint16_t i = 0; i < count; i++) {
       Bookmark bm;
-      serialization::readPod(f, bm.spineIndex);
-      serialization::readPod(f, bm.pageNumber);
+      if (f.read(reinterpret_cast<uint8_t*>(&bm.spineIndex), sizeof(bm.spineIndex)) != sizeof(bm.spineIndex) ||
+          f.read(reinterpret_cast<uint8_t*>(&bm.pageNumber), sizeof(bm.pageNumber)) != sizeof(bm.pageNumber)) {
+        LOG_ERR("BKM", "Truncated bookmarks file at entry %d", i);
+        bookmarks.clear();
+        f.close();
+        return;
+      }
       bookmarks.push_back(bm);
     }
 
@@ -111,9 +117,11 @@ class BookmarkStore {
 
   [[nodiscard]] const std::vector<Bookmark>& getAll() const { return bookmarks; }
   [[nodiscard]] bool isEmpty() const { return bookmarks.empty(); }
+  void markDirty() { dirty = true; }
 
  private:
   static constexpr uint8_t FILE_VERSION = 1;
+  static constexpr uint16_t MAX_BOOKMARKS = 1000;
 
   std::vector<Bookmark> bookmarks;
   std::string basePath;

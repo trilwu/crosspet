@@ -373,7 +373,7 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
           [this](const ActivityResult& result) {
             if (!result.isCancelled) {
               const auto& starred = std::get<StarredPageResult>(result.data);
-              if (currentSpineIndex != starred.spineIndex || (section && section->currentPage != starred.pageNumber)) {
+              if (currentSpineIndex != starred.spineIndex || !section || section->currentPage != starred.pageNumber) {
                 RenderLock lock(*this);
                 currentSpineIndex = starred.spineIndex;
                 nextPageNumber = starred.pageNumber;
@@ -398,6 +398,10 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
           epub->clearCache();
           epub->setupCacheDir();
           saveProgress(backupSpine, backupPage, backupPageCount);
+          if (!bookmarkStore.isEmpty()) {
+            bookmarkStore.markDirty();
+            bookmarkStore.save();
+          }
         }
       }
       onGoHome();
