@@ -1,6 +1,6 @@
 {
   "name": "CrossPet Reader",
-  "version": "0.0.0",
+  "version": "1.6.10",
   "new_install_prompt_erase": false,
   "builds": [
     {

@@ -4,6 +4,11 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
@@ -38,3 +43,51 @@ jobs:
             .pio/build/gh_release/firmware.elf
             .pio/build/gh_release/firmware.map
             .pio/build/gh_release/partitions.bin
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          ASSET=".pio/build/gh_release/firmware.bin"
+          NAMED="firmware-x4-crosspet-${TAG}.bin"
+          cp "$ASSET" "$NAMED"
+          gh release create "$TAG" "$NAMED" --title "CrossPet $TAG" --generate-notes || \
+          gh release upload "$TAG" "$NAMED" --clobber
+
+      - name: Update landing page firmware
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#v}"
+          cp .pio/build/gh_release/firmware.bin site/firmware/firmware.bin
+          # Update manifest version
+          cat > site/firmware/manifest.json << EOF
+          {
+            "name": "CrossPet Reader",
+            "version": "${VERSION}",
+            "new_install_prompt_erase": false,
+            "builds": [
+              {
+                "chipFamily": "ESP32-C3",
+                "parts": [
+                  {
+                    "path": "firmware.bin",
+                    "offset": 65536
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
