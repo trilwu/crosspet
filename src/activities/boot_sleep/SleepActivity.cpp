@@ -938,6 +938,5 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
     }
   }
 
-  // Fast clear then content — reduces ghosting without multi-blink full refresh
-  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 }

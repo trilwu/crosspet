@@ -92,6 +92,7 @@ void KOReaderSyncActivity::performSync() {
     documentHash = KOReaderDocumentId::calculate(epubPath);
   }
   if (documentHash.empty()) {
+    wifiOff();
     {
       RenderLock lock(*this);
       state = SYNC_FAILED;
@@ -124,6 +125,7 @@ void KOReaderSyncActivity::performSync() {
   }
 
   if (result != KOReaderSyncClient::OK) {
+    wifiOff();
     {
       RenderLock lock(*this);
       state = SYNC_FAILED;
