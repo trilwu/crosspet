@@ -47,6 +47,8 @@ esp_err_t httpEventHandler(esp_http_client_event_t* evt) {
       memcpy(buf->data + buf->len, evt->data, evt->data_len);
       buf->len += evt->data_len;
       buf->data[buf->len] = '\0';
+    } else {
+      LOG_ERR("KOSync", "Response buffer allocation failed (%d bytes)", evt->data_len);
     }
   }
   return ESP_OK;
@@ -73,7 +75,7 @@ std::string base64Encode(const std::string& input) {
 
 // Create configured esp_http_client with small TLS buffers
 esp_http_client_handle_t createClient(const char* url, ResponseBuffer* buf,
-                                       esp_http_client_method_t method = HTTP_METHOD_GET) {
+                                      esp_http_client_method_t method = HTTP_METHOD_GET) {
   esp_http_client_config_t config = {};
   config.url = url;
   config.event_handler = httpEventHandler;
