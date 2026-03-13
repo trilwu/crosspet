@@ -9,6 +9,7 @@
 #include <string>
 
 #include "fontIds.h"
+#include "util/SleepScreenCache.h"
 
 // Initialize the static instance
 CrossPointSettings CrossPointSettings::instance;
