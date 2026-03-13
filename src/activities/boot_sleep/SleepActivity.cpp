@@ -52,15 +52,32 @@ void SleepActivity::onEnter() {
   }
 }
 
+bool SleepActivity::displayCachedSleepScreen(const std::string& sourcePath) const {
+  renderer.clearScreen();
+  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+  if (!SleepScreenCache::load(renderer, sourcePath)) {
+    return false;
+  }
+  renderer.setFadingFix(true);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
+  return true;
+}
+
 void SleepActivity::renderCustomSleepScreen() const {
   // If a specific sleep image is pinned, load it directly
   if (SETTINGS.sleepImagePath[0] != '\0') {
+    const std::string pinnedPath(SETTINGS.sleepImagePath);
+    // Try cache first
+    if (displayCachedSleepScreen(pinnedPath)) {
+      return;
+    }
     FsFile pinnedFile;
     if (Storage.openFileForRead("SLP", SETTINGS.sleepImagePath, pinnedFile)) {
       Bitmap bitmap(pinnedFile, true);
       if (bitmap.parseHeaders() == BmpReaderError::Ok) {
         LOG_DBG("SLP", "Loading pinned sleep image: %s", SETTINGS.sleepImagePath);
-        renderBitmapSleepScreen(bitmap);
+        renderBitmapSleepScreen(bitmap, pinnedPath);
         pinnedFile.close();
         return;
       }
@@ -86,7 +103,7 @@ void SleepActivity::renderCustomSleepScreen() const {
   if (sleepDir) {
     std::vector<std::string> files;
     char name[500];
-    // collect all valid BMP files
+    // Collect BMP files by extension only (skip parseHeaders during scan)
     for (auto file = dir.openNextFile(); file; file = dir.openNextFile()) {
       if (file.isDirectory()) {
         file.close();
@@ -104,12 +121,6 @@ void SleepActivity::renderCustomSleepScreen() const {
         file.close();
         continue;
       }
-      Bitmap bitmap(file);
-      if (bitmap.parseHeaders() != BmpReaderError::Ok) {
-        LOG_DBG("SLP", "Skipping invalid BMP file: %s", name);
-        file.close();
-        continue;
-      }
       files.emplace_back(filename);
       file.close();
     }
@@ -123,14 +134,19 @@ void SleepActivity::renderCustomSleepScreen() const {
       }
       APP_STATE.lastSleepImage = randomFileIndex;
       APP_STATE.saveToFile();
-      const auto filename = std::string(sleepDir) + "/" + files[randomFileIndex];
+      const auto sourcePath = std::string(sleepDir) + "/" + files[randomFileIndex];
+      // Try cache first
+      if (displayCachedSleepScreen(sourcePath)) {
+        dir.close();
+        return;
+      }
       FsFile file;
-      if (Storage.openFileForRead("SLP", filename, file)) {
+      if (Storage.openFileForRead("SLP", sourcePath, file)) {
         LOG_DBG("SLP", "Randomly loading: %s/%s", sleepDir, files[randomFileIndex].c_str());
         delay(100);
         Bitmap bitmap(file, true);
         if (bitmap.parseHeaders() == BmpReaderError::Ok) {
-          renderBitmapSleepScreen(bitmap);
+          renderBitmapSleepScreen(bitmap, sourcePath);
           file.close();
           dir.close();
           return;
@@ -143,16 +159,23 @@ void SleepActivity::renderCustomSleepScreen() const {
 
   // Look for sleep.bmp on the root of the sd card to determine if we should
   // render a custom sleep screen instead of the default.
-  FsFile file;
-  if (Storage.openFileForRead("SLP", "/sleep.bmp", file)) {
-    Bitmap bitmap(file, true);
-    if (bitmap.parseHeaders() == BmpReaderError::Ok) {
-      LOG_DBG("SLP", "Loading: /sleep.bmp");
-      renderBitmapSleepScreen(bitmap);
-      file.close();
+  {
+    const std::string rootSleepPath = "/sleep.bmp";
+    // Try cache first
+    if (displayCachedSleepScreen(rootSleepPath)) {
       return;
     }
-    file.close();
+    FsFile file;
+    if (Storage.openFileForRead("SLP", "/sleep.bmp", file)) {
+      Bitmap bitmap(file, true);
+      if (bitmap.parseHeaders() == BmpReaderError::Ok) {
+        LOG_DBG("SLP", "Loading: /sleep.bmp");
+        renderBitmapSleepScreen(bitmap, rootSleepPath);
+        file.close();
+        return;
+      }
+      file.close();
+    }
   }
 
   renderDefaultSleepScreen();
@@ -198,7 +221,7 @@ void SleepActivity::renderDefaultSleepScreen() const {
   renderer.setFadingFix(SETTINGS.fadingFix);
 }
 
-void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
+void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap, const std::string& sourcePath) const {
   int x, y;
   const auto pageWidth = renderer.getScreenWidth();
   const auto pageHeight = renderer.getScreenHeight();
@@ -254,6 +277,11 @@ void SleepActivity::renderBitmapSleepScreen(const Bitmap& bitmap) const {
 
   if (SETTINGS.sleepScreenCoverFilter == CrossPointSettings::SLEEP_SCREEN_COVER_FILTER::INVERTED_BLACK_AND_WHITE) {
     renderer.invertScreen();
+  }
+
+  // Save BW framebuffer to cache (greyscale needs 3 buffers, skip caching)
+  if (!hasGreyscale && !sourcePath.empty()) {
+    SleepScreenCache::save(renderer, sourcePath);
   }
 
   // Power off analog drivers after final refresh to prevent charge drift fading.
@@ -355,14 +383,21 @@ void SleepActivity::renderCoverSleepScreen() const {
 
   FsFile file;
   if (Storage.openFileForRead("SLP", coverBmpPath, file)) {
-    Bitmap bitmap(file);
-    if (bitmap.parseHeaders() == BmpReaderError::Ok) {
-      LOG_DBG("SLP", "Rendering sleep cover: %s", coverBmpPath.c_str());
-      renderBitmapSleepScreen(bitmap);
-      file.close();
+    // Try cache before parsing BMP
+    file.close();
+    if (displayCachedSleepScreen(coverBmpPath)) {
       return;
     }
-    file.close();
+    if (Storage.openFileForRead("SLP", coverBmpPath, file)) {
+      Bitmap bitmap(file);
+      if (bitmap.parseHeaders() == BmpReaderError::Ok) {
+        LOG_DBG("SLP", "Rendering sleep cover: %s", coverBmpPath.c_str());
+        renderBitmapSleepScreen(bitmap, coverBmpPath);
+        file.close();
+        return;
+      }
+      file.close();
+    }
   }
 
   return (this->*renderNoCoverSleepScreen)();
