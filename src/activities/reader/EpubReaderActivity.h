@@ -29,6 +29,7 @@ class EpubReaderActivity final : public Activity {
   bool skipNextButtonCheck = false;  // Skip button processing for one frame after subactivity exit
   bool automaticPageTurnActive = false;
   bool bookCompletionNotified = false;
+  bool ignoreFrontButtons = false;
 
   // Chapter completion celebration (Phase 2)
   int lastCompletedSpineIndex = -1;   // prevents double-fire on back-then-forward

@@ -210,10 +210,15 @@ void EpubReaderActivity::loop() {
       return;
     }
   }
+  // Short power button if block front is enabled.
+  if (mappedInput.wasReleased(MappedInputManager::Button::Power) &&
+      SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
+    ignoreFrontButtons = !ignoreFrontButtons;
+  }
 
   // Long-press Confirm = star/unstar current page
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) &&
-      mappedInput.getHeldTime() >= 700) {
+      mappedInput.getHeldTime() >= 700 && !ignoreFrontButtons) {
     if (section && section->currentPage >= 0 && section->currentPage < section->pageCount) {
       const uint16_t si = static_cast<uint16_t>(currentSpineIndex);
       const uint16_t pg = static_cast<uint16_t>(section->currentPage);
@@ -246,7 +251,7 @@ void EpubReaderActivity::loop() {
   }
 
   // Short-press Confirm = enter reader menu activity.
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) && !ignoreFrontButtons) {
     const int currentPage = section ? section->currentPage + 1 : 0;
     const int totalPages = section ? section->pageCount : 0;
     float bookProgress = 0.0f;
@@ -285,14 +290,15 @@ void EpubReaderActivity::loop() {
   }
 
   // Long press BACK (1s+) goes to file selection
-  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= ReaderUtils::GO_HOME_MS) {
+  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= ReaderUtils::GO_HOME_MS &&
+      !ignoreFrontButtons) {
     activityManager.goToFileBrowser(epub ? epub->getPath() : "");
     return;
   }
 
   // Short press BACK goes directly to home (or restores position if viewing footnote)
   if (mappedInput.wasReleased(MappedInputManager::Button::Back) &&
-      mappedInput.getHeldTime() < ReaderUtils::GO_HOME_MS) {
+      mappedInput.getHeldTime() < ReaderUtils::GO_HOME_MS && !ignoreFrontButtons) {
     if (footnoteDepth > 0) {
       restoreSavedPosition();
       return;
@@ -334,8 +340,7 @@ void EpubReaderActivity::loop() {
     return;
   }
 
-  auto [prevTriggered, nextTriggered] = ReaderUtils::detectPageTurn(mappedInput);
-
+  auto [prevTriggered, nextTriggered] = ReaderUtils::detectPageTurn(mappedInput, ignoreFrontButtons);
   if (!prevTriggered && !nextTriggered) {
     return;
   }

@@ -58,8 +58,14 @@ void XtcReaderActivity::onExit() {
 }
 
 void XtcReaderActivity::loop() {
+  // Short power button if block front is enabled.
+  if (mappedInput.wasReleased(MappedInputManager::Button::Power) &&
+      SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
+    ignoreFrontButtons = !ignoreFrontButtons;
+  }
+
   // Enter chapter selection activity
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) && !ignoreFrontButtons) {
     if (xtc && xtc->hasChapters() && !xtc->getChapters().empty()) {
       startActivityForResult(
           std::make_unique<XtcReaderChapterSelectionActivity>(renderer, mappedInput, xtc, currentPage),
@@ -72,30 +78,33 @@ void XtcReaderActivity::loop() {
   }
 
   // Long press BACK (1s+) goes to file selection
-  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= goHomeMs) {
+  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= goHomeMs &&
+      !ignoreFrontButtons) {
     activityManager.goToFileBrowser(xtc ? xtc->getPath() : "");
     return;
   }
 
   // Short press BACK goes directly to home
-  if (mappedInput.wasReleased(MappedInputManager::Button::Back) && mappedInput.getHeldTime() < goHomeMs) {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) && mappedInput.getHeldTime() < goHomeMs &&
+      !ignoreFrontButtons) {
     onGoHome();
     return;
   }
 
   // When long-press chapter skip is disabled, turn pages on press instead of release.
   const bool usePressForPageTurn = !SETTINGS.longPressChapterSkip;
-  const bool prevTriggered = usePressForPageTurn ? (mappedInput.wasPressed(MappedInputManager::Button::PageBack) ||
-                                                    mappedInput.wasPressed(MappedInputManager::Button::FrontPageBack))
-                                                 : (mappedInput.wasReleased(MappedInputManager::Button::PageBack) ||
-                                                    mappedInput.wasReleased(MappedInputManager::Button::FrontPageBack));
+  const bool prevTriggered = usePressForPageTurn
+                                 ? (mappedInput.wasPressed(MappedInputManager::Button::PageBack) ||
+                                    (mappedInput.wasPressed(MappedInputManager::Button::FrontPageBack) && !ignoreFrontButtons))
+                                 : (mappedInput.wasReleased(MappedInputManager::Button::PageBack) ||
+                                    (mappedInput.wasReleased(MappedInputManager::Button::FrontPageBack) && !ignoreFrontButtons));
   const bool powerPageTurn = SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::PAGE_TURN &&
                              mappedInput.wasReleased(MappedInputManager::Button::Power);
   const bool nextTriggered = usePressForPageTurn
                                  ? (mappedInput.wasPressed(MappedInputManager::Button::PageForward) || powerPageTurn ||
-                                    mappedInput.wasPressed(MappedInputManager::Button::FrontPageForward))
+                                    (mappedInput.wasPressed(MappedInputManager::Button::FrontPageForward) && !ignoreFrontButtons))
                                  : (mappedInput.wasReleased(MappedInputManager::Button::PageForward) || powerPageTurn ||
-                                    mappedInput.wasReleased(MappedInputManager::Button::FrontPageForward));
+                                    (mappedInput.wasReleased(MappedInputManager::Button::FrontPageForward) && !ignoreFrontButtons));
 
   if (!prevTriggered && !nextTriggered) {
     return;
