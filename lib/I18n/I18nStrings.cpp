@@ -827,7 +827,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC5"
     "\x9F"
     "",  // Türkçe
-    " !\"%'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvxyz|~\xC2"
+    " !\"%'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1186,6 +1186,7 @@ const char* const STRINGS_EN[] = {
     "Reader Paragraph Alignment",
     "Hyphenation",
     "Time to Sleep",
+    "Show Hidden Files",
     "Refresh Frequency",
     "Calibre Settings",
     "KOReader Sync",
@@ -1237,6 +1238,7 @@ const char* const STRINGS_EN[] = {
     "Sleep",
     "Page Turn",
     "Screen Refresh",
+    "Block Front",
     "Portrait",
     "Landscape CW",
     "Inverted",
@@ -1369,6 +1371,7 @@ const char* const STRINGS_EN[] = {
     "Remap Front Buttons",
     "OPDS Browser",
     "Cover + Custom",
+    "Page overlay",
     "Recents",
     "Recent Books",
     "No recent books",
@@ -1965,6 +1968,7 @@ const char* const STRINGS_ES[] = {
     "Auto suspensi\xC3"
     "\xB3"
     "n",
+    "Show Hidden Files",
     "Frecuencia de refresco",
     "Ajustes de Calibre",
     "Sincronizaci\xC3"
@@ -2058,6 +2062,7 @@ const char* const STRINGS_ES[] = {
     "\xA1"
     "gina",
     "Screen Refresh",
+    "Bloquear frente",
     "Vertical",
     "Horizontal (horario)",
     "Invertido",
@@ -2256,6 +2261,7 @@ const char* const STRINGS_ES[] = {
     "Reconfigurar botones frontales",
     "Navegador OPDS",
     "Portada + Pers.",
+    "Page overlay",
     "Recientes",
     "Libros recientes",
     "No hay libros recientes",
@@ -2986,6 +2992,7 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "sure",
     "Mise en veille auto",
+    "Show Hidden Files",
     "Fr\xC3"
     "\xA9"
     "quence rafra\xC3"
@@ -3103,6 +3110,10 @@ const char* const STRINGS_FR[] = {
     "Mise en veille",
     "Page suivante",
     "Screen Refresh",
+    "Bloquer l\xE2"
+    "\x80"
+    "\x99"
+    "avant",
     "Portrait",
     "Paysage",
     "Invers\xC3"
@@ -3338,6 +3349,7 @@ const char* const STRINGS_FR[] = {
     "ade",
     "Navigateur OPDS",
     "Couverture + Perso",
+    "Page overlay",
     "R\xC3"
     "\xA9"
     "cents",
@@ -3974,6 +3986,7 @@ const char* const STRINGS_DE[] = {
     "Lese-Absatzausrichtung",
     "Silbentrennung",
     "Standby nach",
+    "Show Hidden Files",
     "Anti-Ghosting nach",
     "Calibre-Einstellungen",
     "KOReader-Synchr.",
@@ -4047,6 +4060,7 @@ const char* const STRINGS_DE[] = {
     "\xA4"
     "ttern",
     "Screen Refresh",
+    "Vorderseite blockieren",
     "Hochformat",
     "Querformat rechts",
     "Invertiert",
@@ -4230,6 +4244,7 @@ const char* const STRINGS_DE[] = {
     "Vordere Tasten belegen",
     "OPDS-Browser",
     "Umschlag + Eigenes",
+    "Page overlay",
     "Zuletzt",
     "Zuletzt gelesen",
     "Keine B\xC3"
@@ -5319,6 +5334,7 @@ const char* const STRINGS_CS[] = {
     "n\xC3"
     "\xAD"
     "",
+    "Show Hidden Files",
     "Frekvence obnoven\xC3"
     "\xAD"
     "",
@@ -5574,6 +5590,11 @@ const char* const STRINGS_CS[] = {
     "\xA1"
     "nek",
     "Screen Refresh",
+    "Blokovat p\xC5"
+    "\x99"
+    "edn\xC3"
+    "\xAD"
+    "",
     "Na v\xC3"
     "\xBD"
     "\xC5"
@@ -5961,6 +5982,7 @@ const char* const STRINGS_CS[] = {
     "lka + Vlastn\xC3"
     "\xAD"
     "",
+    "Page overlay",
     "Ned\xC3"
     "\xA1"
     "vn\xC3"
@@ -6842,6 +6864,7 @@ const char* const STRINGS_PO[] = {
     "\xA3"
     "o",
     "Tempo para repousar",
+    "Show Hidden Files",
     "Frequ\xC3"
     "\xAA"
     "ncia atualiza\xC3"
@@ -6948,6 +6971,7 @@ const char* const STRINGS_PO[] = {
     "\xA1"
     "gina",
     "Screen Refresh",
+    "Bloquear frente",
     "Retrato",
     "Paisagem H",
     "Invertido",
@@ -7149,6 +7173,7 @@ const char* const STRINGS_PO[] = {
     "es frontais",
     "Navegador OPDS",
     "Capa + personalizado",
+    "Page overlay",
     "Recentes",
     "Livros recentes",
     "Sem livros recentes",
@@ -10877,6 +10902,7 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB7"
     "",
+    "Show Hidden Files",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -12210,6 +12236,55 @@ const char* const STRINGS_RU[] = {
     "\xB5"
     "",
     "Screen Refresh",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8C"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8E"
+    "\xD1"
+    "\x8E"
+    " \xD1"
+    "\x87"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8C"
+    "",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -14482,6 +14557,7 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB9"
     "",
+    "Page overlay",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -17005,6 +17081,7 @@ const char* const STRINGS_SV[] = {
     "r att g\xC3"
     "\xA5"
     " i vila",
+    "Show Hidden Files",
     "Uppdateringsfrekvens",
     "Calibreinst\xC3"
     "\xA4"
@@ -17118,6 +17195,7 @@ const char* const STRINGS_SV[] = {
     "\xA4"
     "ndning",
     "Screen Refresh",
+    "Blockera framsidan",
     "Portr\xC3"
     "\xA4"
     "tt",
@@ -17363,6 +17441,7 @@ const char* const STRINGS_SV[] = {
     "\xA4"
     "sare",
     "Omslag + Valfri",
+    "Page overlay",
     "Senaste",
     "Senaste b\xC3"
     "\xB6"
@@ -18257,6 +18336,7 @@ const char* const STRINGS_RO[] = {
     "n\xC4"
     "\x83"
     " la repaus",
+    "Show Hidden Files",
     "Frecven\xC5"
     "\xA3"
     "\xC4"
@@ -18422,6 +18502,11 @@ const char* const STRINGS_RO[] = {
     "\x83"
     "",
     "Screen Refresh",
+    "Blocheaz\xC4"
+    "\x83"
+    " partea frontal\xC4"
+    "\x83"
+    "",
     "Vertical",
     "Orizontal dreapta",
     "Invers",
@@ -18698,6 +18783,7 @@ const char* const STRINGS_RO[] = {
     "Copert\xC4"
     "\x83"
     " + Personalizat",
+    "Page overlay",
     "Recente",
     "C\xC4"
     "\x83"
@@ -19438,6 +19524,7 @@ const char* const STRINGS_CA[] = {
     "Temps per entrar en rep\xC3"
     "\xB2"
     "s",
+    "Show Hidden Files",
     "Freq\xC3"
     "\xBC"
     "\xC3"
@@ -19541,6 +19628,7 @@ const char* const STRINGS_CA[] = {
     "\xA0"
     "gina",
     "Screen Refresh",
+    "Bloquejar frontal",
     "Vertical",
     "Horitzontal horari",
     "Invertit",
@@ -19749,6 +19837,7 @@ const char* const STRINGS_CA[] = {
     "Reassigna els botons frontals",
     "Navegador OPDS",
     "Portada + Personalitzat",
+    "Page overlay",
     "Recents",
     "Llibres recents",
     "No hi ha llibres recents",
@@ -23993,6 +24082,7 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x83"
     "",
+    "Show Hidden Files",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -25488,6 +25578,57 @@ const char* const STRINGS_UK[] = {
     "\xB8"
     "",
     "Screen Refresh",
+    "\xD0"
+    "\x97"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8E"
+    " \xD1"
+    "\x87"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -28044,6 +28185,7 @@ const char* const STRINGS_UK[] = {
     "\xD0"
     "\xB0"
     "",
+    "Page overlay",
     "\xD0"
     "\x9E"
     "\xD1"
@@ -33826,6 +33968,7 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB7"
     "",
+    "Show Hidden Files",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -35171,6 +35314,53 @@ const char* const STRINGS_BE[] = {
     "\xB5"
     "",
     "Screen Refresh",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD1"
+    "\x8C"
+    " \xD0"
+    "\xBF"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8D"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8E"
+    "\xD1"
+    "\x8E"
+    " \xD1"
+    "\x87"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x83"
+    "",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -37101,6 +37291,7 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB9"
     "",
+    "Page overlay",
     "\xD0"
     "\x9D"
     "\xD1"
@@ -39326,6 +39517,7 @@ const char* const STRINGS_IT[] = {
     "Allineamento paragrafo lettore",
     "Sillabazione",
     "Tempo prima di sospensione",
+    "Show Hidden Files",
     "Frequenza di aggiornamento",
     "Impostazioni Calibre",
     "Sincronizzazione KOReader",
@@ -39379,6 +39571,7 @@ const char* const STRINGS_IT[] = {
     "Sospendi",
     "Volta pagina",
     "Screen Refresh",
+    "Blocca parte anteriore",
     "Verticale",
     "Orizzontale \xE2"
     "\x86"
@@ -39523,6 +39716,7 @@ const char* const STRINGS_IT[] = {
     "Rimappa Pulsanti Frontali",
     "Browser OPDS",
     "Copertina + Personalizzato",
+    "Page overlay",
     "Recenti",
     "Libri Recenti",
     "Nessun libro recente",
@@ -40313,6 +40507,7 @@ const char* const STRINGS_PL[] = {
     "Czas do u\xC5"
     "\x9B"
     "pienia",
+    "Show Hidden Files",
     "Cz\xC4"
     "\x99"
     "stotliwo\xC5"
@@ -40480,6 +40675,9 @@ const char* const STRINGS_PL[] = {
     "pienie",
     "Nast. str.",
     "Screen Refresh",
+    "Zablokuj prz\xC3"
+    "\xB3"
+    "d",
     "Pionowo",
     "Poziomo P",
     "Odwr\xC3"
@@ -40792,6 +40990,7 @@ const char* const STRINGS_PL[] = {
     "adka + W\xC5"
     "\x82"
     "asne",
+    "Page overlay",
     "Ostatnie",
     "Ostatnio czytane",
     "Brak ostatnio czytanych",
@@ -41590,6 +41789,7 @@ const char* const STRINGS_FI[] = {
     "Lukijan kappaletasaus",
     "Tavutus",
     "Aika lepotilaan",
+    "Show Hidden Files",
     "P\xC3"
     "\xA4"
     "ivitystaajuus",
@@ -41719,6 +41919,9 @@ const char* const STRINGS_FI[] = {
     "\xB6"
     "",
     "Screen Refresh",
+    "Est\xC3"
+    "\xA4"
+    " etuosa",
     "Pysty",
     "Vaaka my\xC3"
     "\xB6"
@@ -41979,6 +42182,7 @@ const char* const STRINGS_FI[] = {
     " etupainikkeet",
     "OPDS-selain",
     "Kansi + mukautettu",
+    "Page overlay",
     "Viimeisimm\xC3"
     "\xA4"
     "t",
@@ -42711,6 +42915,7 @@ const char* const STRINGS_DA[] = {
     "Afsnitsjustering",
     "Orddeling",
     "Tid til hvile",
+    "Show Hidden Files",
     "Opdateringsfrekvens",
     "Calibre-indstillinger",
     "KOReader Sync",
@@ -42790,6 +42995,7 @@ const char* const STRINGS_DA[] = {
     "Hvile",
     "Sideskift",
     "Screen Refresh",
+    "Bloker forside",
     "Portr\xC3"
     "\xA6"
     "t",
@@ -42966,6 +43172,7 @@ const char* const STRINGS_DA[] = {
     "Omtildel frontknapper",
     "OPDS Browser",
     "Omslag + Brugerdefineret",
+    "Page overlay",
     "Seneste",
     "Seneste b\xC3"
     "\xB8"
@@ -43498,6 +43705,7 @@ const char* const STRINGS_NL[] = {
     "Uitlijning alinea lezer",
     "Woordafbreking",
     "Tijd tot slaapstand",
+    "Show Hidden Files",
     "Verversingsfrequentie",
     "Calibre instellingen",
     "KOReader Sync",
@@ -43553,6 +43761,7 @@ const char* const STRINGS_NL[] = {
     "Slaap",
     "Pagina omslaan",
     "Screen Refresh",
+    "Voorkant blokkeren",
     "Staand",
     "Liggend (rechtsom)",
     "Omgekeerd",
@@ -43685,6 +43894,7 @@ const char* const STRINGS_NL[] = {
     "Knoppen voorzijde wijzigen",
     "OPDS-browser",
     "Omslag + Aangepast",
+    "Page overlay",
     "Recent",
     "Recente boeken",
     "Geen recente boeken",
@@ -44595,6 +44805,7 @@ const char* const STRINGS_TR[] = {
     "me S\xC3"
     "\xBC"
     "resi",
+    "Show Hidden Files",
     "Yenileme S\xC4"
     "\xB1"
     "kl\xC4"
@@ -44818,6 +45029,11 @@ const char* const STRINGS_TR[] = {
     "\x87"
     "evirme",
     "Screen Refresh",
+    "\xC3"
+    "\x96"
+    "n\xC3"
+    "\xBC"
+    " engelle",
     "Dikey",
     "Yatay (Saat Y\xC3"
     "\xB6"
@@ -45260,6 +45476,7 @@ const char* const STRINGS_TR[] = {
     "Kapak + \xC3"
     "\x96"
     "zel",
+    "Page overlay",
     "Son Okunanlar",
     "Son Kitaplar",
     "Son okunan kitap yok",
@@ -46990,6 +47207,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xA7"
     "",
+    "Show Hidden Files",
     "T\xE1"
     "\xBA"
     "\xA7"
@@ -47464,6 +47682,7 @@ const char* const STRINGS_VI[] = {
     "n h\xC3"
     "\xAC"
     "nh",
+    "Block Front",
     "D\xE1"
     "\xBB"
     "\x8D"
@@ -48215,6 +48434,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x89"
     "nh",
+    "Page overlay",
     "G\xE1"
     "\xBA"
     "\xA7"
