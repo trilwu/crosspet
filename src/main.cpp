@@ -234,7 +234,8 @@ void verifyPowerButtonDuration() {
       activityManager.goToSleep();
     }
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
-    powerManager.startDeepSleep(gpio);
+    powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+                                CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
   }
 }
 
@@ -267,7 +268,8 @@ void enterDeepSleep() {
   // Also save to SD as reliable fallback (RTC_DATA_ATTR can be lost on some ESP32-C3 boards)
   saveClockToSD();
 
-  powerManager.startDeepSleep(gpio);
+  powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+                                CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
 }
 
 void setupDisplayAndFonts() {
@@ -403,10 +405,25 @@ void setup() {
       LOG_DBG("MAIN", "Verifying power button press duration");
       verifyPowerButtonDuration();
       break;
+    case HalGPIO::WakeupReason::TimerWake: {
+      // Periodic sleep screen refresh — minimal boot path, no full UI
+      LOG_DBG("MAIN", "Timer wake: refreshing sleep screen");
+      const auto mode = SETTINGS.sleepScreen;
+      if (mode == CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK ||
+          mode == CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS) {
+        setupDisplayAndFonts();
+        activityManager.goToSleep();
+      }
+      saveClockToSD();
+      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+                                  CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+      break;  // unreachable — startDeepSleep never returns
+    }
     case HalGPIO::WakeupReason::AfterUSBPower:
       // If USB power caused a cold boot, go back to sleep
       LOG_DBG("MAIN", "Wakeup reason: After USB Power");
-      powerManager.startDeepSleep(gpio);
+      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+                                  CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
       break;
     case HalGPIO::WakeupReason::AfterFlash:
       // After flashing, just proceed to boot

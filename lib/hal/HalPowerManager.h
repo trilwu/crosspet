@@ -31,7 +31,9 @@ class HalPowerManager {
 
   // Setup wake up GPIO and enter deep sleep
   // Should be called inside main loop() to handle the currentLockMode
-  void startDeepSleep(HalGPIO& gpio) const;
+  // keepClockAlive: when true, GPIO13 stays HIGH so RTC/LP timer keep running (costs ~3-4mA on battery)
+  // timerWakeMinutes: if > 0 and keepClockAlive, enables periodic timer wakeup for sleep screen refresh
+  void startDeepSleep(HalGPIO& gpio, bool keepClockAlive = false, uint32_t timerWakeMinutes = 0) const;
 
   // Get battery percentage (range 0-100)
   uint16_t getBatteryPercentage() const;
