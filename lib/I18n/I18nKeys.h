@@ -718,6 +718,10 @@ enum class StrId : uint16_t {
   STR_PLACE_BMP_IN_SLEEP,
   STR_ANY_RANDOM,
   STR_SLEEP_MODE_HINT,
+  STR_STARRED_PAGES,
+  STR_STAR_PAGE,
+  STR_NO_STARRED_PAGES,
+  STR_PAGE_PREFIX,
   // Sentinel - must be last
   _COUNT
 };

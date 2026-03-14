@@ -1742,6 +1742,10 @@ const char* const STRINGS_EN[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2693,6 +2697,10 @@ const char* const STRINGS_ES[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3772,6 +3780,10 @@ const char* const STRINGS_FR[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4623,6 +4635,10 @@ const char* const STRINGS_DE[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6582,6 +6598,10 @@ const char* const STRINGS_CS[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7564,6 +7584,10 @@ const char* const STRINGS_PO[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_RU[] = {
@@ -16593,6 +16617,10 @@ const char* const STRINGS_RU[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_SV[] = {
@@ -17792,6 +17820,10 @@ const char* const STRINGS_SV[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19151,6 +19183,10 @@ const char* const STRINGS_RO[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20146,6 +20182,10 @@ const char* const STRINGS_CA[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_UK[] = {
@@ -30423,6 +30463,10 @@ const char* const STRINGS_UK[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_BE[] = {
@@ -39124,6 +39168,10 @@ const char* const STRINGS_BE[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_IT[] = {
@@ -39838,6 +39886,10 @@ const char* const STRINGS_IT[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_PL[] = {
@@ -41221,6 +41273,10 @@ const char* const STRINGS_PL[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_FI[] = {
@@ -42370,6 +42426,10 @@ const char* const STRINGS_FI[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_DA[] = {
@@ -43283,6 +43343,10 @@ const char* const STRINGS_DA[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_NL[] = {
@@ -43964,6 +44028,10 @@ const char* const STRINGS_NL[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_TR[] = {
@@ -45699,6 +45767,10 @@ const char* const STRINGS_TR[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 const char* const STRINGS_VI[] = {
@@ -50555,6 +50627,10 @@ const char* const STRINGS_VI[] = {
     "Place .bmp files in /sleep/",
     "Any (random)",
     "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
 };
 
 }  // namespace i18n_strings

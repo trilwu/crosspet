@@ -3,6 +3,7 @@
 #include <Epub/FootnoteEntry.h>
 #include <Epub/Section.h>
 
+#include "BookmarkStore.h"
 #include "EpubReaderMenuActivity.h"
 #include "activities/Activity.h"
 
@@ -39,6 +40,9 @@ class EpubReaderActivity final : public Activity {
   bool showMilestoneToast = false;
   unsigned long milestoneToastTime = 0;
   char milestoneText[48] = {};
+
+  // Bookmarks (starred pages)
+  BookmarkStore bookmarkStore;
 
   // Footnote support
   std::vector<FootnoteEntry> currentPageFootnotes;
