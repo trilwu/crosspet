@@ -10,9 +10,10 @@
 EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,
                                                const std::string& title, const int currentPage, const int totalPages,
                                                const int bookProgressPercent, const uint8_t currentOrientation,
-                                               const bool hasFootnotes, const uint8_t currentPageTurnOption)
+                                               const bool hasFootnotes, const bool hasStarredPages,
+                                               const uint8_t currentPageTurnOption)
     : Activity("EpubReaderMenu", renderer, mappedInput),
-      menuItems(buildMenuItems(hasFootnotes)),
+      menuItems(buildMenuItems(hasFootnotes, hasStarredPages)),
       title(title),
       pendingOrientation(currentOrientation),
       selectedPageTurnOption(currentPageTurnOption),
@@ -20,12 +21,16 @@ EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInpu
       totalPages(totalPages),
       bookProgressPercent(bookProgressPercent) {}
 
-std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuItems(bool hasFootnotes) {
+std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuItems(bool hasFootnotes,
+                                                                                     bool hasStarredPages) {
   std::vector<MenuItem> items;
-  items.reserve(10);
+  items.reserve(11);
   items.push_back({MenuAction::SELECT_CHAPTER, StrId::STR_SELECT_CHAPTER});
   if (hasFootnotes) {
     items.push_back({MenuAction::FOOTNOTES, StrId::STR_FOOTNOTES});
+  }
+  if (hasStarredPages) {
+    items.push_back({MenuAction::STARRED_PAGES, StrId::STR_STARRED_PAGES});
   }
   items.push_back({MenuAction::ROTATE_SCREEN, StrId::STR_ORIENTATION});
   items.push_back({MenuAction::AUTO_PAGE_TURN, StrId::STR_AUTO_TURN_PAGES_PER_MIN});

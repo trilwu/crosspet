@@ -649,8 +649,8 @@ void BaseTheme::fillPopupProgress(const GfxRenderer& renderer, const Rect& layou
 }
 
 void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, const int currentPage,
-                              const int pageCount, std::string title, const int paddingBottom,
-                              const int textYOffset) const {
+                              const int pageCount, std::string title, const int paddingBottom, const int textYOffset,
+                              const bool isStarred) const {
   auto metrics = UITheme::getInstance().getMetrics();
   int orientedMarginTop, orientedMarginRight, orientedMarginBottom, orientedMarginLeft;
   renderer.getOrientedViewableTRBL(&orientedMarginTop, &orientedMarginRight, &orientedMarginBottom,
@@ -735,8 +735,9 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
 
     const int batterySize = SETTINGS.statusBarBattery ? (showBatteryPercentage ? 50 : 20) : 0;
     const int clockSize = clockWidth > 0 ? clockWidth + 6 : 0;
+    const int starReserve = isStarred ? (renderer.getTextWidth(SMALL_FONT_ID, "*") + 6) : 0;
     const int titleMarginLeft = clockSize + batterySize + 30;
-    const int titleMarginRight = progressTextWidth + 30;
+    const int titleMarginRight = progressTextWidth + starReserve + 30;
 
     // Attempt to center title on the screen, but if title is too wide then later we will center it within the
     // available space.
@@ -759,6 +760,21 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
                       titleMarginLeftAdjusted + metrics.statusBarHorizontalMargin + orientedMarginLeft +
                           (availableTitleSpace - titleWidth) / 2,
                       textY, title.c_str());
+  }
+
+  // Draw star indicator between title and progress text
+  if (isStarred) {
+    const int starWidth = renderer.getTextWidth(SMALL_FONT_ID, "*");
+    int starX;
+    if (progressTextWidth > 0) {
+      // Place star just left of the progress text with a small gap
+      starX = renderer.getScreenWidth() - metrics.statusBarHorizontalMargin - orientedMarginRight - progressTextWidth -
+              starWidth - 6;
+    } else {
+      // No progress text, place star at right edge
+      starX = renderer.getScreenWidth() - metrics.statusBarHorizontalMargin - orientedMarginRight - starWidth;
+    }
+    renderer.drawText(SMALL_FONT_ID, starX, textY + textYOffset, "*");
   }
 }
 
