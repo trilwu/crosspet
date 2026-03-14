@@ -176,19 +176,12 @@ std::string KOReaderDocumentId::calculate(const std::string& filePath) {
 
   const size_t fileSize = file.fileSize();
 
-  // Compute a lightweight fingerprint from the file's modification time.
-  // The underlying FsFile API provides getModifyDateTime which returns two
-  // packed 16-bit values (date and time).  Concatenate these as eight hex
-  // digits to produce the token stored in the cache header.
-  uint16_t date = 0, time = 0;
-  if (!file.getModifyDateTime(&date, &time)) {
-    // If timestamp isn't available for some reason, fall back to a sentinel.
-    date = 0;
-    time = 0;
-  }
+  // Fingerprint: use file size as the sole invalidation signal.
+  // Our HalFile doesn't expose modification timestamps, so we use a fixed
+  // sentinel for the fingerprint field. The cache header already validates
+  // file size separately, which catches content changes in practice.
   char fpBuf[9];
-  // two 16-bit numbers => 4 hex digits each
-  sprintf(fpBuf, "%04x%04x", date, time);
+  sprintf(fpBuf, "%08x", (unsigned)fileSize);
   const std::string fingerprintTok(fpBuf);
 
   // Return persisted hash if the file size and fingerprint haven't changed.
