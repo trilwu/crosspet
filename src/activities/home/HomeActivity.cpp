@@ -14,6 +14,7 @@
 
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
+#include "TabNavigation.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
@@ -172,6 +173,15 @@ void HomeActivity::freeCoverBuffer() {
 }
 
 void HomeActivity::loop() {
+  // Tab switching via L/R
+  int nextTab = handleTabInput(mappedInput, static_cast<Tab>(APP_STATE.currentTab));
+  if (nextTab >= 0) {
+    APP_STATE.currentTab = static_cast<uint8_t>(nextTab);
+    APP_STATE.saveToFile();
+    activityManager.replaceActivity(createTabActivity(static_cast<Tab>(nextTab), renderer, mappedInput));
+    return;
+  }
+
   const int menuCount = getMenuItemCount();
 
   buttonNavigator.onNext([this, menuCount] {
@@ -244,8 +254,10 @@ void HomeActivity::render(RenderLock&&) {
       [&menuItems](int index) { return std::string(menuItems[index]); },
       [&menuIcons](int index) { return menuIcons[index]; });
 
-  const auto labels = mappedInput.mapLabels("", tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
-  GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  // Tab bar at bottom (Kindle-style)
+  auto tabs = getGlobalTabs(static_cast<Tab>(APP_STATE.currentTab));
+  int tabBarY = pageHeight - metrics.tabBarHeight;
+  GUI.drawTabBar(renderer, Rect{0, tabBarY, pageWidth, metrics.tabBarHeight}, tabs, true);
 
   renderer.displayBuffer();
 

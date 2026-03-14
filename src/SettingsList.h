@@ -74,6 +74,12 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN}, "shortPwrBtn",
                         StrId::STR_CAT_CONTROLS),
 
+      // --- Library ---
+      SettingInfo::Enum(StrId::STR_SORT_MODE, &CrossPointSettings::librarySortMode,
+                        {StrId::STR_SORT_NATURAL, StrId::STR_SORT_ALPHA, StrId::STR_SORT_BY_DATE,
+                         StrId::STR_SORT_BY_SIZE},
+                        "librarySortMode", StrId::STR_CAT_LIBRARY),
+
       // --- System ---
       SettingInfo::Enum(StrId::STR_TIME_TO_SLEEP, &CrossPointSettings::sleepTimeout,
                         {StrId::STR_MIN_1, StrId::STR_MIN_5, StrId::STR_MIN_10, StrId::STR_MIN_15, StrId::STR_MIN_30},

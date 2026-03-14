@@ -7,6 +7,8 @@
 #include "CalibreSettingsActivity.h"
 #include "ClearCacheActivity.h"
 #include "CrossPointSettings.h"
+#include "CrossPointState.h"
+#include "TabNavigation.h"
 #include "KOReaderSettingsActivity.h"
 #include "LanguageSelectActivity.h"
 #include "MappedInputManager.h"
@@ -18,7 +20,8 @@
 #include "fontIds.h"
 
 const StrId SettingsActivity::categoryNames[categoryCount] = {StrId::STR_CAT_DISPLAY, StrId::STR_CAT_READER,
-                                                              StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM};
+                                                              StrId::STR_CAT_LIBRARY, StrId::STR_CAT_CONTROLS,
+                                                              StrId::STR_CAT_SYSTEM};
 
 void SettingsActivity::onEnter() {
   Activity::onEnter();
@@ -26,6 +29,7 @@ void SettingsActivity::onEnter() {
   // Build per-category vectors from the shared settings list
   displaySettings.clear();
   readerSettings.clear();
+  librarySettings.clear();
   controlsSettings.clear();
   systemSettings.clear();
 
@@ -35,6 +39,8 @@ void SettingsActivity::onEnter() {
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
       readerSettings.push_back(setting);
+    } else if (setting.category == StrId::STR_CAT_LIBRARY) {
+      librarySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_CONTROLS) {
       controlsSettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_SYSTEM) {
@@ -132,9 +138,12 @@ void SettingsActivity::loop() {
         currentSettings = &readerSettings;
         break;
       case 2:
-        currentSettings = &controlsSettings;
+        currentSettings = &librarySettings;
         break;
       case 3:
+        currentSettings = &controlsSettings;
+        break;
+      case 4:
         currentSettings = &systemSettings;
         break;
     }
@@ -247,7 +256,7 @@ void SettingsActivity::render(RenderLock&&) {
       },
       true);
 
-  // Draw help text
+  // Button hints (no global tab bar — L/R is used for category switching)
   const auto confirmLabel = (selectedSettingIndex == 0)
                                 ? I18N.get(categoryNames[(selectedCategoryIndex + 1) % categoryCount])
                                 : tr(STR_TOGGLE);

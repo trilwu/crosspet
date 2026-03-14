@@ -1,12 +1,19 @@
 #pragma once
 
-#include <functional>
+#include <cstdint>
 #include <string>
 #include <vector>
 
 #include "../Activity.h"
-#include "RecentBooksStore.h"
 #include "util/ButtonNavigator.h"
+
+// File entry with metadata for sorting by date/size/favorites
+struct FileEntry {
+  std::string name;
+  uint32_t modTime = 0;
+  uint32_t fileSize = 0;
+  bool favorite = false;  // pre-computed during loadFiles()
+};
 
 class FileBrowserActivity final : public Activity {
  private:
@@ -19,11 +26,14 @@ class FileBrowserActivity final : public Activity {
 
   // Files state
   std::string basepath = "/";
-  std::vector<std::string> files;
+  std::vector<FileEntry> files;
 
   // Data loading
   void loadFiles();
   size_t findEntry(const std::string& name) const;
+
+  // Build full path for a file entry
+  std::string buildFullPath(const std::string& filename) const;
 
  public:
   explicit FileBrowserActivity(GfxRenderer& renderer, MappedInputManager& mappedInput, std::string initialPath = "/")

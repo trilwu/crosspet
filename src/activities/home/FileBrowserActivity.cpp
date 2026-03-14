@@ -9,65 +9,86 @@
 #include <algorithm>
 
 #include "../util/ConfirmationActivity.h"
+#include "CrossPointSettings.h"
+#include "CrossPointState.h"
+#include "FavoritesStore.h"
+#include "TabNavigation.h"
 #include "MappedInputManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
 namespace {
 constexpr unsigned long GO_HOME_MS = 1000;
-}  // namespace
+constexpr unsigned long FAVORITE_MS = 700;
 
-void sortFileList(std::vector<std::string>& strs) {
-  std::sort(begin(strs), end(strs), [](const std::string& str1, const std::string& str2) {
-    // Directories first
-    bool isDir1 = str1.back() == '/';
-    bool isDir2 = str2.back() == '/';
+// Natural sort comparator for two strings (case-insensitive, numeric-aware)
+bool naturalLess(const std::string& str1, const std::string& str2) {
+  const char* s1 = str1.c_str();
+  const char* s2 = str2.c_str();
+
+  while (*s1 && *s2) {
+    if (isdigit(*s1) && isdigit(*s2)) {
+      while (*s1 == '0') s1++;
+      while (*s2 == '0') s2++;
+      int len1 = 0, len2 = 0;
+      while (isdigit(s1[len1])) len1++;
+      while (isdigit(s2[len2])) len2++;
+      if (len1 != len2) return len1 < len2;
+      for (int i = 0; i < len1; i++) {
+        if (s1[i] != s2[i]) return s1[i] < s2[i];
+      }
+      s1 += len1;
+      s2 += len2;
+    } else {
+      char c1 = tolower(*s1);
+      char c2 = tolower(*s2);
+      if (c1 != c2) return c1 < c2;
+      s1++;
+      s2++;
+    }
+  }
+  return *s1 == '\0' && *s2 != '\0';
+}
+// Sort file list by mode with favorites first, directories always on top
+void sortFileList(std::vector<FileEntry>& files) {
+  uint8_t sortMode = SETTINGS.librarySortMode;
+
+  std::sort(files.begin(), files.end(), [sortMode](const FileEntry& a, const FileEntry& b) {
+    // Directories always first
+    bool isDir1 = !a.name.empty() && a.name.back() == '/';
+    bool isDir2 = !b.name.empty() && b.name.back() == '/';
     if (isDir1 != isDir2) return isDir1;
 
-    // Start naive natural sort
-    const char* s1 = str1.c_str();
-    const char* s2 = str2.c_str();
+    // Favorites second (uses pre-computed flag — no heap allocation)
+    if (!isDir1 && a.favorite != b.favorite) return a.favorite;
 
-    // Iterate while both strings have characters
-    while (*s1 && *s2) {
-      // Check if both are at the start of a number
-      if (isdigit(*s1) && isdigit(*s2)) {
-        // Skip leading zeros and track them
-        const char* start1 = s1;
-        const char* start2 = s2;
-        while (*s1 == '0') s1++;
-        while (*s2 == '0') s2++;
-
-        // Count digits to compare lengths first
-        int len1 = 0, len2 = 0;
-        while (isdigit(s1[len1])) len1++;
-        while (isdigit(s2[len2])) len2++;
-
-        // Different length so return smaller integer value
-        if (len1 != len2) return len1 < len2;
-
-        // Same length so compare digit by digit
-        for (int i = 0; i < len1; i++) {
-          if (s1[i] != s2[i]) return s1[i] < s2[i];
+    // Sort by selected mode
+    switch (sortMode) {
+      case CrossPointSettings::SORT_ALPHA: {
+        // Case-insensitive compare without allocating
+        const char* s1 = a.name.c_str();
+        const char* s2 = b.name.c_str();
+        while (*s1 && *s2) {
+          char c1 = tolower(*s1++);
+          char c2 = tolower(*s2++);
+          if (c1 != c2) return c1 < c2;
         }
-
-        // Numbers equal so advance pointers
-        s1 += len1;
-        s2 += len2;
-      } else {
-        // Regular case-insensitive character comparison
-        char c1 = tolower(*s1);
-        char c2 = tolower(*s2);
-        if (c1 != c2) return c1 < c2;
-        s1++;
-        s2++;
+        return *s1 == '\0' && *s2 != '\0';
       }
+      case CrossPointSettings::SORT_DATE:
+        // Newest first, fallback to name (modTime=0 if HalFile lacks API)
+        if (a.modTime != b.modTime) return a.modTime > b.modTime;
+        return naturalLess(a.name, b.name);
+      case CrossPointSettings::SORT_SIZE:
+        // Largest first, fallback to name
+        if (a.fileSize != b.fileSize) return a.fileSize > b.fileSize;
+        return naturalLess(a.name, b.name);
+      default:
+        return naturalLess(a.name, b.name);
     }
-
-    // One string is prefix of other
-    return *s1 == '\0' && *s2 != '\0';
   });
 }
+}  // namespace
 
 void FileBrowserActivity::loadFiles() {
   files.clear();
@@ -89,13 +110,19 @@ void FileBrowserActivity::loadFiles() {
     }
 
     if (file.isDirectory()) {
-      files.emplace_back(std::string(name) + "/");
+      FileEntry entry;
+      entry.name = std::string(name) + "/";
+      files.push_back(std::move(entry));
     } else {
       std::string_view filename{name};
       if (FsHelpers::hasEpubExtension(filename) || FsHelpers::hasXtcExtension(filename) ||
           FsHelpers::hasTxtExtension(filename) || FsHelpers::hasMarkdownExtension(filename) ||
           FsHelpers::hasBmpExtension(filename)) {
-        files.emplace_back(filename);
+        FileEntry entry;
+        entry.name = std::string(name);
+        entry.fileSize = static_cast<uint32_t>(file.fileSize());
+        entry.favorite = FAVORITES.isFavorite(buildFullPath(entry.name));
+        files.push_back(std::move(entry));
       }
     }
     file.close();
@@ -104,12 +131,15 @@ void FileBrowserActivity::loadFiles() {
   sortFileList(files);
 }
 
+std::string FileBrowserActivity::buildFullPath(const std::string& filename) const {
+  if (basepath.back() == '/') return basepath + filename;
+  return basepath + "/" + filename;
+}
+
 void FileBrowserActivity::onEnter() {
   Activity::onEnter();
-
   loadFiles();
   selectorIndex = 0;
-
   requestUpdate();
 }
 
@@ -119,7 +149,6 @@ void FileBrowserActivity::onExit() {
 }
 
 void FileBrowserActivity::clearFileMetadata(const std::string& fullPath) {
-  // Only clear cache for .epub files
   if (FsHelpers::hasEpubExtension(fullPath)) {
     Epub(fullPath, "/.crosspoint").clearCache();
     LOG_DBG("FileBrowser", "Cleared metadata cache for: %s", fullPath.c_str());
@@ -127,6 +156,17 @@ void FileBrowserActivity::clearFileMetadata(const std::string& fullPath) {
 }
 
 void FileBrowserActivity::loop() {
+  // Tab switching via L/R (only at root directory level)
+  if (basepath == "/") {
+    int nextTab = handleTabInput(mappedInput, static_cast<Tab>(APP_STATE.currentTab));
+    if (nextTab >= 0) {
+      APP_STATE.currentTab = static_cast<uint8_t>(nextTab);
+      APP_STATE.saveToFile();
+      activityManager.replaceActivity(createTabActivity(static_cast<Tab>(nextTab), renderer, mappedInput));
+      return;
+    }
+  }
+
   // Long press BACK (1s+) goes to root folder
   if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= GO_HOME_MS &&
       basepath != "/") {
@@ -141,14 +181,13 @@ void FileBrowserActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     if (files.empty()) return;
 
-    const std::string& entry = files[selectorIndex];
-    bool isDirectory = (entry.back() == '/');
+    const std::string& entry = files[selectorIndex].name;
+    bool isDirectory = (!entry.empty() && entry.back() == '/');
+    unsigned long heldTime = mappedInput.getHeldTime();
 
-    if (mappedInput.getHeldTime() >= GO_HOME_MS && !isDirectory) {
-      // --- LONG PRESS ACTION: DELETE FILE ---
-      std::string cleanBasePath = basepath;
-      if (cleanBasePath.back() != '/') cleanBasePath += "/";
-      const std::string fullPath = cleanBasePath + entry;
+    if (heldTime >= GO_HOME_MS && !isDirectory) {
+      // --- LONG PRESS (1s+): DELETE FILE ---
+      const std::string fullPath = buildFullPath(entry);
 
       auto handler = [this, fullPath](const ActivityResult& res) {
         if (!res.isCancelled) {
@@ -160,25 +199,40 @@ void FileBrowserActivity::loop() {
             if (files.empty()) {
               selectorIndex = 0;
             } else if (selectorIndex >= files.size()) {
-              // Move selection to the new "last" item
               selectorIndex = files.size() - 1;
             }
-
             requestUpdate(true);
           } else {
             LOG_ERR("FileBrowser", "Failed to delete file: %s", fullPath.c_str());
           }
-        } else {
-          LOG_DBG("FileBrowser", "Delete cancelled by user");
         }
       };
 
       std::string heading = tr(STR_DELETE) + std::string("? ");
-
       startActivityForResult(std::make_unique<ConfirmationActivity>(renderer, mappedInput, heading, entry), handler);
       return;
+    } else if (heldTime >= FAVORITE_MS && !isDirectory) {
+      // --- MEDIUM PRESS (700ms-999ms): TOGGLE FAVORITE ---
+      const std::string fullPath = buildFullPath(entry);
+      FAVORITES.toggleFavorite(fullPath);
+      // Update pre-computed flag for all entries
+      for (auto& f : files) {
+        if (!f.name.empty() && f.name.back() != '/') {
+          f.favorite = FAVORITES.isFavorite(buildFullPath(f.name));
+        }
+      }
+      sortFileList(files);
+      // Re-find the entry after re-sort
+      for (size_t i = 0; i < files.size(); i++) {
+        if (files[i].name == entry) {
+          selectorIndex = i;
+          break;
+        }
+      }
+      requestUpdate(true);
+      return;
     } else {
-      // --- SHORT PRESS ACTION: OPEN/NAVIGATE ---
+      // --- SHORT PRESS: OPEN/NAVIGATE ---
       if (basepath.back() != '/') basepath += "/";
 
       if (isDirectory) {
@@ -194,11 +248,9 @@ void FileBrowserActivity::loop() {
   }
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
-    // Short press: go up one directory, or go home if at root
     if (mappedInput.getHeldTime() < GO_HOME_MS) {
       if (basepath != "/") {
         const std::string oldPath = basepath;
-
         basepath.replace(basepath.find_last_of('/'), std::string::npos, "");
         if (basepath.empty()) basepath = "/";
         loadFiles();
@@ -206,7 +258,6 @@ void FileBrowserActivity::loop() {
         const auto pos = oldPath.find_last_of('/');
         const std::string dirName = oldPath.substr(pos + 1) + "/";
         selectorIndex = findEntry(dirName);
-
         requestUpdate();
       } else {
         onGoHome();
@@ -236,7 +287,7 @@ void FileBrowserActivity::loop() {
   });
 }
 
-std::string getFileName(std::string filename) {
+std::string getFileName(const std::string& filename) {
   if (filename.back() == '/') {
     return filename.substr(0, filename.length() - 1);
   }
@@ -261,21 +312,34 @@ void FileBrowserActivity::render(RenderLock&&) {
   } else {
     GUI.drawList(
         renderer, Rect{0, contentTop, pageWidth, contentHeight}, files.size(), selectorIndex,
-        [this](int index) { return getFileName(files[index]); }, nullptr,
-        [this](int index) { return UITheme::getFileIcon(files[index]); });
+        [this](int index) {
+          const FileEntry& entry = files[index];
+          std::string display = getFileName(entry.name);
+          // Prepend star for favorites (uses pre-computed flag)
+          if (entry.favorite) {
+            display = "* " + display;
+          }
+          return display;
+        },
+        nullptr, [this](int index) { return UITheme::getFileIcon(files[index].name); });
   }
 
-  // Help text
-  const auto labels =
-      mappedInput.mapLabels(basepath == "/" ? tr(STR_HOME) : tr(STR_BACK), files.empty() ? "" : tr(STR_OPEN),
-                            files.empty() ? "" : tr(STR_DIR_UP), files.empty() ? "" : tr(STR_DIR_DOWN));
-  GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  // Tab bar at bottom (Kindle-style) — only show at root level
+  if (basepath == "/") {
+    auto tabs = getGlobalTabs(static_cast<Tab>(APP_STATE.currentTab));
+    int tabBarY = pageHeight - metrics.tabBarHeight;
+    GUI.drawTabBar(renderer, Rect{0, tabBarY, pageWidth, metrics.tabBarHeight}, tabs, true);
+  } else {
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), files.empty() ? "" : tr(STR_OPEN),
+                                               files.empty() ? "" : tr(STR_DIR_UP), files.empty() ? "" : tr(STR_DIR_DOWN));
+    GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  }
 
   renderer.displayBuffer();
 }
 
 size_t FileBrowserActivity::findEntry(const std::string& name) const {
   for (size_t i = 0; i < files.size(); i++)
-    if (files[i] == name) return i;
+    if (files[i].name == name) return i;
   return 0;
 }

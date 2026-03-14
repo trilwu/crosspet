@@ -3,6 +3,8 @@
 #include <Epub/FootnoteEntry.h>
 #include <Epub/Section.h>
 
+#include "BookReaderSettings.h"
+#include "BookmarkStore.h"
 #include "EpubReaderMenuActivity.h"
 #include "activities/Activity.h"
 
@@ -48,6 +50,16 @@ class EpubReaderActivity final : public Activity {
   void applyOrientation(uint8_t orientation);
   void toggleAutoPageTurn(uint8_t selectedPageTurnOption);
   void pageTurn(bool isForwardTurn);
+
+  // Per-book settings
+  BookReaderSettings savedGlobalSettings;
+  std::string bookSettingsPath;
+  bool hasPerBookSettings = false;
+
+  // Bookmarks
+  std::unique_ptr<BookmarkStore> bookmarkStore;
+  bool currentPageBookmarked = false;
+  void updateBookmarkStatus();
 
   // Footnote navigation
   void navigateToHref(const std::string& href, bool savePosition = false);

@@ -12,6 +12,8 @@
 
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
+#include "../util/ConfirmationActivity.h"
+#include "BookmarkListActivity.h"
 #include "EpubReaderChapterSelectionActivity.h"
 #include "EpubReaderFootnotesActivity.h"
 #include "EpubReaderPercentSelectionActivity.h"
@@ -81,6 +83,19 @@ void EpubReaderActivity::onEnter() {
     }
   }
 
+  // Load bookmarks for this book
+  bookmarkStore = std::make_unique<BookmarkStore>(epub->getCachePath());
+  bookmarkStore->load();
+
+  // Load per-book settings (override globals during reading)
+  bookSettingsPath = epub->getCachePath() + "/reader_settings.bin";
+  savedGlobalSettings = BookReaderSettings::fromGlobal();
+  BookReaderSettings perBook;
+  if (BookReaderSettings::load(bookSettingsPath, perBook)) {
+    perBook.applyToGlobal();
+    hasPerBookSettings = true;
+  }
+
   // Save current epub as last opened epub and add to recent books
   APP_STATE.openEpubPath = epub->getPath();
   APP_STATE.saveToFile();
@@ -96,8 +111,28 @@ void EpubReaderActivity::onExit() {
   // Reset orientation back to portrait for the rest of the UI
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
 
+  // Save per-book settings if any reader settings changed during this session
+  BookReaderSettings current = BookReaderSettings::fromGlobal();
+  bool settingsChanged = current.fontFamily != savedGlobalSettings.fontFamily ||
+                          current.fontSize != savedGlobalSettings.fontSize ||
+                          current.lineSpacing != savedGlobalSettings.lineSpacing ||
+                          current.paragraphAlignment != savedGlobalSettings.paragraphAlignment ||
+                          current.extraParagraphSpacing != savedGlobalSettings.extraParagraphSpacing ||
+                          current.textAntiAliasing != savedGlobalSettings.textAntiAliasing ||
+                          current.hyphenationEnabled != savedGlobalSettings.hyphenationEnabled ||
+                          current.screenMargin != savedGlobalSettings.screenMargin ||
+                          current.embeddedStyle != savedGlobalSettings.embeddedStyle ||
+                          current.imageRendering != savedGlobalSettings.imageRendering;
+  if (settingsChanged) {
+    current.save(bookSettingsPath);
+  }
+
+  // Restore global settings (undo per-book overrides)
+  savedGlobalSettings.applyToGlobal();
+
   APP_STATE.readerActivityLoadCount = 0;
   APP_STATE.saveToFile();
+  bookmarkStore.reset();
   section.reset();
   epub.reset();
 }
@@ -135,28 +170,42 @@ void EpubReaderActivity::loop() {
     }
   }
 
-  // Enter reader menu activity.
+  // Confirm button: long-press = toggle bookmark, short-press = reader menu
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    const int currentPage = section ? section->currentPage + 1 : 0;
-    const int totalPages = section ? section->pageCount : 0;
-    float bookProgress = 0.0f;
-    if (epub->getBookSize() > 0 && section && section->pageCount > 0) {
-      const float chapterProgress = static_cast<float>(section->currentPage) / static_cast<float>(section->pageCount);
-      bookProgress = epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f;
+    if (mappedInput.getHeldTime() >= 800 && bookmarkStore && section) {
+      // Long-press: toggle bookmark on current page
+      uint16_t spine = static_cast<uint16_t>(currentSpineIndex);
+      uint16_t page = static_cast<uint16_t>(section->currentPage);
+      if (currentPageBookmarked) {
+        bookmarkStore->removeBookmark(spine, page);
+      } else {
+        bookmarkStore->addBookmark(spine, page, nullptr);
+      }
+      currentPageBookmarked = !currentPageBookmarked;
+      requestUpdate(true);
+    } else {
+      // Short-press: open reader menu
+      const int currentPage = section ? section->currentPage + 1 : 0;
+      const int totalPages = section ? section->pageCount : 0;
+      float bookProgress = 0.0f;
+      if (epub->getBookSize() > 0 && section && section->pageCount > 0) {
+        const float chapterProgress =
+            static_cast<float>(section->currentPage) / static_cast<float>(section->pageCount);
+        bookProgress = epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f;
+      }
+      const int bookProgressPercent = clampPercent(static_cast<int>(bookProgress + 0.5f));
+      startActivityForResult(std::make_unique<EpubReaderMenuActivity>(
+                                 renderer, mappedInput, epub->getTitle(), currentPage, totalPages, bookProgressPercent,
+                                 SETTINGS.orientation, !currentPageFootnotes.empty()),
+                             [this](const ActivityResult& result) {
+                               const auto& menu = std::get<MenuResult>(result.data);
+                               applyOrientation(menu.orientation);
+                               toggleAutoPageTurn(menu.pageTurnOption);
+                               if (!result.isCancelled) {
+                                 onReaderMenuConfirm(static_cast<EpubReaderMenuActivity::MenuAction>(menu.action));
+                               }
+                             });
     }
-    const int bookProgressPercent = clampPercent(static_cast<int>(bookProgress + 0.5f));
-    startActivityForResult(std::make_unique<EpubReaderMenuActivity>(
-                               renderer, mappedInput, epub->getTitle(), currentPage, totalPages, bookProgressPercent,
-                               SETTINGS.orientation, !currentPageFootnotes.empty()),
-                           [this](const ActivityResult& result) {
-                             // Always apply orientation change even if the menu was cancelled
-                             const auto& menu = std::get<MenuResult>(result.data);
-                             applyOrientation(menu.orientation);
-                             toggleAutoPageTurn(menu.pageTurnOption);
-                             if (!result.isCancelled) {
-                               onReaderMenuConfirm(static_cast<EpubReaderMenuActivity::MenuAction>(menu.action));
-                             }
-                           });
   }
 
   // Long press BACK (1s+) goes to file selection
@@ -401,6 +450,71 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
       }
       break;
     }
+    case EpubReaderMenuActivity::MenuAction::BOOKMARKS: {
+      if (bookmarkStore) {
+        startActivityForResult(
+            std::make_unique<BookmarkListActivity>(renderer, mappedInput, bookmarkStore->getBookmarks()),
+            [this](const ActivityResult& result) {
+              if (!result.isCancelled) {
+                const auto& bm = std::get<BookmarkResult>(result.data);
+                RenderLock lock(*this);
+                currentSpineIndex = bm.spineIndex;
+                nextPageNumber = bm.pageIndex;
+                section.reset();
+              }
+            });
+      }
+      break;
+    }
+    case EpubReaderMenuActivity::MenuAction::RESET_PROGRESS: {
+      std::string bookTitle = epub ? epub->getTitle() : "";
+      startActivityForResult(
+          std::make_unique<ConfirmationActivity>(renderer, mappedInput,
+                                                 std::string(tr(STR_RESET_PROGRESS)) + "?", bookTitle),
+          [this](const ActivityResult& result) {
+            if (!result.isCancelled) {
+              RenderLock lock(*this);
+              if (epub) epub->clearCache();
+              if (epub) epub->setupCacheDir();
+              currentSpineIndex = 0;
+              nextPageNumber = 0;
+              section.reset();
+            }
+          });
+      break;
+    }
+    case EpubReaderMenuActivity::MenuAction::RESET_TO_GLOBAL: {
+      Storage.remove(bookSettingsPath.c_str());
+      savedGlobalSettings.applyToGlobal();
+      hasPerBookSettings = false;
+      {
+        RenderLock lock(*this);
+        // Clear cached sections rendered with old per-book settings
+        if (epub) {
+          epub->clearCache();
+          epub->setupCacheDir();
+        }
+        section.reset();  // Force re-render with global settings
+      }
+      requestUpdate(true);
+      break;
+    }
+    case EpubReaderMenuActivity::MenuAction::DELETE_BOOK: {
+      std::string bookTitle = epub ? epub->getTitle() : "";
+      startActivityForResult(
+          std::make_unique<ConfirmationActivity>(renderer, mappedInput,
+                                                 std::string(tr(STR_DELETE_BOOK)) + "?", bookTitle),
+          [this](const ActivityResult& result) {
+            if (!result.isCancelled && epub) {
+              std::string path = epub->getPath();
+              epub->clearCache();
+              Storage.remove(path.c_str());
+              RECENT_BOOKS.removeBook(path);
+              onGoHome();
+            }
+          });
+      break;
+    }
   }
 }
 
@@ -483,7 +597,17 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
     }
   }
   lastPageTurnTime = millis();
+  updateBookmarkStatus();
   requestUpdate();
+}
+
+void EpubReaderActivity::updateBookmarkStatus() {
+  if (bookmarkStore && section) {
+    currentPageBookmarked =
+        bookmarkStore->isBookmarked(static_cast<uint16_t>(currentSpineIndex), static_cast<uint16_t>(section->currentPage));
+  } else {
+    currentPageBookmarked = false;
+  }
 }
 
 // TODO: Failure handling

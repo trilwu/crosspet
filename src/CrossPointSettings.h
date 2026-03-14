@@ -137,6 +137,9 @@ class CrossPointSettings {
   // Image rendering in EPUB reader
   enum IMAGE_RENDERING { IMAGES_DISPLAY = 0, IMAGES_PLACEHOLDER = 1, IMAGES_SUPPRESS = 2, IMAGE_RENDERING_COUNT };
 
+  // Library sort mode
+  enum LIBRARY_SORT_MODE { SORT_NATURAL = 0, SORT_ALPHA = 1, SORT_DATE = 2, SORT_SIZE = 3, LIBRARY_SORT_MODE_COUNT };
+
   // Sleep screen settings
   uint8_t sleepScreen = DARK;
   // Sleep screen cover mode settings
@@ -199,6 +202,8 @@ class CrossPointSettings {
   uint8_t showHiddenFiles = 0;
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
+  // Library sort mode (natural, alpha, date, size)
+  uint8_t librarySortMode = SORT_NATURAL;
 
   ~CrossPointSettings() = default;
 
