@@ -722,6 +722,8 @@ enum class StrId : uint16_t {
   STR_STAR_PAGE,
   STR_NO_STARRED_PAGES,
   STR_PAGE_PREFIX,
+  STR_PAGE_STARRED,
+  STR_PAGE_UNSTARRED,
   // Sentinel - must be last
   _COUNT
 };

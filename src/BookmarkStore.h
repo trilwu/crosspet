@@ -15,6 +15,7 @@ class BookmarkStore {
   struct Bookmark {
     uint16_t spineIndex;
     uint16_t pageNumber;
+    std::string snippet;  // First ~60 chars of text from the bookmarked page
   };
 
   // Load bookmarks from the cache directory (e.g. .crosspoint/epub_<hash>/).
@@ -29,7 +30,7 @@ class BookmarkStore {
     }
 
     uint8_t version;
-    if (f.read(reinterpret_cast<uint8_t*>(&version), sizeof(version)) != sizeof(version) || version != FILE_VERSION) {
+    if (f.read(reinterpret_cast<uint8_t*>(&version), sizeof(version)) != sizeof(version) || version < 1 || version > FILE_VERSION) {
       f.close();
       return;
     }
@@ -50,6 +51,20 @@ class BookmarkStore {
         bookmarks.clear();
         f.close();
         return;
+      }
+      // v2: read snippet string (length-prefixed)
+      if (version >= 2) {
+        uint8_t snippetLen = 0;
+        if (f.read(&snippetLen, 1) == 1 && snippetLen > 0) {
+          char buf[MAX_SNIPPET_LEN + 1];
+          const uint8_t toRead = std::min(snippetLen, static_cast<uint8_t>(MAX_SNIPPET_LEN));
+          if (f.read(reinterpret_cast<uint8_t*>(buf), toRead) == toRead) {
+            buf[toRead] = '\0';
+            bm.snippet = buf;
+          }
+          // Skip remaining bytes if snippet was truncated
+          if (snippetLen > toRead) f.seekCur(snippetLen - toRead);
+        }
       }
       bookmarks.push_back(bm);
     }
@@ -84,6 +99,12 @@ class BookmarkStore {
 
     for (const auto& bm : bookmarks) {
       ok = ok && writePodChecked(bm.spineIndex) && writePodChecked(bm.pageNumber);
+      // v2: write snippet (length-prefixed, capped to MAX_SNIPPET_LEN)
+      const uint8_t snippetLen = static_cast<uint8_t>(std::min(bm.snippet.size(), static_cast<size_t>(MAX_SNIPPET_LEN)));
+      ok = ok && writePodChecked(snippetLen);
+      if (snippetLen > 0) {
+        ok = ok && f.write(reinterpret_cast<const uint8_t*>(bm.snippet.c_str()), snippetLen) == snippetLen;
+      }
     }
 
     ok = ok && f.close();
@@ -96,14 +117,14 @@ class BookmarkStore {
   }
 
   // Toggle bookmark for the given page. Returns true if now starred, false if removed.
-  bool toggle(uint16_t spineIndex, uint16_t pageNumber) {
+  bool toggle(uint16_t spineIndex, uint16_t pageNumber, const std::string& snippet = "") {
     auto it = find(spineIndex, pageNumber);
     if (it != bookmarks.end()) {
       bookmarks.erase(it);
       dirty = true;
       return false;
     }
-    bookmarks.push_back({spineIndex, pageNumber});
+    bookmarks.push_back({spineIndex, pageNumber, snippet.substr(0, MAX_SNIPPET_LEN)});
     dirty = true;
     return true;
   }
@@ -120,8 +141,9 @@ class BookmarkStore {
   void markDirty() { dirty = true; }
 
  private:
-  static constexpr uint8_t FILE_VERSION = 1;
+  static constexpr uint8_t FILE_VERSION = 2;  // v2: added snippet field
   static constexpr uint16_t MAX_BOOKMARKS = 1000;
+  static constexpr uint8_t MAX_SNIPPET_LEN = 80;
 
   std::vector<Bookmark> bookmarks;
   std::string basePath;

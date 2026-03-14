@@ -21,8 +21,15 @@ int StarredPagesActivity::getPageItems() const {
 std::string StarredPagesActivity::getItemLabel(int index) const {
   const auto& bm = bookmarks[index];
   char buf[64];
+
+  // Show text snippet if available (v2 bookmarks)
+  if (!bm.snippet.empty()) {
+    snprintf(buf, sizeof(buf), "%d. ", index + 1);
+    return std::string(buf) + bm.snippet;
+  }
+
+  // Fallback: chapter title + page number
   if (epub) {
-    // Try to get chapter title from TOC
     const int tocIndex = epub->getTocIndexForSpineIndex(bm.spineIndex);
     if (tocIndex != -1) {
       const auto tocItem = epub->getTocItem(tocIndex);
@@ -32,7 +39,6 @@ std::string StarredPagesActivity::getItemLabel(int index) const {
     snprintf(buf, sizeof(buf), "%d. %s%d, %s%d", index + 1, tr(STR_SECTION_PREFIX), bm.spineIndex + 1,
              tr(STR_PAGE_PREFIX), bm.pageNumber + 1);
   } else {
-    // TXT file: just page number (spineIndex is always 0)
     snprintf(buf, sizeof(buf), "%d. %s%d", index + 1, tr(STR_PAGE_PREFIX), bm.pageNumber + 1);
   }
   return std::string(buf);

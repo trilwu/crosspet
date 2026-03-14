@@ -211,7 +211,41 @@ void EpubReaderActivity::loop() {
     }
   }
 
-  // Enter reader menu activity.
+  // Long-press Confirm = star/unstar current page
+  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) &&
+      mappedInput.getHeldTime() >= 700) {
+    if (section && section->currentPage >= 0 && section->currentPage < section->pageCount) {
+      const uint16_t si = static_cast<uint16_t>(currentSpineIndex);
+      const uint16_t pg = static_cast<uint16_t>(section->currentPage);
+      const bool wasStarred = bookmarkStore.has(si, pg);
+      // Extract text snippet from current page for bookmark label
+      std::string snippet;
+      if (!wasStarred) {
+        auto page = section->loadPageFromSectionFile();
+        if (page) {
+          for (const auto& el : page->elements) {
+            if (el->getTag() == TAG_PageLine) {
+              const auto& line = static_cast<const PageLine&>(*el);
+              for (const auto& w : line.getBlock()->getWords()) {
+                if (!snippet.empty()) snippet += ' ';
+                snippet += w;
+                if (snippet.size() >= 60) break;
+              }
+            }
+            if (snippet.size() >= 60) break;
+          }
+        }
+      }
+      bookmarkStore.toggle(si, pg, snippet);
+      GUI.drawPopup(renderer, wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
+      renderer.displayBuffer();
+      delay(600);
+      requestUpdate();
+    }
+    return;
+  }
+
+  // Short-press Confirm = enter reader menu activity.
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     const int currentPage = section ? section->currentPage + 1 : 0;
     const int totalPages = section ? section->pageCount : 0;
@@ -271,7 +305,30 @@ void EpubReaderActivity::loop() {
   if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::STAR_PAGE &&
       mappedInput.wasReleased(MappedInputManager::Button::Power)) {
     if (section && section->currentPage >= 0 && section->currentPage < section->pageCount) {
-      bookmarkStore.toggle(static_cast<uint16_t>(currentSpineIndex), static_cast<uint16_t>(section->currentPage));
+      const uint16_t si = static_cast<uint16_t>(currentSpineIndex);
+      const uint16_t pg = static_cast<uint16_t>(section->currentPage);
+      const bool wasStarred = bookmarkStore.has(si, pg);
+      std::string snippet;
+      if (!wasStarred) {
+        auto page = section->loadPageFromSectionFile();
+        if (page) {
+          for (const auto& el : page->elements) {
+            if (el->getTag() == TAG_PageLine) {
+              const auto& line = static_cast<const PageLine&>(*el);
+              for (const auto& w : line.getBlock()->getWords()) {
+                if (!snippet.empty()) snippet += ' ';
+                snippet += w;
+                if (snippet.size() >= 60) break;
+              }
+            }
+            if (snippet.size() >= 60) break;
+          }
+        }
+      }
+      bookmarkStore.toggle(si, pg, snippet);
+      GUI.drawPopup(renderer, wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
+      renderer.displayBuffer();
+      delay(600);
       requestUpdate();
     }
     return;

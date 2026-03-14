@@ -1746,6 +1746,8 @@ const char* const STRINGS_EN[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2701,6 +2703,8 @@ const char* const STRINGS_ES[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3784,6 +3788,8 @@ const char* const STRINGS_FR[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4639,6 +4645,8 @@ const char* const STRINGS_DE[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6602,6 +6610,8 @@ const char* const STRINGS_CS[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7588,6 +7598,8 @@ const char* const STRINGS_PO[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_RU[] = {
@@ -16621,6 +16633,8 @@ const char* const STRINGS_RU[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_SV[] = {
@@ -17824,6 +17838,8 @@ const char* const STRINGS_SV[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19187,6 +19203,8 @@ const char* const STRINGS_RO[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20186,6 +20204,8 @@ const char* const STRINGS_CA[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_UK[] = {
@@ -30467,6 +30487,8 @@ const char* const STRINGS_UK[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_BE[] = {
@@ -39172,6 +39194,8 @@ const char* const STRINGS_BE[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_IT[] = {
@@ -39890,6 +39914,8 @@ const char* const STRINGS_IT[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_PL[] = {
@@ -41277,6 +41303,8 @@ const char* const STRINGS_PL[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_FI[] = {
@@ -42430,6 +42458,8 @@ const char* const STRINGS_FI[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_DA[] = {
@@ -43347,6 +43377,8 @@ const char* const STRINGS_DA[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_NL[] = {
@@ -44032,6 +44064,8 @@ const char* const STRINGS_NL[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_TR[] = {
@@ -45771,6 +45805,8 @@ const char* const STRINGS_TR[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 const char* const STRINGS_VI[] = {
@@ -50631,6 +50667,8 @@ const char* const STRINGS_VI[] = {
     "Star Page",
     "No starred pages",
     "p",
+    "Page starred",
+    "Page unstarred",
 };
 
 }  // namespace i18n_strings
