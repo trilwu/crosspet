@@ -216,7 +216,7 @@ void EpubReaderActivity::loop() {
     const int bookProgressPercent = clampPercent(static_cast<int>(bookProgress + 0.5f));
     // Resolve current chapter title for menu; fall back to book title if no TOC entry
     std::string menuTitle = epub->getTitle();
-    const int menuTocIdx = epub->getTocIndexForSpineIndex(currentSpineIndex);
+    const int menuTocIdx = resolveCurrentTocIndex();
     if (menuTocIdx != -1) {
       const auto menuTocItem = epub->getTocItem(menuTocIdx);
       if (!menuTocItem.title.empty()) {
@@ -373,11 +373,16 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
       startActivityForResult(
           std::make_unique<EpubReaderChapterSelectionActivity>(renderer, mappedInput, epub, path, spineIdx),
           [this](const ActivityResult& result) {
-            if (!result.isCancelled && currentSpineIndex != std::get<ChapterResult>(result.data).spineIndex) {
-              RenderLock lock(*this);
-              currentSpineIndex = std::get<ChapterResult>(result.data).spineIndex;
-              nextPageNumber = 0;
-              section.reset();
+            if (!result.isCancelled) {
+              const auto& chapterResult = std::get<ChapterResult>(result.data);
+              // Navigate even if spine index is same — anchor may differ (e.g., same HTML file, different chapter)
+              if (currentSpineIndex != chapterResult.spineIndex || !chapterResult.anchor.empty()) {
+                RenderLock lock(*this);
+                currentSpineIndex = chapterResult.spineIndex;
+                pendingAnchor = chapterResult.anchor;
+                nextPageNumber = 0;
+                section.reset();
+              }
             }
           });
       break;
@@ -937,7 +942,7 @@ void EpubReaderActivity::renderStatusBar() const {
 
   } else if (SETTINGS.statusBarTitle == CrossPointSettings::STATUS_BAR_TITLE::CHAPTER_TITLE) {
     title = tr(STR_UNNAMED);
-    const int tocIndex = epub->getTocIndexForSpineIndex(currentSpineIndex);
+    const int tocIndex = resolveCurrentTocIndex();
     if (tocIndex != -1) {
       const auto tocItem = epub->getTocItem(tocIndex);
       title = tocItem.title;
@@ -1007,4 +1012,28 @@ void EpubReaderActivity::restoreSavedPosition() {
     section.reset();
   }
   requestUpdate();
+}
+
+int EpubReaderActivity::resolveCurrentTocIndex() const {
+  const int baseTocIdx = epub->getTocIndexForSpineIndex(currentSpineIndex);
+  if (baseTocIdx == -1 || !section) return baseTocIdx;
+
+  // Scan TOC entries sharing same spine index. Find last one whose anchor page <= currentPage.
+  int bestTocIdx = baseTocIdx;
+  const int baseSpineIdx = epub->getTocItem(baseTocIdx).spineIndex;
+  const int tocCount = epub->getTocItemsCount();
+
+  for (int i = baseTocIdx + 1; i < tocCount; i++) {
+    const auto entry = epub->getTocItem(i);
+    if (entry.spineIndex != baseSpineIdx) break;
+
+    if (entry.anchor.empty()) continue;
+
+    const auto anchorPage = section->getPageForAnchor(entry.anchor);
+    if (anchorPage && *anchorPage <= static_cast<uint16_t>(section->currentPage)) {
+      bestTocIdx = i;
+    }
+  }
+
+  return bestTocIdx;
 }

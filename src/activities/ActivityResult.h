@@ -25,6 +25,7 @@ struct MenuResult {
 
 struct ChapterResult {
   int spineIndex = 0;
+  std::string anchor;  // Fragment anchor for within-chapter navigation (e.g., TOC entries sharing same spine item)
 };
 
 struct PercentResult {

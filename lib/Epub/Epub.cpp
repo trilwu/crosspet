@@ -177,6 +177,7 @@ bool Epub::parseTocNcxFile() const {
     return false;
   }
 
+  int chunkCount = 0;
   while (tempNcxFile.available()) {
     const auto readSize = tempNcxFile.read(ncxBuffer, 1024);
     if (readSize == 0) break;
@@ -188,6 +189,8 @@ bool Epub::parseTocNcxFile() const {
       tempNcxFile.close();
       return false;
     }
+    // Feed watchdog on large TOC files (2000+ chapters)
+    if (++chunkCount % 16 == 0) yield();
   }
 
   free(ncxBuffer);
@@ -235,6 +238,7 @@ bool Epub::parseTocNavFile() const {
     return false;
   }
 
+  int navChunkCount = 0;
   while (tempNavFile.available()) {
     const auto readSize = tempNavFile.read(navBuffer, 1024);
     const auto processedSize = navParser.write(navBuffer, readSize);
@@ -245,6 +249,8 @@ bool Epub::parseTocNavFile() const {
       tempNavFile.close();
       return false;
     }
+    // Feed watchdog on large nav files (211KB+ with 2000+ TOC entries)
+    if (++navChunkCount % 16 == 0) yield();
   }
 
   free(navBuffer);
@@ -335,13 +341,26 @@ void Epub::parseCssFiles() const {
 bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
   LOG_DBG("EBP", "Loading ePub: %s", filepath.c_str());
 
+  // Heap diagnostics for debugging memory-constrained epub loading
+  LOG_INF("EBP", "Heap before load: free=%zu maxBlock=%zu minEver=%zu",
+          ESP.getFreeHeap(), ESP.getMaxAllocHeap(), ESP.getMinFreeHeap());
+
+  // Guard: check heap before loading — large EPUBs (2000+ chapters, 250KB+ OPF)
+  // require ~80KB of working memory for parsing, indexing, and cache building
+  constexpr size_t MIN_HEAP_FOR_EPUB_LOAD = 80 * 1024;
+  const size_t freeHeap = ESP.getFreeHeap();
+  if (freeHeap < MIN_HEAP_FOR_EPUB_LOAD) {
+    LOG_ERR("EBP", "Insufficient heap for ePub load: %zu bytes free (need %zu)", freeHeap, MIN_HEAP_FOR_EPUB_LOAD);
+    return false;
+  }
+
   // Initialize spine/TOC cache
   bookMetadataCache.reset(new BookMetadataCache(cachePath));
-  // Always create CssParser - needed for inline style parsing even without CSS files
-  cssParser.reset(new CssParser(cachePath));
 
   // Try to load existing cache first
   if (bookMetadataCache->load()) {
+    // CssParser needed for inline style parsing even without CSS files
+    cssParser.reset(new CssParser(cachePath));
     if (!skipLoadingCss) {
       // Rebuild CSS cache when missing or when cache version changed (loadFromCache removes stale file)
       if (!cssParser->hasCache() || !cssParser->loadFromCache()) {
@@ -367,6 +386,8 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
   }
 
   // Cache doesn't exist or is invalid, build it
+  // NOTE: CssParser creation deferred until after cache build to reduce peak heap
+  // during the memory-intensive indexing phase (large EPUBs with 2000+ chapters)
   LOG_DBG("EBP", "Cache not found, building spine/TOC cache");
   setupCacheDir();
 
@@ -456,6 +477,8 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
     return false;
   }
 
+  // Create CssParser after cache build to reduce peak heap during indexing
+  cssParser.reset(new CssParser(cachePath));
   if (!skipLoadingCss) {
     // Parse CSS files after cache reload
     parseCssFiles();

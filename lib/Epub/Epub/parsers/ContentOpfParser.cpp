@@ -1,5 +1,7 @@
 #include "ContentOpfParser.h"
 
+#include <Arduino.h>  // yield()
+#include <Esp.h>      // ESP.getMaxAllocHeap()
 #include <FsHelpers.h>
 #include <Logging.h>
 #include <Serialization.h>
@@ -122,6 +124,16 @@ void XMLCALL ContentOpfParser::startElement(void* userData, const XML_Char* name
     if (!Storage.openFileForWrite("COF", self->cachePath + itemCacheFile, self->tempItemStore)) {
       LOG_ERR("COF", "Couldn't open temp items file for writing. This is probably going to be a fatal error.");
     }
+    // Pre-reserve item index to avoid vector reallocation OOM.
+    // Without reserve, vector doubles at capacity boundaries — at 2048 entries (20KB)
+    // the realloc to 4096 temporarily needs 60KB (40KB new + 20KB old), crashing on ESP32-C3.
+    // Use at most 1/3 of largest free block so other allocations still succeed.
+    const size_t maxBlock = ESP.getMaxAllocHeap();
+    const size_t maxEntries = maxBlock / (3 * sizeof(ItemIndexEntry));
+    if (maxEntries >= 64) {
+      self->itemIndex.reserve(std::min(maxEntries, static_cast<size_t>(8192)));
+      LOG_DBG("COF", "Reserved item index for %zu entries (heap: %zu)", self->itemIndex.capacity(), maxBlock);
+    }
     return;
   }
 
@@ -188,8 +200,8 @@ void XMLCALL ContentOpfParser::startElement(void* userData, const XML_Char* name
       }
     }
 
-    // Record index entry for fast lookup later
-    if (self->tempItemStore) {
+    // Record index entry for fast lookup later (within pre-reserved capacity to avoid realloc OOM)
+    if (self->tempItemStore && self->itemIndex.size() < self->itemIndex.capacity()) {
       ItemIndexEntry entry;
       entry.idHash = fnvHash(itemId);
       entry.idLen = static_cast<uint16_t>(itemId.size());
@@ -200,6 +212,9 @@ void XMLCALL ContentOpfParser::startElement(void* userData, const XML_Char* name
     // Write items down to SD card
     serialization::writeString(self->tempItemStore, itemId);
     serialization::writeString(self->tempItemStore, href);
+
+    // Feed watchdog on large manifests (2000+ items with disk I/O each)
+    if (self->itemIndex.size() % 50 == 0) yield();
 
     if (itemId == self->coverItemId) {
       self->coverItemHref = href;
@@ -288,6 +303,8 @@ void XMLCALL ContentOpfParser::startElement(void* userData, const XML_Char* name
 
           if (found && self->cache) {
             self->cache->createSpineEntry(href);
+            // Feed watchdog on large spine (2000+ items with disk I/O each)
+            if (self->cache->getSpineCount() % 50 == 0) yield();
           }
         }
       }
@@ -347,6 +364,10 @@ void XMLCALL ContentOpfParser::endElement(void* userData, const XML_Char* name) 
   if (self->state == IN_SPINE && (strcmp(name, "spine") == 0 || strcmp(name, "opf:spine") == 0)) {
     self->state = IN_PACKAGE;
     self->tempItemStore.close();
+    // Free manifest index — no longer needed after spine resolution (~20KB for 2000+ items)
+    self->itemIndex.clear();
+    self->itemIndex.shrink_to_fit();
+    self->useItemIndex = false;
     return;
   }
 

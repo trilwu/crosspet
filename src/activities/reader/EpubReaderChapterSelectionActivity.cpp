@@ -55,7 +55,10 @@ void EpubReaderChapterSelectionActivity::loop() {
       setResult(std::move(result));
       finish();
     } else {
-      setResult(ChapterResult{newSpineIndex});
+      // Pass anchor from TOC entry for within-chapter navigation
+      // (multiple TOC entries may share the same spine item with different anchors)
+      const auto tocItem = epub->getTocItem(selectorIndex);
+      setResult(ChapterResult{newSpineIndex, tocItem.anchor});
       finish();
     }
   } else if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {

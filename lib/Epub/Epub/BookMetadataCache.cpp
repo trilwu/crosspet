@@ -1,5 +1,6 @@
 #include "BookMetadataCache.h"
 
+#include <Arduino.h>  // yield()
 #include <Logging.h>
 #include <Serialization.h>
 #include <ZipFile.h>
@@ -59,6 +60,8 @@ bool BookMetadataCache::beginTocPass() {
       idx.hrefLen = static_cast<uint16_t>(entry.href.size());
       idx.spineIndex = static_cast<int16_t>(i);
       spineHrefIndex.push_back(idx);
+      // Feed watchdog on large spine (2000+ items)
+      if (i % 50 == 0) yield();
     }
     std::sort(spineHrefIndex.begin(), spineHrefIndex.end(),
               [](const SpineHrefIndexEntry& a, const SpineHrefIndexEntry& b) {
@@ -254,6 +257,9 @@ bool BookMetadataCache::buildBookBin(const std::string& epubPath, const BookMeta
 
     // Write out spine data to book.bin
     writeSpineEntry(bookFile, spineEntry);
+
+    // Feed watchdog on large spine (2000+ items with disk I/O each)
+    if (i % 50 == 0) yield();
   }
   // Close opened zip file
   zip.close();
@@ -263,6 +269,8 @@ bool BookMetadataCache::buildBookBin(const std::string& epubPath, const BookMeta
   for (int i = 0; i < tocCount; i++) {
     auto tocEntry = readTocEntry(tocFile);
     writeTocEntry(bookFile, tocEntry);
+    // Feed watchdog on large TOC
+    if (i % 50 == 0) yield();
   }
 
   bookFile.close();
