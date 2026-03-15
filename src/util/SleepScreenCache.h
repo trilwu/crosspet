@@ -23,9 +23,10 @@ class SleepScreenCache {
  private:
   static constexpr const char* CACHE_DIR = "/.crosspoint/sleep_cache";
 
-  /// FNV-1a hash of the cache key (source path + cover filter + cover mode).
-  static uint32_t hashKey(const std::string& sourcePath);
+  /// FNV-1a hash of the cache key (source path + file size + cover filter + cover mode).
+  /// File size acts as a fingerprint to detect when the source BMP is replaced.
+  static uint32_t hashKey(const std::string& sourcePath, uint32_t fileSize);
 
   /// Build the full cache file path for a given source BMP.
-  static std::string getCachePath(const std::string& sourcePath);
+  static std::string getCachePath(const std::string& sourcePath, uint32_t fileSize);
 };
