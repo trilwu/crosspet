@@ -346,11 +346,14 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
           ESP.getFreeHeap(), ESP.getMaxAllocHeap(), ESP.getMinFreeHeap());
 
   // Guard: check heap before loading — large EPUBs (2000+ chapters, 250KB+ OPF)
-  // require ~80KB of working memory for parsing, indexing, and cache building
+  // require ~80KB of working memory for parsing, indexing, and cache building.
+  // When cache exists and CSS is skipped (e.g. thumbnail generation), 40KB is enough.
   constexpr size_t MIN_HEAP_FOR_EPUB_LOAD = 80 * 1024;
+  constexpr size_t MIN_HEAP_FOR_CACHED_LOAD = 40 * 1024;
+  const size_t minRequired = (!buildIfMissing && skipLoadingCss) ? MIN_HEAP_FOR_CACHED_LOAD : MIN_HEAP_FOR_EPUB_LOAD;
   const size_t freeHeap = ESP.getFreeHeap();
-  if (freeHeap < MIN_HEAP_FOR_EPUB_LOAD) {
-    LOG_ERR("EBP", "Insufficient heap for ePub load: %zu bytes free (need %zu)", freeHeap, MIN_HEAP_FOR_EPUB_LOAD);
+  if (freeHeap < minRequired) {
+    LOG_ERR("EBP", "Insufficient heap for ePub load: %zu bytes free (need %zu)", freeHeap, minRequired);
     return false;
   }
 
