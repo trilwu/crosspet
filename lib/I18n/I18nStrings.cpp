@@ -46150,20 +46150,18 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xA7"
     "",
-    "Duy\xE1"
+    "Th\xC6"
+    "\xB0"
+    " vi\xE1"
     "\xBB"
     "\x87"
-    "t t\xE1"
-    "\xBB"
-    "\x87"
-    "p",
-    "Truy\xE1"
-    "\xBB"
-    "\x81"
-    "n t\xE1"
-    "\xBB"
-    "\x87"
-    "p",
+    "n",
+    "T\xE1"
+    "\xBA"
+    "\xA3"
+    "i s\xC3"
+    "\xA1"
+    "ch",
     "C\xC3"
     "\xA0"
     "i \xC4"
