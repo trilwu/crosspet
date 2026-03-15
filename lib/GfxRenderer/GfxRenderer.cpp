@@ -119,7 +119,11 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
             if (bmpVal < 3) renderer.drawPixel(screenX, screenY, pixelState);
           } else if (renderMode == GfxRenderer::GRAYSCALE_MSB) {
             // Text darkness shifts more AA pixels into the "draw" bucket for bolder text.
-            // Dark mode swaps LUT direction — fringes go white→black instead of black→white.
+            // bmpVal: 0=black, 1=dark gray, 2=light gray, 3=white
+            // MSB controls the "heavier" gray channel.
+            // Normal: only light gray (2) → subtle fringe
+            // Dark: dark+light gray (1,2) → bolder fringe
+            // Extra Dark: all non-white (1,2) → max bold
             const uint8_t darkness = renderer.getTextDarkness();
             bool hit;
             if (renderer.isDarkMode()) {
@@ -128,10 +132,15 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
                     : (bmpVal == 2);
             } else {
               hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
-                    : (bmpVal == 1 || bmpVal == 2);
+                    : (darkness == 1) ? (bmpVal == 1 || bmpVal == 2)
+                    : (bmpVal == 2);
             }
             if (hit) renderer.drawPixel(screenX, screenY, false);
           } else if (renderMode == GfxRenderer::GRAYSCALE_LSB) {
+            // LSB controls the "lighter" gray channel.
+            // Normal: only dark gray (1) → minimal
+            // Dark: dark gray (1) → same as normal (MSB does the heavy lifting)
+            // Extra Dark: dark+light gray (1,2) → pushes everything darker
             const uint8_t darkness = renderer.getTextDarkness();
             bool hit;
             if (renderer.isDarkMode()) {
