@@ -912,11 +912,19 @@ void EpubReaderActivity::render(RenderLock&& lock) {
 }
 
 void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageCount) {
+  // Guard: don't save out-of-bounds spine index (end-of-book state).
+  // Otherwise reopening the book would jump to the "finished" screen.
+  if (epub && spineIndex >= static_cast<int>(epub->getSpineItemsCount())) {
+    spineIndex = epub->getSpineItemsCount() - 1;
+    // Clamp to last page of last chapter
+    currentPage = (pageCount > 0) ? pageCount - 1 : 0;
+  }
+
   FsFile f;
   if (Storage.openFileForWrite("ERS", epub->getCachePath() + "/progress.bin", f)) {
     uint8_t data[6];
-    data[0] = currentSpineIndex & 0xFF;
-    data[1] = (currentSpineIndex >> 8) & 0xFF;
+    data[0] = spineIndex & 0xFF;
+    data[1] = (spineIndex >> 8) & 0xFF;
     data[2] = currentPage & 0xFF;
     data[3] = (currentPage >> 8) & 0xFF;
     data[4] = pageCount & 0xFF;
