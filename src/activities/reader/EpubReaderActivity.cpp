@@ -26,6 +26,7 @@
 #include "RecentBooksStore.h"
 #include "ReadingStats.h"
 #include "StarredPagesActivity.h"
+#include "activities/settings/BluetoothSettingsActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ScreenshotUtil.h"
@@ -536,6 +537,11 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
               }
             }
           });
+      break;
+    }
+    case EpubReaderMenuActivity::MenuAction::BLUETOOTH: {
+      startActivityForResult(std::make_unique<BluetoothSettingsActivity>(renderer, mappedInput),
+                             [this](const ActivityResult& result) { requestUpdate(); });
       break;
     }
     case EpubReaderMenuActivity::MenuAction::GO_HOME: {

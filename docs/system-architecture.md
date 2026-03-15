@@ -1,6 +1,6 @@
 # System Architecture
 
-**Last Updated:** March 4, 2026
+**Last Updated:** March 15, 2026
 **Version:** 1.4.0 (In Development)
 
 ## High-Level Architecture
@@ -207,7 +207,124 @@ void onExit();         // Cleanup (called when popped)
 - Aging: totalAge, careMistakes
 - Evolution: avgCareScore, evolutionVariant
 
-### 3. Reading Stats Subsystem (src/ReadingStats.h/cpp) [NEW - v1.4.0]
+### 3. Bluetooth HID Remote Integration (lib/hal/ + src/activities/settings/) [NEW - v1.4.0]
+
+**Location:** `lib/hal/BluetoothHIDManager.h/cpp`, `lib/hal/DeviceProfiles.h/cpp`, `src/activities/settings/BluetoothSettingsActivity.h/cpp`
+
+**Architecture:**
+
+```
+┌────────────────────────────┐
+│ BLE Remote (Page Turner)   │
+│ HID Client (NimBLE 2.3.6)  │
+└──────────┬─────────────────┘
+           │
+    ┌──────▼──────────────────────────┐
+    │ BluetoothHIDManager (Singleton)  │
+    │  - Scan for remotes              │
+    │  - Connect/pair                  │
+    │  - Parse HID reports             │
+    │  - Inject button events          │
+    └──────┬──────────────┬────────────┘
+           │              │
+      ┌────▼───┐   ┌─────▼─────────┐
+      │ Scan +  │   │ DeviceProfiles│
+      │ Connect │   │ (Known DB)    │
+      │ State   │   │ (Custom Learn)│
+      └────┬───┘   └─────┬─────────┘
+           │              │
+      ┌────▼──────────────▼────────┐
+      │ HalGPIO::injectButtonPress()│
+      │ (Virtual button event)      │
+      └────────┬────────────────────┘
+               │
+      ┌────────▼─────────────┐
+      │ ActivityManager      │
+      │ (Processes input)    │
+      └─────────────────────┘
+```
+
+**Data Flow:**
+
+```
+Boot:
+├─ BluetoothHIDManager::getInstance()  ← Create singleton
+├─ btMgr.setButtonInjector(callback)   ← Wire to HalGPIO
+├─ btMgr.loadState()                   ← Restore bonded device
+└─ btMgr.enableIfPreviouslyBonded()    ← Auto-enable if paired
+
+Main Loop:
+├─ btMgr.updateActivity()              ← Check for HID reports
+├─ btMgr.checkAutoReconnect()          ← Reconnect if lost
+└─ bleRecentActivity = btMgr.hasRecentActivity()  ← Prevent sleep
+
+BLE Settings Activity:
+├─ Scan: list discoverable remotes
+├─ Connect: pair + bond device
+├─ Learn Mode: user teaches custom keycodes
+├─ Manage: delete bonded devices
+└─ Save: persist device address/profiles
+
+WiFi Activation:
+├─ WifiSelectionActivity::attemptConnection()
+├─ BluetoothHIDManager::disable()      ← Disable BLE (2.4GHz conflict)
+├─ WiFi.mode(WIFI_STA)
+└─ BLE auto-reconnects after WiFi ends
+
+Sleep:
+├─ enterDeepSleep()
+├─ btMgr.disable()                     ← Shutdown BLE gracefully
+└─ esp_deep_sleep()
+```
+
+**Key Components:**
+
+**BluetoothHIDManager**
+- Singleton pattern (per project standards)
+- States: disabled, scanning, connecting, connected, learning
+- Scan: NimBLE callback finds advertising remotes
+- Connect: BLE pairing + bonding via NimBLE
+- Button Injection: HID report parsing → `HalGPIO::injectButtonPress(buttonIndex)`
+- Persistence: `saveState()` → `/.crosspoint/ble_bonded.txt`
+- Activity tracking: `hasRecentActivity()` prevents auto-sleep during use
+
+**DeviceProfiles**
+- Known device database: codename → HID keycode mappings
+- Custom profiles: Learn mode stores user-taught mappings to `/.crosspoint/ble_custom_profile.txt`
+- Fallback: Default button mappings for unknown devices
+
+**BluetoothSettingsActivity**
+- Main menu: list bonded devices, scan, settings
+- Scan screen: discover new remotes, select & pair
+- Learn mode: user presses prev/next to teach button meanings
+- Manage: view device info, delete bond
+- Persistence: auto-save via HalStorage
+
+**WiFi/BLE Mutual Exclusion**
+- ESP32-C3 single 2.4GHz radio → WiFi + BLE can't coexist
+- Strategy: Disable BLE before WiFi, restore after WiFi disconnect
+- Check in `WifiSelectionActivity::attemptConnection()`
+
+**Integration Points:**
+
+1. **main.cpp (Boot):**
+   - `BluetoothHIDManager::getInstance()` after GPIO init
+   - `setButtonInjector()` + `loadState()` in setup()
+   - `updateActivity()` + `checkAutoReconnect()` in main loop
+   - `disable()` in `enterDeepSleep()`
+
+2. **Settings Menu (SettingsActivity.cpp):**
+   - Add menu entry: "Bluetooth Remote"
+   - Launch `BluetoothSettingsActivity`
+
+3. **Reader Menu (EpubReaderMenuActivity.cpp):**
+   - Quick access: `BLUETOOTH` action in menu
+   - Allows device pairing during reading
+
+4. **WiFi (WifiSelectionActivity.cpp):**
+   - Call `btMgr.disable()` before `WiFi.mode(WIFI_STA)`
+
+### 4. Reading Stats Subsystem (src/ReadingStats.h/cpp) [NEW - v1.4.0]
 
 **Location:** `src/ReadingStats.h/cpp`
 

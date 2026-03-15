@@ -240,6 +240,12 @@ class CrossPointSettings {
   enum SLEEP_REFRESH_INTERVAL { REFRESH_OFF = 0, REFRESH_1M = 1, REFRESH_5M = 2, REFRESH_10M = 3, REFRESH_30M = 4, REFRESH_60M = 5, SLEEP_REFRESH_INTERVAL_COUNT };
   uint8_t sleepRefreshInterval = REFRESH_OFF;
 
+  // BLE HID remote settings
+  uint8_t bleEnabled = 0;                    // 0=disabled, 1=enabled on startup
+  char bleBondedDeviceAddr[18] = "";         // BLE bonded device MAC address (e.g. "aa:bb:cc:dd:ee:ff")
+  char bleBondedDeviceName[32] = "";         // BLE bonded device display name
+  uint8_t bleBondedDeviceAddrType = 0;       // BLE address type (0=public, 1=random)
+
   static uint32_t getSleepRefreshMinutes(const uint8_t setting) {
     constexpr uint32_t intervals[] = {0, 1, 5, 10, 30, 60};
     return setting < SLEEP_REFRESH_INTERVAL_COUNT ? intervals[setting] : 0;

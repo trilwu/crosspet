@@ -1,7 +1,7 @@
 # Project Changelog
 
 **Format:** Semantic Versioning (MAJOR.MINOR.PATCH)
-**Last Updated:** March 4, 2026
+**Last Updated:** March 15, 2026
 
 ---
 
@@ -26,6 +26,15 @@
 - **Clock Refresh on Brief Wake:** Brief power button press re-renders dynamic sleep screens (CLOCK, READING_STATS) before re-entering sleep
 - **ReadingStats Persistence:** Binary persistence at `/.crosspoint/reading_stats.bin` with auto-load on boot
 
+#### Bluetooth HID Remote Integration
+- **BLE Page Turner Remote:** Connect external BLE HID remotes for page turning in reader
+- **BluetoothHIDManager:** Singleton HAL component managing remote discovery, pairing, and event injection
+- **Device Profiles:** Database of known BLE remotes with keycode mappings; learn mode for custom devices
+- **Settings UI:** Dedicated `BluetoothSettingsActivity` for scan, connect, manage devices, and learn custom buttons
+- **Reader Menu Integration:** Quick Bluetooth settings access from reader menu (home + down while reading)
+- **WiFi/BLE Mutual Exclusion:** Auto-disable BLE before WiFi activation (shared 2.4GHz radio on ESP32-C3)
+- **Persistence:** Bonded device address/name persisted; auto-reconnect on boot if previously connected
+
 ### Removed Activities
 - **PhotoFrameActivity** - Removed due to feature consolidation
 - **GameOfLifeActivity** - Removed due to maintenance burden
@@ -43,6 +52,15 @@ src/activities/tools/
 ├── NewsReaderActivity.h/cpp
 └── DailyQuoteActivity.h/cpp
 
+src/activities/settings/
+└── BluetoothSettingsActivity.h/cpp
+
+lib/hal/
+├── BluetoothHIDManager.h/cpp
+├── BluetoothHIDManagerScan.cpp
+├── BluetoothHIDManagerReport.cpp
+└── DeviceProfiles.h/cpp
+
 src/
 ├── ReadingStats.h/cpp (singleton, binary persistence)
 └── ReadingStatsManager.cpp (if split)
@@ -52,8 +70,12 @@ src/
 - `src/activities/home/HomeActivity.cpp` - Added renderHeaderClock() method
 - `src/activities/tools/ToolsActivity.cpp/h` - Expanded menu to 11 items
 - `src/activities/boot_sleep/SleepActivity.cpp` - Added daily quotes rendering, reading stats screen
-- `src/main.cpp` - Added ReadingStats load on boot, verifyPowerButtonDuration() for clock refresh
-- `src/CrossPointSettings.h` - Added `statusBarClock` boolean setting
+- `src/main.cpp` - Added ReadingStats load on boot, verifyPowerButtonDuration() for clock refresh, BLE manager integration
+- `src/CrossPointSettings.h` - Added `statusBarClock` boolean setting, BLE persistence fields
+- `src/activities/settings/SettingsActivity.cpp/h` - Added BluetoothSettingsActivity launcher
+- `src/activities/reader/EpubReaderMenuActivity.h/cpp` - Added BLUETOOTH action to reader menu
+- `src/activities/reader/EpubReaderActivity.cpp` - Handle BLUETOOTH menu action
+- `src/activities/network/WifiSelectionActivity.cpp` - Disable BLE before WiFi.mode(WIFI_STA)
 
 **Deleted Files:**
 - `src/activities/tools/PhotoFrameActivity.h/cpp`

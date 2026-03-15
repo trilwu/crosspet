@@ -1,5 +1,6 @@
 #include "WifiSelectionActivity.h"
 
+#include <BluetoothHIDManager.h>
 #include <GfxRenderer.h>
 #include <I18n.h>
 #include <Logging.h>
@@ -223,6 +224,15 @@ void WifiSelectionActivity::attemptConnection() {
   connectedIP.clear();
   connectionError.clear();
   requestUpdate();
+
+  // ESP32-C3: WiFi and BLE share the 2.4GHz radio — disable BLE first
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    if (btMgr.isEnabled()) {
+      LOG_INF("WIFI", "Disabling Bluetooth to enable WiFi");
+      btMgr.disable();
+    }
+  }
 
   WiFi.mode(WIFI_STA);
 

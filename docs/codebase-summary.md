@@ -1,6 +1,6 @@
 # CrossPoint Reader - Codebase Summary
 
-**Last Updated:** March 4, 2026
+**Last Updated:** March 15, 2026
 **Version:** 1.4.0 (In Development)
 **Total Files:** 495 | **Total Tokens:** 19.2M | **Languages:** C++, Python, HTML
 
@@ -107,7 +107,47 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - Discipline system: rewards ignoring fake calls, punishes indulgence
 - Daily missions (reset each day): read 20 pages, pet 3x
 
-### 3. Reading Stats System (src/ReadingStats.h/cpp) [NEW - v1.4.0]
+### 3. Bluetooth HID Remote Integration (lib/hal/ + src/activities/settings/) [NEW - v1.4.0]
+**Purpose:** Connect external BLE HID remotes for page turning in reader
+
+**Components:**
+- **BluetoothHIDManager.h/cpp** (lib/hal/) - Singleton managing BLE remote discovery, pairing, event injection
+  - Scan for advertising remotes (NimBLE 2.3.6 APIs)
+  - Connect & pair to devices
+  - Parse HID reports → inject virtual button presses
+  - Persistence: bonded device address/name to `/.crosspoint/ble_bonded.txt`
+  - Auto-reconnect on boot if previously paired
+  - `updateActivity()` / `checkAutoReconnect()` for main loop integration
+  - `disable()` for WiFi/BLE mutual exclusion (shared 2.4GHz radio)
+
+- **DeviceProfiles.h/cpp** (lib/hal/) - Known device database + custom profiles
+  - Codename → HID keycode mapping for known remotes
+  - Learn mode: user presses buttons to teach custom mappings
+  - Stores custom profiles to `/.crosspoint/ble_custom_profile.txt`
+  - Fallback defaults for unknown devices
+
+- **BluetoothSettingsActivity.h/cpp** (src/activities/settings/) - Settings UI
+  - 3 modes: MAIN_MENU (show bonded), DEVICE_LIST (scan/pair), LEARN_KEYS (teach buttons)
+  - Scan: discover nearby remotes, select & bond
+  - Learn: user presses prev/next to assign keycodes
+  - Manage: view bonded devices, remove bonds
+  - Persistence: auto-saves via HalStorage
+
+**Integration:**
+- main.cpp: `btMgr.getInstance()` + `setButtonInjector()` in setup(); `updateActivity()`/`checkAutoReconnect()` in loop
+- SettingsActivity: Menu entry to launch BluetoothSettingsActivity
+- EpubReaderMenuActivity: Quick access (BLUETOOTH action) while reading
+- WifiSelectionActivity: `btMgr.disable()` before WiFi activation
+- Input: Injected button presses routed through `HalGPIO::injectButtonPress()` to ActivityManager
+
+**Files Modified:**
+- `src/main.cpp` - BLE manager init & loop integration
+- `src/CrossPointSettings.h` - BLE persistence fields
+- `src/activities/settings/SettingsActivity.cpp` - Menu entry
+- `src/activities/reader/EpubReaderMenuActivity.h/cpp` - Reader menu action
+- `src/activities/network/WifiSelectionActivity.cpp` - WiFi/BLE mutual exclusion
+
+### 4. Reading Stats System (src/ReadingStats.h/cpp) [NEW - v1.4.0]
 **Purpose:** Track daily and lifetime reading metrics, display on sleep screen
 
 **Features:**
@@ -124,7 +164,7 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - `currentStreak` - Consecutive days with reading activity
 - `currentSession` - In-progress session with start/end times
 
-### 4. Game & Tool Activities (src/activities/tools/) [v1.4.0]
+### 5. Game & Tool Activities (src/activities/tools/) [v1.4.0]
 **New Tools (5 activities):**
 - **ChessActivity** - Full chess with move validation and AI
 - **CaroActivity** - Caro/Gomoku tile-matching strategy game
@@ -137,7 +177,7 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - Launcher menu with 11 items
 - Sleep screen: Daily quotes (28 rotating) at bottom of CLOCK mode, shifted left for pet sprite
 
-### 5. EPUB Processing (lib/Epub/)
+### 6. EPUB Processing (lib/Epub/)
 **Flow:**
 1. Parse EPUB archive & OPF metadata
 2. Extract spine (reading order) & table of contents
@@ -149,7 +189,7 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - `EpubRenderer.h` - Chapter text layout & pagination
 - `Hyphenation/` - Language-specific hyphenation rules (16 languages via .trie.h)
 
-### 4. Web Server (src/network/)
+### 7. Web Server (src/network/)
 **Features:**
 - REST API: file listing, OTA upload, settings read/write
 - WebDAV: drag-and-drop file management
@@ -160,7 +200,7 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - `/files` - File explorer with drag-drop upload
 - `/settings` - Configuration dashboard
 
-### 5. Settings & Persistence (src/CrossPointSettings.h)
+### 8. Settings & Persistence (src/CrossPointSettings.h)
 **Strategy:** JSON-based settings stored on SD card
 
 - Font/size selection (Bookerly, Noto Sans, OpenDyslexic, Ubuntu)
@@ -170,7 +210,7 @@ CrossPoint Reader is an open-source firmware for the Xteink X4 e-paper device bu
 - KOReader sync tokens
 - Theme selection (Lyra, etc.)
 
-### 6. Internationalization (i18n)
+### 9. Internationalization (i18n)
 **System:** 419 total string keys, 18 languages
 
 - **Base:** `src/I18nKeys.h` (enum), `src/I18nStrings.h/cpp` (lookup)

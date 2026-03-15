@@ -37,6 +37,7 @@
 #include "activities/tools/WeatherActivity.h"
 #include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
+#include <BluetoothHIDManager.h>
 
 HalDisplay display;
 HalGPIO gpio;
@@ -265,6 +266,14 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
+  // Disable Bluetooth before deep sleep to save power
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    if (btMgr.isEnabled()) {
+      btMgr.disable();
+    }
+  }
+
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
@@ -409,6 +418,19 @@ void setup() {
   PET_MANAGER.load();
   PET_MANAGER.tick();
 
+  // Initialize Bluetooth HID button injection
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    btMgr.setButtonInjector([](uint8_t buttonIndex) {
+      gpio.injectButtonPress(buttonIndex);
+    });
+    btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName);
+    // Auto-enable BLE on boot if previously enabled and has bonded device
+    if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
+      btMgr.enable();
+    }
+  }
+
   switch (gpio.getWakeupReason()) {
     case HalGPIO::WakeupReason::PowerButton:
       // For normal wakeups, verify power button press duration
@@ -477,6 +499,17 @@ void loop() {
 
   gpio.update();
 
+  const bool userInputDetected = gpio.wasAnyPressed() || gpio.wasAnyReleased();
+  bool bleRecentActivity = false;
+
+  // Check for Bluetooth inactivity timeouts and auto-reconnect
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    btMgr.updateActivity();
+    btMgr.checkAutoReconnect(userInputDetected);
+    bleRecentActivity = btMgr.hasRecentActivity();
+  }
+
   renderer.setFadingFix(SETTINGS.fadingFix);
   {
     static uint8_t lastDarkMode = 0xFF;
@@ -515,7 +548,7 @@ void loop() {
 
   // Check for any user activity (button press or release) or active background work
   static unsigned long lastActivityTime = millis();
-  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep()) {
+  if (userInputDetected || bleRecentActivity || activityManager.preventAutoSleep()) {
     lastActivityTime = millis();         // Reset inactivity timer
     powerManager.setPowerSaving(false);  // Restore normal CPU frequency on user activity
   }
