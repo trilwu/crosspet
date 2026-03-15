@@ -220,7 +220,8 @@ class CrossPointSettings {
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
   // Text darkness: 0=normal, 1=dark (light gray→dark gray), 2=extra dark (all→black)
-  uint8_t textDarkness = 0;
+  // Default 1 (dark) — closer to the bold BW look users expect from e-ink
+  uint8_t textDarkness = 1;
 
   // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
   uint8_t weatherCity = 0;
