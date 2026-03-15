@@ -282,3 +282,4 @@ void HomeActivity::onVirtualPetOpen()  { activityManager.goToVirtualPet(); }
 void HomeActivity::onFileTransferOpen(){ activityManager.goToFileTransfer(); }
 void HomeActivity::onSettingsOpen()    { activityManager.goToSettings(); }
 void HomeActivity::onToolsOpen()       { activityManager.goToTools(); }
+void HomeActivity::onOpdsBrowserOpen() { activityManager.goToBrowser(); }
