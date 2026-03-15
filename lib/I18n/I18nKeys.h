@@ -730,6 +730,8 @@ enum class StrId : uint16_t {
   STR_RELOAD_SLEEP_IMAGE,
   STR_SLEEP_CACHE_CLEARED,
   STR_SYNC_WEATHER_TIME,
+  STR_SHORT_PWR_BTN_2CLICK,
+  STR_SHORT_PWR_BTN_3CLICK,
   // Sentinel - must be last
   _COUNT
 };

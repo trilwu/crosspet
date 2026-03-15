@@ -1754,6 +1754,8 @@ const char* const STRINGS_EN[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2717,6 +2719,8 @@ const char* const STRINGS_ES[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3811,6 +3815,8 @@ const char* const STRINGS_FR[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4674,6 +4680,8 @@ const char* const STRINGS_DE[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6649,6 +6657,8 @@ const char* const STRINGS_CS[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7643,6 +7653,8 @@ const char* const STRINGS_PO[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_RU[] = {
@@ -16732,6 +16744,8 @@ const char* const STRINGS_RU[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_SV[] = {
@@ -17943,6 +17957,8 @@ const char* const STRINGS_SV[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19318,6 +19334,8 @@ const char* const STRINGS_RO[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20325,6 +20343,8 @@ const char* const STRINGS_CA[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_UK[] = {
@@ -30664,6 +30684,8 @@ const char* const STRINGS_UK[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_BE[] = {
@@ -39423,6 +39445,8 @@ const char* const STRINGS_BE[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_IT[] = {
@@ -40149,6 +40173,8 @@ const char* const STRINGS_IT[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_PL[] = {
@@ -41546,6 +41572,8 @@ const char* const STRINGS_PL[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_FI[] = {
@@ -42709,6 +42737,8 @@ const char* const STRINGS_FI[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_DA[] = {
@@ -43634,6 +43664,8 @@ const char* const STRINGS_DA[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_NL[] = {
@@ -44327,6 +44359,8 @@ const char* const STRINGS_NL[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_TR[] = {
@@ -46078,6 +46112,8 @@ const char* const STRINGS_TR[] = {
     "Reload Sleep Image",
     "Sleep cache cleared!",
     "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
 };
 
 const char* const STRINGS_VI[] = {
@@ -51065,6 +51101,28 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9D"
     "",
+    "N\xC3"
+    "\xBA"
+    "t ngu\xE1"
+    "\xBB"
+    "\x93"
+    "n b\xE1"
+    "\xBA"
+    "\xA5"
+    "m \xC4"
+    "\x91"
+    "\xC3"
+    "\xB4"
+    "i",
+    "N\xC3"
+    "\xBA"
+    "t ngu\xE1"
+    "\xBB"
+    "\x93"
+    "n b\xE1"
+    "\xBA"
+    "\xA5"
+    "m ba",
 };
 
 }  // namespace i18n_strings

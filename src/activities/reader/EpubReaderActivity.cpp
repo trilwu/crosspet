@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "CrossPointSettings.h"
+#include "util/PowerButtonClickDetector.h"
 #include "pet/PetManager.h"
 #include "pet/PetSpriteRenderer.h"
 #include "CrossPointState.h"
@@ -212,9 +213,8 @@ void EpubReaderActivity::loop() {
       return;
     }
   }
-  // Short power button if block front is enabled.
-  if (mappedInput.wasReleased(MappedInputManager::Button::Power) &&
-      SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
+  // Power button multi-click: block front buttons toggle
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
     ignoreFrontButtons = !ignoreFrontButtons;
   }
 
@@ -309,9 +309,8 @@ void EpubReaderActivity::loop() {
     return;
   }
 
-  // Star page toggle via short power button press
-  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::STAR_PAGE &&
-      mappedInput.wasReleased(MappedInputManager::Button::Power)) {
+  // Star page toggle via power button multi-click
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::STAR_PAGE) {
     if (section && section->currentPage >= 0 && section->currentPage < section->pageCount) {
       const uint16_t si = static_cast<uint16_t>(currentSpineIndex);
       const uint16_t pg = static_cast<uint16_t>(section->currentPage);

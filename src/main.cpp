@@ -35,10 +35,19 @@
 #include "util/ScreenshotUtil.h"
 #include "activities/tools/ReadingStatsActivity.h"
 #include "activities/tools/WeatherActivity.h"
+#include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
 
 HalDisplay display;
 HalGPIO gpio;
+// Global multi-click detector for power button (accessible via extern in reader activities)
+PowerButtonClickDetector pwrClickDetector;
+// Resolved power button action for the current frame (set in loop, read by reader activities)
+static uint8_t currentPwrAction_ = 0;
+
+uint8_t getPowerClickAction() {
+  return currentPwrAction_;
+}
 MappedInputManager mappedInputManager(gpio);
 GfxRenderer renderer(display);
 ActivityManager activityManager(renderer, mappedInputManager);
@@ -543,32 +552,30 @@ void loop() {
     return;
   }
 
-  // Short power button press = full screen refresh (clears e-ink ghosting)
-  // Debounce: ignore repeated triggers within 2s to prevent multiple refreshes
-  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::SCREEN_REFRESH &&
-      gpio.wasReleased(HalGPIO::BTN_POWER)) {
-    static unsigned long lastRefreshMs = 0;
-    if (millis() - lastRefreshMs > 2000) {
-      lastRefreshMs = millis();
+  // Multi-click power button detection (single/double/triple click)
+  // Resolve action once per frame — reader activities read it via getPowerClickAction()
+  pwrClickDetector.update(gpio.wasReleased(HalGPIO::BTN_POWER));
+  {
+    const uint8_t clicks = pwrClickDetector.getClickCount();
+    currentPwrAction_ = (clicks == 0) ? CrossPointSettings::SHORT_PWRBTN::IGNORE
+                       : (clicks == 1) ? SETTINGS.shortPwrBtn
+                       : (clicks == 2) ? SETTINGS.shortPwrBtn2Click
+                                       : SETTINGS.shortPwrBtn3Click;
+  }
+  // Handle global power button actions (reader-specific ones handled inside reader activities)
+  switch (currentPwrAction_) {
+    case CrossPointSettings::SHORT_PWRBTN::SCREEN_REFRESH:
       renderer.requestNextHalfRefresh();
       activityManager.requestUpdate();
-    }
-  }
-
-  // Short power button press = open reading stats activity
-  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW &&
-      gpio.wasReleased(HalGPIO::BTN_POWER)) {
-    activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInputManager));
-  }
-
-  // Short power button press = sync weather & time via WiFi
-  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME &&
-      gpio.wasReleased(HalGPIO::BTN_POWER)) {
-    static unsigned long lastSyncMs = 0;
-    if (millis() - lastSyncMs > 5000) {
-      lastSyncMs = millis();
-      WeatherActivity::silentRefresh();  // connects WiFi, syncs NTP + weather, then disconnects
-    }
+      break;
+    case CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW:
+      activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInputManager));
+      break;
+    case CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME:
+      WeatherActivity::silentRefresh();
+      break;
+    default:
+      break;  // PAGE_TURN, BLOCK_FRONT, STAR_PAGE handled by reader activities
   }
 
   const unsigned long activityStartTime = millis();

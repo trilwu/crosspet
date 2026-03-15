@@ -5,6 +5,7 @@
 #include <Logging.h>
 
 #include "MappedInputManager.h"
+#include "util/PowerButtonClickDetector.h"
 
 namespace ReaderUtils {
 
@@ -40,8 +41,7 @@ inline PageTurnResult detectPageTurn(const MappedInputManager& input, const bool
                                 (input.wasPressed(MappedInputManager::Button::FrontPageBack) && !blockFront))
                              : (input.wasReleased(MappedInputManager::Button::PageBack) ||
                                 (input.wasReleased(MappedInputManager::Button::FrontPageBack) && !blockFront));
-  const bool powerTurn = SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::PAGE_TURN &&
-                         input.wasReleased(MappedInputManager::Button::Power);
+  const bool powerTurn = getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::PAGE_TURN;
   const bool next = usePress ? (input.wasPressed(MappedInputManager::Button::PageForward) || powerTurn ||
                                 (input.wasPressed(MappedInputManager::Button::FrontPageForward) && !blockFront))
                              : (input.wasReleased(MappedInputManager::Button::PageForward) || powerTurn ||

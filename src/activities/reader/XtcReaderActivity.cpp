@@ -13,6 +13,7 @@
 #include <I18n.h>
 
 #include "CrossPointSettings.h"
+#include "util/PowerButtonClickDetector.h"
 #include "pet/PetManager.h"
 #include "CrossPointState.h"
 #include "MappedInputManager.h"
@@ -58,9 +59,8 @@ void XtcReaderActivity::onExit() {
 }
 
 void XtcReaderActivity::loop() {
-  // Short power button if block front is enabled.
-  if (mappedInput.wasReleased(MappedInputManager::Button::Power) &&
-      SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
+  // Power button multi-click: block front buttons toggle
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
     ignoreFrontButtons = !ignoreFrontButtons;
   }
 
@@ -98,8 +98,7 @@ void XtcReaderActivity::loop() {
                                     (mappedInput.wasPressed(MappedInputManager::Button::FrontPageBack) && !ignoreFrontButtons))
                                  : (mappedInput.wasReleased(MappedInputManager::Button::PageBack) ||
                                     (mappedInput.wasReleased(MappedInputManager::Button::FrontPageBack) && !ignoreFrontButtons));
-  const bool powerPageTurn = SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::PAGE_TURN &&
-                             mappedInput.wasReleased(MappedInputManager::Button::Power);
+  const bool powerPageTurn = getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::PAGE_TURN;
   const bool nextTriggered = usePressForPageTurn
                                  ? (mappedInput.wasPressed(MappedInputManager::Button::PageForward) || powerPageTurn ||
                                     (mappedInput.wasPressed(MappedInputManager::Button::FrontPageForward) && !ignoreFrontButtons))

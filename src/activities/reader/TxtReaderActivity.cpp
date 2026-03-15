@@ -7,6 +7,7 @@
 #include <Utf8.h>
 
 #include "CrossPointSettings.h"
+#include "util/PowerButtonClickDetector.h"
 #include "pet/PetManager.h"
 #include "CrossPointState.h"
 #include "MappedInputManager.h"
@@ -131,9 +132,8 @@ void TxtReaderActivity::onExit() {
 
 void TxtReaderActivity::loop() {
   
-  // Short power button if block front is enabled.
-  if (mappedInput.wasReleased(MappedInputManager::Button::Power) &&
-      SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
+  // Power button multi-click: block front buttons toggle
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
     ignoreFrontButtons = !ignoreFrontButtons;
   }
 
@@ -151,9 +151,8 @@ void TxtReaderActivity::loop() {
     return;
   }
 
-  // Star page toggle via short power button press
-  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::STAR_PAGE &&
-      mappedInput.wasReleased(MappedInputManager::Button::Power)) {
+  // Star page toggle via power button multi-click
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::STAR_PAGE) {
     bookmarkStore.toggle(0, static_cast<uint16_t>(currentPage));
     requestUpdate();
     return;
