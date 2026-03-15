@@ -531,23 +531,20 @@ void SleepActivity::renderCoverSleepScreen() const {
     return (this->*renderNoCoverSleepScreen)();
   }
 
+  // Try cache first — avoids opening the source BMP entirely
+  if (displayCachedSleepScreen(coverBmpPath)) {
+    return;
+  }
   FsFile file;
   if (Storage.openFileForRead("SLP", coverBmpPath, file)) {
-    // Try cache before parsing BMP
-    file.close();
-    if (displayCachedSleepScreen(coverBmpPath)) {
+    Bitmap bitmap(file);
+    if (bitmap.parseHeaders() == BmpReaderError::Ok) {
+      LOG_DBG("SLP", "Rendering sleep cover: %s", coverBmpPath.c_str());
+      renderBitmapSleepScreen(bitmap, coverBmpPath);
+      file.close();
       return;
     }
-    if (Storage.openFileForRead("SLP", coverBmpPath, file)) {
-      Bitmap bitmap(file);
-      if (bitmap.parseHeaders() == BmpReaderError::Ok) {
-        LOG_DBG("SLP", "Rendering sleep cover: %s", coverBmpPath.c_str());
-        renderBitmapSleepScreen(bitmap, coverBmpPath);
-        file.close();
-        return;
-      }
-      file.close();
-    }
+    file.close();
   }
 
   return (this->*renderNoCoverSleepScreen)();

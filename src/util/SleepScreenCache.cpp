@@ -7,11 +7,17 @@
 
 #include "CrossPointSettings.h"
 
-uint32_t SleepScreenCache::hashKey(const std::string& sourcePath) {
-  // FNV-1a 32-bit hash of: sourcePath + coverFilter + coverMode
+uint32_t SleepScreenCache::hashKey(const std::string& sourcePath, const uint32_t fileSize) {
+  // FNV-1a 32-bit hash of: sourcePath + fileSize + coverFilter + coverMode
+  // File size acts as fingerprint — cache auto-invalidates when source BMP changes.
   uint32_t hash = 2166136261u;
   for (char c : sourcePath) {
     hash ^= static_cast<uint8_t>(c);
+    hash *= 16777619u;
+  }
+  // Mix in file size to detect replacement of source BMP with same path
+  for (int i = 0; i < 4; i++) {
+    hash ^= static_cast<uint8_t>((fileSize >> (i * 8)) & 0xFF);
     hash *= 16777619u;
   }
   // Mix in settings that affect the rendered output
@@ -22,14 +28,27 @@ uint32_t SleepScreenCache::hashKey(const std::string& sourcePath) {
   return hash;
 }
 
-std::string SleepScreenCache::getCachePath(const std::string& sourcePath) {
-  char filename[48];
-  snprintf(filename, sizeof(filename), "%s/%08x.raw", CACHE_DIR, hashKey(sourcePath));
+std::string SleepScreenCache::getCachePath(const std::string& sourcePath, const uint32_t fileSize) {
+  char filename[64];
+  snprintf(filename, sizeof(filename), "%s/%08x.raw", CACHE_DIR, hashKey(sourcePath, fileSize));
   return std::string(filename);
 }
 
+/// Look up the source BMP file size to use as cache fingerprint.
+static uint32_t getSourceFileSize(const std::string& sourcePath) {
+  FsFile file;
+  if (!Storage.openFileForRead("SLC", sourcePath, file)) {
+    return 0;
+  }
+  const uint32_t size = file.fileSize();
+  file.close();
+  return size;
+}
+
 bool SleepScreenCache::load(GfxRenderer& renderer, const std::string& sourcePath) {
-  const auto path = getCachePath(sourcePath);
+  const uint32_t srcSize = getSourceFileSize(sourcePath);
+  if (srcSize == 0) return false;
+  const auto path = getCachePath(sourcePath, srcSize);
   FsFile file;
   if (!Storage.openFileForRead("SLC", path, file)) {
     return false;
@@ -60,7 +79,9 @@ bool SleepScreenCache::load(GfxRenderer& renderer, const std::string& sourcePath
 void SleepScreenCache::save(const GfxRenderer& renderer, const std::string& sourcePath) {
   Storage.mkdir(CACHE_DIR);
 
-  const auto path = getCachePath(sourcePath);
+  const uint32_t srcSize = getSourceFileSize(sourcePath);
+  if (srcSize == 0) return;
+  const auto path = getCachePath(sourcePath, srcSize);
   FsFile file;
   if (!Storage.openFileForWrite("SLC", path, file)) {
     LOG_ERR("SLC", "Failed to open cache for write: %s", path.c_str());
