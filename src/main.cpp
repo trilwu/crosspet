@@ -34,6 +34,7 @@
 #include "util/ButtonNavigator.h"
 #include "util/ScreenshotUtil.h"
 #include "activities/tools/ReadingStatsActivity.h"
+#include "activities/tools/WeatherActivity.h"
 #include <ArduinoJson.h>
 
 HalDisplay display;
@@ -558,6 +559,16 @@ void loop() {
   if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW &&
       gpio.wasReleased(HalGPIO::BTN_POWER)) {
     activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInputManager));
+  }
+
+  // Short power button press = sync weather & time via WiFi
+  if (SETTINGS.shortPwrBtn == CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME &&
+      gpio.wasReleased(HalGPIO::BTN_POWER)) {
+    static unsigned long lastSyncMs = 0;
+    if (millis() - lastSyncMs > 5000) {
+      lastSyncMs = millis();
+      WeatherActivity::silentRefresh();  // connects WiFi, syncs NTP + weather, then disconnects
+    }
   }
 
   const unsigned long activityStartTime = millis();

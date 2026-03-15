@@ -727,6 +727,9 @@ enum class StrId : uint16_t {
   STR_PAGE_PREFIX,
   STR_PAGE_STARRED,
   STR_PAGE_UNSTARRED,
+  STR_RELOAD_SLEEP_IMAGE,
+  STR_SLEEP_CACHE_CLEARED,
+  STR_SYNC_WEATHER_TIME,
   // Sentinel - must be last
   _COUNT
 };

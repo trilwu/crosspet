@@ -107,12 +107,12 @@ const char* const LANGUAGE_NAMES[] = {
 
 // Character sets for each language
 const char* const CHARACTER_SETS[] = {
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
     "",  // English
-    " !\"%'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xA1"
     "\xC2"
     "\xAB"
@@ -135,7 +135,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBA"
     "",  // Español
-    " !%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -187,7 +187,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Deutsch
-    " !%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -245,7 +245,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Čeština
-    "\n !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -271,7 +271,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x91"
     "",  // Português (Brasil)
-    " !%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -392,7 +392,7 @@ const char* const CHARACTER_SETS[] = {
     "\xD1"
     "\x91"
     "",  // Русский
-    " !%'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -415,7 +415,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Svenska
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -440,7 +440,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC8"
     "\x9B"
     "",  // Română
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -467,7 +467,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBC"
     "",  // Català
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -590,7 +590,7 @@ const char* const CHARACTER_SETS[] = {
     "\xD1"
     "\x97"
     "",  // Українська
-    " !%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -711,7 +711,7 @@ const char* const CHARACTER_SETS[] = {
     "\xD1"
     "\x9E"
     "",  // Беларуская
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -732,7 +732,7 @@ const char* const CHARACTER_SETS[] = {
     "\x86"
     "\xBB"
     "",  // Italiano
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -759,7 +759,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC5"
     "\xBC"
     "",  // Polski
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -770,7 +770,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xB6"
     "",  // Suomi
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -787,7 +787,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xB8"
     "",  // Dansk
-    " !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -798,7 +798,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBC"
     "",  // Nederlands
-    "\n !\"%'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -827,7 +827,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC5"
     "\x9F"
     "",  // Türkçe
-    " !\"%'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1751,6 +1751,9 @@ const char* const STRINGS_EN[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2711,6 +2714,9 @@ const char* const STRINGS_ES[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3802,6 +3808,9 @@ const char* const STRINGS_FR[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4662,6 +4671,9 @@ const char* const STRINGS_DE[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6634,6 +6646,9 @@ const char* const STRINGS_CS[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7625,6 +7640,9 @@ const char* const STRINGS_PO[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_RU[] = {
@@ -16711,6 +16729,9 @@ const char* const STRINGS_RU[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_SV[] = {
@@ -17919,6 +17940,9 @@ const char* const STRINGS_SV[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19291,6 +19315,9 @@ const char* const STRINGS_RO[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20295,6 +20322,9 @@ const char* const STRINGS_CA[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_UK[] = {
@@ -30631,6 +30661,9 @@ const char* const STRINGS_UK[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_BE[] = {
@@ -39387,6 +39420,9 @@ const char* const STRINGS_BE[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_IT[] = {
@@ -40110,6 +40146,9 @@ const char* const STRINGS_IT[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_PL[] = {
@@ -41504,6 +41543,9 @@ const char* const STRINGS_PL[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_FI[] = {
@@ -42664,6 +42706,9 @@ const char* const STRINGS_FI[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_DA[] = {
@@ -43586,6 +43631,9 @@ const char* const STRINGS_DA[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_NL[] = {
@@ -44276,6 +44324,9 @@ const char* const STRINGS_NL[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_TR[] = {
@@ -46024,6 +46075,9 @@ const char* const STRINGS_TR[] = {
     "p",
     "Page starred",
     "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
 };
 
 const char* const STRINGS_VI[] = {
@@ -50860,13 +50914,17 @@ const char* const STRINGS_VI[] = {
     "",
     "\xC4"
     "\x90"
+    "\xC3"
+    "\xA3"
+    " \xC4"
+    "\x91"
     "\xE1"
     "\xBB"
     "\x93"
     "ng b\xE1"
     "\xBB"
     "\x99"
-    " OK",
+    "",
     "WiFi qu\xC3"
     "\xA1"
     " h\xE1"
@@ -50877,18 +50935,136 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x97"
     "i API %d",
-    "Sleep Image",
-    "Image selected!",
-    "No .bmp files found",
-    "Place .bmp files in /sleep/",
-    "Any (random)",
-    "Set sleep screen to 'Custom' in Settings > Display",
+    "\xE1"
+    "\xBA"
+    "\xA2"
+    "nh m\xC3"
+    "\xA0"
+    "n h\xC3"
+    "\xAC"
+    "nh ng\xE1"
+    "\xBB"
+    "\xA7"
+    "",
+    "\xC4"
+    "\x90"
+    "\xC3"
+    "\xA3"
+    " ch\xE1"
+    "\xBB"
+    "\x8D"
+    "n \xE1"
+    "\xBA"
+    "\xA3"
+    "nh!",
+    "Kh\xC3"
+    "\xB4"
+    "ng t\xC3"
+    "\xAC"
+    "m th\xE1"
+    "\xBA"
+    "\xA5"
+    "y file .bmp",
+    "\xC4"
+    "\x90"
+    "\xE1"
+    "\xBA"
+    "\xB7"
+    "t file .bmp v\xC3"
+    "\xA0"
+    "o th\xC6"
+    "\xB0"
+    " m\xE1"
+    "\xBB"
+    "\xA5"
+    "c /sleep/",
+    "Ng\xE1"
+    "\xBA"
+    "\xAB"
+    "u nhi\xC3"
+    "\xAA"
+    "n",
+    "\xC4"
+    "\x90"
+    "\xE1"
+    "\xBA"
+    "\xB7"
+    "t m\xC3"
+    "\xA0"
+    "n h\xC3"
+    "\xAC"
+    "nh ng\xE1"
+    "\xBB"
+    "\xA7"
+    " th\xC3"
+    "\xA0"
+    "nh 'T\xC3"
+    "\xB9"
+    "y ch\xE1"
+    "\xBB"
+    "\x89"
+    "nh' trong C\xC3"
+    "\xA0"
+    "i \xC4"
+    "\x91"
+    "\xE1"
+    "\xBA"
+    "\xB7"
+    "t > Hi\xE1"
+    "\xBB"
+    "\x83"
+    "n th\xE1"
+    "\xBB"
+    "\x8B"
+    "",
     "Starred Pages",
     "Star Page",
     "No starred pages",
     "p",
     "Page starred",
     "Page unstarred",
+    "X\xC3"
+    "\xB3"
+    "a cache m\xC3"
+    "\xA0"
+    "n h\xC3"
+    "\xAC"
+    "nh ng\xE1"
+    "\xBB"
+    "\xA7"
+    "",
+    "\xC4"
+    "\x90"
+    "\xC3"
+    "\xA3"
+    " x\xC3"
+    "\xB3"
+    "a cache m\xC3"
+    "\xA0"
+    "n h\xC3"
+    "\xAC"
+    "nh ng\xE1"
+    "\xBB"
+    "\xA7"
+    "!",
+    "\xC4"
+    "\x90"
+    "\xE1"
+    "\xBB"
+    "\x93"
+    "ng b\xE1"
+    "\xBB"
+    "\x99"
+    " th\xE1"
+    "\xBB"
+    "\x9D"
+    "i ti\xE1"
+    "\xBA"
+    "\xBF"
+    "t & gi\xE1"
+    "\xBB"
+    "\x9D"
+    "",
 };
 
 }  // namespace i18n_strings
