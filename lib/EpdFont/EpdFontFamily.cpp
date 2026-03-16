@@ -24,6 +24,10 @@ void EpdFontFamily::getTextDimensions(const char* string, int* w, int* h, const 
 
 const EpdFontData* EpdFontFamily::getData(const Style style) const { return getFont(style)->data; }
 
+// Coverage checks must follow the same style resolution path as rendering so
+// bold/italic-only glyph gaps can be handled correctly.
+bool EpdFontFamily::hasGlyph(const uint32_t cp, const Style style) const { return getFont(style)->hasGlyph(cp); }
+
 const EpdGlyph* EpdFontFamily::getGlyph(const uint32_t cp, const Style style) const {
   return getFont(style)->getGlyph(cp);
 }

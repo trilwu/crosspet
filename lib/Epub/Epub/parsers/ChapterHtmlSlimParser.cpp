@@ -39,6 +39,47 @@ constexpr int NUM_SKIP_TAGS = sizeof(SKIP_TAGS) / sizeof(SKIP_TAGS[0]);
 
 bool isWhitespace(const char c) { return c == ' ' || c == '\r' || c == '\n' || c == '\t'; }
 
+bool matchesUtf8Bytes(const XML_Char* s, const int len, const int index, const uint8_t b0, const uint8_t b1,
+                      const uint8_t b2) {
+  return index + 2 < len && static_cast<uint8_t>(s[index]) == b0 && static_cast<uint8_t>(s[index + 1]) == b1 &&
+         static_cast<uint8_t>(s[index + 2]) == b2;
+}
+
+uint32_t getBreakableUnicodeSpaceCodepoint(const XML_Char* s, const int len, const int index) {
+  // Common Unicode spaces that should behave like a normal ASCII word break.
+  // U+2000..U+200A (en/em/thin spaces...), U+205F (medium mathematical space),
+  // U+3000 (ideographic space). Returning the exact codepoint lets the parser
+  // preserve it for fonts that support it and normalize only when needed.
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x80)) return 0x2000;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x81)) return 0x2001;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x82)) return 0x2002;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x83)) return 0x2003;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x84)) return 0x2004;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x85)) return 0x2005;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x86)) return 0x2006;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x87)) return 0x2007;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x88)) return 0x2008;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x89)) return 0x2009;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x8A)) return 0x200A;
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x81, 0x9F)) return 0x205F;
+  if (matchesUtf8Bytes(s, len, index, 0xE3, 0x80, 0x80)) return 0x3000;
+
+  return 0;
+}
+
+uint32_t getCompatibilityHyphenCodepoint(const XML_Char* s, const int len, const int index) {
+  // Some fonts miss U+2010/U+2011 even though they handle ASCII '-' correctly.
+  // Returning the original codepoint lets the parser substitute only for fonts
+  // that actually need the compatibility fallback.
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x90)) {
+    return 0x2010;
+  }
+  if (matchesUtf8Bytes(s, len, index, 0xE2, 0x80, 0x91)) {
+    return 0x2011;
+  }
+  return 0;
+}
+
 // given the start and end of a tag, check to see if it matches a known tag
 bool matches(const char* tag_name, const char* possible_tags[], const int possible_tag_count) {
   for (int i = 0; i < possible_tag_count; i++) {
@@ -97,14 +138,13 @@ void ChapterHtmlSlimParser::updateEffectiveInlineStyle() {
   }
 }
 
-// flush the contents of partWordBuffer to currentTextBlock
-void ChapterHtmlSlimParser::flushPartWordBuffer() {
-  // Determine font style from depth-based tracking and CSS effective style
+EpdFontFamily::Style ChapterHtmlSlimParser::getCurrentFontStyle() const {
+  // Parser-side compatibility checks must use the same effective style that
+  // flushPartWordBuffer() will later assign to the emitted word.
   const bool isBold = boldUntilDepth < depth || effectiveBold;
   const bool isItalic = italicUntilDepth < depth || effectiveItalic;
   const bool isUnderline = underlineUntilDepth < depth || effectiveUnderline;
 
-  // Combine style flags using bitwise OR
   EpdFontFamily::Style fontStyle = EpdFontFamily::REGULAR;
   if (isBold) {
     fontStyle = static_cast<EpdFontFamily::Style>(fontStyle | EpdFontFamily::BOLD);
@@ -115,6 +155,16 @@ void ChapterHtmlSlimParser::flushPartWordBuffer() {
   if (isUnderline) {
     fontStyle = static_cast<EpdFontFamily::Style>(fontStyle | EpdFontFamily::UNDERLINE);
   }
+  return fontStyle;
+}
+
+bool ChapterHtmlSlimParser::currentFontHasGlyph(const uint32_t cp) const {
+  return renderer.fontHasGlyph(fontId, cp, getCurrentFontStyle());
+}
+
+// flush the contents of partWordBuffer to currentTextBlock
+void ChapterHtmlSlimParser::flushPartWordBuffer() {
+  const EpdFontFamily::Style fontStyle = getCurrentFontStyle();
 
   // flush the buffer
   partWordBuffer[partWordBufferIndex] = '\0';
@@ -552,7 +602,12 @@ void XMLCALL ChapterHtmlSlimParser::startElement(void* userData, const XML_Char*
       self->updateEffectiveInlineStyle();
 
       if (strcmp(name, "li") == 0) {
-        self->currentTextBlock->addWord("\xe2\x80\xa2", EpdFontFamily::REGULAR);
+        // Keep the original bullet when the active reader font supports it.
+        // Fall back to a plain ASCII marker only for fonts that would render
+        // U+2022 as a replacement glyph.
+        self->currentTextBlock->addWord(
+            self->renderer.fontHasGlyph(self->fontId, 0x2022, EpdFontFamily::REGULAR) ? "\xe2\x80\xa2" : "-",
+            EpdFontFamily::REGULAR);
       }
     }
   } else if (matches(name, UNDERLINE_TAGS, NUM_UNDERLINE_TAGS)) {
@@ -688,6 +743,33 @@ void XMLCALL ChapterHtmlSlimParser::characterData(void* userData, const XML_Char
       self->nextWordContinues = false;
       // Skip the whitespace char
       continue;
+    }
+
+    if (const uint32_t spaceCp = getBreakableUnicodeSpaceCodepoint(s, len, i)) {
+      // Treat exotic Unicode spaces as real word breaks only when the current
+      // font cannot render them. Fonts with proper coverage keep the original
+      // codepoint so typography is unchanged.
+      if (!self->currentFontHasGlyph(spaceCp)) {
+        if (self->partWordBufferIndex > 0) {
+          self->flushPartWordBuffer();
+        }
+        self->nextWordContinues = false;
+        i += 2;
+        continue;
+      }
+    }
+
+    if (const uint32_t hyphenCp = getCompatibilityHyphenCodepoint(s, len, i)) {
+      // Preserve the original hyphen codepoint for fonts that support it.
+      // Substitute ASCII '-' only for fonts that would otherwise show U+FFFD.
+      if (!self->currentFontHasGlyph(hyphenCp)) {
+        if (self->partWordBufferIndex >= MAX_WORD_SIZE) {
+          self->flushPartWordBuffer();
+        }
+        self->partWordBuffer[self->partWordBufferIndex++] = '-';
+        i += 2;
+        continue;
+      }
     }
 
     // Detect U+00A0 (non-breaking space, UTF-8: 0xC2 0xA0) or

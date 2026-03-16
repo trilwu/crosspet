@@ -10,7 +10,9 @@
 #include "parsers/ChapterHtmlSlimParser.h"
 
 namespace {
-constexpr uint8_t SECTION_FILE_VERSION = 18;
+// Bump the section cache version whenever parsed text/layout compatibility
+// rules change so existing EPUB caches are rebuilt with the new behavior.
+constexpr uint8_t SECTION_FILE_VERSION = 19;
 constexpr uint32_t HEADER_SIZE = sizeof(uint8_t) + sizeof(int) + sizeof(float) + sizeof(bool) + sizeof(uint8_t) +
                                  sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(bool) + sizeof(bool) +
                                  sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint32_t);

@@ -80,7 +80,7 @@ struct BlockStyle {
     blockStyle.paddingRight = cssStyle.paddingRight.toPixelsInt16(emSize, vw);
 
     // For textIndent: if it's a percentage we can't resolve (no viewport width),
-    // leave textIndentDefined=false so the EmSpace fallback in applyParagraphIndent() is used
+    // leave textIndentDefined=false so ParsedText can apply the fallback paragraph indent at layout time.
     if (cssStyle.hasTextIndent() && cssStyle.textIndent.isResolvable(vw)) {
       blockStyle.textIndent = cssStyle.textIndent.toPixelsInt16(emSize, vw);
       blockStyle.textIndentDefined = true;

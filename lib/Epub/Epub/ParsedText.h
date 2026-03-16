@@ -19,8 +19,10 @@ class ParsedText {
   BlockStyle blockStyle;
   bool extraParagraphSpacing;
   bool hyphenationEnabled;
+  bool paragraphStartPending = true;  // true until the paragraph's first-line indent strategy is decided
 
-  void applyParagraphIndent();
+  void applyParagraphIndent(const GfxRenderer& renderer, int fontId);
+  int getFirstLineIndent(const GfxRenderer& renderer, int fontId, bool isFirstLine) const;
   std::vector<size_t> computeLineBreaks(const GfxRenderer& renderer, int fontId, int pageWidth,
                                         std::vector<uint16_t>& wordWidths, std::vector<bool>& continuesVec);
   std::vector<size_t> computeHyphenatedLineBreaks(const GfxRenderer& renderer, int fontId, int pageWidth,

@@ -979,6 +979,18 @@ int GfxRenderer::getSpaceWidth(const int fontId, const EpdFontFamily::Style styl
   return spaceGlyph ? fp4::toPixel(spaceGlyph->advanceX) : 0;  // snap 12.4 fixed-point to nearest pixel
 }
 
+bool GfxRenderer::fontHasGlyph(const int fontId, const uint32_t cp, const EpdFontFamily::Style style) const {
+  // Keep glyph coverage checks in renderer so EPUB layout/parser code can make
+  // style-aware compatibility decisions without reaching into font internals.
+  const auto fontIt = fontMap.find(fontId);
+  if (fontIt == fontMap.end()) {
+    LOG_ERR("GFX", "Font %d not found", fontId);
+    return false;
+  }
+
+  return fontIt->second.hasGlyph(cp, style);
+}
+
 int GfxRenderer::getSpaceAdvance(const int fontId, const uint32_t leftCp, const uint32_t rightCp,
                                  const EpdFontFamily::Style style) const {
   const auto fontIt = fontMap.find(fontId);

@@ -143,22 +143,37 @@ uint32_t EpdFont::applyLigatures(uint32_t cp, const char*& text) const {
   return cp;
 }
 
-const EpdGlyph* EpdFont::getGlyph(const uint32_t cp) const {
+// Checks raw interval coverage without falling back to the replacement glyph.
+// This lets higher layers decide whether to preserve the original codepoint or
+// substitute a compatibility fallback for fonts that are missing it.
+bool EpdFont::hasGlyph(const uint32_t cp) const {
   const int count = data->intervalCount;
-  if (count == 0) return nullptr;
+  if (count == 0) return false;
 
   const EpdUnicodeInterval* intervals = data->intervals;
   const auto* end = intervals + count;
 
-  // upper_bound: range lookup. Finds the first interval with first > cp, so the
-  // interval just before it is the last one with first <= cp. That's the only
-  // candidate that could contain cp. Then we verify cp <= candidate.last.
   const auto it = std::upper_bound(
       intervals, end, cp, [](uint32_t value, const EpdUnicodeInterval& interval) { return value < interval.first; });
 
-  if (it != intervals) {
-    const auto& interval = *(it - 1);
-    if (cp <= interval.last) {
+  if (it == intervals) {
+    return false;
+  }
+
+  const auto& interval = *(it - 1);
+  return cp >= interval.first && cp <= interval.last;
+}
+
+const EpdGlyph* EpdFont::getGlyph(const uint32_t cp) const {
+  // Resolve direct coverage first, then fall back to U+FFFD for rendering paths
+  // that prefer a visible replacement glyph over a silent drop.
+  if (hasGlyph(cp)) {
+    const auto* intervals = data->intervals;
+    const auto* end = intervals + data->intervalCount;
+    const auto it = std::upper_bound(
+        intervals, end, cp, [](uint32_t value, const EpdUnicodeInterval& interval) { return value < interval.first; });
+    if (it != intervals) {
+      const auto& interval = *(it - 1);
       return &data->glyph[interval.offset + (cp - interval.first)];
     }
   }

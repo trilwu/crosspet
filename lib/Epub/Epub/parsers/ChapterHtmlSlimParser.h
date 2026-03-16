@@ -85,6 +85,8 @@ class ChapterHtmlSlimParser {
   int wordsExtractedInBlock = 0;
 
   void updateEffectiveInlineStyle();
+  EpdFontFamily::Style getCurrentFontStyle() const;
+  bool currentFontHasGlyph(uint32_t cp) const;
   void startNewTextBlock(const BlockStyle& blockStyle);
   void flushPartWordBuffer();
   void makePages();
