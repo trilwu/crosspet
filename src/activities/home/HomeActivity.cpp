@@ -209,13 +209,20 @@ void HomeActivity::renderHeaderClock() {
   } else if (syncResultMsg) {
     renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
   } else {
-    WeatherData wData;
-    uint8_t wCity = 0;
-    char wTime[8] = "";
-    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
-      char wBuf[16];
-      snprintf(wBuf, sizeof(wBuf), "%.0f%s", WeatherActivity::convertTemp(wData.temperature), WeatherActivity::tempUnitSuffix());
-      renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
+    // Cache weather string in memory — avoid SD read on every frame
+    static char cachedWeather[16] = "";
+    static unsigned long lastWeatherLoad = 0;
+    if (millis() - lastWeatherLoad > 60000 || cachedWeather[0] == '\0') {
+      WeatherData wData;
+      uint8_t wCity = 0;
+      char wTime[8] = "";
+      if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
+        snprintf(cachedWeather, sizeof(cachedWeather), "%.0f%s", WeatherActivity::convertTemp(wData.temperature), WeatherActivity::tempUnitSuffix());
+      }
+      lastWeatherLoad = millis();
+    }
+    if (cachedWeather[0]) {
+      renderer.drawText(SMALL_FONT_ID, weatherX, 5, cachedWeather);
     }
   }
 }

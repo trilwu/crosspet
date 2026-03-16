@@ -264,11 +264,10 @@ void HomeActivity::renderReadingStatsBar() {
 
 // ── Bottom navigation bar ─────────────────────────────────────────────────────
 
-void HomeActivity::renderBottomBar() {
+// Render bottom bar icons + labels (static, cached in cover buffer)
+void HomeActivity::renderBottomBarIcons() {
   const int screenW = renderer.getScreenWidth();
   const int screenH = renderer.getScreenHeight();
-  const int recentCount = std::min(CP_MAX_RECENT, static_cast<int>(recentBooks.size()) - 1);
-  const int barStart = 1 + recentCount;
 
   const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
   renderer.drawLine(0, barY, screenW, barY);
@@ -288,13 +287,6 @@ void HomeActivity::renderBottomBar() {
 
   for (int i = 0; i < CP_BOTTOM_ITEMS; i++) {
     const int x = barPad + i * itemW;
-    const bool selected = (selectorIndex == barStart + i);
-
-    if (selected) {
-      renderer.fillRoundedRect(x + 2, barY + innerTop - 2, itemW - 4, contentH, CP_BOTTOM_R, Color::LightGray);
-      renderer.drawRoundedRect(x + 2, barY + innerTop - 2, itemW - 4, contentH, 2, CP_BOTTOM_R, true);
-    }
-
     const int lineH = renderer.getLineHeight(SMALL_FONT_ID);
     const int totalH = CP_BOTTOM_ICON_SZ + 4 + lineH;
     const int startY = barY + innerTop + (contentH - totalH) / 2;
@@ -302,6 +294,44 @@ void HomeActivity::renderBottomBar() {
     auto label = renderer.truncatedText(SMALL_FONT_ID, items[i].label, itemW - 4);
     const int lblW = renderer.getTextWidth(SMALL_FONT_ID, label.c_str());
     renderer.drawText(SMALL_FONT_ID, x + (itemW - lblW) / 2, startY + CP_BOTTOM_ICON_SZ + 4, label.c_str(), true);
+  }
+}
+
+// Render bottom bar selection highlight only (dynamic, per-frame)
+void HomeActivity::renderBottomBarSelection() {
+  const int screenW = renderer.getScreenWidth();
+  const int screenH = renderer.getScreenHeight();
+  const int recentCount = std::min(CP_MAX_RECENT, static_cast<int>(recentBooks.size()) - 1);
+  const int barStart = 1 + recentCount;
+
+  const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
+  constexpr int barPad = 8;
+  constexpr int innerTop = 10;
+  const int itemW = (screenW - 2 * barPad) / CP_BOTTOM_ITEMS;
+  const int contentH = CP_BOTTOM_BAR_H - innerTop;
+
+  for (int i = 0; i < CP_BOTTOM_ITEMS; i++) {
+    if (selectorIndex == barStart + i) {
+      const int x = barPad + i * itemW;
+      renderer.fillRoundedRect(x + 2, barY + innerTop - 2, itemW - 4, contentH, CP_BOTTOM_R, Color::LightGray);
+      renderer.drawRoundedRect(x + 2, barY + innerTop - 2, itemW - 4, contentH, 2, CP_BOTTOM_R, true);
+      // Redraw icon + label inside selection (they were overwritten by fill)
+      struct BarItem { const uint8_t* icon; const char* label; };
+      const BarItem items[] = {
+        {ToolsIcon, tr(STR_TOOLS)},
+        {LibraryIcon, tr(STR_BROWSE_FILES)},
+        {TransferIcon, tr(STR_FILE_TRANSFER)},
+        {Settings2Icon, tr(STR_SETTINGS_TITLE)},
+      };
+      const int lineH = renderer.getLineHeight(SMALL_FONT_ID);
+      const int totalH = CP_BOTTOM_ICON_SZ + 4 + lineH;
+      const int startY = barY + innerTop + (contentH - totalH) / 2;
+      renderer.drawIcon(items[i].icon, x + (itemW - CP_BOTTOM_ICON_SZ) / 2, startY, CP_BOTTOM_ICON_SZ, CP_BOTTOM_ICON_SZ);
+      auto label = renderer.truncatedText(SMALL_FONT_ID, items[i].label, itemW - 4);
+      const int lblW = renderer.getTextWidth(SMALL_FONT_ID, label.c_str());
+      renderer.drawText(SMALL_FONT_ID, x + (itemW - lblW) / 2, startY + CP_BOTTOM_ICON_SZ + 4, label.c_str(), true);
+      break;
+    }
   }
 }
 
@@ -355,76 +385,83 @@ void HomeActivity::loopCrossPet() {
   }
 }
 
+// ── Button hints (static, drawn once into buffer) ────────────────────────────
+
+void HomeActivity::renderButtonHints() {
+  const int sw = renderer.getScreenWidth();
+  const int sh = renderer.getScreenHeight();
+  constexpr int hH = BaseMetrics::values.buttonHintsHeight;
+  const int hY = sh - hH;
+  renderer.fillRect(0, hY, sw, hH, false);
+  renderer.drawLine(0, hY, sw - 1, hY);
+
+  constexpr int bw = 106;
+  constexpr int pos[] = {25, 130, 245, 350};
+  const int cy = hY + hH / 2;
+  constexpr int s = 7;
+
+  // Left triangle
+  { const int cx = pos[0] + bw / 2;
+    for (int dx = -s; dx <= s; dx++) {
+      const int h = dx + s + 1;
+      renderer.fillRect(cx + dx, cy - h / 2, 1, h);
+    }
+  }
+  // Filled circle
+  { const int cx = pos[1] + bw / 2;
+    static constexpr int8_t dx[] = {7, 6, 6, 6, 5, 4, 3, 2};
+    for (int dy = -s; dy <= s; dy++) {
+      const int d = dx[abs(dy)];
+      renderer.fillRect(cx - d, cy + dy, 2 * d + 1, 1);
+    }
+  }
+  // Up triangle
+  { const int cx = pos[2] + bw / 2;
+    for (int dy = -s; dy <= s; dy++) {
+      const int w = dy + s + 1;
+      renderer.fillRect(cx - w / 2, cy + dy, w, 1);
+    }
+  }
+  // Down triangle
+  { const int cx = pos[3] + bw / 2;
+    for (int dy = -s; dy <= s; dy++) {
+      const int w = s - dy + 1;
+      renderer.fillRect(cx - w / 2, cy + dy, w, 1);
+    }
+  }
+}
+
 // ── CrossPet main render ──────────────────────────────────────────────────────
 
 void HomeActivity::renderCrossPet() {
   const int screenW = renderer.getScreenWidth();
 
   if (!coverRendered) {
+    // First render: build full base buffer (covers + static UI elements)
     renderer.clearScreen();
     renderContinueReadingCard();
     renderRecentCovers();
+    // Include static elements in buffer to avoid redrawing every frame
+    renderReadingStatsBar();
+    renderBottomBarIcons();
+    renderButtonHints();
     coverBufferStored = storeCoverBuffer();
     coverRendered = coverBufferStored;
   } else {
+    // Fast path: restore cached buffer (covers + static elements)
     restoreCoverBuffer();
   }
 
-  // Header (redrawn each frame for clock/weather)
+  // Dynamic elements (redrawn each frame — lightweight)
   GUI.drawHeader(renderer, Rect{0, 0, screenW, CP_HEADER_H}, nullptr);
   renderHeaderClock();
   renderPetStatusWidget(CP_HEADER_H);
 
-  // Selection highlights
+  // Selection highlights only (not full bottom bar redraw)
   renderSelectionHighlight();
   renderRecentSelection();
-  renderReadingStatsBar();
-  renderBottomBar();
+  renderBottomBarSelection();
 
-  // Button hints — pixel-perfect filled shapes
-  {
-    const int sw = renderer.getScreenWidth();
-    const int sh = renderer.getScreenHeight();
-    constexpr int hH = BaseMetrics::values.buttonHintsHeight;
-    const int hY = sh - hH;
-    renderer.fillRect(0, hY, sw, hH, false);
-    renderer.drawLine(0, hY, sw - 1, hY);
-
-    constexpr int bw = 106;
-    constexpr int pos[] = {25, 130, 245, 350};
-    const int cy = hY + hH / 2;
-    constexpr int s = 7;
-
-    // Left triangle (pointing left, same visual size as up/down)
-    { const int cx = pos[0] + bw / 2;
-      for (int dx = -s; dx <= s; dx++) {
-        const int h = dx + s + 1;
-        renderer.fillRect(cx + dx, cy - h / 2, 1, h);
-      }
-    }
-    // Filled circle
-    { const int cx = pos[1] + bw / 2;
-      static constexpr int8_t dx[] = {7, 6, 6, 6, 5, 4, 3, 2};
-      for (int dy = -s; dy <= s; dy++) {
-        const int d = dx[abs(dy)];
-        renderer.fillRect(cx - d, cy + dy, 2 * d + 1, 1);
-      }
-    }
-    // Up triangle
-    { const int cx = pos[2] + bw / 2;
-      for (int dy = -s; dy <= s; dy++) {
-        const int w = dy + s + 1;
-        renderer.fillRect(cx - w / 2, cy + dy, w, 1);
-      }
-    }
-    // Down triangle
-    { const int cx = pos[3] + bw / 2;
-      for (int dy = -s; dy <= s; dy++) {
-        const int w = s - dy + 1;
-        renderer.fillRect(cx - w / 2, cy + dy, w, 1);
-      }
-    }
-  }
   renderer.displayBuffer();
 
   // Post-render: trigger cover thumbnail loading

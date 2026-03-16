@@ -47,7 +47,9 @@ class HomeActivity final : public Activity {
   void renderRecentCovers();       // Draw cover thumbnails (cached in buffer)
   void renderRecentSelection();    // Selection highlight for recent covers
   void renderReadingStatsBar();    // Pet widget or reading stats in gap
-  void renderBottomBar();          // 4-icon bottom navigation bar
+  void renderBottomBarIcons();      // Static icons + labels (cached in buffer)
+  void renderBottomBarSelection();  // Selection highlight only (per-frame)
+  void renderButtonHints();         // Static button hint shapes (cached in buffer)
   void renderSelectionHighlight();
 
   // CrossPet Classic (v1.6.8 grid layout) render helpers
