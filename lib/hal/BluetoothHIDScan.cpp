@@ -5,6 +5,7 @@
 #include "BluetoothHIDManager.h"
 #include <Logging.h>
 #include <NimBLEDevice.h>
+#include <algorithm>
 
 // Shared UUIDs defined in BluetoothHIDManager.cpp
 extern const char* HID_SERVICE_UUID;
@@ -73,6 +74,18 @@ void BluetoothHIDManager::startScan(uint32_t durationMs) {
 
     pScan->stop();
     _scanning = false;
+
+    // Sort by: HID first, then by signal strength (strongest first)
+    std::sort(_discoveredDevices.begin(), _discoveredDevices.end(),
+      [](const BluetoothDevice& a, const BluetoothDevice& b) {
+        if (a.isHID != b.isHID) return a.isHID > b.isHID;  // HID first
+        // Named devices before "Unknown"
+        bool aName = !a.name.empty() && a.name != "Unknown";
+        bool bName = !b.name.empty() && b.name != "Unknown";
+        if (aName != bName) return aName > bName;
+        return a.rssi > b.rssi;  // Strongest signal first
+    });
+
     LOG_INF("BT", "Scan complete, found %d devices", _discoveredDevices.size());
   } catch (const std::exception& e) {
     LOG_ERR("BT", "Scan failed: %s", e.what());
@@ -114,27 +127,42 @@ void BluetoothHIDManager::onScanResult(NimBLEAdvertisedDevice* advertisedDevice)
     }
   }
 
-  // Cap at 20 devices to prevent heap exhaustion in crowded BLE environments
-  // Prioritize HID devices — always add those, drop non-HID if at cap
-  constexpr size_t MAX_DEVICES = 20;
-  if (_discoveredDevices.size() >= MAX_DEVICES) {
-    if (!isHID) return;  // Skip non-HID devices when full
-    // Find and remove a non-HID device to make room for this HID device
-    bool replaced = false;
-    for (auto it = _discoveredDevices.begin(); it != _discoveredDevices.end(); ++it) {
-      if (!it->isHID) {
-        _discoveredDevices.erase(it);
-        replaced = true;
-        break;
-      }
-    }
-    if (!replaced) return;  // All slots are HID — skip
-  }
+  // Skip very weak signals
+  if (rssi < -85 && !isHID) return;
 
   std::string name = advertisedDevice->getName();
+  bool hasName = !name.empty();
+
+  // Only collect named devices or HID devices — skip anonymous non-HID
+  if (!hasName && !isHID) return;
+
+  // Cap devices to prevent heap exhaustion in crowded BLE environments.
+  // Prioritize: HID > named > strong signal. Replace weakest non-HID when full.
+  constexpr size_t MAX_DEVICES = 16;
+  if (_discoveredDevices.size() >= MAX_DEVICES) {
+    if (!isHID && !hasName) return;  // Skip unnamed non-HID when full
+    // Find weakest non-HID unnamed device to replace
+    int weakestIdx = -1;
+    int weakestRssi = 0;
+    for (size_t i = 0; i < _discoveredDevices.size(); i++) {
+      const auto& d = _discoveredDevices[i];
+      if (!d.isHID && (d.name.empty() || d.name == "Unknown")) {
+        if (weakestIdx < 0 || d.rssi < weakestRssi) {
+          weakestIdx = static_cast<int>(i);
+          weakestRssi = d.rssi;
+        }
+      }
+    }
+    if (weakestIdx >= 0) {
+      _discoveredDevices.erase(_discoveredDevices.begin() + weakestIdx);
+    } else {
+      return;  // All slots occupied by HID/named devices
+    }
+  }
+
   BluetoothDevice device;
   device.address = address;
-  device.name = name.empty() ? "Unknown" : name;
+  device.name = hasName ? name : "Unknown";
   device.rssi = rssi;
   device.isHID = isHID;
   device.addressType = advertisedDevice->getAddress().getType();

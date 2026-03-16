@@ -26,6 +26,8 @@
 #include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
 #include "util/StringUtils.h"
+#include <BluetoothHIDManager.h>
+#include "components/icons/bluetooth.h"
 
 // ── Buffer management ─────────────────────────────────────────────────────────
 
@@ -200,10 +202,30 @@ void HomeActivity::renderHeaderClock() {
   const int clockW = renderer.getTextWidth(SMALL_FONT_ID, buf);
   renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
 
+  // BLE status: icon + connection state
+  int nextX = 10 + clockW + 6;
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    if (btMgr.isEnabled()) {
+      // Align BT icon vertically with clock text baseline
+      const int clockH = renderer.getLineHeight(SMALL_FONT_ID);
+      const int iconY = 5 + (clockH - 12) / 2;
+      renderer.drawIcon(BluetoothIcon12, nextX, iconY, 12, 12);
+      nextX += 14;
+      // Show "x" for disconnected, nothing extra for connected (icon alone = connected)
+      if (btMgr.getConnectedDevices().empty()) {
+        renderer.drawText(SMALL_FONT_ID, nextX, 5, "x", true);
+        nextX += renderer.getTextWidth(SMALL_FONT_ID, "x") + 4;
+      } else {
+        nextX += 2;
+      }
+    }
+  }
+
   if (!PET_SETTINGS.homeShowWeather) return;
 
-  // Weather temp or sync status next to clock
-  const int weatherX = 10 + clockW + 6;
+  // Weather temp or sync status next to clock + BT indicator
+  const int weatherX = nextX;
   if (weatherRefreshing) {
     renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
   } else if (syncResultMsg) {

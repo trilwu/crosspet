@@ -87,7 +87,7 @@ void BluetoothSettingsActivity::handleDeviceListInput() {
     const auto& device = devices[selectedIndex];
     LOG_INF("BT", "Connecting to %s (%s)", device.name.c_str(), device.address.c_str());
     lastError = "Connecting...";
-    requestUpdate();
+    requestUpdateAndWait();  // Force render before blocking connect
 
     if (btMgr->connectToDevice(device.address)) {
       // Persist bonded device in manager and settings
@@ -128,7 +128,9 @@ void BluetoothSettingsActivity::renderDeviceList() {
                  countStr);
 
   std::string subheaderText;
-  if (btMgr->isScanning()) {
+  if (!lastError.empty() && lastError != "Scanning...") {
+    subheaderText = lastError;  // Show connection result/error
+  } else if (btMgr->isScanning()) {
     subheaderText = "Searching for devices...";
   } else if (devices.empty()) {
     subheaderText = "No devices found";
@@ -150,11 +152,14 @@ void BluetoothSettingsActivity::renderDeviceList() {
     bool connected = btMgr->isConnected(device.address);
     const char* connSym = connected ? "[*] " : "";
     const char* hidSym = device.isHID ? "[HID] " : "";
-    snprintf(buf, sizeof(buf), "%s%s%s", connSym, hidSym, device.name.c_str());
+    // Show device name, or MAC address if name is "Unknown" or empty
+    const bool hasName = !device.name.empty() && device.name != "Unknown";
+    const char* displayName = hasName ? device.name.c_str() : device.address.c_str();
+    snprintf(buf, sizeof(buf), "%s%s%s", connSym, hidSym, displayName);
     deviceLabels.push_back(buf);
 
     std::string signal = getSignalStrengthIndicator(device.rssi);
-    snprintf(buf, sizeof(buf), "%s (%d dBm)", signal.c_str(), device.rssi);
+    snprintf(buf, sizeof(buf), "%s %ddBm", signal.c_str(), device.rssi);
     deviceValues.push_back(buf);
   }
 

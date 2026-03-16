@@ -54,7 +54,7 @@ public:
   const std::vector<BluetoothDevice>& getDiscoveredDevices() const { return _discoveredDevices; }
 
   // Connection
-  bool connectToDevice(const std::string& address);
+  bool connectToDevice(std::string address);  // By value — cleared internally
   bool disconnectFromDevice(const std::string& address);
   bool isConnected(const std::string& address) const;
   std::vector<std::string> getConnectedDevices() const;

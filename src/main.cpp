@@ -425,10 +425,9 @@ void setup() {
       gpio.injectButtonPress(buttonIndex);
     });
     btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName);
-    // Auto-enable BLE on boot if previously enabled and has bonded device
-    if (SETTINGS.bleEnabled && strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
-      btMgr.enable();
-    }
+    // Don't auto-enable BLE on boot — NimBLE stack uses ~40KB heap which
+    // combined with home screen cover buffer (48KB) leaves too little for
+    // GATT discovery during reconnect. User enables via Bluetooth settings.
   }
 
   switch (gpio.getWakeupReason()) {
@@ -502,11 +501,11 @@ void loop() {
   const bool userInputDetected = gpio.wasAnyPressed() || gpio.wasAnyReleased();
   bool bleRecentActivity = false;
 
-  // Check for Bluetooth inactivity timeouts and auto-reconnect
+  // Check for Bluetooth inactivity timeouts (no auto-reconnect from main loop —
+  // heap is too constrained for GATT discovery alongside home screen buffers)
   {
     auto& btMgr = BluetoothHIDManager::getInstance();
     btMgr.updateActivity();
-    btMgr.checkAutoReconnect(userInputDetected);
     bleRecentActivity = btMgr.hasRecentActivity();
   }
 

@@ -25,14 +25,31 @@ class ClientCallbacks : public NimBLEClientCallbacks {
     LOG_ERR("BT", "Client disconnected: %s (reason: %d)",
             pClient->getPeerAddress().toString().c_str(), reason);
   }
+
+  // Accept connection parameter updates from peripherals.
+  // HID devices request params they need — rejecting causes disconnect.
+  bool onConnParamsUpdateRequest(NimBLEClient*, const ble_gap_upd_params* params) override {
+    LOG_INF("BT", "Conn param update: interval=%d-%d latency=%d timeout=%d",
+            params->itvl_min, params->itvl_max, params->latency, params->supervision_timeout);
+    return true;  // Accept whatever the peripheral wants
+  }
 };
 
 // ---- Connection Methods ----
 
-bool BluetoothHIDManager::connectToDevice(const std::string& address) {
+bool BluetoothHIDManager::connectToDevice(std::string address) {
   if (!_enabled) {
-    LOG_ERR("BT", "Cannot connect: Bluetooth not enabled");
     lastError = "Bluetooth not enabled";
+    return false;
+  }
+
+  // GATT discovery + service enumeration needs ~35KB.
+  const int freeHeap = ESP.getFreeHeap();
+  if (freeHeap < 35000) {
+    char buf[48];
+    snprintf(buf, sizeof(buf), "Not enough RAM (%dKB free, need 35KB)", freeHeap / 1024);
+    lastError = buf;
+    LOG_ERR("BT", "%s", buf);
     return false;
   }
 
@@ -44,29 +61,68 @@ bool BluetoothHIDManager::connectToDevice(const std::string& address) {
   LOG_INF("BT", "Connecting to device %s", address.c_str());
 
   try {
-    NimBLEClient* pClient = NimBLEDevice::createClient();
+    // Look up the address type from NimBLE scan cache before clearing
+    NimBLEScan* pScan = NimBLEDevice::getScan();
+    uint8_t addrType = BLE_ADDR_PUBLIC;
+    {
+      const NimBLEScanResults& results = pScan->getResults();
+      for (int i = 0; i < static_cast<int>(results.getCount()); i++) {
+        const NimBLEAdvertisedDevice* dev = results.getDevice(i);
+        if (dev && dev->getAddress().toString() == address) {
+          addrType = dev->getAddress().getType();
+          LOG_INF("BT", "Found in scan cache: type=%d", addrType);
+          break;
+        }
+      }
+    }
+
+    // Free our device list
+    _discoveredDevices.clear();
+    _discoveredDevices.shrink_to_fit();
+
+    // Stop scan and free NimBLE internal scan buffers
+    if (pScan->isScanning()) pScan->stop();
+    pScan->clearResults();
+
+    // CRITICAL: Deinit+reinit NimBLE to reclaim all internal allocations
+    // from scan. This frees ~10-15KB needed for GATT discovery.
+    NimBLEDevice::deinit(false);  // false = keep bonding data
+    delay(200);
+    NimBLEDevice::init("CrossPoint");
+    NimBLEDevice::setPower(ESP_PWR_LVL_P9);
+    NimBLEDevice::setSecurityAuth(false, false, false);
+
+    LOG_INF("BT", "Heap after reinit: %d bytes free", ESP.getFreeHeap());
+
+    // Reuse existing disconnected client or create new
+    NimBLEClient* pClient = NimBLEDevice::getDisconnectedClient();
     if (!pClient) {
-      lastError = "Failed to create BLE client";
+      pClient = NimBLEDevice::createClient();
+    }
+    if (!pClient) {
+      lastError = "BLE client limit reached";
       LOG_ERR("BT", "Failed to create BLE client");
       return false;
     }
 
     static ClientCallbacks clientCallbacks;
     pClient->setClientCallbacks(&clientCallbacks);
+    // NimBLE 2.x API: timeout in MILLISECONDS (not seconds!)
+    pClient->setConnectTimeout(10000);  // 10 seconds
+    // Connection params: interval 20-30ms, latency=0, supervision timeout=6s
+    // scanInterval/scanWindow 60ms/60ms for 100% duty cycle
+    pClient->setConnectionParams(16, 24, 0, 600, 96, 96);
 
-    // Determine address type: check scan results first, fall back to public
-    uint8_t addrType = BLE_ADDR_PUBLIC;
-    for (const auto& dev : _discoveredDevices) {
-      if (dev.address == address) {
-        addrType = dev.addressType;
-        break;
-      }
-    }
+    // Connect using address + type saved from scan cache
     NimBLEAddress bleAddress(address, addrType);
+    LOG_INF("BT", "Connecting to %s (type=%d, heap=%d)...", address.c_str(), addrType, ESP.getFreeHeap());
+
     if (!pClient->connect(bleAddress)) {
-      lastError = "Connection failed";
-      LOG_ERR("BT", "Failed to connect to %s", address.c_str());
-      NimBLEDevice::deleteClient(pClient);
+      int rc = pClient->getLastError();
+      char errBuf[64];
+      snprintf(errBuf, sizeof(errBuf), "Connect failed (rc=%d)", rc);
+      lastError = errBuf;
+      LOG_ERR("BT", "%s addr=%s heap=%d", errBuf, address.c_str(), ESP.getFreeHeap());
       return false;
     }
 
@@ -200,11 +256,9 @@ bool BluetoothHIDManager::disconnectFromDevice(const std::string& address) {
       }
     }
 
-    // Erase from vector first, then delete client to avoid use-after-free
+    // Erase from our tracking vector. Don't delete the NimBLE client —
+    // it stays in disconnected pool and will be reused on next connect.
     _connectedDevices.erase(it);
-    if (client) {
-      NimBLEDevice::deleteClient(client);
-    }
     LOG_INF("BT", "Disconnected from %s", address.c_str());
     return true;
   }

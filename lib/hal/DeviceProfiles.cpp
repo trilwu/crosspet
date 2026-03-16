@@ -131,14 +131,10 @@ bool isCommonPageTurnCode(uint8_t code) {
     // Keyboard page/navigation keys
     case KEYBOARD_PAGE_UP:
     case KEYBOARD_PAGE_DOWN:
-    case KEYBOARD_UP_ARROW:
-    case KEYBOARD_DOWN_ARROW:
     case KEYBOARD_LEFT_ARROW:
     case KEYBOARD_RIGHT_ARROW:
 
-    // Common clicker/media mappings often used by low-cost BLE remotes
-    case KEYBOARD_SPACE:
-    case KEYBOARD_ENTER:
+    // Media keys used by some remotes
     case KEYBOARD_VOLUME_UP:
     case KEYBOARD_VOLUME_DOWN:
 
@@ -153,13 +149,10 @@ bool isCommonPageTurnCode(uint8_t code) {
 
 bool mapCommonCodeToDirection(uint8_t code, bool& pageForward) {
   switch (code) {
-    // Next page
+    // Next page — only unambiguous page-turn codes
     case STANDARD_PAGE_UP:
     case KEYBOARD_PAGE_DOWN:
-    case KEYBOARD_DOWN_ARROW:
     case KEYBOARD_RIGHT_ARROW:
-    case KEYBOARD_SPACE:
-    case KEYBOARD_ENTER:
     case KEYBOARD_VOLUME_UP:
     case 0x07:
       pageForward = true;
@@ -168,13 +161,14 @@ bool mapCommonCodeToDirection(uint8_t code, bool& pageForward) {
     // Previous page
     case STANDARD_PAGE_DOWN:
     case KEYBOARD_PAGE_UP:
-    case KEYBOARD_UP_ARROW:
     case KEYBOARD_LEFT_ARROW:
     case KEYBOARD_VOLUME_DOWN:
     case 0x09:
       pageForward = false;
       return true;
 
+    // NOT mapped: ENTER (0x28), SPACE (0x2C), UP/DOWN arrows
+    // These have navigation meaning and should not be page-turn
     default:
       return false;
   }

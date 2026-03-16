@@ -101,9 +101,7 @@ void BluetoothHIDManager::checkAutoReconnect(bool userInputDetected) {
   // Remove stale disconnected clients from active list
   for (auto it = _connectedDevices.begin(); it != _connectedDevices.end();) {
     if (!it->client || !it->client->isConnected()) {
-      if (it->client) {
-        NimBLEDevice::deleteClient(it->client);
-      }
+      // Don't deleteClient — stays in disconnected pool for reuse
       it = _connectedDevices.erase(it);
     } else {
       ++it;
@@ -114,13 +112,8 @@ void BluetoothHIDManager::checkAutoReconnect(bool userInputDetected) {
     return;
   }
 
-  // Reconnect is user-driven: require button activity
-  if (!userInputDetected) {
-    return;
-  }
-
-  // Avoid reconnect storms on repeated presses
-  if (now - lastReconnectAttempt < 2000) {
+  // Avoid reconnect storms — wait 30s between attempts
+  if (now - lastReconnectAttempt < 30000) {
     return;
   }
   lastReconnectAttempt = now;
@@ -262,9 +255,9 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
       if (btn != 0xFF) {
         unsigned long now = millis();
         if ((now - device->lastInjectionTime >= 150) || (keycode != device->lastInjectedKeycode)) {
-          String buttonName = (btn == HalGPIO::BTN_DOWN) ? "PageForward" : "PageBack";
-          LOG_INF("BT", "Mapped key 0x%02X -> %s", keycode, buttonName.c_str());
-          LOG_DBG("BT", "Injecting button: %d", btn);
+          static const char* btnNames[] = {"Back", "Confirm", "Left", "Right", "Up", "Down", "Power"};
+          const char* btnName = (btn < 7) ? btnNames[btn] : "?";
+          LOG_INF("BT", "Inject: key=0x%02X -> btn=%d (%s)", keycode, btn, btnName);
           g_instance->_buttonInjector(btn);
           device->lastInjectionTime = now;
           device->lastInjectedKeycode = keycode;
@@ -339,15 +332,37 @@ uint8_t BluetoothHIDManager::mapKeycodeToButton(uint8_t keycode,
     }
   }
 
-  // Generic common-key mapping
+  // Navigation keys → map to actual device buttons
+  switch (keycode) {
+    case 0x28:  // Enter → Confirm
+      LOG_INF("BT", "Mapped Enter -> Confirm");
+      return HalGPIO::BTN_CONFIRM;
+    case 0x29:  // Escape → Back
+      LOG_INF("BT", "Mapped Escape -> Back");
+      return HalGPIO::BTN_BACK;
+    case 0x52:  // Up arrow
+      LOG_INF("BT", "Mapped Up -> Up");
+      return HalGPIO::BTN_UP;
+    case 0x51:  // Down arrow
+      LOG_INF("BT", "Mapped Down -> Down");
+      return HalGPIO::BTN_DOWN;
+    case 0x50:  // Left arrow → page back in reader, left in menus
+      LOG_INF("BT", "Mapped Left -> Left");
+      return HalGPIO::BTN_LEFT;
+    case 0x4F:  // Right arrow → page forward in reader, right in menus
+      LOG_INF("BT", "Mapped Right -> Right");
+      return HalGPIO::BTN_RIGHT;
+  }
+
+  // Generic page-turn codes (consumer control, volume, etc.)
   bool pageForward = false;
   if (DeviceProfiles::mapCommonCodeToDirection(keycode, pageForward)) {
     if (pageForward) {
-      LOG_INF("BT", "Mapped generic key 0x%02X -> PageForward", keycode);
-      return HalGPIO::BTN_DOWN;
+      LOG_INF("BT", "Mapped generic key 0x%02X -> Right (page forward)", keycode);
+      return HalGPIO::BTN_RIGHT;
     }
-    LOG_INF("BT", "Mapped generic key 0x%02X -> PageBack", keycode);
-    return HalGPIO::BTN_UP;
+    LOG_INF("BT", "Mapped generic key 0x%02X -> Left (page back)", keycode);
+    return HalGPIO::BTN_LEFT;
   }
 
   if (keycode == 0x00) {

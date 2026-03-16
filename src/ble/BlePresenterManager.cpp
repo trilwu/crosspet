@@ -2,9 +2,8 @@
 
 #include <Logging.h>
 
-// NimBLE-Arduino 2.x doesn't include esp32-hal-bt-mem.h, so btInUse() returns
-// false by default, causing Arduino to release BLE controller memory at boot.
-// This override keeps the memory reserved so NimBLE can initialize.
+// Must return true to keep BT controller memory reserved at boot.
+// NimBLE needs this memory — releasing it is permanent and cannot be reclaimed.
 extern "C" bool btInUse(void) { return true; }
 
 // Standard boot-compatible keyboard HID report descriptor (Usage Page 0x01, Usage 0x06)

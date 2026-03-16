@@ -33,6 +33,13 @@ void BluetoothSettingsActivity::onEnter() {
     // Auto-restore BLE state from settings
     if (SETTINGS.bleEnabled && !btMgr->isEnabled()) { btMgr->enable(); }
 
+    // Show bonded device info (reconnect is manual via device list)
+    if (strlen(SETTINGS.bleBondedDeviceAddr) > 0 && btMgr->getConnectedDevices().empty()) {
+      char buf[64];
+      snprintf(buf, sizeof(buf), "Paired: %s (not connected)", SETTINGS.bleBondedDeviceName);
+      lastError = buf;
+    }
+
     btMgr->setInputCallback([this](uint16_t keycode) {
       if (keycode > 0 && keycode <= 0xFF) {
         pendingLearnKey = static_cast<uint8_t>(keycode);
@@ -107,12 +114,32 @@ void BluetoothSettingsActivity::render(RenderLock&& lock) {
   }
 }
 
+// Menu actions — indices are dynamic based on whether bonded device exists
+enum MenuAction { TOGGLE_BT = 0, RECONNECT, SCAN, LEARN_KEYS, CLEAR_KEYS, FORGET_DEVICE };
+
+// Build dynamic menu: toggle + optional reconnect + scan + learn + clear + optional forget
+static int buildMenuActions(bool hasBonded, bool isConnected, MenuAction* actions, int maxActions) {
+  int n = 0;
+  actions[n++] = TOGGLE_BT;
+  if (hasBonded && !isConnected) actions[n++] = RECONNECT;
+  actions[n++] = SCAN;
+  actions[n++] = LEARN_KEYS;
+  actions[n++] = CLEAR_KEYS;
+  if (hasBonded) actions[n++] = FORGET_DEVICE;
+  return n;
+}
+
 void BluetoothSettingsActivity::handleMainMenuInput() {
+  const bool hasBonded = strlen(SETTINGS.bleBondedDeviceAddr) > 0;
+  const bool isConnected = btMgr && !btMgr->getConnectedDevices().empty();
+  MenuAction actions[6];
+  const int menuCount = buildMenuActions(hasBonded, isConnected, actions, 6);
+
   if (mappedInput.wasPressed(MappedInputManager::Button::Up)) {
-    selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : 3;
+    selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : menuCount - 1;
     requestUpdate();
   } else if (mappedInput.wasPressed(MappedInputManager::Button::Down)) {
-    selectedIndex = (selectedIndex < 3) ? selectedIndex + 1 : 0;
+    selectedIndex = (selectedIndex < menuCount - 1) ? selectedIndex + 1 : 0;
     requestUpdate();
   }
 
@@ -120,67 +147,71 @@ void BluetoothSettingsActivity::handleMainMenuInput() {
 
   if (!btMgr) {
     lastError = "BLE not available";
-    LOG_ERR("BT", "BLE manager not available");
     requestUpdate();
     return;
   }
 
+  if (selectedIndex >= menuCount) { requestUpdate(); return; }
+  MenuAction action = actions[selectedIndex];
+
   try {
-    if (selectedIndex == 0) {
-      // Toggle Bluetooth on/off
-      if (btMgr->isEnabled()) {
-        LOG_INF("BT", "Disabling Bluetooth...");
-        if (btMgr->disable()) {
-          lastError = "Bluetooth disabled";
-          SETTINGS.bleEnabled = 0; SETTINGS.saveToFile();
+    switch (action) {
+      case TOGGLE_BT:
+        if (btMgr->isEnabled()) {
+          if (btMgr->disable()) { lastError = "Bluetooth disabled"; SETTINGS.bleEnabled = 0; SETTINGS.saveToFile(); }
+          else lastError = "Failed to disable";
         } else {
-          lastError = "Failed to disable";
+          if (btMgr->enable()) { lastError = "Bluetooth enabled"; SETTINGS.bleEnabled = 1; SETTINGS.saveToFile(); }
+          else lastError = btMgr->lastError.empty() ? "Failed to enable" : btMgr->lastError;
         }
-      } else {
-        LOG_INF("BT", "Enabling Bluetooth...");
-        if (btMgr->enable()) {
-          lastError = "Bluetooth enabled";
-          SETTINGS.bleEnabled = 1; SETTINGS.saveToFile();
+        break;
+      case RECONNECT: {
+        if (!btMgr->isEnabled()) { lastError = "Enable BT first"; break; }
+        lastError = "Reconnecting...";
+        requestUpdateAndWait();
+        if (btMgr->connectToDevice(std::string(SETTINGS.bleBondedDeviceAddr))) {
+          lastError = std::string("Connected to ") + SETTINGS.bleBondedDeviceName;
         } else {
-          lastError = btMgr->lastError.empty() ? "Failed to enable" : btMgr->lastError;
+          lastError = btMgr->lastError.empty() ? "Reconnect failed" : btMgr->lastError;
         }
+        break;
       }
-    } else if (selectedIndex == 1) {
-      // Scan for devices
-      if (btMgr->isEnabled()) {
-        btMgr->startScan(10000);
-        lastScanTime = millis();
-        viewMode = ViewMode::DEVICE_LIST;
-        selectedIndex = 0;
-        lastError = "";
-      } else {
-        lastError = "Enable BT first";
-      }
-    } else if (selectedIndex == 2) {
-      // Learn page-turn keys
-      if (!btMgr->isEnabled()) {
-        lastError = "Enable BT first";
-      } else if (btMgr->getConnectedDevices().empty()) {
-        lastError = "Connect a remote first";
-      } else {
-        viewMode = ViewMode::LEARN_KEYS;
-        learnStep = LearnStep::WAIT_PREV;
-        pendingLearnKey = 0;
-        learnedPrevKey = 0;
-        learnedNextKey = 0;
-        lastError = "Press PREVIOUS PAGE button";
-      }
-    } else if (selectedIndex == 3) {
-      // Clear learned key mapping
-      DeviceProfiles::clearCustomProfile();
-      lastError = "Learned mapping cleared";
+      case SCAN:
+        if (btMgr->isEnabled()) {
+          btMgr->startScan(10000);
+          lastScanTime = millis();
+          viewMode = ViewMode::DEVICE_LIST;
+          selectedIndex = 0;
+          lastError = "";
+        } else { lastError = "Enable BT first"; }
+        break;
+      case LEARN_KEYS:
+        if (!btMgr->isEnabled()) { lastError = "Enable BT first"; }
+        else if (btMgr->getConnectedDevices().empty()) { lastError = "Connect a remote first"; }
+        else {
+          viewMode = ViewMode::LEARN_KEYS;
+          learnStep = LearnStep::WAIT_PREV;
+          pendingLearnKey = 0; learnedPrevKey = 0; learnedNextKey = 0;
+          lastError = "Press PREVIOUS PAGE button";
+        }
+        break;
+      case CLEAR_KEYS:
+        DeviceProfiles::clearCustomProfile();
+        lastError = "Learned mapping cleared";
+        break;
+      case FORGET_DEVICE:
+        memset(SETTINGS.bleBondedDeviceAddr, 0, sizeof(SETTINGS.bleBondedDeviceAddr));
+        memset(SETTINGS.bleBondedDeviceName, 0, sizeof(SETTINGS.bleBondedDeviceName));
+        SETTINGS.bleEnabled = 0;
+        SETTINGS.saveToFile();
+        if (btMgr->isEnabled()) btMgr->disable();
+        lastError = "Device forgotten";
+        break;
     }
   } catch (const std::exception& e) {
     lastError = std::string("Error: ") + e.what();
-    LOG_ERR("BT", "Menu action error: %s", e.what());
   } catch (...) {
     lastError = "Unknown error";
-    LOG_ERR("BT", "Unknown error in main menu action");
   }
 
   requestUpdate();
@@ -195,39 +226,56 @@ void BluetoothSettingsActivity::renderMainMenu() {
 
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_BLE_REMOTE));
 
-  // Status line below header
-  std::string statusLine;
+  // Status line below header — includes free heap for debugging
+  char statusBuf[80];
   if (btMgr) {
     auto connDevices = btMgr->getConnectedDevices();
     if (btMgr->isEnabled()) {
       if (!connDevices.empty()) {
-        char buf[64];
-        snprintf(buf, sizeof(buf), "Enabled, %zu device(s) connected", connDevices.size());
-        statusLine = buf;
+        snprintf(statusBuf, sizeof(statusBuf), "Connected (%zu) | %dKB free", connDevices.size(), ESP.getFreeHeap() / 1024);
       } else {
-        statusLine = "Enabled, no devices connected";
+        snprintf(statusBuf, sizeof(statusBuf), "Enabled, disconnected | %dKB free", ESP.getFreeHeap() / 1024);
       }
     } else {
-      statusLine = "Disabled";
+      snprintf(statusBuf, sizeof(statusBuf), "Disabled | %dKB free", ESP.getFreeHeap() / 1024);
     }
   } else {
-    statusLine = "Error initializing Bluetooth";
+    snprintf(statusBuf, sizeof(statusBuf), "BT error | %dKB free", ESP.getFreeHeap() / 1024);
   }
+  std::string statusLine = statusBuf;
 
   GUI.drawSubHeader(renderer, Rect{0, metrics.topPadding + metrics.headerHeight, pageWidth, metrics.tabBarHeight},
                     statusLine.c_str());
 
-  // Build menu items dynamically (Enable/Disable label depends on BT state)
-  const char* toggleLabel = (btMgr && btMgr->isEnabled()) ? "Disable Bluetooth" : "Enable Bluetooth";
-  std::vector<std::string> itemLabels = {toggleLabel, "Scan for Devices", "Learn Page-Turn Keys",
-                                         "Clear Learned Keys"};
+  // Build dynamic menu labels matching handleMainMenuInput actions
+  const bool hasBonded = strlen(SETTINGS.bleBondedDeviceAddr) > 0;
+  const bool isConnected = btMgr && !btMgr->getConnectedDevices().empty();
+  MenuAction actions[6];
+  const int menuCount = buildMenuActions(hasBonded, isConnected, actions, 6);
+
+  std::vector<std::string> itemLabels;
+  for (int i = 0; i < menuCount; i++) {
+    switch (actions[i]) {
+      case TOGGLE_BT: itemLabels.push_back((btMgr && btMgr->isEnabled()) ? "Disable Bluetooth" : "Enable Bluetooth"); break;
+      case RECONNECT: {
+        char buf[48];
+        snprintf(buf, sizeof(buf), "Reconnect: %s", SETTINGS.bleBondedDeviceName);
+        itemLabels.push_back(buf);
+        break;
+      }
+      case SCAN: itemLabels.push_back("Scan for Devices"); break;
+      case LEARN_KEYS: itemLabels.push_back("Learn Page-Turn Keys"); break;
+      case CLEAR_KEYS: itemLabels.push_back("Clear Learned Keys"); break;
+      case FORGET_DEVICE: itemLabels.push_back("Forget Paired Device"); break;
+    }
+  }
 
   GUI.drawList(
       renderer,
       Rect{0, metrics.topPadding + metrics.headerHeight + metrics.tabBarHeight + metrics.verticalSpacing, pageWidth,
            pageHeight - (metrics.topPadding + metrics.headerHeight + metrics.tabBarHeight + metrics.buttonHintsHeight +
                          metrics.verticalSpacing * 2)},
-      4, selectedIndex, [&itemLabels](int index) { return itemLabels[index]; }, nullptr, nullptr,
+      menuCount, selectedIndex, [&itemLabels](int index) { return itemLabels[index]; }, nullptr, nullptr,
       [this](int /*i*/) { return lastError; }, true);
 
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_LEFT), tr(STR_DIR_RIGHT));

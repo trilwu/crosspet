@@ -69,7 +69,8 @@ bool BluetoothHIDManager::enable() {
   try {
     NimBLEDevice::init("CrossPoint");
     NimBLEDevice::setPower(ESP_PWR_LVL_P9);
-    NimBLEDevice::setSecurityAuth(true, false, true);
+    // No bonding/MITM/SC — most BLE HID remotes use "Just Works" pairing
+    NimBLEDevice::setSecurityAuth(false, false, false);
 
     _enabled = true;
     lastError = "";
