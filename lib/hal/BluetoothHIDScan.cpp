@@ -38,6 +38,9 @@ void BluetoothHIDManager::startScan(uint32_t durationMs) {
     return;
   }
 
+  // Cap scan duration to 5s — crowded environments can overwhelm heap in 10s
+  if (durationMs > 5000) durationMs = 5000;
+
   LOG_INF("BT", "Starting BLE scan for %lu ms", durationMs);
   _scanning = true;
   _discoveredDevices.clear();
@@ -50,27 +53,25 @@ void BluetoothHIDManager::startScan(uint32_t durationMs) {
       return;
     }
 
-    LOG_DBG("BT", "Setting up scan callbacks...");
     pScan->setScanCallbacks(&scanCallbacks, false);
     pScan->setActiveScan(true);
     pScan->setInterval(100);
     pScan->setWindow(99);
 
-    LOG_DBG("BT", "Starting continuous scan (duration: 0 = continuous)...");
     bool started = pScan->start(0, false);
-
     if (!started) {
       LOG_ERR("BT", "Failed to start scan!");
       _scanning = false;
       return;
     }
 
-    LOG_DBG("BT", "Scan started, waiting %lu ms...", durationMs);
-    delay(durationMs);
+    // Blocking wait — yields to FreeRTOS to prevent watchdog timeout
+    const unsigned long scanEnd = millis() + durationMs;
+    while (millis() < scanEnd) {
+      delay(100);
+    }
 
-    LOG_DBG("BT", "Stopping scan after %lu ms...", durationMs);
     pScan->stop();
-
     _scanning = false;
     LOG_INF("BT", "Scan complete, found %d devices", _discoveredDevices.size());
   } catch (const std::exception& e) {
@@ -101,9 +102,7 @@ void BluetoothHIDManager::onScanResult(NimBLEAdvertisedDevice* advertisedDevice)
   if (!advertisedDevice) return;
 
   std::string address = advertisedDevice->getAddress().toString();
-  std::string name = advertisedDevice->getName();
   int rssi = advertisedDevice->getRSSI();
-
   bool isHID = advertisedDevice->isAdvertisingService(NimBLEUUID(HID_SERVICE_UUID));
 
   // Update existing entry if found
@@ -115,7 +114,24 @@ void BluetoothHIDManager::onScanResult(NimBLEAdvertisedDevice* advertisedDevice)
     }
   }
 
-  // Add new device
+  // Cap at 20 devices to prevent heap exhaustion in crowded BLE environments
+  // Prioritize HID devices — always add those, drop non-HID if at cap
+  constexpr size_t MAX_DEVICES = 20;
+  if (_discoveredDevices.size() >= MAX_DEVICES) {
+    if (!isHID) return;  // Skip non-HID devices when full
+    // Find and remove a non-HID device to make room for this HID device
+    bool replaced = false;
+    for (auto it = _discoveredDevices.begin(); it != _discoveredDevices.end(); ++it) {
+      if (!it->isHID) {
+        _discoveredDevices.erase(it);
+        replaced = true;
+        break;
+      }
+    }
+    if (!replaced) return;  // All slots are HID — skip
+  }
+
+  std::string name = advertisedDevice->getName();
   BluetoothDevice device;
   device.address = address;
   device.name = name.empty() ? "Unknown" : name;
@@ -124,11 +140,6 @@ void BluetoothHIDManager::onScanResult(NimBLEAdvertisedDevice* advertisedDevice)
   device.addressType = advertisedDevice->getAddress().getType();
 
   _discoveredDevices.push_back(device);
-
-  const std::string prefix = (address.size() >= 8) ? address.substr(0, 8) : address;
-  LOG_INF("BT", "Scan device: %s (%s) prefix=%s RSSI:%d HID:%d",
-    device.name.c_str(), device.address.c_str(), prefix.c_str(), rssi, isHID);
-
-  LOG_DBG("BT", "Found device: %s (%s) RSSI:%d HID:%d",
-          device.name.c_str(), device.address.c_str(), rssi, isHID);
+  LOG_INF("BT", "[%d] %s (%s) RSSI:%d HID:%d",
+          _discoveredDevices.size(), device.name.c_str(), address.c_str(), rssi, isHID);
 }
