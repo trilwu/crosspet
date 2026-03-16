@@ -223,6 +223,9 @@ class CrossPointSettings {
   // Default 1 (dark) — closer to the bold BW look users expect from e-ink
   uint8_t textDarkness = 1;
 
+  // Developer: show free heap in header (0=off, 1=on)
+  uint8_t showFreeHeap = 0;
+
   // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
   uint8_t weatherCity = 0;
   // Temperature display unit: 0=Celsius, 1=Fahrenheit
