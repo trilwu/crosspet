@@ -17,7 +17,7 @@
 
 void ActivityManager::begin() {
   xTaskCreate(&renderTaskTrampoline, "ActivityManagerRender",
-              8192,              // Stack size (8KB — sufficient for all render paths)
+              12288,             // Stack size (12KB needed for complex render paths)
               this,              // Parameters
               1,                 // Priority
               &renderTaskHandle  // Task handle

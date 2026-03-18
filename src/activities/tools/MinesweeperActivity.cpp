@@ -81,8 +81,7 @@ const char* MinesweeperActivity::difficultyLabel() const {
   return "";
 }
 
-void MinesweeperActivity::onEnter() {
-  Activity::onEnter();
+void MinesweeperActivity::initGame() {
   mineCount = MINE_COUNTS[(int)difficulty];
   memset(grid, 0, sizeof(grid));
   for (int r = 0; r < ROWS; r++)
@@ -98,6 +97,11 @@ void MinesweeperActivity::onEnter() {
   requestUpdate();
 }
 
+void MinesweeperActivity::onEnter() {
+  Activity::onEnter();
+  initGame();
+}
+
 void MinesweeperActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
     finish();
@@ -107,7 +111,7 @@ void MinesweeperActivity::loop() {
   // Game over / won: Confirm = new game, Left/Right = difficulty
   if (gameOver || won) {
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-      onEnter();
+      initGame();
       return;
     }
     if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {

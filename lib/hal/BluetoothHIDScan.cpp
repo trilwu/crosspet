@@ -42,7 +42,7 @@ void BluetoothHIDManager::startScan(uint32_t durationMs) {
   // Cap scan duration to 5s — crowded environments can overwhelm heap in 10s
   if (durationMs > 5000) durationMs = 5000;
 
-  LOG_INF("BT", "Starting BLE scan for %lu ms", durationMs);
+  LOG_INF("BT", "Starting BLE scan. Free heap: %d bytes", ESP.getFreeHeap());
   _scanning = true;
   _discoveredDevices.clear();
 

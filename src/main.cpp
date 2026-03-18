@@ -266,7 +266,7 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
-  // Disable Bluetooth before deep sleep to save power
+  // Disable BLE before deep sleep to save power
   {
     auto& btMgr = BluetoothHIDManager::getInstance();
     if (btMgr.isEnabled()) {
@@ -418,16 +418,13 @@ void setup() {
   PET_MANAGER.load();
   PET_MANAGER.tick();
 
-  // Initialize Bluetooth HID button injection
+  // Initialize BLE HID button injection (lazy — BLE not enabled until user opens settings)
   {
     auto& btMgr = BluetoothHIDManager::getInstance();
     btMgr.setButtonInjector([](uint8_t buttonIndex) {
       gpio.injectButtonPress(buttonIndex);
     });
     btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName);
-    // Don't auto-enable BLE on boot — NimBLE stack uses ~40KB heap which
-    // combined with home screen cover buffer (48KB) leaves too little for
-    // GATT discovery during reconnect. User enables via Bluetooth settings.
   }
 
   switch (gpio.getWakeupReason()) {
@@ -498,16 +495,8 @@ void loop() {
 
   gpio.update();
 
-  const bool userInputDetected = gpio.wasAnyPressed() || gpio.wasAnyReleased();
-  bool bleRecentActivity = false;
-
-  // Check for Bluetooth inactivity timeouts (no auto-reconnect from main loop —
-  // heap is too constrained for GATT discovery alongside home screen buffers)
-  {
-    auto& btMgr = BluetoothHIDManager::getInstance();
-    btMgr.updateActivity();
-    bleRecentActivity = btMgr.hasRecentActivity();
-  }
+  // Check BLE inactivity timeout (auto-disable after 5 min idle)
+  BluetoothHIDManager::getInstance().updateActivity();
 
   renderer.setFadingFix(SETTINGS.fadingFix);
   {
@@ -547,7 +536,7 @@ void loop() {
 
   // Check for any user activity (button press or release) or active background work
   static unsigned long lastActivityTime = millis();
-  if (userInputDetected || bleRecentActivity || activityManager.preventAutoSleep()) {
+  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep()) {
     lastActivityTime = millis();         // Reset inactivity timer
     powerManager.setPowerSaving(false);  // Restore normal CPU frequency on user activity
   }

@@ -119,6 +119,11 @@ void DailyQuoteActivity::onEnter() {
   requestUpdate();
 }
 
+void DailyQuoteActivity::onExit() {
+  Activity::onExit();
+  quotes.clear();
+}
+
 void DailyQuoteActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
     finish();

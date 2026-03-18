@@ -10,6 +10,8 @@
 
 #include <memory>
 
+#include <BluetoothHIDManager.h>
+
 #include "CrossPointSettings.h"
 #include "util/PowerButtonClickDetector.h"
 #include "pet/PetManager.h"
@@ -951,8 +953,11 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
 void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int orientedMarginTop,
                                         const int orientedMarginRight, const int orientedMarginBottom,
                                         const int orientedMarginLeft) {
+  // Disable AA when BLE is active to save ~48KB heap (no storeBwBuffer allocation)
+  const bool aaEnabled = SETTINGS.textAntiAliasing && !BluetoothHIDManager::getInstance().isEnabled();
+
   // Force special handling for pages with images when anti-aliasing is on
-  bool imagePageWithAA = page->hasImages() && SETTINGS.textAntiAliasing;
+  bool imagePageWithAA = page->hasImages() && aaEnabled;
 
   page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
   renderStatusBar();
@@ -986,14 +991,14 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderer.displayBuffer(HalDisplay::FAST_REFRESH);
     } else {
       // Fallback when bounding box unavailable: AA needs FAST_REFRESH to avoid ghosting
-      if (SETTINGS.textAntiAliasing) {
+      if (aaEnabled) {
         renderer.displayBuffer(HalDisplay::FAST_REFRESH);
       } else {
         renderer.displayBuffer(HalDisplay::HALF_REFRESH);
       }
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
-  } else if (SETTINGS.textAntiAliasing) {
+  } else if (aaEnabled) {
     // Anti-aliasing on: always use FAST_REFRESH for BW pass.
     // HALF_REFRESH sets e-ink particles too firmly, preventing the subsequent
     // grayscale LUT from adjusting them — causing ghost artifacts on next page.
@@ -1014,30 +1019,24 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
     ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
   }
 
-  // Save bw buffer to reset buffer state after grayscale data sync
-  renderer.storeBwBuffer();
+  // Grayscale AA rendering — storeBwBuffer allocates ~48KB, only do when AA active
+  if (aaEnabled) {
+    renderer.storeBwBuffer();
 
-  // grayscale rendering
-  // TODO: Only do this if font supports it
-  if (SETTINGS.textAntiAliasing) {
     renderer.clearScreen(0x00);
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_LSB);
     page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
     renderer.copyGrayscaleLsbBuffers();
 
-    // Render and copy to MSB buffer
     renderer.clearScreen(0x00);
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_MSB);
     page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
     renderer.copyGrayscaleMsbBuffers();
 
-    // display grayscale part
     renderer.displayGrayBuffer();
     renderer.setRenderMode(GfxRenderer::BW);
+    renderer.restoreBwBuffer();
   }
-
-  // restore the bw data
-  renderer.restoreBwBuffer();
 }
 
 void EpubReaderActivity::renderStatusBar() const {

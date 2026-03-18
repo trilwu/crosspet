@@ -462,13 +462,14 @@ int WeatherActivity::silentRefresh() {
 }
 
 void WeatherActivity::onExit() {
+  Activity::onExit();
+
   SETTINGS.weatherCity = selectedCity;
   SETTINGS.saveToFile();
   WiFi.disconnect(false);
   delay(100);
   WiFi.mode(WIFI_OFF);
   delay(100);
-  Activity::onExit();
 }
 
 void WeatherActivity::loop() {

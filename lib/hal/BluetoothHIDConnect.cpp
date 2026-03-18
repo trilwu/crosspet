@@ -76,6 +76,15 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
       }
     }
 
+    // Extract device name before clearing scan results
+    std::string deviceName;
+    for (const auto& dev : _discoveredDevices) {
+      if (dev.address == address) {
+        deviceName = dev.name;
+        break;
+      }
+    }
+
     // Free our device list
     _discoveredDevices.clear();
     _discoveredDevices.shrink_to_fit();
@@ -193,19 +202,12 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
     connDev.lastActivityTime = millis();
     connDev.wasConnected = true;
 
-    // Resolve device name from scan results
-    bool foundInScan = false;
-    for (const auto& dev : _discoveredDevices) {
-      if (dev.address == address) {
-        connDev.name = dev.name;
-        foundInScan = true;
-        LOG_INF("BT", "Device found in scan results: %s (%s)", dev.name.c_str(), address.c_str());
-        break;
-      }
-    }
-
-    if (!foundInScan) {
-      LOG_INF("BT", "Device not in scan results (may be previously paired): %s", address.c_str());
+    // Use device name extracted before scan results were cleared
+    if (!deviceName.empty()) {
+      connDev.name = deviceName;
+      LOG_INF("BT", "Device name from scan: %s (%s)", deviceName.c_str(), address.c_str());
+    } else {
+      LOG_INF("BT", "Device name unknown (may be previously paired): %s", address.c_str());
     }
 
     // Match device profile

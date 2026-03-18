@@ -146,6 +146,9 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
   }
   LOG_DBG("BT", "HID Report (%d bytes): %s", length, hexStr);
 
+  // Protect _connectedDevices — this callback runs on NimBLE host task
+  portENTER_CRITICAL(&g_instance->_devicesMux);
+
   // Resolve the sending device
   ConnectedDevice* device = nullptr;
   if (pChar && pChar->getRemoteService()) {
@@ -156,7 +159,10 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
     }
   }
 
-  if (!device) return;
+  if (!device) {
+    portEXIT_CRITICAL(&g_instance->_devicesMux);
+    return;
+  }
 
   // Refresh activity timestamp
   device->lastActivityTime = millis();
@@ -275,6 +281,8 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
 
   device->lastButtonState = isPressed;
   device->lastHIDKeycode = keycode;
+
+  portEXIT_CRITICAL(&g_instance->_devicesMux);
 }
 
 // ---- HID Report Parsing ----

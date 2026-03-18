@@ -22,6 +22,7 @@ class DailyQuoteActivity final : public Activity {
       : Activity("DailyQuote", renderer, mappedInput) {}
 
   void onEnter() override;
+  void onExit() override;
   void loop() override;
   void render(RenderLock&&) override;
   // No preventAutoSleep — static display, device should sleep normally

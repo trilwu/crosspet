@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/semphr.h>
 #include <string>
 #include <vector>
 #include <functional>
@@ -94,6 +96,7 @@ private:
 
   bool _enabled = false;
   bool _scanning = false;
+  bool _nimbleOwnedByUs = false;  // true if we called NimBLEDevice::init()
   std::vector<BluetoothDevice> _discoveredDevices;
   std::vector<ConnectedDevice> _connectedDevices;
   std::function<void(uint16_t)> _inputCallback;
@@ -104,4 +107,7 @@ private:
   // Inactivity timeout (milliseconds)
   static constexpr unsigned long INACTIVITY_TIMEOUT_MS = 300000;  // 5 minutes
   unsigned long lastMaintenanceCheck = 0;
+
+  // Spinlock protecting _connectedDevices — NimBLE callbacks run on host task
+  portMUX_TYPE _devicesMux = portMUX_INITIALIZER_UNLOCKED;
 };

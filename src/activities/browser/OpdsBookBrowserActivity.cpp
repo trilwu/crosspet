@@ -39,8 +39,11 @@ void OpdsBookBrowserActivity::onEnter() {
 void OpdsBookBrowserActivity::onExit() {
   Activity::onExit();
 
-  // Turn off WiFi when exiting
+  // Graceful WiFi teardown (disconnect sends deauth frame to AP)
+  WiFi.disconnect(false);
+  delay(30);
   WiFi.mode(WIFI_OFF);
+  delay(30);
 
   entries.clear();
   navigationHistory.clear();

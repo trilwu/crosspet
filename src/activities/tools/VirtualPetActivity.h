@@ -19,6 +19,7 @@ class VirtualPetActivity final : public Activity {
       : Activity("Virtual Pet", renderer, mappedInput) {}
 
   void onEnter() override;
+  void onExit() override;
   void loop() override;
   void render(RenderLock&&) override;
   bool skipLoopDelay() override { return animActive(); }

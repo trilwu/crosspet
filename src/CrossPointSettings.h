@@ -223,6 +223,9 @@ class CrossPointSettings {
   // Default 1 (dark) — closer to the bold BW look users expect from e-ink
   uint8_t textDarkness = 1;
 
+  // Developer: show free heap in header (0=off, 1=on)
+  uint8_t showFreeHeap = 0;
+
   // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
   uint8_t weatherCity = 0;
   // Temperature display unit: 0=Celsius, 1=Fahrenheit
@@ -241,8 +244,8 @@ class CrossPointSettings {
   uint8_t sleepRefreshInterval = REFRESH_OFF;
 
   // BLE HID remote settings
-  uint8_t bleEnabled = 0;                    // 0=disabled, 1=enabled on startup
-  char bleBondedDeviceAddr[18] = "";         // BLE bonded device MAC address (e.g. "aa:bb:cc:dd:ee:ff")
+  uint8_t bleEnabled = 0;                    // 0=disabled, 1=auto-connect on startup
+  char bleBondedDeviceAddr[18] = "";         // BLE bonded device MAC address
   char bleBondedDeviceName[32] = "";         // BLE bonded device display name
   uint8_t bleBondedDeviceAddrType = 0;       // BLE address type (0=public, 1=random)
 

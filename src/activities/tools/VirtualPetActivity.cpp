@@ -19,6 +19,11 @@ void VirtualPetActivity::onEnter() {
   requestUpdate();
 }
 
+void VirtualPetActivity::onExit() {
+  PET_MANAGER.save();
+  Activity::onExit();
+}
+
 void VirtualPetActivity::loop() {
   // Type selection mode: handle Up/Down/Confirm/Back inline
   if (screenMode == ScreenMode::TYPE_SELECT) {

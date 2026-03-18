@@ -105,6 +105,7 @@ def parse_yaml_file(filepath: str) -> Dict[str, str]:
 
 def load_translations(
     translations_dir: str,
+    language_filter: List[str] = None,
 ) -> Tuple[List[str], List[str], List[str], Dict[str, List[str]]]:
     """
     Read every YAML file in *translations_dir* and return:
@@ -113,7 +114,8 @@ def load_translations(
         string_keys      ordered list of STR_* keys (from English)
         translations     {key: [translation_per_language]}
 
-    English is always first;
+    English is always first.
+    If language_filter is set, only include those language codes (EN is always included).
     """
     yaml_dir = Path(translations_dir)
     if not yaml_dir.is_dir():
@@ -137,6 +139,16 @@ def load_translations(
 
     if english_file is None:
         raise ValueError("No YAML file with _language_code: EN found")
+
+    # Filter languages if requested (EN is always kept)
+    if language_filter:
+        allowed = {c.upper() for c in language_filter} | {"EN"}
+        filtered = {name: data for name, data in parsed.items()
+                    if data.get("_language_code", "").upper() in allowed}
+        skipped = len(parsed) - len(filtered)
+        if skipped:
+            print(f"  Language filter active: keeping {sorted(allowed)}, skipped {skipped} languages")
+        parsed = filtered
 
     # Order: English first, then by _order metadata (falls back to filename)
     def sort_key(fname: str) -> Tuple[int, int, str]:
@@ -614,8 +626,15 @@ def main(translations_dir=None, output_dir=None) -> None:
     print()
 
     try:
+        # Optional language filter: set I18N_LANGUAGES="EN,VI" to build with fewer languages
+        lang_filter = None
+        lang_env = os.environ.get("I18N_LANGUAGES", "")
+        if lang_env:
+            lang_filter = [c.strip() for c in lang_env.split(",") if c.strip()]
+            print(f"I18N_LANGUAGES={lang_env}")
+
         languages, language_names, string_keys, translations = load_translations(
-            translations_dir
+            translations_dir, language_filter=lang_filter
         )
 
         out = Path(output_dir)

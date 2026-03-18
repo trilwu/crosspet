@@ -94,6 +94,7 @@ void BluetoothSettingsActivity::handleDeviceListInput() {
       btMgr->setBondedDevice(device.address, device.name);
       strncpy(SETTINGS.bleBondedDeviceAddr, device.address.c_str(), sizeof(SETTINGS.bleBondedDeviceAddr) - 1);
       strncpy(SETTINGS.bleBondedDeviceName, device.name.c_str(), sizeof(SETTINGS.bleBondedDeviceName) - 1);
+      SETTINGS.bleBondedDeviceAddrType = device.addressType;
       SETTINGS.bleEnabled = 1;
       SETTINGS.saveToFile();
       lastError = std::string("Connected to ") + device.name;

@@ -49,7 +49,8 @@ bool BluetoothHIDManager::enable() {
   }
 
   // Guard: prevent conflict with BlePresenterManager or other NimBLE users
-  if (NimBLEDevice::isInitialized()) {
+  // Allow re-enable if we previously initialized NimBLE (disable() keeps it alive)
+  if (NimBLEDevice::isInitialized() && !_nimbleOwnedByUs) {
     LOG_ERR("BT", "NimBLE already initialized by another module — aborting");
     lastError = "BLE radio in use (Presenter?)";
     return false;
@@ -67,15 +68,24 @@ bool BluetoothHIDManager::enable() {
   }
 
   try {
-    NimBLEDevice::init("CrossPoint");
-    NimBLEDevice::setPower(ESP_PWR_LVL_P9);
-    // No bonding/MITM/SC — most BLE HID remotes use "Just Works" pairing
-    NimBLEDevice::setSecurityAuth(false, false, false);
+    if (!_nimbleOwnedByUs) {
+      // First-time init
+      LOG_INF("BT", "Heap before NimBLE init: %d bytes free", ESP.getFreeHeap());
+      NimBLEDevice::init("CrossPoint");
+      LOG_INF("BT", "Heap after NimBLE init: %d bytes free (delta: %dKB)",
+              ESP.getFreeHeap(), (int)(ESP.getFreeHeap()) / 1024);
+      NimBLEDevice::setPower(ESP_PWR_LVL_P9);
+      // No bonding/MITM/SC — most BLE HID remotes use "Just Works" pairing
+      NimBLEDevice::setSecurityAuth(false, false, false);
+      _nimbleOwnedByUs = true;
+    } else {
+      LOG_INF("BT", "Re-enabling with existing NimBLE stack. Free heap: %d bytes", ESP.getFreeHeap());
+    }
 
     _enabled = true;
     lastError = "";
 
-    LOG_INF("BT", "Bluetooth enabled successfully");
+    LOG_INF("BT", "Bluetooth enabled. Free heap: %d bytes", ESP.getFreeHeap());
     loadState();
     return true;
   } catch (const std::exception& e) {
@@ -103,17 +113,21 @@ bool BluetoothHIDManager::disable() {
     stopScan();
   }
 
-  // Disconnect all devices
+  // Disconnect all devices but keep NimBLE initialized.
+  // ESP32-C3 leaks ~8KB per deinit/reinit cycle — never call deinit().
+  // BLE controller memory stays reserved until device restart.
   while (!_connectedDevices.empty()) {
     disconnectFromDevice(_connectedDevices[0].address);
   }
 
-  NimBLEDevice::deinit(true);
+  // Stop advertising/scanning but keep NimBLE stack alive
+  NimBLEDevice::getScan()->stop();
+  NimBLEDevice::getScan()->clearResults();
 
   _enabled = false;
   lastError = "";
 
-  LOG_INF("BT", "Bluetooth disabled");
+  LOG_INF("BT", "Bluetooth disabled (NimBLE kept alive to avoid heap leak)");
   return true;
 }
 

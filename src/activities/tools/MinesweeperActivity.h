@@ -40,6 +40,7 @@ class MinesweeperActivity final : public Activity {
   int countAdjacentFlags(int row, int col) const;
   bool checkWin() const;
   const char* difficultyLabel() const;
+  void initGame();
 
  public:
   explicit MinesweeperActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)

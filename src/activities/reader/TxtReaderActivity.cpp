@@ -6,6 +6,8 @@
 #include <Serialization.h>
 #include <Utf8.h>
 
+#include <BluetoothHIDManager.h>
+
 #include "CrossPointSettings.h"
 #include "util/PowerButtonClickDetector.h"
 #include "pet/PetManager.h"
@@ -384,7 +386,8 @@ void TxtReaderActivity::renderPage() {
 
   ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
 
-  if (SETTINGS.textAntiAliasing) {
+  // Disable AA when BLE is active to save ~48KB heap
+  if (SETTINGS.textAntiAliasing && !BluetoothHIDManager::getInstance().isEnabled()) {
     ReaderUtils::renderAntiAliased(renderer, [&renderLines]() { renderLines(); });
   }
 }
