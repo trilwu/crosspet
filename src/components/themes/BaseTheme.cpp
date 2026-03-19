@@ -241,6 +241,14 @@ void BaseTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCount, 
 
     // Draw name
     auto itemName = rowTitle(i);
+
+    // Section header: small uppercase text with top padding, no highlight
+    if (!itemName.empty() && itemName[0] == '\x01') {
+      renderer.drawText(SMALL_FONT_ID, rect.x + BaseMetrics::values.contentSidePadding, itemY + 14,
+                         itemName.c_str() + 1, true);
+      continue;
+    }
+
     auto font = (rowSubtitle != nullptr) ? UI_12_FONT_ID : UI_10_FONT_ID;
     auto item = renderer.truncatedText(font, itemName.c_str(), textWidth);
     renderer.drawText(font, rect.x + BaseMetrics::values.contentSidePadding, itemY, item.c_str(), i != selectedIndex);

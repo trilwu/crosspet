@@ -320,6 +320,13 @@ void LyraTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCount, 
     }
 
     auto itemName = rowTitle(i);
+
+    // Section header: small uppercase text with top padding, no highlight
+    if (!itemName.empty() && itemName[0] == '\x01') {
+      renderer.drawText(SMALL_FONT_ID, textX, itemY + 14, itemName.c_str() + 1, true);
+      continue;
+    }
+
     auto item = renderer.truncatedText(UI_10_FONT_ID, itemName.c_str(), rowTextWidth);
     renderer.drawText(UI_10_FONT_ID, textX, itemY + 7, item.c_str(), true);
 

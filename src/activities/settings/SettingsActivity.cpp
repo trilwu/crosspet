@@ -1,5 +1,6 @@
 #include "SettingsActivity.h"
 
+#include <Arduino.h>
 #include <GfxRenderer.h>
 #include <Logging.h>
 #include <WiFi.h>
@@ -7,6 +8,7 @@
 #include "ButtonRemapActivity.h"
 #include "CalibreSettingsActivity.h"
 #include "ClearCacheActivity.h"
+#include "DeviceInfoActivity.h"
 #include "CrossPointSettings.h"
 #include "KOReaderSettingsActivity.h"
 #include "LanguageSelectActivity.h"
@@ -53,7 +55,40 @@ void SettingsActivity::onEnter() {
   systemSettings.push_back(SettingInfo::Action(StrId::STR_CLEAR_READING_CACHE, SettingAction::ClearCache));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_CHECK_UPDATES, SettingAction::CheckForUpdates));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_LANGUAGE, SettingAction::Language));
+  systemSettings.push_back(SettingInfo::Action(StrId::STR_DEVICE_INFO, SettingAction::DeviceInfo));
+  systemSettings.push_back(SettingInfo::Action(StrId::STR_REBOOT, SettingAction::Reboot));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_CUSTOMISE_STATUS_BAR, SettingAction::CustomiseStatusBar));
+
+  // Insert section headers into each category (device UI only, after ACTION items are appended).
+  // Display: SCREEN (sleep/refresh settings), APPEARANCE (theme/UI), HOME (home screen widgets)
+  // Items order: Sleep Screen(0), Sleep Cover Mode(1), Sleep Cover Filter(2), Keep Clock Alive(3),
+  //              Sleep Refresh(4), Hide Battery(5), Refresh Freq(6), UI Theme(7), Sunlight Fix(8),
+  //              Dark Mode(9), Temp Unit(10), Home Clock(11), Home Weather(12), Home Pet Status(13), Home Focus Mode(14)
+  displaySettings.insert(displaySettings.begin() + 11, SettingInfo::Section("HOME"));
+  displaySettings.insert(displaySettings.begin() + 5, SettingInfo::Section("APPEARANCE"));
+  displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
+
+  // Reader: TEXT (font/layout), NAVIGATION (orientation/turn), ACTIONS (status bar)
+  // Items order: Font Family(0), Font Size(1), Line Spacing(2), Screen Margin(3), Para Alignment(4),
+  //              Embedded Style(5), Hyphenation(6), Orientation(7), Extra Spacing(8), Text AA(9),
+  //              Text Darkness(10), Images(11), Auto Page Turn(12), Customise Status Bar(13)
+  readerSettings.insert(readerSettings.begin() + 13, SettingInfo::Section("ACTIONS"));
+  readerSettings.insert(readerSettings.begin() + 7, SettingInfo::Section("READING"));
+  readerSettings.insert(readerSettings.begin(), SettingInfo::Section("TEXT"));
+
+  // Controls: BUTTONS (remapping action + layout toggles), POWER BUTTON (short pwr btn actions)
+  // Items order after insert: Remap Front Buttons(0), Side Btn Layout(1), Front Page Btn Layout(2),
+  //                           Long Press Skip(3), Short Pwr Btn(4), 2Click(5), 3Click(6)
+  controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
+  controlsSettings.insert(controlsSettings.begin(), SettingInfo::Section("BUTTONS"));
+
+  // System: GENERAL (sleep timeout, files), CONNECTIVITY (WiFi, KOReader, OPDS), MAINTENANCE (clear, updates, reboot)
+  // Items order: Sleep Timeout(0), Show Hidden Files(1), Show Free Heap(2),
+  //              WiFi(3), KOReader Sync(4), OPDS Browser(5),
+  //              Clear Cache(6), Check Updates(7), Language(8), Device Info(9), Reboot(10)
+  systemSettings.insert(systemSettings.begin() + 9, SettingInfo::Section("DEVICE"));
+  systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
+  systemSettings.insert(systemSettings.begin(), SettingInfo::Section("GENERAL"));
 
   // Reset selection to first category
   selectedCategoryIndex = 0;
@@ -95,14 +130,20 @@ void SettingsActivity::loop() {
     return;
   }
 
-  // Handle navigation
+  // Handle navigation — skip SECTION items (non-interactive headers)
   buttonNavigator.onNextRelease([this] {
-    selectedSettingIndex = ButtonNavigator::nextIndex(selectedSettingIndex, settingsCount + 1);
+    do {
+      selectedSettingIndex = ButtonNavigator::nextIndex(selectedSettingIndex, settingsCount + 1);
+    } while (selectedSettingIndex > 0 && selectedSettingIndex <= settingsCount &&
+             (*currentSettings)[selectedSettingIndex - 1].type == SettingType::SECTION);
     requestUpdate();
   });
 
   buttonNavigator.onPreviousRelease([this] {
-    selectedSettingIndex = ButtonNavigator::previousIndex(selectedSettingIndex, settingsCount + 1);
+    do {
+      selectedSettingIndex = ButtonNavigator::previousIndex(selectedSettingIndex, settingsCount + 1);
+    } while (selectedSettingIndex > 0 && selectedSettingIndex <= settingsCount &&
+             (*currentSettings)[selectedSettingIndex - 1].type == SettingType::SECTION);
     requestUpdate();
   });
 
@@ -119,7 +160,6 @@ void SettingsActivity::loop() {
   });
 
   if (hasChangedCategory) {
-    selectedSettingIndex = (selectedSettingIndex == 0) ? 0 : 1;
     switch (selectedCategoryIndex) {
       case 0:
         currentSettings = &displaySettings;
@@ -135,6 +175,19 @@ void SettingsActivity::loop() {
         break;
     }
     settingsCount = static_cast<int>(currentSettings->size());
+
+    if (selectedSettingIndex == 0) {
+      // Tab bar is focused — stay there
+    } else {
+      // Find first non-SECTION item in new category
+      selectedSettingIndex = 1;
+      while (selectedSettingIndex <= settingsCount &&
+             (*currentSettings)[selectedSettingIndex - 1].type == SettingType::SECTION) {
+        selectedSettingIndex++;
+      }
+      // If somehow all items are sections (shouldn't happen), fall back to tab bar
+      if (selectedSettingIndex > settingsCount) selectedSettingIndex = 0;
+    }
   }
 }
 
@@ -200,6 +253,17 @@ void SettingsActivity::toggleCurrentSetting() {
       case SettingAction::Language:
         startActivityForResult(std::make_unique<LanguageSelectActivity>(renderer, mappedInput), resultHandler);
         break;
+      case SettingAction::DeviceInfo:
+        startActivityForResult(std::make_unique<DeviceInfoActivity>(renderer, mappedInput), resultHandler);
+        break;
+      case SettingAction::Reboot:
+        renderer.clearScreen();
+        renderer.drawCenteredText(UI_12_FONT_ID, renderer.getScreenHeight() / 2 - 10,
+                                  "Rebooting...", true, EpdFontFamily::BOLD);
+        renderer.displayBuffer();
+        delay(500);
+        ESP.restart();
+        break;
       case SettingAction::None:
         // Do nothing
         break;
@@ -238,9 +302,19 @@ void SettingsActivity::render(RenderLock&&) {
            pageHeight - (metrics.topPadding + metrics.headerHeight + metrics.tabBarHeight + metrics.buttonHintsHeight +
                          metrics.verticalSpacing * 2)},
       settingsCount, selectedSettingIndex - 1,
-      [&settings](int index) { return std::string(I18N.get(settings[index].nameId)); }, nullptr, nullptr,
+      [&settings](int index) {
+        const auto& s = settings[index];
+        // Section header: prefix with \x01 marker for special rendering in drawList
+        if (s.type == SettingType::SECTION) {
+          return s.sectionLabel ? std::string("\x01") + s.sectionLabel : std::string("");
+        }
+        return std::string(I18N.get(s.nameId));
+      },
+      nullptr, nullptr,
       [&settings](int i) {
         const auto& setting = settings[i];
+        // Section headers have no value
+        if (setting.type == SettingType::SECTION) return std::string("");
         std::string valueText = "";
         if (setting.type == SettingType::TOGGLE && setting.valuePtr != nullptr) {
           const bool value = SETTINGS.*(setting.valuePtr);

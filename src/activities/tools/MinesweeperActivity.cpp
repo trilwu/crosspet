@@ -229,15 +229,17 @@ void MinesweeperActivity::render(RenderLock&&) {
                             cy + (CELL - renderer.getLineHeight(SMALL_FONT_ID)) / 2, "F", false);
         }
         if (isCursor) {
-          // Draw cursor border in white on the filled cell
-          renderer.drawRect(cx + 2, cy + 2, CELL - 4, CELL - 4, false);
-          renderer.drawRect(cx + 3, cy + 3, CELL - 6, CELL - 6, false);
+          // Draw cursor border in white on the filled cell (rounded)
+          renderer.drawRoundedRect(cx + 2, cy + 2, CELL - 4, CELL - 4, 2, 4, false);
+          renderer.drawRoundedRect(cx + 3, cy + 3, CELL - 6, CELL - 6, 1, 3, false);
         }
       } else {
         // Revealed cell
         renderer.drawRect(cx, cy, CELL, CELL);
         if (isCursor) {
-          renderer.drawRect(cx + 1, cy + 1, CELL - 2, CELL - 2);
+          // Rounded cursor border on revealed cell (2px thick)
+          renderer.drawRoundedRect(cx + 1, cy + 1, CELL - 2, CELL - 2, 2, 4, true);
+          renderer.drawRoundedRect(cx + 2, cy + 2, CELL - 4, CELL - 4, 1, 3, true);
         }
 
         if (grid[r][c] == 9) {

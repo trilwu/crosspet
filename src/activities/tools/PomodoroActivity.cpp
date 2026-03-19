@@ -225,12 +225,12 @@ void PomodoroActivity::render(RenderLock&&) {
       const bool selected = (rows[i].field == selectedField);
       char buf[48];
       snprintf(buf, sizeof(buf), tr(STR_POMO_DURATION_FMT), rows[i].name, (unsigned long)(rows[i].ms / 60000));
-      // Draw selection arrow + bold text for selected row
       if (selected) {
-        renderer.drawText(SMALL_FONT_ID, labelX - 14, y, ">");
-        renderer.drawText(UI_10_FONT_ID, labelX, y, buf);
+        // Black fill selection — CrossPet theme style
+        renderer.fillRect(0, y - 2, pageWidth, rowH, true);
+        renderer.drawText(UI_10_FONT_ID, labelX, y, buf, false);
       } else {
-        renderer.drawText(SMALL_FONT_ID, labelX, y, buf);
+        renderer.drawText(UI_10_FONT_ID, labelX, y, buf, true);
       }
     }
   } else {

@@ -206,15 +206,15 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
       const int y = gridTop + r * (TILE + GAP);
       const uint32_t val = grid[r][c];
 
-      // Draw tile border
-      renderer.drawRect(x, y, TILE, TILE);
+      // Draw tile border (rounded for CrossPet theme)
+      renderer.drawRoundedRect(x, y, TILE, TILE, 1, 6, true);
 
       // Fill pattern based on tile value (e-ink monochrome: use dot density)
       if (val >= 128) {
         // High values: fill background, draw inverted text
         bool inverted = (val >= 512);  // solid fill for 512+
         if (inverted) {
-          renderer.fillRect(x + 1, y + 1, TILE - 2, TILE - 2);
+          renderer.fillRoundedRect(x + 1, y + 1, TILE - 2, TILE - 2, 5, Color::Black);
         } else {
           // 128-256: cross-hatch pattern (every 3rd pixel)
           for (int py = y + 1; py < y + TILE - 1; py++) {
@@ -273,12 +273,21 @@ void TwentyFortyEightActivity::render(RenderLock&&) {
     }
   }
 
-  // Overlay messages
+  // Overlay messages: card with black fill + white text
+  auto drawOverlayCard = [&](const char* msg, int centerY) {
+    int msgW = renderer.getTextWidth(UI_10_FONT_ID, msg);
+    int msgH = renderer.getLineHeight(UI_10_FONT_ID);
+    const int padX = 20, padY = 8;
+    int cardX = (pageWidth - msgW - padX * 2) / 2;
+    renderer.fillRoundedRect(cardX, centerY - padY, msgW + padX * 2, msgH + padY * 2, 10, Color::Black);
+    renderer.drawCenteredText(UI_10_FONT_ID, centerY, msg, false, EpdFontFamily::BOLD);
+  };
+
   if (won && !gameOver) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 - 20, tr(STR_YOU_WIN));
+    drawOverlayCard(tr(STR_YOU_WIN), pageHeight / 2 - 20);
   }
   if (gameOver) {
-    renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2, tr(STR_GAME_OVER));
+    drawOverlayCard(tr(STR_GAME_OVER), pageHeight / 2);
   }
 
   // Button hints

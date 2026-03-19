@@ -359,9 +359,16 @@ int WeatherActivity::silentRefresh() {
   // Returns: 0=ok, 1=no saved wifi creds, 2=wifi connect timeout, 4=api fail, 5=parse fail
   if (WiFi.status() != WL_CONNECTED) {
     const auto& ssid = WIFI_STORE.getLastConnectedSsid();
-    if (ssid.empty()) return 1;  // No saved WiFi credentials
+    if (ssid.empty()) {
+      LOG_ERR("SYNC", "No saved WiFi credentials (empty lastConnectedSsid)");
+      return 1;
+    }
     const auto* cred = WIFI_STORE.findCredential(ssid);
-    if (!cred) return 1;
+    if (!cred) {
+      LOG_ERR("SYNC", "Credential not found for SSID: %s", ssid.c_str());
+      return 1;
+    }
+    LOG_INF("SYNC", "Connecting to WiFi: %s", cred->ssid.c_str());
     WiFi.mode(WIFI_STA);
     WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
     bool connected = false;
@@ -369,7 +376,11 @@ int WeatherActivity::silentRefresh() {
       if (WiFi.status() == WL_CONNECTED) { connected = true; break; }
       delay(100);
     }
-    if (!connected) { WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return 2; }
+    if (!connected) {
+      LOG_ERR("SYNC", "WiFi connect timeout (10s)");
+      WiFi.disconnect(false); WiFi.mode(WIFI_OFF); return 2;
+    }
+    LOG_INF("SYNC", "WiFi connected, IP: %s", WiFi.localIP().toString().c_str());
     delay(500);  // Allow DNS resolver to initialize after WiFi connect
   }
 
@@ -633,8 +644,8 @@ void WeatherActivity::render(RenderLock&&) {
 
     // Large temperature
     snprintf(buf, sizeof(buf), "%.0f%s", convertTemp(weather.temperature), tempUnitSuffix());
-    renderer.drawCenteredText(NOTOSANS_18_FONT_ID, y, buf, true, EpdFontFamily::BOLD);
-    y += renderer.getLineHeight(NOTOSANS_18_FONT_ID) + 4;
+    renderer.drawCenteredText(LEXEND_18_FONT_ID, y, buf, true, EpdFontFamily::BOLD);
+    y += renderer.getLineHeight(LEXEND_18_FONT_ID) + 4;
 
     // Feels like
     snprintf(buf, sizeof(buf), "%s %.0f%s", tr(STR_FEELS_LIKE), convertTemp(weather.feelsLike), tempUnitSuffix());

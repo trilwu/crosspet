@@ -189,10 +189,10 @@ void SudokuActivity::render(RenderLock&&) {
       int cx = gridX + c * cellSize;
       int cy = gridY + r * cellSize;
 
-      // Highlight cursor cell
+      // Highlight cursor cell: rounded black fill
       bool isCursor = (r == cursorRow && c == cursorCol);
       if (isCursor) {
-        renderer.fillRect(cx + 1, cy + 1, cellSize - 2, cellSize - 2);
+        renderer.fillRoundedRect(cx + 2, cy + 2, cellSize - 4, cellSize - 4, 5, Color::Black);
       }
 
       uint8_t val = puzzle[r][c];
@@ -231,7 +231,13 @@ void SudokuActivity::render(RenderLock&&) {
   // Status line below grid
   int statusY = gridY + gridSize + 10;
   if (completed) {
-    renderer.drawCenteredText(UI_10_FONT_ID, statusY, tr(STR_SUDOKU_COMPLETE), true, EpdFontFamily::BOLD);
+    const char* completeMsg = tr(STR_SUDOKU_COMPLETE);
+    int msgW = renderer.getTextWidth(UI_10_FONT_ID, completeMsg);
+    int msgH = renderer.getLineHeight(UI_10_FONT_ID);
+    int cardPadX = 16, cardPadY = 5;
+    int cardX = (pageWidth - msgW - cardPadX * 2) / 2;
+    renderer.fillRoundedRect(cardX, statusY - cardPadY, msgW + cardPadX * 2, msgH + cardPadY * 2, 8, Color::Black);
+    renderer.drawCenteredText(UI_10_FONT_ID, statusY, completeMsg, false, EpdFontFamily::BOLD);
   } else {
     // Show difficulty
     renderer.drawCenteredText(SMALL_FONT_ID, statusY, difficultyLabel());

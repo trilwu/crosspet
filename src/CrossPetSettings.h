@@ -21,6 +21,7 @@ class CrossPetSettings {
   uint8_t homeShowClock = 1;
   uint8_t homeShowWeather = 1;
   uint8_t homeShowPetStatus = 1;
+  uint8_t homeFocusMode = 0;  // 1=show only current book (no recent covers/stats)
 
  private:
   CrossPetSettings() = default;

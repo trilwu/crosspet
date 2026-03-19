@@ -6,7 +6,8 @@ cd "$(dirname "$0")"
 
 READER_FONT_STYLES=("Regular" "Italic" "Bold" "BoldItalic")
 BOOKERLY_FONT_SIZES=(12 14 16 18)
-NOTOSANS_FONT_SIZES=(12 14 16 18)
+LEXEND_FONT_SIZES=(12 14 16 18)
+LEXEND_FONT_STYLES=("Regular" "Bold")
 for size in ${BOOKERLY_FONT_SIZES[@]}; do
   for style in ${READER_FONT_STYLES[@]}; do
     font_name="bookerly_${size}_$(echo $style | tr '[:upper:]' '[:lower:]')"
@@ -17,10 +18,10 @@ for size in ${BOOKERLY_FONT_SIZES[@]}; do
   done
 done
 
-for size in ${NOTOSANS_FONT_SIZES[@]}; do
-  for style in ${READER_FONT_STYLES[@]}; do
-    font_name="notosans_${size}_$(echo $style | tr '[:upper:]' '[:lower:]')"
-    font_path="../builtinFonts/source/NotoSans/NotoSans-${style}.ttf"
+for size in ${LEXEND_FONT_SIZES[@]}; do
+  for style in ${LEXEND_FONT_STYLES[@]}; do
+    font_name="lexend_${size}_$(echo $style | tr '[:upper:]' '[:lower:]')"
+    font_path="../builtinFonts/source/Lexend/Lexend-${style}.ttf"
     output_path="../builtinFonts/${font_name}.h"
     python fontconvert.py $font_name $size $font_path --2bit --compress > $output_path
     echo "Generated $output_path"

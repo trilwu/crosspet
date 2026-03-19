@@ -9,7 +9,7 @@
 #include "activities/Activity.h"
 #include "util/ButtonNavigator.h"
 
-enum class SettingType { TOGGLE, ENUM, ACTION, VALUE, STRING };
+enum class SettingType { TOGGLE, ENUM, ACTION, VALUE, STRING, SECTION };
 
 enum class SettingAction {
   None,
@@ -21,6 +21,8 @@ enum class SettingAction {
   ClearCache,
   CheckForUpdates,
   Language,
+  DeviceInfo,
+  Reboot,
 };
 
 struct SettingInfo {
@@ -40,6 +42,7 @@ struct SettingInfo {
   const char* key = nullptr;             // JSON API key (nullptr for ACTION types)
   StrId category = StrId::STR_NONE_OPT;  // Category for web UI grouping
   bool obfuscated = false;               // Save/load via base64 obfuscation (passwords)
+  const char* sectionLabel = nullptr;    // Section header label (only for SECTION type)
 
   // Direct char[] string fields (for settings stored in CrossPointSettings)
   size_t stringOffset = 0;
@@ -149,6 +152,15 @@ struct SettingInfo {
     s.stringSetter = std::move(setter);
     s.key = key;
     s.category = category;
+    return s;
+  }
+
+  // Section header item — device UI only, non-interactive visual separator.
+  static SettingInfo Section(const char* label) {
+    SettingInfo s;
+    s.nameId = StrId::STR_NONE_OPT;
+    s.type = SettingType::SECTION;
+    s.sectionLabel = label;
     return s;
   }
 };

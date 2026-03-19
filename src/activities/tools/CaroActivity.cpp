@@ -299,7 +299,11 @@ void CaroActivity::render(RenderLock&&) {
       int cy = gridY + r * CELL;
       bool isCursor = (r == cursorRow && c == cursorCol);
 
-      if (isCursor) {
+      // Cursor: use rounded border on empty cell, black fill on occupied cells
+      if (isCursor && grid[r][c] == 0) {
+        renderer.drawRoundedRect(cx + 2, cy + 2, CELL - 4, CELL - 4, 2, 4, true);
+        renderer.drawRoundedRect(cx + 3, cy + 3, CELL - 6, CELL - 6, 1, 3, true);
+      } else if (isCursor) {
         renderer.fillRect(cx + 1, cy + 1, CELL - 2, CELL - 2);
       }
 
@@ -326,7 +330,13 @@ void CaroActivity::render(RenderLock&&) {
   int statusY = gridY + gridH + 4;
   if (gameOver) {
     const char* msg = (winner == 1) ? tr(STR_CARO_WIN_X) : (winner == 2) ? tr(STR_CARO_WIN_O) : tr(STR_CARO_DRAW);
-    renderer.drawCenteredText(SMALL_FONT_ID, statusY, msg, true, EpdFontFamily::BOLD);
+    // Wrap game over message in a small card
+    int msgW = renderer.getTextWidth(UI_10_FONT_ID, msg);
+    int msgH = renderer.getLineHeight(UI_10_FONT_ID);
+    int cardPadX = 16, cardPadY = 6;
+    int cardX = (pageWidth - msgW - cardPadX * 2) / 2;
+    renderer.fillRoundedRect(cardX, statusY - cardPadY, msgW + cardPadX * 2, msgH + cardPadY * 2, 8, Color::Black);
+    renderer.drawCenteredText(UI_10_FONT_ID, statusY, msg, false, EpdFontFamily::BOLD);
   } else {
     renderer.drawCenteredText(SMALL_FONT_ID, statusY, difficultyLabel());
   }

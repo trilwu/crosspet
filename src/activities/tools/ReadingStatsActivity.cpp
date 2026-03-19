@@ -77,6 +77,17 @@ void ReadingStatsActivity::render(RenderLock&&) {
     snprintf(values[2], sizeof(values[2]), tr(STR_STATS_DAYS), (unsigned)READ_STATS.currentStreak);
     snprintf(values[3], sizeof(values[3]), tr(STR_STATS_DAYS), (unsigned)READ_STATS.longestStreak);
 
+    // Card outline around the stats grid
+    const int cardPad = 8;
+    const int cardH = lhUi10 + lhSmall + 8 + cardPad * 2;
+    renderer.drawRoundedRect(MARGIN - cardPad, y - cardPad, pageWidth - MARGIN * 2 + cardPad * 2, cardH, 1, 10, true);
+
+    // Thin vertical dividers between columns
+    for (int i = 1; i < 4; i++) {
+      const int divX = MARGIN + i * colW;
+      renderer.drawLine(divX, y - cardPad + 4, divX, y + lhUi10 + lhSmall + 8 + cardPad - 4);
+    }
+
     for (int i = 0; i < 4; i++) {
       const int cx = MARGIN + i * colW + colW / 2;
       const int vw = renderer.getTextWidth(UI_10_FONT_ID, values[i]);

@@ -44,39 +44,31 @@ ruby -rdigest -e 'puts [
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define NOTOSANS_12_FONT_ID ($(
+echo "#define LEXEND_12_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./notosans_12_regular.h",
-  "./notosans_12_bold.h",
-  "./notosans_12_bolditalic.h",
-  "./notosans_12_italic.h",
+  "./lexend_12_regular.h",
+  "./lexend_12_bold.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define NOTOSANS_14_FONT_ID ($(
+echo "#define LEXEND_14_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./notosans_14_regular.h",
-  "./notosans_14_bold.h",
-  "./notosans_14_bolditalic.h",
-  "./notosans_14_italic.h",
+  "./lexend_14_regular.h",
+  "./lexend_14_bold.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define NOTOSANS_16_FONT_ID ($(
+echo "#define LEXEND_16_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./notosans_16_regular.h",
-  "./notosans_16_bold.h",
-  "./notosans_16_bolditalic.h",
-  "./notosans_16_italic.h",
+  "./lexend_16_regular.h",
+  "./lexend_16_bold.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 
-echo "#define NOTOSANS_18_FONT_ID ($(
+echo "#define LEXEND_18_FONT_ID ($(
 ruby -rdigest -e 'puts [
-  "./notosans_18_regular.h",
-  "./notosans_18_bold.h",
-  "./notosans_18_bolditalic.h",
-  "./notosans_18_italic.h",
+  "./lexend_18_regular.h",
+  "./lexend_18_bold.h",
 ].map{|f| Digest::SHA256.hexdigest(File.read(f)).to_i(16) }.sum % (2 ** 32) - (2 ** 31)'
 ))"
 

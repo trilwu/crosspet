@@ -271,7 +271,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x91"
     "",  // Português (Brasil)
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -467,7 +467,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBC"
     "",  // Català
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -590,7 +590,7 @@ const char* const CHARACTER_SETS[] = {
     "\xD1"
     "\x97"
     "",  // Українська
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -732,7 +732,7 @@ const char* const CHARACTER_SETS[] = {
     "\x86"
     "\xBB"
     "",  // Italiano
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1249,7 +1249,7 @@ const char* const STRINGS_EN[] = {
     "Prev/Next",
     "Next/Prev",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Small",
@@ -1731,6 +1731,7 @@ const char* const STRINGS_EN[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -1756,6 +1757,18 @@ const char* const STRINGS_EN[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2084,7 +2097,7 @@ const char* const STRINGS_ES[] = {
     "Ant./Sig.",
     "Sig./Ant.",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Peque\xC3"
@@ -2696,6 +2709,7 @@ const char* const STRINGS_ES[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -2721,6 +2735,18 @@ const char* const STRINGS_ES[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3142,7 +3168,7 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "c",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Petit",
@@ -3792,6 +3818,7 @@ const char* const STRINGS_FR[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -3817,6 +3844,18 @@ const char* const STRINGS_FR[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4096,7 +4135,7 @@ const char* const STRINGS_DE[] = {
     "\xBC"
     "ck",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Klein",
@@ -4657,6 +4696,7 @@ const char* const STRINGS_DE[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -4682,6 +4722,18 @@ const char* const STRINGS_DE[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_CS[] = {
@@ -5677,7 +5729,7 @@ const char* const STRINGS_CS[] = {
     "\xAD"
     "",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Mal\xC3"
@@ -6634,6 +6686,7 @@ const char* const STRINGS_CS[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -6659,6 +6712,18 @@ const char* const STRINGS_CS[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7011,7 +7076,7 @@ const char* const STRINGS_PO[] = {
     "\xB3"
     "x/Ant",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Pequeno",
@@ -7630,6 +7695,7 @@ const char* const STRINGS_PO[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -7655,6 +7721,18 @@ const char* const STRINGS_PO[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_RU[] = {
@@ -12503,7 +12581,7 @@ const char* const STRINGS_RU[] = {
     "\xB4"
     "",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "\xD0"
@@ -16721,6 +16799,7 @@ const char* const STRINGS_RU[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -16746,6 +16825,18 @@ const char* const STRINGS_RU[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_SV[] = {
@@ -17263,7 +17354,7 @@ const char* const STRINGS_SV[] = {
     "\xB6"
     "rra",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "\xC3"
     "\x96"
     "ppen dyslektisk",
@@ -17934,6 +18025,7 @@ const char* const STRINGS_SV[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -17959,6 +18051,18 @@ const char* const STRINGS_SV[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_RO[] = {
@@ -18573,7 +18677,7 @@ const char* const STRINGS_RO[] = {
     "\x8E"
     "nainte",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Mic",
@@ -19311,6 +19415,7 @@ const char* const STRINGS_RO[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -19336,6 +19441,18 @@ const char* const STRINGS_RO[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_CA[] = {
@@ -19688,7 +19805,7 @@ const char* const STRINGS_CA[] = {
     "\xBC"
     "ent/Anterior",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Petita",
@@ -20320,6 +20437,7 @@ const char* const STRINGS_CA[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -20345,6 +20463,18 @@ const char* const STRINGS_CA[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_UK[] = {
@@ -25975,7 +26105,7 @@ const char* const STRINGS_UK[] = {
     "\x80"
     "",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "\xD0"
@@ -30661,6 +30791,7 @@ const char* const STRINGS_UK[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -30686,6 +30817,18 @@ const char* const STRINGS_UK[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_BE[] = {
@@ -35608,7 +35751,7 @@ const char* const STRINGS_BE[] = {
     "\xB4"
     "",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "\xD0"
@@ -39422,6 +39565,7 @@ const char* const STRINGS_BE[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -39447,6 +39591,18 @@ const char* const STRINGS_BE[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_IT[] = {
@@ -39648,7 +39804,7 @@ const char* const STRINGS_IT[] = {
     "Prec/Succ",
     "Succ/Prec",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Piccolo",
@@ -40150,6 +40306,7 @@ const char* const STRINGS_IT[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -40175,6 +40332,18 @@ const char* const STRINGS_IT[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_PL[] = {
@@ -40761,7 +40930,7 @@ const char* const STRINGS_PL[] = {
     "Poprz./Nast.",
     "Nast./Poprz.",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Ma\xC5"
@@ -41549,6 +41718,7 @@ const char* const STRINGS_PL[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -41574,6 +41744,18 @@ const char* const STRINGS_PL[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_FI[] = {
@@ -42022,7 +42204,7 @@ const char* const STRINGS_FI[] = {
     "Edell/Seur",
     "Seur/Edell",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Pieni",
@@ -42714,6 +42896,7 @@ const char* const STRINGS_FI[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -42739,6 +42922,18 @@ const char* const STRINGS_FI[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_DA[] = {
@@ -43087,7 +43282,7 @@ const char* const STRINGS_DA[] = {
     "\xA6"
     "ste/Forrige",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Lille",
@@ -43641,6 +43836,7 @@ const char* const STRINGS_DA[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -43666,6 +43862,18 @@ const char* const STRINGS_DA[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_NL[] = {
@@ -43852,7 +44060,7 @@ const char* const STRINGS_NL[] = {
     "Vorige/Volgende",
     "Volgende/Vorige",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Klein",
@@ -44336,6 +44544,7 @@ const char* const STRINGS_NL[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -44361,6 +44570,18 @@ const char* const STRINGS_NL[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_TR[] = {
@@ -45147,7 +45368,7 @@ const char* const STRINGS_TR[] = {
     "\x96"
     "nceki",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "K\xC3"
@@ -46089,6 +46310,7 @@ const char* const STRINGS_TR[] = {
     "Today",
     "Total",
     "Sessions",
+    "EST. LEFT",
     "TIME READ",
     "%d times",
     "%d min",
@@ -46114,6 +46336,18 @@ const char* const STRINGS_TR[] = {
     "Sync Weather & Time",
     "Power Double-Click",
     "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 const char* const STRINGS_VI[] = {
@@ -47826,7 +48060,7 @@ const char* const STRINGS_VI[] = {
     "\x9B"
     "c",
     "Bookerly",
-    "Noto Sans",
+    "Lexend",
     "Open Dyslexic",
     "Bokerlam",
     "Nh\xE1"
@@ -50919,6 +51153,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x8D"
     "c",
+    "EST. LEFT",
     "\xC4"
     "\x90"
     "\xC3"
@@ -51121,6 +51356,62 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA5"
     "m ba",
+    "Hi\xE1"
+    "\xBB"
+    "\x83"
+    "n th\xE1"
+    "\xBB"
+    "\x8B"
+    " RAM",
+    "Th\xC3"
+    "\xB4"
+    "ng tin thi\xE1"
+    "\xBA"
+    "\xBF"
+    "t b\xE1"
+    "\xBB"
+    "\x8B"
+    "",
+    "Ch\xE1"
+    "\xBA"
+    "\xBF"
+    " \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\x99"
+    " t\xE1"
+    "\xBA"
+    "\xAD"
+    "p trung",
+    "RAM tr\xE1"
+    "\xBB"
+    "\x91"
+    "ng",
+    "Kh\xE1"
+    "\xBB"
+    "\x9F"
+    "i \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\x99"
+    "ng l\xE1"
+    "\xBA"
+    "\xA1"
+    "i",
+    "Phi\xC3"
+    "\xAA"
+    "n b\xE1"
+    "\xBA"
+    "\xA3"
+    "n",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
 };
 
 }  // namespace i18n_strings

@@ -14,14 +14,13 @@
 // PresenterActivity removed — NimBLE BLE stack uses ~60KB RAM
 #include "WeatherActivity.h"
 #include "ReadingStatsActivity.h"
-#include "SleepCacheClearActivity.h"
 #include "SleepImagePickerActivity.h"
 #include "activities/browser/OpdsBookBrowserActivity.h"
 #include "components/UITheme.h"
 #include "CrossPointSettings.h"
 #include "fontIds.h"
 
-static constexpr int BASE_MENU_COUNT = 12;  // Presenter removed (no BLE)
+static constexpr int BASE_MENU_COUNT = 12;  // File Transfer added to Apps
 
 int ToolsActivity::getMenuCount() const {
   return BASE_MENU_COUNT + (SETTINGS.opdsServerUrl[0] ? 1 : 0);
@@ -46,27 +45,26 @@ void ToolsActivity::loop() {
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (selectorIndex) {
-      // -- Utilities --
       case 0:
-        activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
+        activityManager.goToFileTransfer();
         break;
       case 1:
-        activityManager.pushActivity(std::make_unique<WeatherActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
         break;
       case 2:
-        activityManager.pushActivity(std::make_unique<PomodoroActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<WeatherActivity>(renderer, mappedInput));
         break;
       case 3:
-        activityManager.pushActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<PomodoroActivity>(renderer, mappedInput));
         break;
       case 4:
-        activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
         break;
       case 5:
-        activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInput));
         break;
       case 6:
-        activityManager.pushActivity(std::make_unique<SleepCacheClearActivity>(renderer, mappedInput));
+        activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
         break;
       default: {
         // Dynamic items: OPDS (if configured) then games
@@ -107,9 +105,9 @@ void ToolsActivity::render(RenderLock&&) {
 
   // Build menu labels — OPDS inserted at index 8 when configured
   const char* baseLabels[] = {
+      tr(STR_FILE_TRANSFER),
       tr(STR_CLOCK), tr(STR_WEATHER), tr(STR_POMODORO), tr(STR_VIRTUAL_PET),
-      tr(STR_READING_STATS_APP), tr(STR_SLEEP_IMAGE_PICKER),
-      tr(STR_RELOAD_SLEEP_IMAGE)};
+      tr(STR_READING_STATS_APP), tr(STR_SLEEP_IMAGE_PICKER)};
   const char* gameLabels[] = {
       tr(STR_CHESS), tr(STR_CARO), tr(STR_SUDOKU), tr(STR_MINESWEEPER), tr(STR_2048)};
   const bool hasOpds = SETTINGS.opdsServerUrl[0] != '\0';
@@ -120,10 +118,13 @@ void ToolsActivity::render(RenderLock&&) {
 
   GUI.drawList(renderer, Rect{0, menuTop, pageWidth, menuHeight}, menuCount, selectorIndex,
                [&](int index) -> std::string {
-                 if (index < 8) return baseLabels[index];
-                 if (hasOpds && index == 8) return tr(STR_OPDS_BROWSER);
-                 int gameIdx = index - 8 - (hasOpds ? 1 : 0);
-                 if (gameIdx >= 0 && gameIdx < 5) return gameLabels[gameIdx];
+                 if (index < 7) return baseLabels[index];
+                 int dynamicIdx = index - 7;
+                 if (hasOpds) {
+                   if (dynamicIdx == 0) return tr(STR_OPDS_BROWSER);
+                   dynamicIdx--;
+                 }
+                 if (dynamicIdx >= 0 && dynamicIdx < 5) return gameLabels[dynamicIdx];
                  return "";
                });
 

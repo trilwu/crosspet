@@ -333,7 +333,7 @@ void ClockActivity::renderCalendar(int startY, const struct tm& t, bool isCurren
     const bool isNewLunar = (lunarData[day].day == 1);
 
     if (isToday) {
-      renderer.fillRect(cx + 1, rowY - 2, cellW - 2, cellH - 1);
+      renderer.fillRoundedRect(cx + 1, rowY - 2, cellW - 2, cellH - 1, 6, Color::Black);
       renderer.drawText(SMALL_FONT_ID, gregX, rowY, gregBuf, false);
       renderer.drawText(SMALL_FONT_ID, lunX, lunY, lunBuf, false);
     } else {

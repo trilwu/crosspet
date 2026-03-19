@@ -11,6 +11,7 @@
 #include "components/themes/BaseTheme.h"
 #include "components/themes/lyra/Lyra3CoversTheme.h"
 #include "components/themes/lyra/LyraTheme.h"
+#include "components/themes/crosspet/CrossPetTheme.h"
 
 namespace {
 constexpr int SKIP_PAGE_MS = 700;
@@ -47,10 +48,9 @@ void UITheme::setTheme(CrossPointSettings::UI_THEME type) {
       break;
     case CrossPointSettings::UI_THEME::CROSSPET:
     case CrossPointSettings::UI_THEME::CROSSPET_CLASSIC:
-      // Both CrossPet themes use Lyra visuals; home screen is custom HomeActivity
       LOG_DBG("UI", "Using CrossPet theme");
-      currentTheme = std::make_unique<LyraTheme>();
-      currentMetrics = &LyraMetrics::values;
+      currentTheme = std::make_unique<CrossPetTheme>();
+      currentMetrics = &CrossPetMetrics::values;
       break;
   }
 }
