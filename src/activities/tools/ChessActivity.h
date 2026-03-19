@@ -48,7 +48,6 @@ class ChessActivity final : public Activity {
   int evaluateBoard() const;
   void doAiMove();
   void checkGameEnd();
-  char pieceChar(int8_t piece) const;
   const char* difficultyLabel() const;
   void initBoard();
   void renderDifficultySelect();

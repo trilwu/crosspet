@@ -7,20 +7,9 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "ChessPieceSprites.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
-
-char ChessActivity::pieceChar(int8_t piece) const {
-  switch (abs(piece)) {
-    case PAWN:   return 'P';
-    case KNIGHT: return 'N';
-    case BISHOP: return 'B';
-    case ROOK:   return 'R';
-    case QUEEN:  return 'Q';
-    case KING:   return 'K';
-    default:     return ' ';
-  }
-}
 
 // Check if path is clear for sliding pieces (bishop, rook, queen)
 bool ChessActivity::isValidSlidingMove(int fromR, int fromC, int toR, int toC, int dr, int dc) const {
@@ -427,15 +416,19 @@ void ChessActivity::render(RenderLock&&) {
         renderer.fillRect(dx, dy, dotSize, dotSize);
       }
 
-      // Draw piece character
+      // Draw piece sprite
       int8_t piece = board[r][c];
       if (piece != EMPTY) {
-        char buf[2] = {pieceChar(piece), 0};
-        int tw = renderer.getTextWidth(UI_10_FONT_ID, buf);
-        int th = renderer.getLineHeight(UI_10_FONT_ID);
-        bool invertColor = isSelected;
-        renderer.drawText(UI_10_FONT_ID, cx + (CELL - tw) / 2, cy + (CELL - th) / 2, buf, !invertColor,
-                          isBlack(piece) ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR);
+        const uint8_t* sprite = getChessPieceSprite(piece);
+        if (sprite) {
+          if (isSelected) {
+            // Opaque draw on solid-filled selected square (piece visible on black bg)
+            renderer.drawImage(sprite, cx, cy, CELL, CELL);
+          } else {
+            // Transparent draw preserves board background (dithered dark squares)
+            renderer.drawImageTransparent(sprite, cx, cy, CELL, CELL);
+          }
+        }
       }
     }
   }

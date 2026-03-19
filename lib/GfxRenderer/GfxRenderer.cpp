@@ -588,6 +588,28 @@ void GfxRenderer::drawImage(const uint8_t bitmap[], const int x, const int y, co
   display.drawImage(bitmap, rotatedX, rotatedY, width, height);
 }
 
+void GfxRenderer::drawImageTransparent(const uint8_t bitmap[], const int x, const int y, const int width,
+                                       const int height) const {
+  int rotatedX = 0;
+  int rotatedY = 0;
+  rotateCoordinates(orientation, x, y, &rotatedX, &rotatedY);
+  switch (orientation) {
+    case Portrait:
+      rotatedY = rotatedY - height;
+      break;
+    case PortraitInverted:
+      rotatedX = rotatedX - width;
+      break;
+    case LandscapeClockwise:
+      rotatedY = rotatedY - height;
+      rotatedX = rotatedX - width;
+      break;
+    case LandscapeCounterClockwise:
+      break;
+  }
+  display.drawImageTransparent(bitmap, rotatedX, rotatedY, width, height);
+}
+
 void GfxRenderer::drawIcon(const uint8_t bitmap[], const int x, const int y, const int width, const int height) const {
   display.drawImageTransparent(bitmap, y, getScreenWidth() - width - x, height, width);
 }
