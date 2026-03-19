@@ -209,7 +209,10 @@ bool SleepActivity::displayCachedSleepScreen(const std::string& sourcePath) cons
     return false;
   }
   renderer.setFadingFix(true);
-  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  // A cached sleep screen bypasses bitmap decode/draw work and jumps straight to the
+  // final update. Use a full refresh here so the panel fully settles on the lock image
+  // before deep sleep, instead of leaving the reader page faintly visible underneath.
+  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
   renderer.setFadingFix(SETTINGS.fadingFix);
   return true;
 }
