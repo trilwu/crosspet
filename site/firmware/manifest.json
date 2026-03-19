@@ -1,0 +1,16 @@
+{
+  "name": "CrossPet Reader",
+  "version": "1.6.10",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-C3",
+      "parts": [
+        {
+          "path": "firmware.bin",
+          "offset": 65536
+        }
+      ]
+    }
+  ]
+}

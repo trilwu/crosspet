@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CrossPet Reader — Vietnamese fork of CrossPoint Reader for Xteink X4. Always synced with upstream. Virtual chicken, mini games, reading stats, weather & lunar calendar. 380KB RAM.">
+  <meta property="og:title" content="CrossPet Reader — Vietnamese Fork of CrossPoint Reader">
+  <meta property="og:description" content="Personal Vietnamese fork of CrossPoint Reader for Xteink X4. Continuously synced with latest upstream reading features. Plus virtual chicken, mini games, reading stats.">
+  <meta property="og:type" content="website">
+  <title>CrossPet Reader — Your Pocket Reading Companion</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/i18n-translations.js"></script>
+  <script src="js/dark-mode-toggle.js"></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="pet-icon" aria-hidden="true">🐔</span>
+        CrossPet Reader
+      </a>
+      <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-menu" role="list">
+        <li><a href="#features" data-i18n="nav.features">Features</a></li>
+        <li><a href="architecture.html" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="flash.html" data-i18n="nav.flash">Flash</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <span class="icon-sun" aria-hidden="true">☀</span>
+          <span class="icon-moon" aria-hidden="true">☾</span>
+        </button>
+        <div class="lang-switcher" role="group" aria-label="Language switcher">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button class="lang-btn active" data-lang="vi">VI</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <p class="hero-eyebrow">Open-source · ESP32-C3 · Xteink X4</p>
+        <h1 data-i18n="hero.tagline">Your pocket e-reader —<br>with a virtual chicken.</h1>
+        <div class="fork-badge" data-i18n="hero.fork-badge">✨ Custom firmware for the Xteink X4 e-reader — built on CrossPoint Reader</div>
+        <p class="hero-sub" data-i18n="hero.subtitle">Open-source firmware for the Xteink X4 — a $69 pocket e-reader with physical buttons, SD card, and weeks of battery. CrossPet adds Vietnamese UI, a virtual chicken pet, mini games, reading stats, weather & lunar calendar.</p>
+        <div class="hero-actions">
+          <a href="#features" class="btn btn-primary btn-large" data-i18n="hero.cta.features">Explore Features</a>
+          <a href="flash.html" class="btn btn-large" data-i18n="hero.cta.flash">Install Firmware</a>
+          <a href="https://github.com/trilwu/crosspet/releases/latest" class="btn btn-large" rel="noopener" data-i18n="hero.cta.download">GitHub Releases</a>
+        </div>
+        <div class="hero-specs">
+          4.3" E-Ink &nbsp;·&nbsp; Physical buttons &nbsp;·&nbsp; SD Card &nbsp;·&nbsp; WiFi + BLE &nbsp;·&nbsp; Weeks of battery &nbsp;·&nbsp; 100g pocket-sized
+        </div>
+      </div>
+
+      <!-- Pixel Pet -->
+      <div class="pixel-pet-wrapper" aria-hidden="true">
+        <div class="pet-speech">cục cục...</div>
+        <div class="pixel-pet-container">
+          <div class="pixel-pet"></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Pet Evolution -->
+    <section class="pet-evolution" id="pet-evolution" aria-labelledby="pet-evo-heading">
+      <div class="container">
+        <h2 class="section-title text-center" id="pet-evo-heading" data-i18n="pet.evo.title">Your chicken grows with every page</h2>
+        <p class="section-lead text-center" data-i18n="pet.evo.lead">The more you read, the more your chicken evolves. From a tiny egg to a proud rooster with a book.</p>
+
+        <div class="evo-timeline fade-in">
+          <div class="evo-stage" data-stage="egg">
+            <div class="evo-sprite evo-egg" aria-hidden="true"></div>
+            <div class="evo-label" data-i18n="pet.evo.egg">Egg</div>
+            <div class="evo-pages" data-i18n="pet.evo.egg.pages">0 pages</div>
+          </div>
+          <div class="evo-arrow" aria-hidden="true"></div>
+          <div class="evo-stage" data-stage="baby">
+            <div class="evo-sprite evo-baby" aria-hidden="true"></div>
+            <div class="evo-label" data-i18n="pet.evo.baby">Chick</div>
+            <div class="evo-pages" data-i18n="pet.evo.baby.pages">100 pages</div>
+          </div>
+          <div class="evo-arrow" aria-hidden="true"></div>
+          <div class="evo-stage" data-stage="teen">
+            <div class="evo-sprite evo-teen" aria-hidden="true"></div>
+            <div class="evo-label" data-i18n="pet.evo.teen">Hen</div>
+            <div class="evo-pages" data-i18n="pet.evo.teen.pages">500 pages</div>
+          </div>
+          <div class="evo-arrow" aria-hidden="true"></div>
+          <div class="evo-stage" data-stage="adult">
+            <div class="evo-sprite evo-adult" aria-hidden="true"></div>
+            <div class="evo-label" data-i18n="pet.evo.adult">Rooster</div>
+            <div class="evo-pages" data-i18n="pet.evo.adult.pages">2000 pages</div>
+          </div>
+        </div>
+
+        <p class="evo-caption text-center" data-i18n="pet.evo.caption">Track reading stats, earn streaks, and watch your pixel chicken come to life.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases" aria-labelledby="use-cases-heading">
+      <div class="container">
+        <h2 class="section-title" id="use-cases-heading" data-i18n="usecases.title">Built for readers, by readers</h2>
+        <p class="section-lead" data-i18n="usecases.lead">CrossPet fits into your reading life — however you read.</p>
+        <div class="cards-grid">
+
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">☀️</span>
+            <h3 data-i18n="usecase.commuter.title">The Commuter</h3>
+            <p data-i18n="usecase.commuter.desc">Sunlight-readable e-ink display. Weeks of battery life. Resume exactly where you left off — even across multiple devices.</p>
+          </article>
+
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">📖</span>
+            <h3 data-i18n="usecase.bookworm.title">The Bookworm</h3>
+            <p data-i18n="usecase.bookworm.desc">Anti-aliased text with 3 font families including OpenDyslexic. Adjustable spacing, margins, and 4 font sizes. Your eyes will thank you.</p>
+          </article>
+
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">🔧</span>
+            <h3 data-i18n="usecase.tinkerer.title">The Tinkerer</h3>
+            <p data-i18n="usecase.tinkerer.desc">Fully open-source firmware. WiFi book upload, OTA updates. Hack it, mod it, make it yours.</p>
+          </article>
+
+          <article class="card fade-in">
+            <span class="card-icon" aria-hidden="true">🪨</span>
+            <h3 data-i18n="usecase.minimalist.title">The Minimalist</h3>
+            <p data-i18n="usecase.minimalist.desc">No ads. No tracking. No cloud dependency. Physical buttons. One purpose: focused reading.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Features -->
+    <section class="features" id="features" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 class="section-title" id="features-heading" data-i18n="features.title">What makes CrossPet special</h2>
+        <p class="section-lead" data-i18n="features.lead">Everything you need for great reading — plus the things that make it uniquely CrossPet.</p>
+
+        <div class="features-split">
+
+          <div class="features-group fade-in">
+            <h3 data-i18n="features.core.title">Core Reading</h3>
+            <ul class="features-list">
+              <li data-i18n="feature.core.epub">EPUB 2 &amp; 3 with image support</li>
+              <li data-i18n="feature.core.antialiased">Anti-aliased grayscale text rendering</li>
+              <li data-i18n="feature.core.fonts">3 font families × 4 sizes × 4 styles</li>
+              <li data-i18n="feature.core.hyphenation">Multi-language hyphenation engine</li>
+              <li data-i18n="feature.core.sync">KOReader Sync — cross-device progress</li>
+              <li data-i18n="feature.core.wifi-upload">WiFi book upload + Calibre + OPDS browser</li>
+              <li data-i18n="feature.core.orientations">4 screen orientations (Portrait, Landscape CW/CCW, Inverted)</li>
+              <li data-i18n="feature.core.buttons">Fully remappable physical buttons</li>
+              <li data-i18n="feature.core.sleep-screens">Custom sleep screens (cover art, custom images)</li>
+              <li data-i18n="feature.core.caching">SD-first aggressive layout caching</li>
+            </ul>
+          </div>
+
+          <div class="features-group exclusive fade-in" aria-label="CrossPet exclusive features">
+            <h3 data-i18n="features.exclusive.title">CrossPet Exclusives</h3>
+            <ul class="features-list">
+              <li data-i18n="feature.exclusive.pet">Virtual Chicken — pixel companion that grows with your reading</li>
+              <li data-i18n="feature.exclusive.stats">Reading Stats — daily time, streaks &amp; session tracking</li>
+              <li data-i18n="feature.exclusive.stats-screen">Stats sleep screen dashboard</li>
+              <li data-i18n="feature.exclusive.weather">Weather Widget — Open-Meteo API, shown in header &amp; clock</li>
+              <li data-i18n="feature.exclusive.clock">Clock + Lunar Calendar with month navigation</li>
+              <li data-i18n="feature.exclusive.quotes">Daily Literary Quotes on clock sleep screen</li>
+              <li data-i18n="feature.exclusive.ble">BLE Remote &amp; Presenter — keyboard &amp; slide control</li>
+              <li data-i18n="feature.exclusive.games">Mini Games — Chess, Caro, Sudoku, Minesweeper, 2048</li>
+              <li data-i18n="feature.exclusive.pomodoro">Pomodoro Timer</li>
+              <li data-i18n="feature.exclusive.vn-fonts">Vietnamese fonts — full diacritics, anti-aliased on e-ink</li>
+              <li data-i18n="feature.exclusive.vn-ui">Full Vietnamese UI — menus, settings, all screens</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Vietnamese Font Callout -->
+        <div class="vn-font-callout fade-in">
+          <div class="vn-font-icon" aria-hidden="true">🇻🇳</div>
+          <div class="vn-font-content">
+            <h3 data-i18n="fonts.vn.title">Vietnamese fonts that actually work on e-ink</h3>
+            <p data-i18n="fonts.vn.desc">CrossPet includes 3 font families (Bookerly, Noto Sans, Bokerlam) with full Vietnamese diacritics support — ă, â, đ, ê, ô, ơ, ư and all tone marks render perfectly with anti-aliased grayscale on the 800×480 e-ink display. Bokerlam is a handcrafted Vietnamese font optimized for readability. No more broken characters or missing glyphs.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Real Device Demo -->
+    <section class="demo-section" id="demo" aria-labelledby="demo-heading">
+      <div class="container">
+        <h2 class="section-title text-center" id="demo-heading" data-i18n="demo.title">See it in action</h2>
+        <p class="section-lead text-center" data-i18n="demo.lead">Real CrossPet firmware running on a real Xteink X4 — Vietnamese UI, virtual chicken, reading progress, all on e-ink.</p>
+        <div class="demo-showcase fade-in">
+          <picture>
+            <source srcset="assets/images/demo-homescreen.webp" type="image/webp">
+            <img src="assets/images/demo-homescreen.jpg" alt="CrossPet Reader homescreen on Xteink X4 showing Vietnamese UI, book covers, reading progress, and virtual chicken menu" class="demo-image" loading="lazy" width="600" height="1004">
+          </picture>
+          <p class="demo-caption" data-i18n="demo.caption">Home screen: weather, book cover, reading progress, virtual chicken — all in Vietnamese.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Mini Games -->
+    <section class="mini-games" id="games" aria-labelledby="games-heading">
+      <div class="container">
+        <h2 class="section-title text-center" id="games-heading" data-i18n="games.title">Take a break — play a game</h2>
+        <p class="section-lead text-center" data-i18n="games.lead">Five pixel-perfect mini games built right into the firmware. No install, no internet, just fun.</p>
+        <div class="games-grid fade-in">
+          <div class="game-card">
+            <span class="game-icon" aria-hidden="true">♟</span>
+            <h3 data-i18n="games.chess">Chess</h3>
+            <p data-i18n="games.chess.desc">Classic chess with AI opponent. Multiple difficulty levels.</p>
+          </div>
+          <div class="game-card">
+            <span class="game-icon" aria-hidden="true">⊞</span>
+            <h3 data-i18n="games.caro">Caro (Gomoku)</h3>
+            <p data-i18n="games.caro.desc">Five-in-a-row on e-ink. Crisp and satisfying.</p>
+          </div>
+          <div class="game-card">
+            <span class="game-icon" aria-hidden="true">9</span>
+            <h3 data-i18n="games.sudoku">Sudoku</h3>
+            <p data-i18n="games.sudoku.desc">Logic puzzles in 4 difficulty tiers. Auto-save progress.</p>
+          </div>
+          <div class="game-card">
+            <span class="game-icon" aria-hidden="true">💣</span>
+            <h3 data-i18n="games.minesweeper">Minesweeper</h3>
+            <p data-i18n="games.minesweeper.desc">The classic. Pixel-perfect on the 800x480 display.</p>
+          </div>
+          <div class="game-card">
+            <span class="game-icon" aria-hidden="true">2⁴</span>
+            <h3 data-i18n="games.2048">2048</h3>
+            <p data-i18n="games.2048.desc">Slide and merge tiles. One more game before bed...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Clock, Lunar Calendar & Weather -->
+    <section class="tools-showcase" id="tools" aria-labelledby="tools-heading">
+      <div class="container">
+        <h2 class="section-title text-center" id="tools-heading" data-i18n="tools.title">More than just a reader</h2>
+        <p class="section-lead text-center" data-i18n="tools.lead">Useful tools built right into the firmware — no apps, no internet required.</p>
+        <div class="tools-grid fade-in">
+          <div class="tool-card">
+            <span class="tool-icon" aria-hidden="true">🕐</span>
+            <h3 data-i18n="tools.clock.title">Clock & Lunar Calendar</h3>
+            <p data-i18n="tools.clock.desc">Monthly calendar with lunar date integration. Navigate months with Left/Right buttons. Vietnamese lunar calendar shows "Âm lịch" range in header. Perfect for tracking traditional holidays.</p>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon" aria-hidden="true">🌤</span>
+            <h3 data-i18n="tools.weather.title">Weather Widget</h3>
+            <p data-i18n="tools.weather.desc">Current weather from Open-Meteo API — free, no API key needed. Shows temperature in header bar, clock sleep screen, and dedicated weather app. Auto-syncs when WiFi connects.</p>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon" aria-hidden="true">📝</span>
+            <h3 data-i18n="tools.quotes.title">Daily Literary Quotes</h3>
+            <p data-i18n="tools.quotes.desc">28 rotating literary quotes displayed on the clock sleep screen. A new quote every day to inspire your reading journey.</p>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon" aria-hidden="true">🍅</span>
+            <h3 data-i18n="tools.pomodoro.title">Pomodoro Timer</h3>
+            <p data-i18n="tools.pomodoro.desc">Built-in focus timer for productive reading sessions. Set work/break intervals and stay on track — right on your e-reader.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- BLE Presenter -->
+    <section class="presenter-section" id="presenter" aria-labelledby="presenter-heading">
+      <div class="container">
+        <div class="presenter-layout fade-in">
+          <div class="presenter-icon" aria-hidden="true">📡</div>
+          <div class="presenter-content">
+            <h2 id="presenter-heading" data-i18n="presenter.title">Your e-reader is also a wireless presenter</h2>
+            <p data-i18n="presenter.desc">Connect to your laptop via BLE and control presentations with physical buttons — next slide, previous slide, from across the room. No dongle, no app. Just pair and present.</p>
+            <div class="presenter-features">
+              <span class="presenter-tag" data-i18n="presenter.tag.ble">BLE 5.0</span>
+              <span class="presenter-tag" data-i18n="presenter.tag.hid">HID Keyboard</span>
+              <span class="presenter-tag" data-i18n="presenter.tag.remote">Page Remote</span>
+              <span class="presenter-tag" data-i18n="presenter.tag.nodongle">No Dongle</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Comparison -->
+    <section class="comparison" aria-labelledby="comparison-heading">
+      <div class="container">
+        <h2 class="section-title" id="comparison-heading" data-i18n="features.comparison.title">Official vs CrossPoint vs CrossPet</h2>
+        <div class="fade-in" style="overflow-x: auto;">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="compare.th.feature">Feature</th>
+                <th scope="col" data-i18n="compare.th.official">Official</th>
+                <th scope="col" data-i18n="compare.th.crosspoint">CrossPoint</th>
+                <th scope="col">CrossPet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td data-i18n="compare.opensource">Open source</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.antialiased">Anti-aliased text rendering</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.fonts">Custom font families</td><td class="cross">✗</td><td class="check" data-i18n="compare.fonts.cp">✓ (3 families)</td><td class="check" data-i18n="compare.fonts.pet">✓ (3 families + Bokerlam)</td></tr>
+              <tr><td data-i18n="compare.koreader">KOReader Sync</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.calibre">Calibre integration</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.opds">OPDS browser</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.wifi-upload">WiFi book upload</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.ota">OTA firmware updates</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.buttons">Remappable buttons</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.vn-ui">Vietnamese UI</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.pet">Virtual Chicken companion</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.stats">Reading stats &amp; streaks</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.weather">Weather widget</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.clock">Clock + Lunar calendar</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.pomodoro">Pomodoro timer</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.quotes">Literary quotes on sleep screen</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.games">Mini games</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+              <tr><td data-i18n="compare.ble">BLE remote / presenter</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Device Comparison: Xteink X4 vs Others -->
+    <section class="device-comparison" id="device-comparison" aria-labelledby="device-compare-heading">
+      <div class="container">
+        <h2 class="section-title" id="device-compare-heading" data-i18n="device.compare.title">Xteink X4 — honest comparison</h2>
+        <p class="section-lead" data-i18n="device.compare.lead">Not the best screen. Not the most features. But the only one you can hack, pocket, and make truly yours.</p>
+        <div class="fade-in" style="overflow-x: auto;">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="device.th.spec">Spec</th>
+                <th scope="col">Xteink X4 + CrossPet</th>
+                <th scope="col">Kindle Paperwhite</th>
+                <th scope="col">Boox Page</th>
+                <th scope="col" data-i18n="device.th.phone">Smartphone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="device.price">Price</td>
+                <td class="check" data-i18n="device.price.x4">$69</td>
+                <td>~$150</td>
+                <td>~$250</td>
+                <td>$200–1200</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.screen">Screen</td>
+                <td data-i18n="device.screen.x4">4.3" E-Ink 800×480 — small but sharp enough</td>
+                <td data-i18n="device.screen.kindle">6.8" E-Ink 1236×1648 — bigger, sharper</td>
+                <td data-i18n="device.screen.boox">7" E-Ink 1264×1680 — best resolution</td>
+                <td data-i18n="device.screen.phone">6"+ LCD/OLED — high brightness, more eye strain</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.battery">Battery</td>
+                <td class="check" data-i18n="device.battery.x4">Weeks (no backlight, ultra-low power)</td>
+                <td data-i18n="device.battery.kindle">Weeks</td>
+                <td data-i18n="device.battery.boox">Days–Week (Android drains faster)</td>
+                <td class="cross" data-i18n="device.battery.phone">Hours</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.backlight">Backlight</td>
+                <td class="cross" data-i18n="device.backlight.x4">None — can't read in the dark</td>
+                <td class="check" data-i18n="device.backlight.kindle">Warm light, adjustable</td>
+                <td class="check" data-i18n="device.backlight.boox">Warm + cold light</td>
+                <td class="check" data-i18n="device.backlight.phone">Full brightness</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.touchscreen">Touchscreen</td>
+                <td class="cross" data-i18n="device.touchscreen.x4">None — buttons only</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+                <td class="check">✓</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.weight">Weight</td>
+                <td class="check">~100g</td>
+                <td>205g</td>
+                <td>195g</td>
+                <td>150–230g</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.opensource">Open-source firmware</td>
+                <td class="check" data-i18n="device.opensource.x4">CrossPet — fully open source, fully customizable</td>
+                <td class="cross" data-i18n="device.opensource.kindle">Locked down, Amazon controls</td>
+                <td class="cross" data-i18n="device.opensource.boox">Android, partially open</td>
+                <td class="cross" data-i18n="device.opensource.phone">Locked ecosystem</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.sideload">Sideload books</td>
+                <td class="check" data-i18n="device.sideload.x4">SD card + WiFi upload</td>
+                <td data-i18n="device.sideload.kindle">Send-to-Kindle, limited formats</td>
+                <td class="check" data-i18n="device.sideload.boox">Full Android, any app</td>
+                <td class="check">Yes</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.ads">Ads</td>
+                <td class="check" data-i18n="device.ads.x4">None, ever</td>
+                <td class="cross" data-i18n="device.ads.kindle">Yes (pay extra to remove)</td>
+                <td class="check" data-i18n="device.ads.boox">None</td>
+                <td class="cross" data-i18n="device.ads.phone">Common in free apps</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.storage">Storage</td>
+                <td class="check" data-i18n="device.storage.x4">SD card — swap anytime, unlimited</td>
+                <td data-i18n="device.storage.kindle">8–32GB fixed, no expansion</td>
+                <td data-i18n="device.storage.boox">64GB fixed</td>
+                <td data-i18n="device.storage.phone">64–512GB</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.personality">Personality</td>
+                <td class="check" data-i18n="device.personality.x4">Virtual chicken, games, lunar calendar, weather</td>
+                <td class="cross" data-i18n="device.personality.kindle">Standard UI, limited customization</td>
+                <td data-i18n="device.personality.boox">Android apps, but generic</td>
+                <td data-i18n="device.personality.phone">Many apps, but easy to get distracted</td>
+              </tr>
+              <tr>
+                <td data-i18n="device.pocketsize">Pocket-sized</td>
+                <td class="check" data-i18n="device.pocketsize.x4">Fits in any pocket</td>
+                <td class="cross" data-i18n="device.pocketsize.kindle">Too large for pockets</td>
+                <td class="cross" data-i18n="device.pocketsize.boox">Too large for pockets</td>
+                <td data-i18n="device.pocketsize.phone">Varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="device-compare-note" data-i18n="device.compare.note">No backlight, no touchscreen, small screen — but at $69, you get an open-source e-ink reader that fits in your pocket, runs for weeks, and has a virtual chicken. Trade-offs worth making.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Hardware Banner -->
+    <div class="hw-banner" role="complementary" aria-label="Hardware specifications">
+      <div class="hw-banner-inner">
+        <span class="hw-item">ESP32-C3 RISC-V @ 160MHz</span>
+        <span class="hw-item" data-i18n="hw.ram">~380KB RAM (no PSRAM)</span>
+        <span class="hw-item">16MB Flash</span>
+        <span class="hw-item">800×480 E-Ink (SSD1677)</span>
+        <span class="hw-item" data-i18n="hw.storage">SD Card storage</span>
+        <span class="hw-item">WiFi 802.11 b/g/n</span>
+        <span class="hw-item">BLE 5.0</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <ul class="footer-links" role="list">
+        <li><a href="https://github.com/trilwu/crosspet" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/discussions" rel="noopener" data-i18n="footer.link.discussions">Discussions</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/issues" rel="noopener" data-i18n="footer.link.issues">Issues</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/blob/master/LICENSE" rel="noopener" data-i18n="footer.link.license">GPL License</a></li>
+        <li><a href="architecture.html" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="flash.html" data-i18n="nav.flash">Flash</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <p class="footer-note">
+        <span data-i18n="footer.disclaimer">CrossPet Reader is a personal Vietnamese fork of</span>
+        <a href="https://github.com/crosspoint-reader/crosspoint-reader" rel="noopener" data-i18n="footer.upstream">CrossPoint Reader</a>.<br>
+        <span data-i18n="footer.warranty">Use at your own risk. Flashing custom firmware may void your warranty.</span>
+      </p>
+      <p class="footer-tagline" data-i18n="footer.love">Built with ♥ on 380KB of RAM</p>
+    </div>
+  </footer>
+
+  <script src="js/i18n-switcher.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

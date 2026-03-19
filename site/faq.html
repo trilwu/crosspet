@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CrossPet Reader FAQ — known limitations, frequently asked questions about reading, technical setup, and CrossPet-exclusive features.">
+  <meta property="og:title" content="FAQ &amp; Limitations — CrossPet Reader">
+  <meta property="og:type" content="website">
+  <title>FAQ — CrossPet Reader</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/i18n-translations.js"></script>
+  <script src="js/dark-mode-toggle.js"></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="pet-icon" aria-hidden="true">🐔</span>
+        CrossPet Reader
+      </a>
+      <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-menu" role="list">
+        <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+        <li><a href="architecture.html" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="flash.html" data-i18n="nav.flash">Flash</a></li>
+        <li><a href="faq.html" aria-current="page" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <span class="icon-sun" aria-hidden="true">☀</span>
+          <span class="icon-moon" aria-hidden="true">☾</span>
+        </button>
+        <div class="lang-switcher" role="group" aria-label="Language switcher">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button class="lang-btn active" data-lang="vi">VI</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <section class="flash-hero">
+      <div class="container">
+        <p class="hero-eyebrow" data-i18n="faq.eyebrow">Honest answers</p>
+        <h1 data-i18n="faq.title">FAQ &amp; Known Limitations</h1>
+        <p class="hero-sub" data-i18n="faq.subtitle">CrossPet is a hobbyist firmware running on constrained hardware. This page documents what it can't do as clearly as what it can.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Getting Started Guide -->
+    <section aria-labelledby="guide-heading">
+      <div class="container">
+        <h2 id="guide-heading" data-i18n="guide.title">Getting Started</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;" data-i18n="guide.desc">Essential guides for using your Xteink X4 with CrossPet/CrossPoint firmware.</p>
+
+        <div class="flash-steps fade-in">
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">1</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.upload.title">Add books to the device</h3>
+              <p data-i18n="guide.upload.desc"><strong>SD Card (easiest):</strong> Remove the SD card → insert into computer → drag and drop EPUB/TXT files → re-insert.<br><strong>WiFi Upload:</strong> File Transfer → select WiFi → open the IP address shown on screen in your browser → drag and drop books.<br><strong>Calibre:</strong> Install the <a href="https://github.com/crosspoint-reader/calibre-plugins/releases" rel="noopener">CrossPoint plugin</a> → File Transfer → Connect to Calibre.</p>
+            </div>
+          </div>
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">2</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.formats.title">Supported formats</h3>
+              <p data-i18n="guide.formats.desc"><strong>EPUB 2 & 3</strong> (with images) and <strong>TXT</strong>. No PDF — convert to EPUB using <a href="https://calibre-ebook.com/" rel="noopener">Calibre</a> first.</p>
+            </div>
+          </div>
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">3</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.fonts.title">Change fonts & text size</h3>
+              <p data-i18n="guide.fonts.desc">While reading: Confirm → Font Settings. 3 font families (Bookerly, Noto Sans, Bokerlam), 4 sizes. Adjust line spacing, paragraph spacing, and margins. Changes apply immediately.</p>
+            </div>
+          </div>
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">4</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.opds.title">Browse OPDS catalogs</h3>
+              <p data-i18n="guide.opds.desc">File Transfer → OPDS Browser. Set server URL (Calibre: append <code>/opds</code>). Browse and download EPUB books directly over WiFi.</p>
+            </div>
+          </div>
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">5</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.sync.title">Sync reading progress</h3>
+              <p data-i18n="guide.sync.desc">Settings → System → KOReader Sync. Set username, password, and server URL (<code>https://sync.koreader.rocks</code> or self-hosted). While reading: Confirm → Sync Progress → Apply Remote or Upload Local.</p>
+            </div>
+          </div>
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">6</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.buttons.title">Remap buttons</h3>
+              <p data-i18n="guide.buttons.desc">Settings → Buttons. Remap 4 front buttons and swap side button layout. Applies to all screens.</p>
+            </div>
+          </div>
+
+          <div class="flash-step">
+            <div class="step-num" aria-hidden="true">7</div>
+            <div class="step-content">
+              <h3 data-i18n="guide.weather.title">Weather widget</h3>
+              <p data-i18n="guide.weather.desc">Tools → Weather. Auto-connects WiFi, fetches from Open-Meteo (free, no API key). Temperature shown in header, clock screen, and weather app.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 1.5rem;" data-i18n="guide.more">
+          For the full user guide, see the
+          <a href="https://github.com/crosspoint-reader/crosspoint-reader/blob/master/USER_GUIDE.md" rel="noopener">CrossPoint USER_GUIDE.md</a> on GitHub.
+        </p>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Known Limitations -->
+    <section aria-labelledby="limits-heading">
+      <div class="container">
+        <h2 id="limits-heading" data-i18n="faq.limitations.title">Known Limitations</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;" data-i18n="faq.limitations.desc">These are not bugs — they are deliberate constraints or hardware facts.</p>
+        <div style="overflow-x: auto;">
+          <table class="limitations-table fade-in">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="limit.th.limitation">Limitation</th>
+                <th scope="col" data-i18n="limit.th.details">Details</th>
+                <th scope="col" data-i18n="limit.th.status">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="limit.nopdf.title">No PDF support</td>
+                <td data-i18n="limit.nopdf.desc">PDF is a fixed-layout format. Reflowing text for e-ink at variable font sizes is not feasible on 380KB RAM without a dedicated library that would consume most of the heap.</td>
+                <td><span class="badge badge-design" data-i18n="badge.design">By design</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.nocjk.title">No CJK script (Chinese, Japanese, Korean)</td>
+                <td data-i18n="limit.nocjk.desc">Built-in fonts cover Latin, Greek, Cyrillic, and Vietnamese. CJK scripts require tens of thousands of glyphs that don't fit in 16MB flash alongside the existing font set.</td>
+                <td><span class="badge badge-hw" data-i18n="badge.hw">Hardware limit</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.clockdrift.title">Clock drift in deep sleep</td>
+                <td data-i18n="limit.clockdrift.desc">The ESP32-C3 has no hardware RTC. CrossPet reconstructs elapsed time from the internal RTC counter delta on wake, which drifts ~1–2 minutes per day without a network sync.</td>
+                <td><span class="badge badge-hw" data-i18n="badge.hw">Hardware limit</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.bleonly.title">BLE only — no Classic Bluetooth</td>
+                <td data-i18n="limit.bleonly.desc">The ESP32-C3 silicon supports BLE 5.0 exclusively. Classic Bluetooth keyboards and headsets will not pair.</td>
+                <td><span class="badge badge-hw" data-i18n="badge.hw">Hardware limit</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.nodrm.title">No DRM / encrypted EPUBs</td>
+                <td data-i18n="limit.nodrm.desc">CrossPet cannot decrypt Adobe DRM or Kindle-format books. Use DRM-free EPUB files from your library, Gutenberg, Standard Ebooks, or purchased DRM-free titles.</td>
+                <td><span class="badge badge-design" data-i18n="badge.design">By design</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.framebuffer.title">Single framebuffer</td>
+                <td data-i18n="limit.framebuffer.desc">The ESP32-C3 has no PSRAM. CrossPet uses a single 48KB framebuffer — no double-buffering. Grayscale rendering briefly allocates a second buffer, then frees it immediately.</td>
+                <td><span class="badge badge-hw" data-i18n="badge.hw">Hardware limit</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.epubonly.title">EPUB 2 / 3 only (no MOBI/AZW)</td>
+                <td data-i18n="limit.epubonly.desc">The layout engine is built around EPUB's OPF/XHTML spine. Proprietary Kindle formats are not supported.</td>
+                <td><span class="badge badge-design" data-i18n="badge.design">By design</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="limit.rename.title">Renaming a book resets progress</td>
+                <td data-i18n="limit.rename.desc">Book caches are keyed by file path hash. Moving or renaming a file creates a new cache entry and loses the saved reading position.</td>
+                <td><span class="badge badge-planned" data-i18n="badge.known-issue">Known issue</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- FAQ -->
+    <section aria-labelledby="faq-heading">
+      <div class="container">
+        <h2 id="faq-heading" class="section-title" data-i18n="faq.heading">Frequently Asked Questions</h2>
+
+        <h3 style="margin: 2rem 0 1rem; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);" data-i18n="faq.general.title">General</h3>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.general.q1">Is CrossPet Reader safe to install?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.general.a1">CrossPet does not modify the ESP32-C3 bootloader or flash partition table layout used by the official firmware. You can revert to official firmware at any time. That said, flashing any custom firmware carries inherent risk — a power failure mid-flash can corrupt the device. Always use a reliable USB cable and cable connection, and keep the device plugged in throughout the process.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.general.q2">Will flashing void my warranty?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.general.a2">Almost certainly yes — modifying device firmware typically voids the manufacturer warranty. CrossPet is community-maintained software with no affiliation to Xteink. Proceed at your own risk and with that understanding.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.general.q3">How do I update CrossPet to a newer version?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.general.a3">If your device has WiFi configured, CrossPet can update itself over-the-air: go to <strong>Settings → System → Check for Updates</strong>. Alternatively, re-flash using the browser installer on this page or the PlatformIO CLI. OTA updates preserve your settings and SD card contents.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.general.q4">Can I go back to the official firmware?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.general.a4">Yes. Download the official firmware from <a href="https://xteink.dve.al" rel="noopener">xteink.dve.al</a> and flash it using their tool or <code>esptool.py</code>. Your SD card books are unaffected. If the device fails to boot, hold the Up side button while connecting USB to enter bootloader mode.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.general.q5">Is CrossPet open source? Can I contribute?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.general.a5">Yes — CrossPet is released under the GPL license. The full source is on GitHub. Contributions are welcome: bug reports, pull requests, translations, and feature ideas. Please read the contributing guide in the repository before submitting a PR.</p>
+          </div>
+        </details>
+
+        <h3 style="margin: 2.5rem 0 1rem; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);" data-i18n="faq.reading.title">Reading</h3>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.reading.q1">What book formats does CrossPet support?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.reading.a1">CrossPet supports EPUB 2 and EPUB 3 with inline images. Plain text (<code>.txt</code>) files are also supported. PDF, MOBI, AZW, and CBZ are not supported. For the best experience, use DRM-free EPUB files from sources like <a href="https://www.gutenberg.org" rel="noopener">Project Gutenberg</a>, <a href="https://standardebooks.org" rel="noopener">Standard Ebooks</a>, or your local library's OverDrive/Libby collection (after removing DRM on books you own).</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.reading.q2">How do I get books onto the device?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.reading.a2">Three methods: (1) <strong>WiFi upload</strong> — connect to the same network, open the device's IP in your browser, drag-and-drop EPUB files. (2) <strong>Calibre</strong> — CrossPet exposes a Calibre Content Server-compatible endpoint; add the device in Calibre's "Send to device" menu. (3) <strong>SD card</strong> — eject the SD card, copy EPUB files to the <code>/books/</code> directory on a computer, reinsert.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.reading.q3">Does CrossPet sync reading position across devices?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.reading.a3">Yes, via <strong>KOReader Sync</strong>. Set up a KOReader Sync server (self-hosted or community instance) in <strong>Settings → Sync</strong>. CrossPet will push your position after each reading session and pull it on open, so you can switch between the X4 and KOReader on Android/iOS seamlessly.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.reading.q4">Why does the first page of a book take longer to load?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.reading.a4">The first time you open a book, CrossPet parses the EPUB, runs the full layout engine for every section, and writes binary cache files to the SD card. This can take 10–60 seconds for large books. Subsequent opens are near-instant because they read pre-computed layout from the cache. If you change font size or family, the cache is invalidated and regenerated automatically.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.reading.q5">What image formats are supported in books?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.reading.a5">CrossPet supports JPEG (baseline) and PNG images embedded in EPUB files. Images are decoded, scaled to fit the viewport, and cached as pre-scaled bitmaps on the SD card. <strong>Progressive JPEG is not supported</strong> — the ESP32-C3's limited RAM cannot hold the full image in memory required for progressive decoding. If a book's images don't display, they are likely progressive JPEGs; re-export them as baseline JPEG or PNG using any image editor.</p>
+          </div>
+        </details>
+
+        <h3 style="margin: 2.5rem 0 1rem; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);" data-i18n="faq.technical.title">Technical</h3>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.technical.q1">What WiFi networks does the X4 support?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.technical.a1">The ESP32-C3 supports 2.4GHz 802.11 b/g/n only. 5GHz networks are not supported. WPA2-Personal and WPA3 are supported. Enterprise (WPA2-Enterprise / 802.1X) networks are not supported. Captive portal networks (hotels, airports) will not work.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.technical.q2">The device doesn't appear as a serial port when connected via USB.</summary>
+          <div class="details-body">
+            <p data-i18n="faq.technical.a2">Make sure the device is awake (press the power button) before connecting USB — the serial interface is inactive in deep sleep. Also verify you're using a data-capable USB-C cable, not a charge-only cable. On Linux, you may need to add yourself to the <code>dialout</code> group: <code>sudo usermod -a -G dialout $USER</code> and log out/in.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.technical.q3">Can I use a Bluetooth keyboard with CrossPet?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.technical.a3">Only BLE HID keyboards are supported — the ESP32-C3 has no Classic Bluetooth. Most modern compact keyboards advertised as "BLE" or "Bluetooth 5" work. Older keyboards that use Bluetooth Classic (pre-BT4.0) will not connect. Use the BLE pairing screen under <strong>Tools → BLE Remote</strong> to scan for and pair a keyboard.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.technical.q4">How much battery life can I expect?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.technical.a4">Battery life depends heavily on WiFi usage and sleep screen type. With WiFi off and a static sleep screen, expect 3–6 weeks of standby. Active reading (frequent page turns) consumes more — e-ink only draws power during refresh, so reading speed matters less than page-turn frequency. WiFi transfers and OTA updates are the largest battery consumers; avoid leaving WiFi on continuously.</p>
+          </div>
+        </details>
+
+        <h3 style="margin: 2.5rem 0 1rem; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);" data-i18n="faq.crosspet.title">CrossPet Features</h3>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.crosspet.q1">How does the Virtual Pet work?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.crosspet.a1">The Virtual Pet is a pixel-art companion that lives on your sleep screen and in the Tools menu. It tracks your reading sessions through the Reading Stats system — the more you read, the more your pet grows and evolves. Your pet's mood and appearance reflect your recent reading activity; long reading gaps will make it listless. The pet is purely cosmetic and does not affect firmware performance.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.crosspet.q2">What reading stats does CrossPet track?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.crosspet.a2">CrossPet tracks: today's reading time, all-time total reading time, number of reading sessions, books finished, current reading streak (consecutive days), and longest streak ever. Stats are stored locally in <code>.crosspoint/reading_stats.bin</code> on your SD card — no data is sent anywhere. The Reading Stats sleep screen displays a dashboard of these figures when your device is idle.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.crosspet.q3">How does the Weather widget work?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.crosspet.a3">The weather widget fetches forecast data from <a href="https://open-meteo.com" rel="noopener">Open-Meteo</a>, a free open-source weather API that requires no API key. Your approximate coordinates are configured in <strong>Settings → Weather</strong>. Data is cached on the SD card and refreshed when WiFi is available. The current temperature appears in the header bar and on the clock sleep screen.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.crosspet.q4">Can I disable the CrossPet features to save RAM?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.crosspet.a4">Most CrossPet features (weather, pet, games) only load when you actively navigate to them — they don't run in the background or consume RAM while you're reading. The reading stats system does record session start/end, but its memory footprint is minimal. If you need the absolute leanest experience, the <code>slim</code> build environment strips serial logging and produces the smallest possible binary.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.crosspet.q5">Does CrossPet drain battery faster than the official firmware?</summary>
+          <div class="details-body">
+            <p data-i18n="faq.crosspet.a5">Not noticeably. CrossPet uses the same deep sleep mechanism as the official firmware — the ESP32-C3 draws near-zero current when idle. Additional features like weather, games, and the virtual chicken only consume power when you actively use them. The reading stats system writes to SD only on session start/end (two brief writes per reading session), which has negligible battery impact. If you use WiFi-dependent features (weather, OTA updates) frequently, that will drain battery faster — but that's WiFi usage, not CrossPet overhead. In practice, standby and reading battery life are virtually identical to official firmware.</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <!-- Troubleshooting -->
+    <section aria-labelledby="troubleshoot-heading">
+      <div class="container">
+        <h2 id="troubleshoot-heading" class="section-title" data-i18n="faq.troubleshoot.title">Troubleshooting</h2>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.troubleshoot.q1">I can't see the device on my network for WiFi upload</summary>
+          <div class="details-body">
+            <p data-i18n="faq.troubleshoot.a1">Check that: (1) your phone/computer is on the same 2.4GHz network as the device, (2) the device shows a WiFi icon in the header bar indicating it's connected, (3) you're using the IP address shown in <strong>Settings → Network → Device IP</strong>, not a hostname. Some routers block device-to-device traffic — try from a different device or temporarily disable AP isolation in your router settings.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.troubleshoot.q2">Upload fails or is very slow</summary>
+          <div class="details-body">
+            <p data-i18n="faq.troubleshoot.a2">Large EPUB files (50MB+) can time out on slow WiFi connections. Try moving the device closer to your router. If Calibre uploads stall, switch to the browser drag-and-drop method. For very large files, copying directly to the SD card on a computer is the most reliable option.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.troubleshoot.q3">The device bootlooped after flashing</summary>
+          <div class="details-body">
+            <p data-i18n="faq.troubleshoot.a3">Hold the <strong>Up</strong> side button while connecting USB to force the ESP32-C3 into bootloader mode, bypassing the application. Then re-flash from a clean build. If the issue persists, try the <code>pio run -t erase</code> command to wipe flash before flashing — this resets all settings but guarantees a clean state.</p>
+          </div>
+        </details>
+
+        <details class="fade-in">
+          <summary data-i18n="faq.troubleshoot.q4">A book crashes or freezes the reader</summary>
+          <div class="details-body">
+            <p data-i18n="faq.troubleshoot.a4">Delete the book's cache directory: on the SD card, find <code>.crosspoint/epub_&lt;hash&gt;/</code> and delete the entire folder, then open the book again. If the crash repeats, the EPUB may contain malformed HTML or CSS that the parser can't handle. Open an issue on GitHub with the book title (if DRM-free and publicly available) or a minimal repro.</p>
+          </div>
+        </details>
+
+        <!-- CTA -->
+        <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border: 3px solid var(--border); box-shadow: 4px 4px 0 0 var(--pixel-shadow); text-align: center;">
+          <p style="font-family: var(--font-heading); font-size: 0.65rem; color: var(--text-primary); margin-bottom: 0.75rem;" data-i18n="faq.still-questions">Still have questions?</p>
+          <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 1rem;" data-i18n="faq.community-note">The community is active and friendly. Most questions get answered within a day.</p>
+          <a href="https://github.com/trilwu/crosspet/discussions" class="btn btn-primary" rel="noopener" data-i18n="faq.discussions">Visit GitHub Discussions</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <ul class="footer-links" role="list">
+        <li><a href="https://github.com/trilwu/crosspet" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/discussions" rel="noopener" data-i18n="footer.link.discussions">Discussions</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/issues" rel="noopener" data-i18n="footer.link.issues">Issues</a></li>
+        <li><a href="https://github.com/trilwu/crosspet/blob/master/LICENSE" rel="noopener" data-i18n="footer.link.license">GPL License</a></li>
+        <li><a href="index.html" data-i18n="footer.link.home">Home</a></li>
+        <li><a href="architecture.html" data-i18n="nav.architecture">Architecture</a></li>
+        <li><a href="flash.html" data-i18n="nav.flash">Flash</a></li>
+      </ul>
+      <p class="footer-note">
+        <span data-i18n="footer.disclaimer">CrossPet Reader is a personal Vietnamese fork of</span>
+        <a href="https://github.com/crosspoint-reader/crosspoint-reader" rel="noopener" data-i18n="footer.upstream">CrossPoint Reader</a>.<br>
+        <span data-i18n="footer.warranty">Use at your own risk. Flashing custom firmware may void your warranty.</span>
+      </p>
+      <p class="footer-tagline" data-i18n="footer.love">Built with ♥ on 380KB of RAM</p>
+    </div>
+  </footer>
+
+  <script src="js/i18n-switcher.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
