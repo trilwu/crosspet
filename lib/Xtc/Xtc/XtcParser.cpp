@@ -186,7 +186,7 @@ XtcError XtcParser::readPageTable() {
       return XtcError::READ_ERROR;
     }
 
-    m_pageTable[i].offset = static_cast<uint32_t>(entry.dataOffset);
+    m_pageTable[i].offset = entry.dataOffset;  // Preserve full 64-bit offset for >2GB files
     m_pageTable[i].size = entry.dataSize;
     m_pageTable[i].width = entry.width;
     m_pageTable[i].height = entry.height;
@@ -332,7 +332,7 @@ size_t XtcParser::loadPage(uint32_t pageIndex, uint8_t* buffer, size_t bufferSiz
 
   // Seek to page data
   if (!m_file.seek(page.offset)) {
-    LOG_DBG("XTC", "Failed to seek to page %u at offset %lu", pageIndex, page.offset);
+    LOG_DBG("XTC", "Failed to seek to page %u at offset %llu", pageIndex, (unsigned long long)page.offset);
     m_lastError = XtcError::READ_ERROR;
     return 0;
   }
@@ -460,12 +460,13 @@ bool XtcParser::loadPagePlaneStrip(uint32_t pageIndex, uint8_t plane, size_t col
   // Page data layout after the XtgPageHeader:
   // [plane1: width*colBytes bytes][plane2: width*colBytes bytes]
   // File offset to bitmap start = page.offset + sizeof(XtgPageHeader)
-  const size_t bitmapStart = static_cast<size_t>(page.offset) + sizeof(XtgPageHeader);
-  const size_t planeSize = colBytes * m_defaultWidth;  // bytes per plane
-  const size_t stripOffset = bitmapStart + plane * planeSize + colStart * colBytes;
+  // Use uint64_t throughout to support files >2GB without 32-bit overflow
+  const uint64_t bitmapStart = page.offset + sizeof(XtgPageHeader);
+  const uint64_t planeSize = static_cast<uint64_t>(colBytes) * m_defaultWidth;  // bytes per plane
+  const uint64_t stripOffset = bitmapStart + plane * planeSize + colStart * colBytes;
 
   if (!m_file.seek(stripOffset)) {
-    LOG_DBG("XTC", "loadPagePlaneStrip: seek failed to offset %lu", (unsigned long)stripOffset);
+    LOG_DBG("XTC", "loadPagePlaneStrip: seek failed to offset %llu", (unsigned long long)stripOffset);
     m_lastError = XtcError::READ_ERROR;
     return false;
   }
