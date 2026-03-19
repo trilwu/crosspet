@@ -66,6 +66,10 @@ bool CrossPointState::loadFromBinaryFile() {
     lastSleepImage = UINT8_MAX;
   }
 
+  customSleepShuffleHash = 0;
+  customSleepShuffleSeed = 0;
+  customSleepShuffleCursor = 0;
+
   if (version >= 3) {
     serialization::readPod(inputFile, readerActivityLoadCount);
   }

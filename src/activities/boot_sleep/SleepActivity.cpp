@@ -8,7 +8,9 @@
 #include <PNGdec.h>
 #include <Txt.h>
 #include <Xtc.h>
+#include <esp_random.h>
 
+#include <algorithm>
 #include <ctime>
 #include <new>
 
@@ -31,6 +33,58 @@
 #include <HalPowerManager.h>
 
 namespace {
+
+uint32_t hashSleepFileSet(const char* sleepDir, const std::vector<std::string>& files) {
+  // FNV-1a over the selected directory plus the sorted file names. This keeps
+  // the shuffle state stable across boots while automatically resetting it when
+  // the user adds, removes, or renames sleep images.
+  uint32_t hash = 2166136261u;
+  for (const char* p = sleepDir; *p != '\0'; ++p) {
+    hash ^= static_cast<uint8_t>(*p);
+    hash *= 16777619u;
+  }
+  for (const auto& file : files) {
+    for (char c : file) {
+      hash ^= static_cast<uint8_t>(c);
+      hash *= 16777619u;
+    }
+    hash ^= static_cast<uint8_t>('/');
+    hash *= 16777619u;
+  }
+  return hash;
+}
+
+uint32_t nextShuffleRand(uint32_t& state) {
+  if (state == 0) {
+    state = 0x6d2b79f5u;
+  }
+  state ^= state << 13;
+  state ^= state >> 17;
+  state ^= state << 5;
+  return state;
+}
+
+void buildShuffledFileOrder(const size_t count, const uint32_t seed, std::vector<uint32_t>& order) {
+  order.resize(count);
+  for (size_t i = 0; i < count; ++i) {
+    order[i] = static_cast<uint32_t>(i);
+  }
+
+  uint32_t state = seed;
+  for (size_t i = count; i > 1; --i) {
+    const size_t j = nextShuffleRand(state) % i;
+    std::swap(order[i - 1], order[j]);
+  }
+}
+
+void startNewCustomSleepShuffleCycle(const uint32_t fileSetHash) {
+  APP_STATE.customSleepShuffleHash = fileSetHash;
+  APP_STATE.customSleepShuffleSeed = esp_random();
+  if (APP_STATE.customSleepShuffleSeed == 0) {
+    APP_STATE.customSleepShuffleSeed = 1;
+  }
+  APP_STATE.customSleepShuffleCursor = 0;
+}
 
 // Context passed through PNGdec's decode() user-pointer to the per-scanline draw callback.
 struct PngOverlayCtx {
@@ -277,35 +331,55 @@ void SleepActivity::renderCustomSleepScreen() const {
       files.emplace_back(filename);
       file.close();
     }
+    std::sort(files.begin(), files.end());
     const auto numFiles = files.size();
     if (numFiles > 0) {
-      // Generate a random number between 1 and numFiles
-      auto randomFileIndex = random(numFiles);
-      // If we picked the same image as last time, reroll
-      while (numFiles > 1 && APP_STATE.lastSleepImage != UINT8_MAX && randomFileIndex == APP_STATE.lastSleepImage) {
-        randomFileIndex = random(numFiles);
+      const uint32_t fileSetHash = hashSleepFileSet(sleepDir, files);
+      if (APP_STATE.customSleepShuffleHash != fileSetHash || APP_STATE.customSleepShuffleSeed == 0 ||
+          APP_STATE.customSleepShuffleCursor >= numFiles) {
+        startNewCustomSleepShuffleCycle(fileSetHash);
       }
-      APP_STATE.lastSleepImage = randomFileIndex;
-      APP_STATE.saveToFile();
-      const auto sourcePath = std::string(sleepDir) + "/" + files[randomFileIndex];
-      // Try cache first
-      if (displayCachedSleepScreen(sourcePath)) {
-        dir.close();
-        return;
-      }
-      FsFile file;
-      if (Storage.openFileForRead("SLP", sourcePath, file)) {
-        LOG_DBG("SLP", "Randomly loading: %s/%s", sleepDir, files[randomFileIndex].c_str());
-        delay(100);
-        Bitmap bitmap(file, true);
-        if (bitmap.parseHeaders() == BmpReaderError::Ok) {
-          renderBitmapSleepScreen(bitmap, sourcePath);
-          file.close();
+
+      std::vector<uint32_t> shuffledOrder;
+      buildShuffledFileOrder(numFiles, APP_STATE.customSleepShuffleSeed, shuffledOrder);
+
+      // Walk only the unseen tail of the current shuffled cycle. This guarantees
+      // every image appears once before the next reshuffle, while keeping only a
+      // small index vector in RAM instead of persisting the whole sequence.
+      for (uint32_t orderPos = APP_STATE.customSleepShuffleCursor; orderPos < numFiles; ++orderPos) {
+        const uint32_t randomFileIndex = shuffledOrder[orderPos];
+        const auto sourcePath = std::string(sleepDir) + "/" + files[randomFileIndex];
+
+        // Try cache first
+        if (displayCachedSleepScreen(sourcePath)) {
+          APP_STATE.customSleepShuffleCursor = orderPos + 1;
+          APP_STATE.saveToFile();
           dir.close();
           return;
         }
-        file.close();
+
+        FsFile file;
+        if (Storage.openFileForRead("SLP", sourcePath, file)) {
+          LOG_DBG("SLP", "Shuffled loading: %s/%s (%lu/%lu)", sleepDir, files[randomFileIndex].c_str(),
+                  (unsigned long)(orderPos + 1), (unsigned long)numFiles);
+          delay(100);
+          Bitmap bitmap(file, true);
+          if (bitmap.parseHeaders() == BmpReaderError::Ok) {
+            renderBitmapSleepScreen(bitmap, sourcePath);
+            APP_STATE.customSleepShuffleCursor = orderPos + 1;
+            APP_STATE.saveToFile();
+            file.close();
+            dir.close();
+            return;
+          }
+          file.close();
+        }
       }
+
+      // All remaining images in this cycle failed to render. Start a fresh cycle
+      // for the next sleep attempt instead of getting stuck on the exhausted tail.
+      startNewCustomSleepShuffleCycle(fileSetHash);
+      APP_STATE.saveToFile();
     }
   }
   if (dir) dir.close();

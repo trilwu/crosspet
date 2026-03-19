@@ -10,6 +10,9 @@ class CrossPointState {
  public:
   std::string openEpubPath;
   uint8_t lastSleepImage = UINT8_MAX;  // UINT8_MAX = unset sentinel
+  uint32_t customSleepShuffleHash = 0;
+  uint32_t customSleepShuffleSeed = 0;
+  uint32_t customSleepShuffleCursor = 0;
   uint8_t readerActivityLoadCount = 0;
   bool lastSleepFromReader = false;
   ~CrossPointState() = default;

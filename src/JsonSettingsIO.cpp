@@ -70,6 +70,9 @@ bool JsonSettingsIO::saveState(const CrossPointState& s, const char* path) {
   JsonDocument doc;
   doc["openEpubPath"] = s.openEpubPath;
   doc["lastSleepImage"] = s.lastSleepImage;
+  doc["customSleepShuffleHash"] = s.customSleepShuffleHash;
+  doc["customSleepShuffleSeed"] = s.customSleepShuffleSeed;
+  doc["customSleepShuffleCursor"] = s.customSleepShuffleCursor;
   doc["readerActivityLoadCount"] = s.readerActivityLoadCount;
   doc["lastSleepFromReader"] = s.lastSleepFromReader;
 
@@ -88,6 +91,9 @@ bool JsonSettingsIO::loadState(CrossPointState& s, const char* json) {
 
   s.openEpubPath = doc["openEpubPath"] | std::string("");
   s.lastSleepImage = doc["lastSleepImage"] | (uint8_t)UINT8_MAX;
+  s.customSleepShuffleHash = doc["customSleepShuffleHash"] | (uint32_t)0;
+  s.customSleepShuffleSeed = doc["customSleepShuffleSeed"] | (uint32_t)0;
+  s.customSleepShuffleCursor = doc["customSleepShuffleCursor"] | (uint32_t)0;
   s.readerActivityLoadCount = doc["readerActivityLoadCount"] | (uint8_t)0;
   s.lastSleepFromReader = doc["lastSleepFromReader"] | false;
   return true;
