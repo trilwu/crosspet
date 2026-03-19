@@ -6,34 +6,43 @@
 #include "../Activity.h"
 #include "util/ButtonNavigator.h"
 
-// Activity that lists .bmp files in /sleep/ (or /.sleep/) and lets the user
-// select one as the fixed custom sleep-screen image.
-// Selecting an image saves the full path to SETTINGS.sleepImagePath.
-// An "Any (random)" option at the top restores default random behaviour.
-// When a specific file is highlighted, a fullscreen preview is shown before
-// saving so the user can confirm the selection looks correct.
+// All-in-one sleep screen configuration: mode selection + image picker + overlay slideshow.
+// Replaces the old 2-step flow (Settings→mode, then Apps→image).
 class SleepImagePickerActivity final : public Activity {
   ButtonNavigator buttonNavigator;
-  std::vector<std::string> fileList;  // filenames only (no directory prefix)
-  std::string sleepDir;               // resolved dir: "/.sleep" or "/sleep"
+  std::vector<std::string> fileList;  // image filenames (no directory prefix)
+  std::string sleepDir;               // resolved: "/.sleep" or "/sleep"
   int selectorIndex = 0;
-  bool previewMode = false;  // true = showing fullscreen BMP preview
+  bool slideshowActive = false;
+  int slideshowIndex = 0;
 
-  // Load .bmp filenames from the sleep directory into fileList.
+  // Menu structure:
+  // [0] Sleep mode selector (cycles on confirm)
+  // [1..N] Image files (only when mode uses images)
+  // [N+1] Clear cache (always last)
+  static constexpr int MODE_ITEM = 0;
+
   void loadFiles();
+  bool modeUsesImages() const;
+  int totalItems() const;
+  int firstFileIndex() const { return 1; }
+  int cacheItemIndex() const { return totalItems() - 1; }
+  bool isFileItem(int idx) const { return modeUsesImages() && idx >= firstFileIndex() && idx < cacheItemIndex(); }
 
-  // Full items count including the "Any (random)" header item.
-  int totalItems() const { return static_cast<int>(fileList.size()) + 1; }
+  bool isCurrentImageSelection(int idx) const;
+  void cycleSleepMode();
+  void saveImageSelection();
+  void clearCache();
 
-  // Save the currently selected image path and show guidance if sleep mode
-  // is not set to CUSTOM / COVER_CUSTOM.
-  void saveSelection();
-
-  // Render the file list view.
+  // Rendering helpers
   void renderList(int pageWidth, int pageHeight);
+  const char* currentModeName() const;
+  const char* modeDescription() const;
 
-  // Render a fullscreen BMP preview of the currently selected file.
-  void renderPreview(int pageWidth, int pageHeight);
+  // Overlay slideshow
+  void renderSlideshow();
+  bool renderBookPage();
+  bool drawOverlayImage(const std::string& path);
 
  public:
   explicit SleepImagePickerActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
