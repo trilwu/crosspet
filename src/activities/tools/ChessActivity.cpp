@@ -223,8 +223,19 @@ void ChessActivity::initBoard() {
 
 void ChessActivity::onEnter() {
   Activity::onEnter();
+  // Save and force portrait so the 8×48=384px board fits vertically on the 540×960 screen.
+  savedOrientation = renderer.getOrientation();
+  renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+  renderer.requestNextHalfRefresh();
   showingDifficultySelect = true;
   requestUpdate();
+}
+
+void ChessActivity::onExit() {
+  Activity::onExit();
+  // Restore orientation so the next activity (reader) starts clean
+  renderer.setOrientation(savedOrientation);
+  renderer.requestNextHalfRefresh();
 }
 
 void ChessActivity::loop() {

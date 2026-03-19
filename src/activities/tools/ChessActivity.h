@@ -51,12 +51,14 @@ class ChessActivity final : public Activity {
   const char* difficultyLabel() const;
   void initBoard();
   void renderDifficultySelect();
+  GfxRenderer::Orientation savedOrientation = GfxRenderer::Orientation::Portrait;
 
  public:
   explicit ChessActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
       : Activity("Chess", renderer, mappedInput) {}
 
   void onEnter() override;
+  void onExit() override;
   void loop() override;
   void render(RenderLock&&) override;
 };
