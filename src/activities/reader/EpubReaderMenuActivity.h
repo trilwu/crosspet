@@ -15,7 +15,10 @@ class EpubReaderMenuActivity final : public Activity {
     SELECT_CHAPTER,
     FOOTNOTES,
     GO_TO_PERCENT,
+    FONT_FAMILY,
+    FONT_SIZE,
     AUTO_PAGE_TURN,
+    AUTO_PAGE_TURN_SPEED,
     ROTATE_SCREEN,
     SCREENSHOT,
     DISPLAY_QR,
@@ -41,10 +44,19 @@ class EpubReaderMenuActivity final : public Activity {
     StrId labelId;
   };
 
-  static std::vector<MenuItem> buildMenuItems(bool hasFootnotes, bool hasStarredPages);
+  // Section header with index range into menuItems
+  struct SectionInfo {
+    const char* label;   // Section header text (uppercase)
+    int startIndex;      // First menu item index in this section
+    int count;           // Number of items in this section
+  };
 
-  // Fixed menu layout
+  static std::vector<MenuItem> buildMenuItems(bool hasFootnotes, bool hasStarredPages);
+  static std::vector<SectionInfo> buildSections(bool hasFootnotes, bool hasStarredPages);
+
+  // Fixed menu layout built at construction time
   const std::vector<MenuItem> menuItems;
+  const std::vector<SectionInfo> sections;
 
   int selectedIndex = 0;
 
@@ -54,9 +66,7 @@ class EpubReaderMenuActivity final : public Activity {
   uint8_t selectedPageTurnOption = 0;
   const std::vector<StrId> orientationLabels = {StrId::STR_PORTRAIT, StrId::STR_LANDSCAPE_CW, StrId::STR_INVERTED,
                                                 StrId::STR_LANDSCAPE_CCW};
-  // Max pages-per-minute for the in-menu auto-turn cycling (0=off, 1-20=ppm)
   static constexpr uint8_t AUTO_TURN_MAX_PPM = 20;
-  // Buffer for rendering the current ppm value as a string
   mutable char pageTurnValueBuf[8] = {};
   int currentPage = 0;
   int totalPages = 0;

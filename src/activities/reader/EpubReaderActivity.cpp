@@ -101,7 +101,7 @@ void EpubReaderActivity::onEnter() {
   READ_STATS.startSession();
 
   // Auto-activate page turn if persistent setting is configured
-  if (SETTINGS.autoPageTurnSpeed > 0) {
+  if (SETTINGS.autoPageTurnEnabled && SETTINGS.autoPageTurnSpeed > 0) {
     toggleAutoPageTurn(SETTINGS.autoPageTurnSpeed);
   }
 
@@ -111,6 +111,9 @@ void EpubReaderActivity::onEnter() {
 
 void EpubReaderActivity::onExit() {
   Activity::onExit();
+
+  // Reset text darkness to normal for UI screens
+  renderer.setTextDarkness(0);
 
   // Request half refresh for the next screen to clear accumulated reader ghosting
   renderer.requestNextHalfRefresh();
@@ -190,7 +193,7 @@ void EpubReaderActivity::loop() {
         mappedInput.wasReleased(MappedInputManager::Button::Back)) {
       automaticPageTurnActive = false;
       // Persist cancellation so auto-turn does not re-activate on next session
-      SETTINGS.autoPageTurnSpeed = 0;
+      SETTINGS.autoPageTurnEnabled = 0;
       SETTINGS.saveToFile();
       // updates chapter title space to indicate page turn disabled
       requestUpdate();
@@ -216,6 +219,16 @@ void EpubReaderActivity::loop() {
   // Power button multi-click: block front buttons toggle
   if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::BLOCK_FRONT) {
     ignoreFrontButtons = !ignoreFrontButtons;
+  }
+
+  // Power button multi-click: toggle auto page turn on/off
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::AUTO_PAGE_TURN) {
+    SETTINGS.autoPageTurnEnabled = SETTINGS.autoPageTurnEnabled ? 0 : 1;
+    if (SETTINGS.autoPageTurnEnabled && SETTINGS.autoPageTurnSpeed == 0) {
+      SETTINGS.autoPageTurnSpeed = 1;
+    }
+    SETTINGS.saveToFile();
+    toggleAutoPageTurn(SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0);
   }
 
   // Long-press Confirm = star/unstar current page
@@ -271,19 +284,28 @@ void EpubReaderActivity::loop() {
         menuTitle = menuTocItem.title;
       }
     }
+    // Capture font state before opening menu to detect changes requiring re-layout
+    const uint8_t prevFontFamily = SETTINGS.fontFamily;
+    const uint8_t prevFontSize = SETTINGS.fontSize;
     startActivityForResult(std::make_unique<EpubReaderMenuActivity>(
                                renderer, mappedInput, menuTitle, currentPage, totalPages, bookProgressPercent,
                                SETTINGS.orientation, !currentPageFootnotes.empty(), !bookmarkStore.isEmpty(),
-                               automaticPageTurnActive ? SETTINGS.autoPageTurnSpeed : 0),
-                           [this](const ActivityResult& result) {
+                               SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0),
+                           [this, prevFontFamily, prevFontSize](const ActivityResult& result) {
                              // Always apply orientation change even if the menu was cancelled
                              const auto& menu = std::get<MenuResult>(result.data);
                              applyOrientation(menu.orientation);
-                             toggleAutoPageTurn(menu.pageTurnOption);
-                             // Persist auto-turn speed so it survives across sessions
-                             if (SETTINGS.autoPageTurnSpeed != menu.pageTurnOption) {
-                               SETTINGS.autoPageTurnSpeed = menu.pageTurnOption;
-                               SETTINGS.saveToFile();
+                             // Apply auto page turn based on enabled flag set in menu
+                             toggleAutoPageTurn(SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0);
+                             // Reset section if font changed to force re-layout with new font/size
+                             if (SETTINGS.fontFamily != prevFontFamily || SETTINGS.fontSize != prevFontSize) {
+                               RenderLock lock(*this);
+                               if (section) {
+                                 cachedSpineIndex = currentSpineIndex;
+                                 cachedChapterTotalPageCount = section->pageCount;
+                                 nextPageNumber = section->currentPage;
+                               }
+                               section.reset();
                              }
                              if (!result.isCancelled) {
                                onReaderMenuConfirm(static_cast<EpubReaderMenuActivity::MenuAction>(menu.action));

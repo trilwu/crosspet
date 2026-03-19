@@ -61,10 +61,15 @@ inline const std::vector<SettingInfo>& getSettingsList() {
           [] { return PET_SETTINGS.homeShowPetStatus; },
           [](uint8_t v) { PET_SETTINGS.homeShowPetStatus = v; PET_SETTINGS.saveToFile(); },
           "homeShowPetStatus", StrId::STR_CAT_DISPLAY),
+      SettingInfo::DynamicToggle(
+          StrId::STR_HOME_FOCUS_MODE,
+          [] { return PET_SETTINGS.homeFocusMode; },
+          [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
+          "homeFocusMode", StrId::STR_CAT_DISPLAY),
 
       // --- Reader ---
       SettingInfo::Enum(StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,
-                        {StrId::STR_BOOKERLY, StrId::STR_NOTO_SANS, StrId::STR_BOKERLAM}, "fontFamily",
+                        {StrId::STR_BOOKERLY, StrId::STR_LEXEND, StrId::STR_BOKERLAM}, "fontFamily",
                         StrId::STR_CAT_READER),
       SettingInfo::Enum(StrId::STR_FONT_SIZE, &CrossPointSettings::fontSize,
                         {StrId::STR_SMALL, StrId::STR_MEDIUM, StrId::STR_LARGE, StrId::STR_X_LARGE}, "fontSize",
@@ -94,8 +99,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Enum(StrId::STR_IMAGES, &CrossPointSettings::imageRendering,
                         {StrId::STR_IMAGES_DISPLAY, StrId::STR_IMAGES_PLACEHOLDER, StrId::STR_IMAGES_SUPPRESS},
                         "imageRendering", StrId::STR_CAT_READER),
-      SettingInfo::Value(StrId::STR_AUTO_PAGE_TURN, &CrossPointSettings::autoPageTurnSpeed, {0, 20, 1},
-                        "autoPageTurnSpeed", StrId::STR_CAT_READER),
       // --- Controls ---
       SettingInfo::Enum(StrId::STR_SIDE_BTN_LAYOUT, &CrossPointSettings::sideButtonLayout,
                         {StrId::STR_PREV_NEXT, StrId::STR_NEXT_PREV}, "sideButtonLayout", StrId::STR_CAT_CONTROLS),
@@ -104,13 +107,13 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Toggle(StrId::STR_LONG_PRESS_SKIP, &CrossPointSettings::longPressChapterSkip, "longPressChapterSkip",
                           StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN, &CrossPointSettings::shortPwrBtn,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME},
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME, StrId::STR_AUTO_PAGE_TURN},
                         "shortPwrBtn", StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN_2CLICK, &CrossPointSettings::shortPwrBtn2Click,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME},
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME, StrId::STR_AUTO_PAGE_TURN},
                         "shortPwrBtn2Click", StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN_3CLICK, &CrossPointSettings::shortPwrBtn3Click,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME},
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME, StrId::STR_AUTO_PAGE_TURN},
                         "shortPwrBtn3Click", StrId::STR_CAT_CONTROLS),
 
       // --- System ---

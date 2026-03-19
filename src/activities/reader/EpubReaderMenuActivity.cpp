@@ -3,9 +3,14 @@
 #include <GfxRenderer.h>
 #include <I18n.h>
 
+#include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
+
+// Font family/size label arrays for rendering current values
+static const StrId fontFamilyLabels[] = {StrId::STR_BOOKERLY, StrId::STR_LEXEND, StrId::STR_BOKERLAM};
+static const StrId fontSizeLabels[] = {StrId::STR_SMALL, StrId::STR_MEDIUM, StrId::STR_LARGE, StrId::STR_X_LARGE};
 
 EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,
                                                const std::string& title, const int currentPage, const int totalPages,
@@ -14,6 +19,7 @@ EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInpu
                                                const uint8_t currentPageTurnOption)
     : Activity("EpubReaderMenu", renderer, mappedInput),
       menuItems(buildMenuItems(hasFootnotes, hasStarredPages)),
+      sections(buildSections(hasFootnotes, hasStarredPages)),
       title(title),
       pendingOrientation(currentOrientation),
       selectedPageTurnOption(currentPageTurnOption),
@@ -24,23 +30,49 @@ EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInpu
 std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuItems(bool hasFootnotes,
                                                                                      bool hasStarredPages) {
   std::vector<MenuItem> items;
-  items.reserve(11);
+  items.reserve(13);
+
+  // NAVIGATION section
   items.push_back({MenuAction::SELECT_CHAPTER, StrId::STR_SELECT_CHAPTER});
-  if (hasFootnotes) {
-    items.push_back({MenuAction::FOOTNOTES, StrId::STR_FOOTNOTES});
-  }
-  if (hasStarredPages) {
-    items.push_back({MenuAction::STARRED_PAGES, StrId::STR_STARRED_PAGES});
-  }
+  items.push_back({MenuAction::GO_TO_PERCENT, StrId::STR_GO_TO_PERCENT});
+  if (hasFootnotes) items.push_back({MenuAction::FOOTNOTES, StrId::STR_FOOTNOTES});
+  if (hasStarredPages) items.push_back({MenuAction::STARRED_PAGES, StrId::STR_STARRED_PAGES});
+
+  // DISPLAY section
+  items.push_back({MenuAction::FONT_FAMILY, StrId::STR_FONT_FAMILY});
+  items.push_back({MenuAction::FONT_SIZE, StrId::STR_FONT_SIZE});
   items.push_back({MenuAction::ROTATE_SCREEN, StrId::STR_ORIENTATION});
   items.push_back({MenuAction::AUTO_PAGE_TURN, StrId::STR_AUTO_TURN_PAGES_PER_MIN});
-  items.push_back({MenuAction::GO_TO_PERCENT, StrId::STR_GO_TO_PERCENT});
+  items.push_back({MenuAction::AUTO_PAGE_TURN_SPEED, StrId::STR_AUTO_PAGE_TURN});
+
+  // FEATURES section
   items.push_back({MenuAction::SCREENSHOT, StrId::STR_SCREENSHOT_BUTTON});
   items.push_back({MenuAction::DISPLAY_QR, StrId::STR_DISPLAY_QR});
-  items.push_back({MenuAction::GO_HOME, StrId::STR_GO_HOME_BUTTON});
   items.push_back({MenuAction::SYNC, StrId::STR_SYNC_PROGRESS});
+  items.push_back({MenuAction::GO_HOME, StrId::STR_GO_HOME_BUTTON});
   items.push_back({MenuAction::DELETE_CACHE, StrId::STR_DELETE_CACHE});
+
   return items;
+}
+
+std::vector<EpubReaderMenuActivity::SectionInfo> EpubReaderMenuActivity::buildSections(bool hasFootnotes,
+                                                                                       bool hasStarredPages) {
+  std::vector<SectionInfo> sects;
+  int idx = 0;
+
+  // NAVIGATION: 2 fixed + optional footnotes + optional starred
+  const int navCount = 2 + (hasFootnotes ? 1 : 0) + (hasStarredPages ? 1 : 0);
+  sects.push_back({"NAVIGATION", idx, navCount});
+  idx += navCount;
+
+  // DISPLAY: font family, font size, orientation, auto page turn toggle, speed
+  sects.push_back({"DISPLAY", idx, 5});
+  idx += 5;
+
+  // FEATURES: always 5
+  sects.push_back({"FEATURES", idx, 5});
+
+  return sects;
 }
 
 void EpubReaderMenuActivity::onEnter() {
@@ -51,7 +83,7 @@ void EpubReaderMenuActivity::onEnter() {
 void EpubReaderMenuActivity::onExit() { Activity::onExit(); }
 
 void EpubReaderMenuActivity::loop() {
-  // Handle navigation
+  // Handle navigation — operates on flat menuItems index (unchanged)
   buttonNavigator.onNext([this] {
     selectedIndex = ButtonNavigator::nextIndex(selectedIndex, static_cast<int>(menuItems.size()));
     requestUpdate();
@@ -64,6 +96,18 @@ void EpubReaderMenuActivity::loop() {
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     const auto selectedAction = menuItems[selectedIndex].action;
+    if (selectedAction == MenuAction::FONT_FAMILY) {
+      SETTINGS.fontFamily = (SETTINGS.fontFamily + 1) % CrossPointSettings::FONT_FAMILY_COUNT;
+      SETTINGS.saveToFile();
+      requestUpdate();
+      return;
+    }
+    if (selectedAction == MenuAction::FONT_SIZE) {
+      SETTINGS.fontSize = (SETTINGS.fontSize + 1) % CrossPointSettings::FONT_SIZE_COUNT;
+      SETTINGS.saveToFile();
+      requestUpdate();
+      return;
+    }
     if (selectedAction == MenuAction::ROTATE_SCREEN) {
       // Cycle orientation preview locally; actual rotation happens on menu exit.
       pendingOrientation = (pendingOrientation + 1) % orientationLabels.size();
@@ -72,8 +116,21 @@ void EpubReaderMenuActivity::loop() {
     }
 
     if (selectedAction == MenuAction::AUTO_PAGE_TURN) {
-      // Cycle 0(off) -> 1 -> 2 -> ... -> AUTO_TURN_MAX_PPM -> 0
-      selectedPageTurnOption = (selectedPageTurnOption >= AUTO_TURN_MAX_PPM) ? 0 : selectedPageTurnOption + 1;
+      // Toggle auto page turn on/off
+      SETTINGS.autoPageTurnEnabled = SETTINGS.autoPageTurnEnabled ? 0 : 1;
+      if (SETTINGS.autoPageTurnEnabled && SETTINGS.autoPageTurnSpeed == 0) {
+        SETTINGS.autoPageTurnSpeed = 1;
+      }
+      selectedPageTurnOption = SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0;
+      SETTINGS.saveToFile();
+      requestUpdate();
+      return;
+    }
+    if (selectedAction == MenuAction::AUTO_PAGE_TURN_SPEED) {
+      // Cycle speed 1 → 2 → ... → 20 → 1
+      SETTINGS.autoPageTurnSpeed = (SETTINGS.autoPageTurnSpeed >= AUTO_TURN_MAX_PPM) ? 1 : SETTINGS.autoPageTurnSpeed + 1;
+      selectedPageTurnOption = SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0;
+      SETTINGS.saveToFile();
       requestUpdate();
       return;
     }
@@ -109,56 +166,90 @@ void EpubReaderMenuActivity::render(RenderLock&&) {
   const int hintGutterHeight = isPortraitInverted ? 50 : 0;
   const int contentY = hintGutterHeight;
 
-  // Title
+  // Header: book title bold centered
   const std::string truncTitle =
       renderer.truncatedText(UI_12_FONT_ID, title.c_str(), contentWidth - 40, EpdFontFamily::BOLD);
-  // Manual centering so we can respect the content gutter.
   const int titleX =
       contentX + (contentWidth - renderer.getTextWidth(UI_12_FONT_ID, truncTitle.c_str(), EpdFontFamily::BOLD)) / 2;
   renderer.drawText(UI_12_FONT_ID, titleX, 15 + contentY, truncTitle.c_str(), true, EpdFontFamily::BOLD);
 
-  // Progress summary
-  std::string progressLine;
+  // Subtitle: "Chapter X · Page Y of Z · 42%"
+  char subtitle[64];
   if (totalPages > 0) {
-    progressLine = std::string(tr(STR_CHAPTER_PREFIX)) + std::to_string(currentPage) + "/" +
-                   std::to_string(totalPages) + std::string(tr(STR_PAGES_SEPARATOR));
+    snprintf(subtitle, sizeof(subtitle), "%s%d \xC2\xB7 %d/%d \xC2\xB7 %d%%",
+             tr(STR_CHAPTER_PREFIX), currentPage, currentPage, totalPages, bookProgressPercent);
+  } else {
+    snprintf(subtitle, sizeof(subtitle), "%d%%", bookProgressPercent);
   }
-  progressLine += std::string(tr(STR_BOOK_PREFIX)) + std::to_string(bookProgressPercent) + "%";
-  renderer.drawCenteredText(UI_10_FONT_ID, 45, progressLine.c_str());
+  const int subW = renderer.getTextWidth(UI_10_FONT_ID, subtitle);
+  renderer.drawText(UI_10_FONT_ID, contentX + (contentWidth - subW) / 2, 42 + contentY, subtitle, true);
 
-  // Menu Items
-  const int startY = 75 + contentY;
-  constexpr int lineHeight = 30;
+  // Sectioned list
+  int y = 64 + contentY;
+  constexpr int lineHeight = 34;
+  constexpr int sectionHeaderH = 26;
 
-  for (size_t i = 0; i < menuItems.size(); ++i) {
-    const int displayY = startY + (i * lineHeight);
-    const bool isSelected = (static_cast<int>(i) == selectedIndex);
+  for (const auto& section : sections) {
+    // Section header — small font, uppercase label
+    renderer.drawText(SMALL_FONT_ID, contentX + 14, y + 4, section.label, true, EpdFontFamily::REGULAR);
+    y += sectionHeaderH;
 
-    if (isSelected) {
-      // Highlight only the content area so we don't paint over hint gutters.
-      renderer.fillRect(contentX, displayY, contentWidth - 1, lineHeight, true);
+    // Items within section
+    for (int j = 0; j < section.count; j++) {
+      const int itemIdx = section.startIndex + j;
+      const bool isSelected = (itemIdx == selectedIndex);
+
+      if (isSelected) {
+        // Selection fill with side padding (not edge-to-edge)
+        renderer.fillRect(contentX + 14, y, contentWidth - 28, lineHeight, true);
+      }
+
+      // Item label (inverted text when selected for contrast)
+      renderer.drawText(UI_10_FONT_ID, contentX + 20, y + 4, I18N.get(menuItems[itemIdx].labelId), !isSelected);
+
+      // Right-aligned value for font family
+      if (menuItems[itemIdx].action == MenuAction::FONT_FAMILY) {
+        const char* value = I18N.get(fontFamilyLabels[SETTINGS.fontFamily]);
+        const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
+        renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, y + 4, value, !isSelected);
+      }
+
+      // Right-aligned value for font size
+      if (menuItems[itemIdx].action == MenuAction::FONT_SIZE) {
+        const char* value = I18N.get(fontSizeLabels[SETTINGS.fontSize]);
+        const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
+        renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, y + 4, value, !isSelected);
+      }
+
+      // Right-aligned value for orientation item
+      if (menuItems[itemIdx].action == MenuAction::ROTATE_SCREEN) {
+        const char* value = I18N.get(orientationLabels[pendingOrientation]);
+        const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
+        renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, y + 4, value, !isSelected);
+      }
+
+      // Right-aligned value for auto page turn toggle: On/Off
+      if (menuItems[itemIdx].action == MenuAction::AUTO_PAGE_TURN) {
+        const char* value = SETTINGS.autoPageTurnEnabled ? I18N.get(StrId::STR_STATE_ON) : I18N.get(StrId::STR_STATE_OFF);
+        const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
+        renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, y + 4, value, !isSelected);
+      }
+
+      // Right-aligned value for auto page turn speed: PPM number
+      if (menuItems[itemIdx].action == MenuAction::AUTO_PAGE_TURN_SPEED) {
+        snprintf(pageTurnValueBuf, sizeof(pageTurnValueBuf), "%d", SETTINGS.autoPageTurnSpeed);
+        const char* value = pageTurnValueBuf;
+        const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
+        renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, y + 4, value, !isSelected);
+      }
+
+      y += lineHeight;
     }
 
-    renderer.drawText(UI_10_FONT_ID, contentX + 20, displayY, I18N.get(menuItems[i].labelId), !isSelected);
-
-    if (menuItems[i].action == MenuAction::ROTATE_SCREEN) {
-      // Render current orientation value on the right edge of the content area.
-      const char* value = I18N.get(orientationLabels[pendingOrientation]);
-      const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
-      renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, displayY, value, !isSelected);
-    }
-
-    if (menuItems[i].action == MenuAction::AUTO_PAGE_TURN) {
-      // Render current pages-per-minute value (0=off, 1-20=ppm)
-      const char* value = (selectedPageTurnOption == 0) ? I18N.get(StrId::STR_STATE_OFF)
-                                                        : (snprintf(pageTurnValueBuf, sizeof(pageTurnValueBuf), "%d",
-                                                                    selectedPageTurnOption), pageTurnValueBuf);
-      const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
-      renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, displayY, value, !isSelected);
-    }
+    y += 4;  // Gap between sections
   }
 
-  // Footer / Hints
+  // Button hints
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 

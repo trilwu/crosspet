@@ -80,30 +80,19 @@ EpdFont bookerly18BoldItalicFont(&bookerly_18_bolditalic);
 EpdFontFamily bookerly18FontFamily(&bookerly18RegularFont, &bookerly18BoldFont, &bookerly18ItalicFont,
                                    &bookerly18BoldItalicFont);
 
-EpdFont notosans12RegularFont(&notosans_12_regular);
-EpdFont notosans12BoldFont(&notosans_12_bold);
-EpdFont notosans12ItalicFont(&notosans_12_italic);
-EpdFont notosans12BoldItalicFont(&notosans_12_bolditalic);
-EpdFontFamily notosans12FontFamily(&notosans12RegularFont, &notosans12BoldFont, &notosans12ItalicFont,
-                                   &notosans12BoldItalicFont);
-EpdFont notosans14RegularFont(&notosans_14_regular);
-EpdFont notosans14BoldFont(&notosans_14_bold);
-EpdFont notosans14ItalicFont(&notosans_14_italic);
-EpdFont notosans14BoldItalicFont(&notosans_14_bolditalic);
-EpdFontFamily notosans14FontFamily(&notosans14RegularFont, &notosans14BoldFont, &notosans14ItalicFont,
-                                   &notosans14BoldItalicFont);
-EpdFont notosans16RegularFont(&notosans_16_regular);
-EpdFont notosans16BoldFont(&notosans_16_bold);
-EpdFont notosans16ItalicFont(&notosans_16_italic);
-EpdFont notosans16BoldItalicFont(&notosans_16_bolditalic);
-EpdFontFamily notosans16FontFamily(&notosans16RegularFont, &notosans16BoldFont, &notosans16ItalicFont,
-                                   &notosans16BoldItalicFont);
-EpdFont notosans18RegularFont(&notosans_18_regular);
-EpdFont notosans18BoldFont(&notosans_18_bold);
-EpdFont notosans18ItalicFont(&notosans_18_italic);
-EpdFont notosans18BoldItalicFont(&notosans_18_bolditalic);
-EpdFontFamily notosans18FontFamily(&notosans18RegularFont, &notosans18BoldFont, &notosans18ItalicFont,
-                                   &notosans18BoldItalicFont);
+// Lexend fonts (no Italic available — uses Regular as fallback)
+EpdFont lexend12RegularFont(&lexend_12_regular);
+EpdFont lexend12BoldFont(&lexend_12_bold);
+EpdFontFamily lexend12FontFamily(&lexend12RegularFont, &lexend12BoldFont, &lexend12RegularFont, &lexend12BoldFont);
+EpdFont lexend14RegularFont(&lexend_14_regular);
+EpdFont lexend14BoldFont(&lexend_14_bold);
+EpdFontFamily lexend14FontFamily(&lexend14RegularFont, &lexend14BoldFont, &lexend14RegularFont, &lexend14BoldFont);
+EpdFont lexend16RegularFont(&lexend_16_regular);
+EpdFont lexend16BoldFont(&lexend_16_bold);
+EpdFontFamily lexend16FontFamily(&lexend16RegularFont, &lexend16BoldFont, &lexend16RegularFont, &lexend16BoldFont);
+EpdFont lexend18RegularFont(&lexend_18_regular);
+EpdFont lexend18BoldFont(&lexend_18_bold);
+EpdFontFamily lexend18FontFamily(&lexend18RegularFont, &lexend18BoldFont, &lexend18RegularFont, &lexend18BoldFont);
 
 #endif  // OMIT_FONTS
 
@@ -128,8 +117,10 @@ EpdFontFamily bokerlam18FontFamily(&bokerlam18RegularFont, &bokerlam18BoldFont, 
 EpdFont smallFont(&notosans_8_regular);
 EpdFontFamily smallFontFamily(&smallFont);
 
-// UI fonts use Noto Sans for full glyph coverage (symbols, Vietnamese)
-EpdFontFamily ui12FontFamily(&notosans12RegularFont, &notosans12BoldFont);
+// UI fonts use NotoSans 12 (clean sans-serif, lighter than Lexend)
+EpdFont notoUI12Regular(&notosans_12_regular);
+EpdFont notoUI12Bold(&notosans_12_bold);
+EpdFontFamily ui12FontFamily(&notoUI12Regular, &notoUI12Bold);
 
 // RTC memory persists across deep sleep — used to restore clock with elapsed time correction.
 // Magic sentinel confirms the values were set by a clean sleep entry (not stale/garbage).
@@ -299,10 +290,10 @@ void setupDisplayAndFonts() {
   renderer.insertFont(BOOKERLY_16_FONT_ID, bookerly16FontFamily);
   renderer.insertFont(BOOKERLY_18_FONT_ID, bookerly18FontFamily);
 
-  renderer.insertFont(NOTOSANS_12_FONT_ID, notosans12FontFamily);
-  renderer.insertFont(NOTOSANS_14_FONT_ID, notosans14FontFamily);
-  renderer.insertFont(NOTOSANS_16_FONT_ID, notosans16FontFamily);
-  renderer.insertFont(NOTOSANS_18_FONT_ID, notosans18FontFamily);
+  renderer.insertFont(LEXEND_12_FONT_ID, lexend12FontFamily);
+  renderer.insertFont(LEXEND_14_FONT_ID, lexend14FontFamily);
+  renderer.insertFont(LEXEND_16_FONT_ID, lexend16FontFamily);
+  renderer.insertFont(LEXEND_18_FONT_ID, lexend18FontFamily);
   renderer.insertFont(BOKERLAM_12_FONT_ID, bokerlam12FontFamily);
   renderer.insertFont(BOKERLAM_14_FONT_ID, bokerlam14FontFamily);
   renderer.insertFont(BOKERLAM_16_FONT_ID, bokerlam16FontFamily);
@@ -419,8 +410,7 @@ void setup() {
       // Periodic sleep screen refresh — minimal boot path, no full UI
       LOG_DBG("MAIN", "Timer wake: refreshing sleep screen");
       const auto mode = SETTINGS.sleepScreen;
-      if (mode == CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK ||
-          mode == CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS) {
+      if (mode == CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK) {
         setupDisplayAndFonts();
         activityManager.goToSleep();
       }
@@ -480,15 +470,12 @@ void loop() {
   renderer.setFadingFix(SETTINGS.fadingFix);
   {
     static uint8_t lastDarkMode = 0xFF;
-    static uint8_t lastTextDarkness = 0xFF;
     if (SETTINGS.darkMode != lastDarkMode) {
       renderer.setDarkMode(SETTINGS.darkMode);
       lastDarkMode = SETTINGS.darkMode;
     }
-    if (SETTINGS.textDarkness != lastTextDarkness) {
-      renderer.setTextDarkness(SETTINGS.textDarkness);
-      lastTextDarkness = SETTINGS.textDarkness;
-    }
+    // textDarkness is only applied in reader activities, not globally,
+    // so UI text stays at normal weight (0).
   }
 
   if (Serial && millis() - lastMemPrint >= 10000) {
@@ -571,9 +558,15 @@ void loop() {
     case CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW:
       activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInputManager));
       break;
-    case CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME:
-      WeatherActivity::silentRefresh();
+    case CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME: {
+      LOG_INF("PWR", "Sync weather/time triggered");
+      int syncResult = WeatherActivity::silentRefresh();
+      LOG_INF("PWR", "Sync result: %d (0=ok, 1=no creds, 2=timeout, 4=api, 5=parse)", syncResult);
+      // Refresh screen after time/weather sync to show updated clock
+      renderer.requestNextHalfRefresh();
+      activityManager.requestUpdate();
       break;
+    }
     default:
       break;  // PAGE_TURN, BLOCK_FRONT, STAR_PAGE handled by reader activities
   }

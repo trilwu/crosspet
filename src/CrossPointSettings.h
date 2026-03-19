@@ -104,7 +104,7 @@ class CrossPointSettings {
   };
 
   // Font family options
-  enum FONT_FAMILY { BOOKERLY = 0, NOTOSANS = 1, BOKERLAM = 2, FONT_FAMILY_COUNT };
+  enum FONT_FAMILY { BOOKERLY = 0, LEXEND = 1, BOKERLAM = 2, FONT_FAMILY_COUNT };
   // Font size options
   enum FONT_SIZE { SMALL = 0, MEDIUM = 1, LARGE = 2, EXTRA_LARGE = 3, FONT_SIZE_COUNT };
   enum LINE_COMPRESSION { TIGHT = 0, NORMAL = 1, WIDE = 2, LINE_COMPRESSION_COUNT };
@@ -138,7 +138,7 @@ class CrossPointSettings {
   };
 
   // Short power button press actions
-  enum SHORT_PWRBTN { IGNORE = 0, SLEEP = 1, PAGE_TURN = 2, SCREEN_REFRESH = 3, READING_STATS_VIEW = 4, STAR_PAGE = 5, BLOCK_FRONT = 6, SYNC_WEATHER_TIME = 7, SHORT_PWRBTN_COUNT };
+  enum SHORT_PWRBTN { IGNORE = 0, SLEEP = 1, PAGE_TURN = 2, SCREEN_REFRESH = 3, READING_STATS_VIEW = 4, STAR_PAGE = 5, BLOCK_FRONT = 6, SYNC_WEATHER_TIME = 7, AUTO_PAGE_TURN = 8, SHORT_PWRBTN_COUNT };
 
   // Hide battery percentage
   enum HIDE_BATTERY_PERCENTAGE { HIDE_NEVER = 0, HIDE_READER = 1, HIDE_ALWAYS = 2, HIDE_BATTERY_PERCENTAGE_COUNT };
@@ -231,8 +231,10 @@ class CrossPointSettings {
   // Temperature display unit: 0=Celsius, 1=Fahrenheit
   uint8_t temperatureUnit = 0;
 
-  // Auto page turn speed: 0=off, 1-20=pages per minute
+  // Auto page turn speed: 1-20=pages per minute (requires autoPageTurnEnabled=1)
   uint8_t autoPageTurnSpeed = 0;
+  // Auto page turn master switch: 0=off, 1=on (speed controlled by autoPageTurnSpeed)
+  uint8_t autoPageTurnEnabled = 0;
 
   // Keep RTC alive during deep sleep (GPIO13 HIGH) for accurate clock on wake.
   // Trade-off: ~3-4mA battery drain vs accurate time. Only useful for clock/stats sleep screens.

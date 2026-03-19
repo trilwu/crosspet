@@ -145,6 +145,8 @@ bool JsonSettingsIO::saveSettings(const CrossPointSettings& s, const char* path)
   doc["statusBarProgressBarThickness"] = s.statusBarProgressBarThickness;
   doc["weatherCity"] = s.weatherCity;
   doc["sleepImagePath"] = s.sleepImagePath;
+  doc["autoPageTurnSpeed"] = s.autoPageTurnSpeed;
+  doc["autoPageTurnEnabled"] = s.autoPageTurnEnabled;
 
   String json;
   serializeJson(doc, json);
@@ -246,6 +248,11 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   const char* sip = doc["sleepImagePath"] | "";
   strncpy(s.sleepImagePath, sip, sizeof(s.sleepImagePath) - 1);
   s.sleepImagePath[sizeof(s.sleepImagePath) - 1] = '\0';
+
+  s.autoPageTurnSpeed = doc["autoPageTurnSpeed"] | (uint8_t)0;
+  if (s.autoPageTurnSpeed > 20) s.autoPageTurnSpeed = 0;
+  s.autoPageTurnEnabled = doc["autoPageTurnEnabled"] | (uint8_t)0;
+  if (s.autoPageTurnEnabled > 1) s.autoPageTurnEnabled = 0;
 
   LOG_DBG("CPS", "Settings loaded from file");
 
