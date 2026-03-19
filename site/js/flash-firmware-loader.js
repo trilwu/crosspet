@@ -104,7 +104,7 @@ async function startFlash() {
 
     // Success
     setProgress(100);
-    statusEl.innerHTML = 'Flash complete! <strong>Press the power button</strong> to reboot your device.';
+    statusEl.innerHTML = 'Flash complete! Hold <strong>Reset</strong>, release it, then hold <strong>Power</strong> to reboot.';
     statusEl.className = 'flash-status success';
     flashBtn.textContent = 'Flash CrossPet Firmware';
     flashBtn.disabled = false;
