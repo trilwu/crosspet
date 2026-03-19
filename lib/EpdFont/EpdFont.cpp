@@ -163,8 +163,7 @@ const EpdGlyph* EpdFont::getGlyph(const uint32_t cp) const {
     }
   }
 
-  if (cp != REPLACEMENT_GLYPH) {
-    return getGlyph(REPLACEMENT_GLYPH);
-  }
+  // Missing glyph: return nullptr to skip rendering instead of showing a
+  // replacement diamond (◆). On an e-reader, invisible beats ugly.
   return nullptr;
 }
