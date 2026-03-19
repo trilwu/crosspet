@@ -19,7 +19,7 @@
 
 int HomeActivity::getMenuItemCount() const {
   int count = 4;  // File Browser, Recents, File Transfer, Settings
-  if (!recentBooks.empty()) count += recentBooks.size();
+  count += getVisibleOriginalRecentBookCount();
   return count;
 }
 
@@ -27,6 +27,7 @@ int HomeActivity::getMenuItemCount() const {
 
 void HomeActivity::loopOriginal() {
   const int menuCount = getMenuItemCount();
+  const int recentCount = getVisibleOriginalRecentBookCount();
 
   buttonNavigator.onNext([this, menuCount] {
     selectorIndex = ButtonNavigator::nextIndex(selectorIndex, menuCount);
@@ -38,8 +39,8 @@ void HomeActivity::loopOriginal() {
   });
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    int menuSelectedIndex = selectorIndex - static_cast<int>(recentBooks.size());
-    if (selectorIndex < static_cast<int>(recentBooks.size())) {
+    int menuSelectedIndex = selectorIndex - recentCount;
+    if (selectorIndex < recentCount) {
       onSelectBook(recentBooks[selectorIndex].path);
     } else if (menuSelectedIndex == 0) {
       onFileBrowserOpen();
@@ -59,6 +60,7 @@ void HomeActivity::renderOriginal() {
   const auto& metrics = UITheme::getInstance().getMetrics();
   const auto pageWidth = renderer.getScreenWidth();
   const auto pageHeight = renderer.getScreenHeight();
+  const int recentCount = getVisibleOriginalRecentBookCount();
 
   renderer.clearScreen();
   bool bufferRestored = coverBufferStored && restoreCoverBuffer();
@@ -79,7 +81,7 @@ void HomeActivity::renderOriginal() {
       Rect{0, metrics.homeTopPadding + metrics.homeCoverTileHeight + metrics.verticalSpacing, pageWidth,
            pageHeight - (metrics.headerHeight + metrics.homeTopPadding + metrics.verticalSpacing * 2 +
                          metrics.buttonHintsHeight)},
-      static_cast<int>(menuItems.size()), selectorIndex - static_cast<int>(recentBooks.size()),
+      static_cast<int>(menuItems.size()), selectorIndex - recentCount,
       [&menuItems](int index) { return std::string(menuItems[index]); },
       [&menuIcons](int index) { return menuIcons[index]; });
 

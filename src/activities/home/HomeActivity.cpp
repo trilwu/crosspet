@@ -62,6 +62,19 @@ void HomeActivity::loadRecentBooks(int maxBooks) {
   }
 }
 
+int HomeActivity::getHomeRecentBookSlotCount() const {
+  if (SETTINGS.uiTheme <= CrossPointSettings::LYRA_3_COVERS) {
+    return UITheme::getInstance().getMetrics().homeRecentBooksCount;
+  }
+
+  return 4;
+}
+
+int HomeActivity::getVisibleOriginalRecentBookCount() const {
+  const int themeSlots = UITheme::getInstance().getMetrics().homeRecentBooksCount;
+  return std::min(static_cast<int>(recentBooks.size()), themeSlots);
+}
+
 void HomeActivity::loadRecentCovers(int coverHeight) {
   recentsLoading = true;
   Rect popup;
@@ -122,7 +135,7 @@ void HomeActivity::onEnter() {
   firstRenderDone = false;
   recentsLoaded = false;
   recentsLoading = false;
-  loadRecentBooks(4);
+  loadRecentBooks(getHomeRecentBookSlotCount());
   requestUpdate();
 }
 

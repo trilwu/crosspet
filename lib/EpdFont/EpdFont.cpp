@@ -165,21 +165,40 @@ bool EpdFont::hasGlyph(const uint32_t cp) const {
 }
 
 const EpdGlyph* EpdFont::getGlyph(const uint32_t cp) const {
-  // Resolve direct coverage first, then fall back to U+FFFD for rendering paths
-  // that prefer a visible replacement glyph over a silent drop.
-  if (hasGlyph(cp)) {
+  const auto lookupGlyph = [this](const uint32_t lookupCp) -> const EpdGlyph* {
+    if (!hasGlyph(lookupCp)) {
+      return nullptr;
+    }
+
     const auto* intervals = data->intervals;
     const auto* end = intervals + data->intervalCount;
     const auto it = std::upper_bound(
-        intervals, end, cp, [](uint32_t value, const EpdUnicodeInterval& interval) { return value < interval.first; });
-    if (it != intervals) {
-      const auto& interval = *(it - 1);
-      return &data->glyph[interval.offset + (cp - interval.first)];
+        intervals, end, lookupCp,
+        [](uint32_t value, const EpdUnicodeInterval& interval) { return value < interval.first; });
+    if (it == intervals) {
+      return nullptr;
+    }
+
+    const auto& interval = *(it - 1);
+    return &data->glyph[interval.offset + (lookupCp - interval.first)];
+  };
+
+  if (const auto* glyph = lookupGlyph(cp)) {
+    return glyph;
+  }
+
+  // Prefer a plain ASCII asterisk for unknown characters because the bundled
+  // replacement glyph renders as a visible question-mark box in several fonts.
+  static constexpr uint32_t kMissingGlyphFallback = '*';
+  if (cp != kMissingGlyphFallback) {
+    if (const auto* glyph = lookupGlyph(kMissingGlyphFallback)) {
+      return glyph;
     }
   }
 
   if (cp != REPLACEMENT_GLYPH) {
-    return getGlyph(REPLACEMENT_GLYPH);
+    return lookupGlyph(REPLACEMENT_GLYPH);
   }
+
   return nullptr;
 }
