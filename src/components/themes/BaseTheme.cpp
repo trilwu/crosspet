@@ -8,12 +8,10 @@
 #include <Logging.h>
 
 #include <cstdint>
-#include <ctime>
 #include <string>
 
 #include "I18n.h"
 #include "RecentBooksStore.h"
-#include "activities/tools/WeatherActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -697,29 +695,11 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
                       true);
   }
 
-  // Draw Clock (left-most element) — respects statusBarClock toggle for all themes
-  int clockWidth = 0;
-  if (SETTINGS.statusBarClock) {
-    time_t now;
-    time(&now);
-    struct tm timeinfo;
-    localtime_r(&now, &timeinfo);
-    char clockBuf[8];
-    if (timeinfo.tm_year >= 125) {
-      snprintf(clockBuf, sizeof(clockBuf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-    } else {
-      snprintf(clockBuf, sizeof(clockBuf), "--:--");
-    }
-    clockWidth = renderer.getTextWidth(SMALL_FONT_ID, clockBuf);
-    renderer.drawText(SMALL_FONT_ID, metrics.statusBarHorizontalMargin + orientedMarginLeft, textY, clockBuf);
-  }
-
-  // Draw Battery (after clock)
+  // Draw Battery (left-most status item)
   const bool showBatteryPercentage =
       SETTINGS.hideBatteryPercentage == CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_NEVER;
   if (SETTINGS.statusBarBattery) {
-    const int batteryX = metrics.statusBarHorizontalMargin + orientedMarginLeft + 1 +
-                         (clockWidth > 0 ? clockWidth + 6 : 0);
+    const int batteryX = metrics.statusBarHorizontalMargin + orientedMarginLeft + 1;
     GUI.drawBatteryLeft(renderer,
                         Rect{batteryX, textY, metrics.batteryWidth, metrics.batteryHeight},
                         showBatteryPercentage);
@@ -734,9 +714,8 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
         renderer.getScreenWidth() - (metrics.statusBarHorizontalMargin * 2) - orientedMarginLeft - orientedMarginRight;
 
     const int batterySize = SETTINGS.statusBarBattery ? (showBatteryPercentage ? 50 : 20) : 0;
-    const int clockSize = clockWidth > 0 ? clockWidth + 6 : 0;
     const int starReserve = isStarred ? (renderer.getTextWidth(SMALL_FONT_ID, "*") + 6) : 0;
-    const int titleMarginLeft = clockSize + batterySize + 30;
+    const int titleMarginLeft = batterySize + 30;
     const int titleMarginRight = progressTextWidth + starReserve + 30;
 
     // Attempt to center title on the screen, but if title is too wide then later we will center it within the

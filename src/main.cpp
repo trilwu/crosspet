@@ -16,7 +16,6 @@
 #include <sys/time.h>
 
 #include <esp_private/esp_clk.h>
-#include <esp_sntp.h>
 
 #include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
@@ -34,7 +33,6 @@
 #include "util/ButtonNavigator.h"
 #include "util/ScreenshotUtil.h"
 #include "activities/tools/ReadingStatsActivity.h"
-#include "activities/tools/WeatherActivity.h"
 #include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
 
@@ -138,16 +136,6 @@ RTC_DATA_ATTR static uint32_t g_rtcSleepMagic = 0;
 RTC_DATA_ATTR static int64_t  g_rtcUsBeforeSleep = 0;    // esp_clk_rtc_time() before sleep
 RTC_DATA_ATTR static uint32_t g_unixBeforeSleep = 0;     // time(nullptr) before sleep
 
-// True when system clock was restored from backup (may have drift from deep sleep).
-// Reset to false after a fresh NTP sync. Used by clock UI to show "~" approximate indicator.
-bool g_clockApproximate = false;
-
-// SNTP callback — clears approximate flag when NTP sync completes
-static void onNtpSyncComplete(struct timeval* tv) {
-  g_clockApproximate = false;
-  LOG_DBG("NTP", "Time synced, clock is now accurate");
-}
-
 // SD-based clock backup — reliable fallback when RTC_DATA_ATTR is lost on ESP32-C3.
 // Saves unix timestamp + RTC timer value. On wake, RTC timer is still running so we can
 // compute elapsed sleep duration even without RTC memory.
@@ -236,16 +224,13 @@ void verifyPowerButtonDuration() {
 
   if (abort) {
     // Button released too early. Returning to sleep.
-    // Refresh dynamic sleep screens (clock, reading stats) so the display isn't stale.
-    const auto mode = SETTINGS.sleepScreen;
-    if (mode == CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK ||
-        mode == CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS) {
+    // Refresh the reading stats sleep screen so the display isn't stale.
+    if (SETTINGS.sleepScreen == CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS) {
       setupDisplayAndFonts();
       activityManager.goToSleep();
     }
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
-    powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
-                                CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+    powerManager.startDeepSleep(gpio);
   }
 }
 
@@ -278,8 +263,7 @@ void enterDeepSleep() {
   // Also save to SD as reliable fallback (RTC_DATA_ATTR can be lost on some ESP32-C3 boards)
   saveClockToSD();
 
-  powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
-                                CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+  powerManager.startDeepSleep(gpio);
 }
 
 void setupDisplayAndFonts() {
@@ -352,9 +336,6 @@ void setup() {
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 
-  // Register NTP sync callback to clear approximate clock flag
-  sntp_set_time_sync_notification_cb(onNtpSyncComplete);
-
   // Restore system clock after deep sleep.
   // Strategy 1: RTC memory + LP timer elapsed correction (most accurate)
   // Strategy 2: SD card backup (reliable fallback when RTC_DATA_ATTR lost on ESP32-C3)
@@ -376,21 +357,20 @@ void setup() {
       struct timeval tv = {corrected, 0};
       settimeofday(&tv, nullptr);
       clockValid = true;
-      g_clockApproximate = true;  // RTC timer drifts during deep sleep
       LOG_DBG("MAIN", "Clock restored via RTC: base=%lu + %us elapsed", g_unixBeforeSleep, elapsedSec);
     }
 
     if (!clockValid) {
       // Strategy 2: SD card backup (time will be slightly behind by sleep duration)
       clockValid = restoreClockFromSD();
-      if (clockValid) g_clockApproximate = true;
     }
 
     g_rtcSleepMagic = 0;  // consume — next boot treats as cold boot unless we sleep again
   }
 
-  // Load cached timezone from weather data, fallback to ICT-7 (Indochina Time).
-  // This must happen after settimeofday() and before any localtime_r() calls.
+  // Load the cached timezone before any localtime_r() calls. Older firmware
+  // persisted it in weather_cache.json, so keep reading that file for
+  // compatibility even though the weather feature has been removed.
   {
     char cachedTz[16] = "ICT-7";
     String content = Storage.readFile("/.crosspoint/weather_cache.json");
@@ -415,25 +395,10 @@ void setup() {
       LOG_DBG("MAIN", "Verifying power button press duration");
       verifyPowerButtonDuration();
       break;
-    case HalGPIO::WakeupReason::TimerWake: {
-      // Periodic sleep screen refresh — minimal boot path, no full UI
-      LOG_DBG("MAIN", "Timer wake: refreshing sleep screen");
-      const auto mode = SETTINGS.sleepScreen;
-      if (mode == CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK ||
-          mode == CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS) {
-        setupDisplayAndFonts();
-        activityManager.goToSleep();
-      }
-      saveClockToSD();
-      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
-                                  CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
-      break;  // unreachable — startDeepSleep never returns
-    }
     case HalGPIO::WakeupReason::AfterUSBPower:
       // If USB power caused a cold boot, go back to sleep
       LOG_DBG("MAIN", "Wakeup reason: After USB Power");
-      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
-                                  CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+      powerManager.startDeepSleep(gpio);
       break;
     case HalGPIO::WakeupReason::AfterFlash:
       // After flashing, just proceed to boot
@@ -570,9 +535,6 @@ void loop() {
       break;
     case CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW:
       activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInputManager));
-      break;
-    case CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME:
-      WeatherActivity::silentRefresh();
       break;
     default:
       break;  // PAGE_TURN, BLOCK_FRONT, STAR_PAGE handled by reader activities

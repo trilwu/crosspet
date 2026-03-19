@@ -18,8 +18,6 @@ class CrossPetSettings {
   bool loadFromFile();
 
   // Home screen widget visibility (1=show, 0=hide)
-  uint8_t homeShowClock = 1;
-  uint8_t homeShowWeather = 1;
   uint8_t homeShowPetStatus = 1;
 
  private:

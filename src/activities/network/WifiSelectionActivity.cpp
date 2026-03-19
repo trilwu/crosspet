@@ -254,9 +254,9 @@ void WifiSelectionActivity::checkConnectionStatus() {
     connectedIP = ipStr;
     autoConnecting = false;
 
-    // Start NTP sync with the cached timezone (set by main.cpp on boot from
-    // weather_cache.json, or ICT-7 default).  configTzTime reads the TZ env var
-    // that was set at startup, so localtime_r() returns local time immediately.
+    // Start NTP sync with the cached timezone prepared during boot. configTzTime
+    // reads the TZ env var that main.cpp restored before we got here, so
+    // localtime_r() returns local time immediately.
     if (!esp_sntp_enabled()) {
       const char* tz = getenv("TZ");
       configTzTime(tz ? tz : "UTC0", "pool.ntp.org", "time.google.com");

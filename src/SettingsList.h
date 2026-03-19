@@ -17,18 +17,13 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       // --- Display ---
       SettingInfo::Enum(StrId::STR_SLEEP_SCREEN, &CrossPointSettings::sleepScreen,
                         {StrId::STR_DARK, StrId::STR_LIGHT, StrId::STR_CUSTOM, StrId::STR_COVER, StrId::STR_NONE_OPT,
-                         StrId::STR_COVER_CUSTOM, StrId::STR_CLOCK, StrId::STR_READING_STATS, StrId::STR_PAGE_OVERLAY},
+                         StrId::STR_COVER_CUSTOM, StrId::STR_READING_STATS, StrId::STR_PAGE_OVERLAY},
                         "sleepScreen", StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_SLEEP_COVER_MODE, &CrossPointSettings::sleepScreenCoverMode,
                         {StrId::STR_FIT, StrId::STR_CROP}, "sleepScreenCoverMode", StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_SLEEP_COVER_FILTER, &CrossPointSettings::sleepScreenCoverFilter,
                         {StrId::STR_NONE_OPT, StrId::STR_FILTER_CONTRAST, StrId::STR_INVERTED},
                         "sleepScreenCoverFilter", StrId::STR_CAT_DISPLAY),
-      SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_ALIVE, &CrossPointSettings::keepClockAlive, "keepClockAlive",
-                          StrId::STR_CAT_DISPLAY),
-      SettingInfo::Enum(StrId::STR_SLEEP_REFRESH, &CrossPointSettings::sleepRefreshInterval,
-                        {StrId::STR_OFF, StrId::STR_1_MIN, StrId::STR_5_MIN, StrId::STR_10_MIN, StrId::STR_30_MIN, StrId::STR_60_MIN},
-                        "sleepRefreshInterval", StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_HIDE_BATTERY, &CrossPointSettings::hideBatteryPercentage,
                         {StrId::STR_NEVER, StrId::STR_IN_READER, StrId::STR_ALWAYS}, "hideBatteryPercentage",
                         StrId::STR_CAT_DISPLAY),
@@ -43,19 +38,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_DISPLAY),
       SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode, "darkMode",
                           StrId::STR_CAT_DISPLAY),
-      SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
-                        {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CAT_DISPLAY),
-      // CrossPet home screen widgets — stored in crosspet.json
-      SettingInfo::DynamicToggle(
-          StrId::STR_HOME_CLOCK,
-          [] { return PET_SETTINGS.homeShowClock; },
-          [](uint8_t v) { PET_SETTINGS.homeShowClock = v; PET_SETTINGS.saveToFile(); },
-          "homeShowClock", StrId::STR_CAT_DISPLAY),
-      SettingInfo::DynamicToggle(
-          StrId::STR_HOME_WEATHER,
-          [] { return PET_SETTINGS.homeShowWeather; },
-          [](uint8_t v) { PET_SETTINGS.homeShowWeather = v; PET_SETTINGS.saveToFile(); },
-          "homeShowWeather", StrId::STR_CAT_DISPLAY),
       SettingInfo::DynamicToggle(
           StrId::STR_HOME_PET_STATUS,
           [] { return PET_SETTINGS.homeShowPetStatus; },
@@ -104,13 +86,13 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Toggle(StrId::STR_LONG_PRESS_SKIP, &CrossPointSettings::longPressChapterSkip, "longPressChapterSkip",
                           StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN, &CrossPointSettings::shortPwrBtn,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME},
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT},
                         "shortPwrBtn", StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN_2CLICK, &CrossPointSettings::shortPwrBtn2Click,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME},
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT},
                         "shortPwrBtn2Click", StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_SHORT_PWR_BTN_3CLICK, &CrossPointSettings::shortPwrBtn3Click,
-                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT, StrId::STR_SYNC_WEATHER_TIME},
+                        {StrId::STR_IGNORE, StrId::STR_SLEEP, StrId::STR_PAGE_TURN, StrId::STR_SCREEN_REFRESH, StrId::STR_READING_STATS_APP, StrId::STR_STAR_PAGE, StrId::STR_BLOCK_FRONT},
                         "shortPwrBtn3Click", StrId::STR_CAT_CONTROLS),
 
       // --- System ---
@@ -174,8 +156,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         {StrId::STR_BOOK, StrId::STR_CHAPTER, StrId::STR_HIDE}, "statusBarTitle",
                         StrId::STR_CUSTOMISE_STATUS_BAR),
       SettingInfo::Toggle(StrId::STR_BATTERY, &CrossPointSettings::statusBarBattery, "statusBarBattery",
-                          StrId::STR_CUSTOMISE_STATUS_BAR),
-      SettingInfo::Toggle(StrId::STR_CLOCK, &CrossPointSettings::statusBarClock, "statusBarClock",
                           StrId::STR_CUSTOMISE_STATUS_BAR),
   };
   return list;

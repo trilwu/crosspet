@@ -24,9 +24,8 @@ class CrossPointSettings {
     COVER = 3,
     BLANK = 4,
     COVER_CUSTOM = 5,
-    CLOCK = 6,
-    READING_STATS = 7,
-    OVERLAY = 8,
+    READING_STATS = 6,
+    OVERLAY = 7,
     SLEEP_SCREEN_MODE_COUNT
   };
   enum SLEEP_SCREEN_COVER_MODE { FIT = 0, CROP = 1, SLEEP_SCREEN_COVER_MODE_COUNT };
@@ -138,7 +137,16 @@ class CrossPointSettings {
   };
 
   // Short power button press actions
-  enum SHORT_PWRBTN { IGNORE = 0, SLEEP = 1, PAGE_TURN = 2, SCREEN_REFRESH = 3, READING_STATS_VIEW = 4, STAR_PAGE = 5, BLOCK_FRONT = 6, SYNC_WEATHER_TIME = 7, SHORT_PWRBTN_COUNT };
+  enum SHORT_PWRBTN {
+    IGNORE = 0,
+    SLEEP = 1,
+    PAGE_TURN = 2,
+    SCREEN_REFRESH = 3,
+    READING_STATS_VIEW = 4,
+    STAR_PAGE = 5,
+    BLOCK_FRONT = 6,
+    SHORT_PWRBTN_COUNT
+  };
 
   // Hide battery percentage
   enum HIDE_BATTERY_PERCENTAGE { HIDE_NEVER = 0, HIDE_READER = 1, HIDE_ALWAYS = 2, HIDE_BATTERY_PERCENTAGE_COUNT };
@@ -163,7 +171,6 @@ class CrossPointSettings {
   uint8_t statusBarProgressBarThickness = PROGRESS_BAR_NORMAL;
   uint8_t statusBarTitle = CHAPTER_TITLE;
   uint8_t statusBarBattery = 1;
-  uint8_t statusBarClock = 1;
   // Text rendering settings
   uint8_t extraParagraphSpacing = 1;
   uint8_t textAntiAliasing = 1;
@@ -223,27 +230,8 @@ class CrossPointSettings {
   // Default 1 (dark) — closer to the bold BW look users expect from e-ink
   uint8_t textDarkness = 1;
 
-  // Weather city selection (0=Hanoi, 1=TPHCM, 2=DaNang)
-  uint8_t weatherCity = 0;
-  // Temperature display unit: 0=Celsius, 1=Fahrenheit
-  uint8_t temperatureUnit = 0;
-
   // Auto page turn speed: 0=off, 1-20=pages per minute
   uint8_t autoPageTurnSpeed = 0;
-
-  // Keep RTC alive during deep sleep (GPIO13 HIGH) for accurate clock on wake.
-  // Trade-off: ~3-4mA battery drain vs accurate time. Only useful for clock/stats sleep screens.
-  uint8_t keepClockAlive = 0;
-
-  // Periodic sleep screen refresh interval (requires keepClockAlive=1).
-  // 0=OFF, 1=1min, 2=5min, 3=10min, 4=30min, 5=60min
-  enum SLEEP_REFRESH_INTERVAL { REFRESH_OFF = 0, REFRESH_1M = 1, REFRESH_5M = 2, REFRESH_10M = 3, REFRESH_30M = 4, REFRESH_60M = 5, SLEEP_REFRESH_INTERVAL_COUNT };
-  uint8_t sleepRefreshInterval = REFRESH_OFF;
-
-  static uint32_t getSleepRefreshMinutes(const uint8_t setting) {
-    constexpr uint32_t intervals[] = {0, 1, 5, 10, 30, 60};
-    return setting < SLEEP_REFRESH_INTERVAL_COUNT ? intervals[setting] : 0;
-  }
 
   ~CrossPointSettings() = default;
 

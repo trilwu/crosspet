@@ -17,14 +17,10 @@
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
-#include "components/UITheme.h"
-#include "fontIds.h"
-#include "activities/network/WifiSelectionActivity.h"
-#include "activities/tools/WeatherActivity.h"
-#include "WifiCredentialStore.h"
-#include <WiFi.h>
 #include "pet/PetEvolution.h"
 #include "pet/PetManager.h"
+#include "components/UITheme.h"
+#include "fontIds.h"
 #include "util/StringUtils.h"
 
 // ── Buffer management ─────────────────────────────────────────────────────────
@@ -195,95 +191,6 @@ void HomeActivity::renderPetStatusWidget(int headerH) {
   const int finalW = renderer.getTextWidth(SMALL_FONT_ID, truncated.c_str());
   const int x = screenW - rightMargin - finalW;
   renderer.drawText(SMALL_FONT_ID, x, 5, truncated.c_str(), true);
-}
-
-void HomeActivity::renderHeaderClock() {
-  if (!PET_SETTINGS.homeShowClock) return;
-
-  time_t now;
-  time(&now);
-  struct tm timeinfo;
-  localtime_r(&now, &timeinfo);
-  char buf[8];
-  if (timeinfo.tm_year >= 125)
-    snprintf(buf, sizeof(buf), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-  else
-    snprintf(buf, sizeof(buf), "--:--");
-
-  const int clockW = renderer.getTextWidth(SMALL_FONT_ID, buf);
-  renderer.drawText(SMALL_FONT_ID, 10, 5, buf);
-
-  if (!PET_SETTINGS.homeShowWeather) return;
-
-  // Weather temp or sync status next to clock
-  const int weatherX = 10 + clockW + 6;
-  if (weatherRefreshing) {
-    renderer.drawText(SMALL_FONT_ID, weatherX, 5, "...");
-  } else if (syncResultMsg) {
-    renderer.drawText(SMALL_FONT_ID, weatherX, 5, syncResultMsg);
-  } else {
-    WeatherData wData;
-    uint8_t wCity = 0;
-    char wTime[8] = "";
-    if (WeatherActivity::loadWeatherCache(wData, wCity, wTime, sizeof(wTime))) {
-      char wBuf[16];
-      snprintf(wBuf, sizeof(wBuf), "%.0f%s", WeatherActivity::convertTemp(wData.temperature), WeatherActivity::tempUnitSuffix());
-      renderer.drawText(SMALL_FONT_ID, weatherX, 5, wBuf);
-    }
-  }
-}
-
-// ── Sync ──────────────────────────────────────────────────────────────────────
-
-void HomeActivity::performSyncAfterWifi() {
-  static char syncBuf[24];
-  weatherRefreshing = true;
-  requestUpdateAndWait();
-
-  if (WiFi.status() != WL_CONNECTED) {
-    const auto& ssid = WIFI_STORE.getLastConnectedSsid();
-    const auto* cred = ssid.empty() ? nullptr : WIFI_STORE.findCredential(ssid);
-    if (cred) {
-      WiFi.mode(WIFI_STA);
-      WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
-      const unsigned long connectStart = millis();
-      while (WiFi.status() != WL_CONNECTED && millis() - connectStart < 8000) {
-        delay(100);
-      }
-      if (WiFi.status() != WL_CONNECTED) {
-        WiFi.disconnect(false);
-        WiFi.mode(WIFI_OFF);
-        weatherRefreshing = false;
-        snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_CONN_FAILED));
-        syncResultMsg = syncBuf;
-        syncResultExpiry = millis() + 3000;
-        requestUpdate();
-        return;
-      }
-    }
-  }
-
-  int rc = WeatherActivity::silentRefresh();
-  weatherRefreshing = false;
-  if (rc == 0)      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
-  else if (rc == 2) snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
-  else              snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), rc);
-  syncResultMsg = syncBuf;
-  syncResultExpiry = millis() + 3000;
-  coverRendered = false;
-  requestUpdate();
-}
-
-void HomeActivity::doSync() {
-  static char syncBuf2[24];
-  if (WIFI_STORE.getLastConnectedSsid().empty()) {
-    snprintf(syncBuf2, sizeof(syncBuf2), "%s", tr(STR_WIFI_CONN_FAILED));
-    syncResultMsg = syncBuf2;
-    syncResultExpiry = millis() + 3000;
-    requestUpdate();
-    return;
-  }
-  performSyncAfterWifi();
 }
 
 // ── Actions ───────────────────────────────────────────────────────────────────

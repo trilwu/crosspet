@@ -14,10 +14,6 @@ class HomeActivity final : public Activity {
   bool recentsLoading = false;
   bool recentsLoaded = false;
   bool firstRenderDone = false;
-  bool weatherRefreshing = false;  // Show "refreshing" status on screen
-  const char* syncResultMsg = nullptr;  // "OK" or "Failed" after sync
-  unsigned long syncResultExpiry = 0;   // millis() when to clear message
-  bool syncTriggered = false;      // Guard against re-triggering sync while held
   bool coverRendered = false;      // Track if cover has been rendered once
   bool coverBufferStored = false;  // Track if cover buffer is stored
   uint8_t* coverBuffer = nullptr;  // HomeActivity's own buffer for cover image
@@ -61,9 +57,6 @@ class HomeActivity final : public Activity {
 
   // Shared render helpers
   void renderPetStatusWidget(int headerH);
-  void renderHeaderClock();
-  void doSync();
-  void performSyncAfterWifi();
 
   // Theme-specific render/loop dispatchers
   void renderCrossPet();

@@ -240,13 +240,6 @@ void PetManager::onBookFinished() {
   save();
 }
 
-void PetManager::onPomodoroComplete() {
-  if (!state.exists() || !state.isAlive()) return;
-  state.happiness = clampAdd(state.happiness, PetConfig::POMODORO_HAPPINESS);
-  LOG_DBG("PET", "Pomodoro complete! happiness=%d", state.happiness);
-  save();
-}
-
 // --- State queries ---
 
 PetMood PetManager::getMood() const {

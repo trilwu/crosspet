@@ -147,9 +147,7 @@ bool JsonSettingsIO::saveSettings(const CrossPointSettings& s, const char* path)
   doc["statusBarProgressBar"] = s.statusBarProgressBar;
   doc["statusBarTitle"] = s.statusBarTitle;
   doc["statusBarBattery"] = s.statusBarBattery;
-  doc["statusBarClock"] = s.statusBarClock;
   doc["statusBarProgressBarThickness"] = s.statusBarProgressBarThickness;
-  doc["weatherCity"] = s.weatherCity;
   doc["sleepImagePath"] = s.sleepImagePath;
 
   String json;
@@ -173,6 +171,34 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   if (doc["statusBarChapterPageCount"].isNull()) {
     applyLegacyStatusBarSettings(s);
   }
+
+  // The clock sleep screen was removed. Remap legacy persisted values so
+  // existing devices fall back to supported modes instead of shifting indices.
+  if (!doc["sleepScreen"].isNull()) {
+    const uint8_t legacySleepScreen = doc["sleepScreen"] | s.sleepScreen;
+    if (legacySleepScreen == 6) {
+      doc["sleepScreen"] = (uint8_t)CrossPointSettings::DARK;
+      if (needsResave) *needsResave = true;
+    } else if (legacySleepScreen == 7) {
+      doc["sleepScreen"] = (uint8_t)CrossPointSettings::READING_STATS;
+      if (needsResave) *needsResave = true;
+    } else if (legacySleepScreen == 8) {
+      doc["sleepScreen"] = (uint8_t)CrossPointSettings::OVERLAY;
+      if (needsResave) *needsResave = true;
+    }
+  }
+
+  auto remapRemovedPowerAction = [&](const char* key) {
+    if (doc[key].isNull()) return;
+    const uint8_t legacyAction = doc[key] | (uint8_t)CrossPointSettings::IGNORE;
+    if (legacyAction == 7) {
+      doc[key] = (uint8_t)CrossPointSettings::IGNORE;
+      if (needsResave) *needsResave = true;
+    }
+  };
+  remapRemovedPowerAction("shortPwrBtn");
+  remapRemovedPowerAction("shortPwrBtn2Click");
+  remapRemovedPowerAction("shortPwrBtn3Click");
 
   for (const auto& info : getSettingsList()) {
     if (!info.key) continue;
@@ -246,8 +272,6 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   s.uiTheme = doc["uiTheme"] | (uint8_t)S::CROSSPET;
   s.fadingFix = doc["fadingFix"] | (uint8_t)0;
   s.embeddedStyle = doc["embeddedStyle"] | (uint8_t)1;
-  s.weatherCity = doc["weatherCity"] | (uint8_t)0;
-  if (s.weatherCity > 63) s.weatherCity = 0;  // 0=Auto, 1-63=manual cities
 
   const char* sip = doc["sleepImagePath"] | "";
   strncpy(s.sleepImagePath, sip, sizeof(s.sleepImagePath) - 1);

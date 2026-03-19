@@ -137,7 +137,17 @@ bool CrossPointSettings::loadFromBinaryFile() {
   uint8_t settingsRead = 0;
   bool frontButtonMappingRead = false;
   do {
-    readAndValidate(inputFile, sleepScreen, SLEEP_SCREEN_MODE_COUNT);
+    uint8_t legacySleepScreen = DARK;
+    serialization::readPod(inputFile, legacySleepScreen);
+    if (legacySleepScreen <= COVER_CUSTOM) {
+      sleepScreen = legacySleepScreen;
+    } else if (legacySleepScreen == 7) {
+      sleepScreen = READING_STATS;
+    } else if (legacySleepScreen == 8) {
+      sleepScreen = OVERLAY;
+    } else {
+      sleepScreen = DARK;
+    }
     if (++settingsRead >= fileSettingsCount) break;
     serialization::readPod(inputFile, extraParagraphSpacing);
     if (++settingsRead >= fileSettingsCount) break;

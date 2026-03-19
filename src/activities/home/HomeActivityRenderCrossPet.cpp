@@ -327,18 +327,6 @@ void HomeActivity::loopCrossPet() {
     requestUpdate();
   });
 
-  // Back long-press = sync
-  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= 800 && !syncTriggered) {
-    syncTriggered = true;
-    doSync();
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Back)) syncTriggered = false;
-
-  if (syncResultMsg && millis() > syncResultExpiry) {
-    syncResultMsg = nullptr;
-    requestUpdate();
-  }
-
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     if (selectorIndex == 0) {
       if (!recentBooks.empty()) onSelectBook(recentBooks[0].path);
@@ -370,9 +358,8 @@ void HomeActivity::renderCrossPet() {
     restoreCoverBuffer();
   }
 
-  // Header (redrawn each frame for clock/weather)
+  // Header (redrawn each frame for selection and battery)
   GUI.drawHeader(renderer, Rect{0, 0, screenW, CP_HEADER_H}, nullptr);
-  renderHeaderClock();
   renderPetStatusWidget(CP_HEADER_H);
 
   // Selection highlights

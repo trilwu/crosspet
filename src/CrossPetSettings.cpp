@@ -15,8 +15,6 @@ bool CrossPetSettings::saveToFile() const {
   Storage.mkdir("/.crosspoint");
 
   JsonDocument doc;
-  doc["homeShowClock"] = homeShowClock;
-  doc["homeShowWeather"] = homeShowWeather;
   doc["homeShowPetStatus"] = homeShowPetStatus;
 
   String json;
@@ -41,8 +39,6 @@ bool CrossPetSettings::loadFromFile() {
         LOG_ERR("CPS", "CrossPet settings JSON parse error: %s", error.c_str());
         return false;
       }
-      homeShowClock = doc["homeShowClock"] | (uint8_t)1;
-      homeShowWeather = doc["homeShowWeather"] | (uint8_t)1;
       homeShowPetStatus = doc["homeShowPetStatus"] | (uint8_t)1;
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
@@ -57,8 +53,6 @@ bool CrossPetSettings::loadFromFile() {
       JsonDocument doc;
       auto error = deserializeJson(doc, json);
       if (!error) {
-        homeShowClock = doc["homeShowClock"] | (uint8_t)1;
-        homeShowWeather = doc["homeShowWeather"] | (uint8_t)1;
         homeShowPetStatus = doc["homeShowPetStatus"] | (uint8_t)1;
         LOG_DBG("CPS", "CrossPet settings migrated from settings.json");
         // Persist the migrated values to crosspet.json

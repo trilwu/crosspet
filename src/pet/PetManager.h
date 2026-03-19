@@ -52,7 +52,6 @@ class PetManager {
 
   void onChapterComplete();
   void onBookFinished();
-  void onPomodoroComplete();
   uint16_t getEffectivePagesPerMeal() const;
 
   // Milestone detection — returns pending milestone message (nullptr if none)

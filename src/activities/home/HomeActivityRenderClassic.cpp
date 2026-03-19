@@ -128,18 +128,6 @@ void HomeActivity::loopClassic() {
     requestUpdate();
   });
 
-  // Back long-press = sync
-  if (mappedInput.isPressed(MappedInputManager::Button::Back) && mappedInput.getHeldTime() >= 800 && !syncTriggered) {
-    syncTriggered = true;
-    doSync();
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Back)) syncTriggered = false;
-
-  if (syncResultMsg && millis() > syncResultExpiry) {
-    syncResultMsg = nullptr;
-    requestUpdate();
-  }
-
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     switch (selectorIndex) {
       case 0: if (!recentBooks.empty()) onSelectBook(recentBooks[0].path); break;
@@ -161,7 +149,6 @@ void HomeActivity::renderClassic() {
   if (!coverRendered) {
     renderer.clearScreen();
     GUI.drawHeader(renderer, Rect{0, 0, pageWidth, CL_HEADER_H}, nullptr);
-    renderHeaderClock();
     renderPetStatusWidget(CL_HEADER_H);
     // Grid lines
     renderer.drawLine(CL_DIVIDER_X, CL_HEADER_H,  CL_DIVIDER_X, CL_DIVIDER_Y,   true);
@@ -177,7 +164,6 @@ void HomeActivity::renderClassic() {
   } else {
     restoreCoverBuffer();
     GUI.drawHeader(renderer, Rect{0, 0, pageWidth, CL_HEADER_H}, nullptr);
-    renderHeaderClock();
     renderPetStatusWidget(CL_HEADER_H);
   }
 
@@ -195,7 +181,7 @@ void HomeActivity::renderClassic() {
 
   renderClassicSelectionHighlight(0, CL_HEADER_H, CL_DIVIDER_X, CL_DIVIDER_Y - CL_HEADER_H);
 
-  const auto labels = mappedInput.mapLabels(tr(STR_SYNC), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const auto labels = mappedInput.mapLabels("", tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   renderer.displayBuffer();
 

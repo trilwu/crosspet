@@ -179,9 +179,6 @@ namespace PetConfig {
   constexpr uint8_t BOOK_FINISH_HAPPINESS = 40;
   constexpr uint8_t BOOK_FINISH_HUNGER = 20;
 
-  // Pomodoro reward
-  constexpr uint8_t POMODORO_HAPPINESS = 15;
-
   // Daily goal rewards
   constexpr uint8_t DAILY_GOAL_PAGES = 20;
   constexpr uint8_t DAILY_GOAL_HEALTH = 10;

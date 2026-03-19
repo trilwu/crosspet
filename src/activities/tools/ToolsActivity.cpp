@@ -3,8 +3,6 @@
 #include <GfxRenderer.h>
 #include <I18n.h>
 
-#include "ClockActivity.h"
-#include "PomodoroActivity.h"
 #include "TwentyFortyEightActivity.h"
 #include "MinesweeperActivity.h"
 #include "SudokuActivity.h"
@@ -12,7 +10,6 @@
 #include "ChessActivity.h"
 #include "VirtualPetActivity.h"
 #include "PresenterActivity.h"
-#include "WeatherActivity.h"
 #include "ReadingStatsActivity.h"
 #include "SleepCacheClearActivity.h"
 #include "SleepImagePickerActivity.h"
@@ -21,7 +18,7 @@
 #include "CrossPointSettings.h"
 #include "fontIds.h"
 
-static constexpr int BASE_MENU_COUNT = 13;
+static constexpr int BASE_MENU_COUNT = 10;
 
 int ToolsActivity::getMenuCount() const {
   return BASE_MENU_COUNT + (SETTINGS.opdsServerUrl[0] ? 1 : 0);
@@ -48,38 +45,29 @@ void ToolsActivity::loop() {
     switch (selectorIndex) {
       // -- Utilities --
       case 0:
-        activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
-        break;
-      case 1:
-        activityManager.pushActivity(std::make_unique<WeatherActivity>(renderer, mappedInput));
-        break;
-      case 2:
-        activityManager.pushActivity(std::make_unique<PomodoroActivity>(renderer, mappedInput));
-        break;
-      case 3:
         activityManager.pushActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
         break;
-      case 4:
+      case 1:
         activityManager.pushActivity(std::make_unique<PresenterActivity>(renderer, mappedInput));
         break;
-      case 5:
+      case 2:
         activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInput));
         break;
-      case 6:
+      case 3:
         activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
         break;
-      case 7:
+      case 4:
         activityManager.pushActivity(std::make_unique<SleepCacheClearActivity>(renderer, mappedInput));
         break;
       default: {
         // Dynamic items: OPDS (if configured) then games
-        int gameBase = 8;
+        int gameBase = 5;
         if (SETTINGS.opdsServerUrl[0]) {
-          if (selectorIndex == 8) {
+          if (selectorIndex == 5) {
             activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
             break;
           }
-          gameBase = 9;
+          gameBase = 6;
         }
         int gameIdx = selectorIndex - gameBase;
         switch (gameIdx) {
@@ -108,10 +96,9 @@ void ToolsActivity::render(RenderLock&&) {
 
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_TOOLS));
 
-  // Build menu labels — OPDS inserted at index 8 when configured
+  // Build menu labels — OPDS inserted after utilities when configured.
   const char* baseLabels[] = {
-      tr(STR_CLOCK), tr(STR_WEATHER), tr(STR_POMODORO), tr(STR_VIRTUAL_PET),
-      tr(STR_PRESENTER), tr(STR_READING_STATS_APP), tr(STR_SLEEP_IMAGE_PICKER),
+      tr(STR_VIRTUAL_PET), tr(STR_PRESENTER), tr(STR_READING_STATS_APP), tr(STR_SLEEP_IMAGE_PICKER),
       tr(STR_RELOAD_SLEEP_IMAGE)};
   const char* gameLabels[] = {
       tr(STR_CHESS), tr(STR_CARO), tr(STR_SUDOKU), tr(STR_MINESWEEPER), tr(STR_2048)};
@@ -123,9 +110,9 @@ void ToolsActivity::render(RenderLock&&) {
 
   GUI.drawList(renderer, Rect{0, menuTop, pageWidth, menuHeight}, menuCount, selectorIndex,
                [&](int index) -> std::string {
-                 if (index < 8) return baseLabels[index];
-                 if (hasOpds && index == 8) return tr(STR_OPDS_BROWSER);
-                 int gameIdx = index - 8 - (hasOpds ? 1 : 0);
+                 if (index < 5) return baseLabels[index];
+                 if (hasOpds && index == 5) return tr(STR_OPDS_BROWSER);
+                 int gameIdx = index - 5 - (hasOpds ? 1 : 0);
                  if (gameIdx >= 0 && gameIdx < 5) return gameLabels[gameIdx];
                  return "";
                });
