@@ -9,6 +9,7 @@
 #include <Txt.h>
 #include <Xtc.h>
 
+#include <algorithm>
 #include <ctime>
 #include <new>
 
@@ -331,36 +332,109 @@ void SleepActivity::renderCustomSleepScreen() const {
   renderDefaultSleepScreen();
 }
 
-void SleepActivity::renderDefaultSleepScreen() const {
-  const auto pageWidth = renderer.getScreenWidth();
-  const auto pageHeight = renderer.getScreenHeight();
+// ── Shared pet rendering ──────────────────────────────────────────────────────
+// Draws pet in bottom-right corner + attention "!" indicator.
+// scale 1 → mini sprite (48×48), scale 2 → 96×96.
+// For clock screen the speech bubble is NOT drawn here — clock screen keeps its own quote area.
+void SleepActivity::renderSleepPet(int scale) const {
+  if (!PET_MANAGER.exists()) return;
+  const auto& petState = PET_MANAGER.getState();
+  const PetMood petMood = PET_MANAGER.isAlive()
+                              ? (petState.attentionCall ? PetMood::NEEDY
+                                 : petState.isSick      ? PetMood::SICK
+                                 : petState.hunger <= 30 ? PetMood::SAD
+                                 : PetMood::SLEEPING)
+                              : PetMood::DEAD;
 
-  renderer.clearScreen();
-  renderer.drawImage(Logo120, (pageWidth - 120) / 2, (pageHeight - 120) / 2, 120, 120);
-  renderer.drawCenteredText(UI_10_FONT_ID, pageHeight / 2 + 70, tr(STR_CROSSPOINT), true, EpdFontFamily::BOLD);
-  renderer.drawCenteredText(SMALL_FONT_ID, pageHeight / 2 + 95, tr(STR_SLEEPING));
+  const int pageWidth  = renderer.getScreenWidth();
+  const int pageHeight = renderer.getScreenHeight();
 
-  // Draw mini pet in bottom-right corner if a pet exists
-  if (PET_MANAGER.exists()) {
-    const auto& petState = PET_MANAGER.getState();
-    const PetMood petMood = PET_MANAGER.isAlive()
-                                ? (petState.attentionCall ? PetMood::NEEDY
-                                   : petState.isSick ? PetMood::SICK
-                                   : petState.hunger <= 30 ? PetMood::SAD
-                                   : PetMood::SLEEPING)
-                                : PetMood::DEAD;
-    const int miniX = pageWidth - PetSpriteRenderer::MINI_W - 10;
+  if (scale <= 1) {
+    // Mini sprite (48×48)
+    const int miniX = pageWidth  - PetSpriteRenderer::MINI_W - 10;
     const int miniY = pageHeight - PetSpriteRenderer::MINI_H - 10;
     PetSpriteRenderer::drawMini(renderer, miniX, miniY, petState.stage, petMood,
                                 petState.evolutionVariant, petState.petType);
-    // Attention indicator: "!" above the mini pet
     if (petState.attentionCall) {
       renderer.drawText(SMALL_FONT_ID, miniX + PetSpriteRenderer::MINI_W / 2 - 2,
                         miniY - renderer.getLineHeight(SMALL_FONT_ID) - 1, "!");
     }
-  }
+  } else {
+    // Full-scale sprite (96×96 for scale=2)
+    const int pSize = PetSpriteRenderer::displaySize(scale);
+    const int petX  = pageWidth  - pSize - 10;
+    const int petY  = pageHeight - pSize - 10;
+    PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, scale,
+                               petState.evolutionVariant, petState.petType);
+    if (petState.attentionCall) {
+      renderer.drawText(SMALL_FONT_ID, petX + pSize / 2 - 2,
+                        petY - renderer.getLineHeight(SMALL_FONT_ID) - 2, "!");
+    }
 
-  // Make sleep screen dark unless light is selected in settings
+    // Speech bubble above the pet (need-specific or mood-varied message)
+    const char* msg = nullptr;
+    if (petMood == PetMood::NEEDY) {
+      switch (petState.currentNeed) {
+        case PetNeed::HUNGRY: msg = tr(STR_PET_SLEEP_FEED_ME); break;
+        case PetNeed::SICK:   msg = tr(STR_PET_SLEEP_MEDICINE); break;
+        case PetNeed::DIRTY:  msg = tr(STR_PET_SLEEP_DIRTY);    break;
+        case PetNeed::BORED:  msg = tr(STR_PET_SLEEP_BORED);    break;
+        default:              msg = tr(STR_PET_SLEEP_HEY);      break;
+      }
+    } else if (petMood == PetMood::SICK) {
+      msg = tr(STR_PET_SLEEP_SICK);
+    } else if (petMood == PetMood::SLEEPING) {
+      const char* const SLEEP_MSGS[] = {tr(STR_PET_SLEEP_ZZZ), tr(STR_PET_SLEEP_PURR),
+                                         tr(STR_PET_SLEEP_SWEET), tr(STR_PET_SLEEP_DREAMING)};
+      msg = SLEEP_MSGS[(uint32_t)time(nullptr) / 3600 % 4];
+    } else if (petMood == PetMood::SAD) {
+      const char* const SAD_MSGS[] = {tr(STR_PET_SLEEP_HUNGRY), tr(STR_PET_SLEEP_READ_MORE),
+                                       tr(STR_PET_SLEEP_FEED_ME)};
+      msg = SAD_MSGS[(uint32_t)time(nullptr) / 3600 % 3];
+    }
+    if (msg != nullptr) {
+      const int lh   = renderer.getLineHeight(SMALL_FONT_ID);
+      const int msgW = renderer.getTextWidth(SMALL_FONT_ID, msg);
+      const int msgX = petX + (pSize - msgW) / 2;
+      const int msgY = petY - lh - 4;
+      renderer.drawText(SMALL_FONT_ID, msgX, msgY, msg);
+    }
+  }
+}
+
+void SleepActivity::renderDefaultSleepScreen() const {
+  const int pageWidth  = renderer.getScreenWidth();
+  const int pageHeight = renderer.getScreenHeight();
+
+  // Pre-clear: wipe previous content ghosting
+  renderer.clearScreen();
+  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
+  renderer.clearScreen();
+
+  // Centered logo — slightly above mid to leave room for branding below
+  constexpr int LOGO_SZ = 120;
+  const int logoX = (pageWidth - LOGO_SZ) / 2;
+  const int logoY = pageHeight / 2 - LOGO_SZ / 2 - 20;
+  renderer.drawImage(Logo120, logoX, logoY, LOGO_SZ, LOGO_SZ);
+
+  // Brand name in Lexend bold below logo
+  const int lhBrand = renderer.getLineHeight(UI_12_FONT_ID);
+  const int brandY = logoY + LOGO_SZ + 14;
+  renderer.drawCenteredText(UI_12_FONT_ID, brandY, "CrossPet Reader", true, EpdFontFamily::BOLD);
+
+  // Thin separator line
+  constexpr int SEP_HALF = 40;
+  const int sepY = brandY + lhBrand + 6;
+  renderer.fillRect(pageWidth / 2 - SEP_HALF, sepY, SEP_HALF * 2, 1);
+
+  // Version string below separator
+  const int verY = sepY + 8;
+  renderer.drawCenteredText(SMALL_FONT_ID, verY, CROSSPOINT_VERSION);
+
+  // Mini pet in bottom-right corner (scale 1 = 48×48)
+  renderSleepPet(1);
+
+  // Dark mode unless light is selected in settings
   if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::LIGHT) {
     renderer.invertScreen();
   }
@@ -726,23 +800,29 @@ void SleepActivity::renderClockSleepScreen() const {
                               weatherLine);
   }
 
-  // Calendar grid
+  // Calendar — wrapped in a subtle rounded rect card
+  constexpr int CAL_CARD_R = 8;
+  constexpr int CAL_PAD    = 8;
   const int margin = 20;
   const int calW = pageWidth - margin * 2;
   const int cellW = calW / 7;
   const int x0 = margin;
-  int calTop = startY + timeHeight + 14 + dateHeight + 6 + lunarHeight + weatherLineH + 10;
+  const int calCardTop = startY + timeHeight + 14 + dateHeight + 6 + lunarHeight + weatherLineH + 6;
 
-  // Thin separator between time area and calendar
-  renderer.fillRect(margin + 20, calTop - 8, calW - 40, 1);
+  // Month header above card
+  renderer.drawCenteredText(SMALL_FONT_ID, calCardTop, monthBuf);
 
-  // Month header above calendar
-  renderer.drawCenteredText(SMALL_FONT_ID, calTop, monthBuf);
-  calTop += monthHdrH + 6;
+  // Inner calendar content starts below month header + padding
+  int calTop = calCardTop + monthHdrH + CAL_PAD;
+
+  // Measure card height: day headers + up to 6 body rows
+  const int calContentH = cellH * 7;  // day-hdr row + max 6 body rows
+  const int calCardH = monthHdrH + CAL_PAD + calContentH + CAL_PAD;
+  renderer.drawRoundedRect(margin, calCardTop - 2, calW, calCardH, 1, CAL_CARD_R, true);
 
   // Calendar grid — only rendered when time is synced
   if (timeValid) {
-    // Day-of-week header
+    // Day-of-week header row
     for (int d = 0; d < 7; d++) {
       int tw = renderer.getTextWidth(SMALL_FONT_ID, DAY_HDR[d]);
       renderer.drawText(SMALL_FONT_ID, x0 + d * cellW + (cellW - tw) / 2, calTop, DAY_HDR[d]);
@@ -774,57 +854,8 @@ void SleepActivity::renderClockSleepScreen() const {
     }
   }
 
-  // Draw cat in bottom-right corner (2x scale = 96x96) with a speech bubble above it
-  if (PET_MANAGER.exists()) {
-    const auto& petState = PET_MANAGER.getState();
-    const PetMood petMood = PET_MANAGER.isAlive()
-                                ? (petState.attentionCall ? PetMood::NEEDY
-                                   : petState.isSick ? PetMood::SICK
-                                   : petState.hunger <= 30 ? PetMood::SAD
-                                   : PetMood::SLEEPING)
-                                : PetMood::DEAD;
-    constexpr int PET_SCALE = 2;
-    const int pSize = PetSpriteRenderer::displaySize(PET_SCALE);
-    const int petX = pageWidth - pSize - 10;
-    const int petY = pageHeight - pSize - 10;
-    PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, PET_SCALE,
-                               petState.evolutionVariant, petState.petType);
-
-    // Attention "!" indicator above the pet sprite
-    if (petState.attentionCall) {
-      renderer.drawText(SMALL_FONT_ID, petX + pSize / 2 - 2,
-                        petY - renderer.getLineHeight(SMALL_FONT_ID) - 2, "!");
-    }
-
-    // Speech bubble: need-specific messages, varied by hour for sleep/sad states
-    const char* msg = nullptr;
-    if (petMood == PetMood::NEEDY) {
-      switch (petState.currentNeed) {
-        case PetNeed::HUNGRY: msg = tr(STR_PET_SLEEP_FEED_ME); break;
-        case PetNeed::SICK:   msg = tr(STR_PET_SLEEP_MEDICINE); break;
-        case PetNeed::DIRTY:  msg = tr(STR_PET_SLEEP_DIRTY); break;
-        case PetNeed::BORED:  msg = tr(STR_PET_SLEEP_BORED); break;
-        default:              msg = tr(STR_PET_SLEEP_HEY); break;
-      }
-    } else if (petMood == PetMood::SICK) {
-      msg = tr(STR_PET_SLEEP_SICK);
-    } else if (petMood == PetMood::SLEEPING) {
-      const char* const SLEEP_MSGS[] = {tr(STR_PET_SLEEP_ZZZ), tr(STR_PET_SLEEP_PURR),
-                                         tr(STR_PET_SLEEP_SWEET), tr(STR_PET_SLEEP_DREAMING)};
-      msg = SLEEP_MSGS[(uint32_t)time(nullptr) / 3600 % 4];
-    } else if (petMood == PetMood::SAD) {
-      const char* const SAD_MSGS[] = {tr(STR_PET_SLEEP_HUNGRY), tr(STR_PET_SLEEP_READ_MORE),
-                                       tr(STR_PET_SLEEP_FEED_ME)};
-      msg = SAD_MSGS[(uint32_t)time(nullptr) / 3600 % 3];
-    }
-    if (msg != nullptr) {
-      const int lh = renderer.getLineHeight(SMALL_FONT_ID);
-      const int msgW = renderer.getTextWidth(SMALL_FONT_ID, msg);
-      const int msgX = petX + (pSize - msgW) / 2;
-      const int msgY = petY - lh - 4;
-      renderer.drawText(SMALL_FONT_ID, msgX, msgY, msg);
-    }
-  }
+  // Pet (2x scale = 96×96) with speech bubble — shared helper handles attention + messages
+  renderSleepPet(2);
 
   // Daily quote — changes each day, shown at the bottom of the screen.
   // Positioned within the left portion to avoid the pet in the bottom-right corner.
@@ -967,13 +998,19 @@ static void formatDuration(char* buf, size_t size, uint32_t secs) {
 void SleepActivity::renderReadingStatsSleepScreen() const {
   const int pageWidth  = renderer.getScreenWidth();
   const int pageHeight = renderer.getScreenHeight();
-  constexpr int MARGIN = 28;
+  constexpr int MARGIN   = 14;   // outer page margin
+  constexpr int CARD_R   = 12;   // rounded rect corner radius
+  constexpr int CARD_PAD = 14;   // inner card padding
 
   // Pre-clear: push a blank white frame to wipe previous content ghosting
   renderer.clearScreen();
   renderer.displayBuffer(HalDisplay::FAST_REFRESH);
-
   renderer.clearScreen();
+
+  const int lhSmall = renderer.getLineHeight(SMALL_FONT_ID);
+  const int lhUi10  = renderer.getLineHeight(UI_10_FONT_ID);
+  const int lhUi12  = renderer.getLineHeight(UI_12_FONT_ID);
+  const int cardW   = pageWidth - 2 * MARGIN;
 
   // Battery — top-right corner
   char battBuf[8];
@@ -981,73 +1018,66 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
   const int battW = renderer.getTextWidth(SMALL_FONT_ID, battBuf);
   renderer.drawText(SMALL_FONT_ID, pageWidth - battW - 10, 10, battBuf);
 
-  // Header: "Reading Stats"
-  const int lhSmall = renderer.getLineHeight(SMALL_FONT_ID);
-  const int lhUi10  = renderer.getLineHeight(UI_10_FONT_ID);
-  const int lhUi12  = renderer.getLineHeight(UI_12_FONT_ID);
-  const int sepMargin = MARGIN + 20;
-  const int sepW = pageWidth - 2 * sepMargin;
-
-  int y = 60;
+  // Page header: "Reading Stats"
+  int y = 12;
   renderer.drawCenteredText(UI_12_FONT_ID, y, tr(STR_READING_STATS), true, EpdFontFamily::BOLD);
-  y += lhUi12 + 6;
-  renderer.fillRect(sepMargin, y, sepW, 1);
-  y += 14;
+  y += lhUi12 + 10;
 
-  // --- TODAY ---
-  renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_TODAY));
-  y += lhSmall + 4;
-
+  // ── TODAY card ────────────────────────────────────────────────────────────
   char todayBuf[32];
   formatDuration(todayBuf, sizeof(todayBuf), READ_STATS.todayReadSeconds);
-  renderer.drawText(UI_10_FONT_ID, MARGIN, y, todayBuf, true, EpdFontFamily::BOLD);
-  y += lhUi10 + 14;
-  renderer.fillRect(sepMargin, y, sepW, 1);
-  y += 14;
+  const int todayCardH = CARD_PAD + lhSmall + 4 + lhUi10 + CARD_PAD;
+  renderer.drawRoundedRect(MARGIN, y, cardW, todayCardH, 1, CARD_R, true);
+  renderer.drawText(SMALL_FONT_ID, MARGIN + CARD_PAD, y + CARD_PAD, tr(STR_STATS_TODAY));
+  renderer.drawText(UI_10_FONT_ID, MARGIN + CARD_PAD, y + CARD_PAD + lhSmall + 4,
+                    todayBuf, true, EpdFontFamily::BOLD);
+  y += todayCardH + 8;
 
-  // --- ALL TIME ---
-  renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_ALL_TIME));
-  y += lhSmall + 4;
-
+  // ── ALL TIME card ─────────────────────────────────────────────────────────
   char totalBuf[32];
   formatDuration(totalBuf, sizeof(totalBuf), READ_STATS.totalReadSeconds);
-  renderer.drawText(UI_10_FONT_ID, MARGIN, y, totalBuf, true, EpdFontFamily::BOLD);
-  y += lhUi10 + 14;
-  renderer.fillRect(sepMargin, y, sepW, 1);
-  y += 14;
+  const int allCardH = CARD_PAD + lhSmall + 4 + lhUi10 + CARD_PAD;
+  renderer.drawRoundedRect(MARGIN, y, cardW, allCardH, 1, CARD_R, true);
+  renderer.drawText(SMALL_FONT_ID, MARGIN + CARD_PAD, y + CARD_PAD, tr(STR_STATS_ALL_TIME));
+  renderer.drawText(UI_10_FONT_ID, MARGIN + CARD_PAD, y + CARD_PAD + lhSmall + 4,
+                    totalBuf, true, EpdFontFamily::BOLD);
+  y += allCardH + 8;
 
-  // --- STATS GRID: Sessions | Books | Streak | Best ---
+  // ── Stats grid card: Sessions | Books | Streak | Best ─────────────────────
   {
-    const int colW = (pageWidth - MARGIN * 2) / 4;
+    const int gridCardH = CARD_PAD + lhUi10 + lhSmall + 4 + CARD_PAD;
+    renderer.drawRoundedRect(MARGIN, y, cardW, gridCardH, 1, CARD_R, true);
+
+    const int colW = cardW / 4;
     const char* labels[] = {tr(STR_STATS_SESSIONS), tr(STR_STATS_BOOKS_DONE),
-                            tr(STR_STATS_STREAK), tr(STR_STATS_BEST_STREAK)};
+                             tr(STR_STATS_STREAK),   tr(STR_STATS_BEST_STREAK)};
     char values[4][16];
     snprintf(values[0], sizeof(values[0]), "%u", (unsigned)READ_STATS.totalSessions);
     snprintf(values[1], sizeof(values[1]), "%u", (unsigned)READ_STATS.booksFinished);
     snprintf(values[2], sizeof(values[2]), tr(STR_STATS_DAYS), (unsigned)READ_STATS.currentStreak);
     snprintf(values[3], sizeof(values[3]), tr(STR_STATS_DAYS), (unsigned)READ_STATS.longestStreak);
 
+    const int valY   = y + CARD_PAD;
+    const int labelY = valY + lhUi10 + 4;
     for (int i = 0; i < 4; i++) {
-      int cx = MARGIN + i * colW + colW / 2;
-      // Value (bold, centered in column)
+      const int cx = MARGIN + i * colW + colW / 2;
+      // Thin vertical divider between columns (skip before first)
+      if (i > 0) {
+        renderer.fillRect(MARGIN + i * colW, y + CARD_PAD / 2,
+                          1, gridCardH - CARD_PAD);
+      }
       int vw = renderer.getTextWidth(UI_10_FONT_ID, values[i]);
-      renderer.drawText(UI_10_FONT_ID, cx - vw / 2, y, values[i], true, EpdFontFamily::BOLD);
-      // Label (small, centered below)
+      renderer.drawText(UI_10_FONT_ID, cx - vw / 2, valY, values[i], true, EpdFontFamily::BOLD);
       int lw = renderer.getTextWidth(SMALL_FONT_ID, labels[i]);
-      renderer.drawText(SMALL_FONT_ID, cx - lw / 2, y + lhUi10 + 2, labels[i]);
+      renderer.drawText(SMALL_FONT_ID, cx - lw / 2, labelY, labels[i]);
     }
-    y += lhUi10 + lhSmall + 14;
+    y += gridCardH + 8;
   }
-  renderer.fillRect(sepMargin, y, sepW, 1);
-  y += 14;
 
-  // --- RECENT BOOKS (per-book time + progress) ---
-  renderer.drawText(SMALL_FONT_ID, MARGIN, y, tr(STR_STATS_LAST_BOOK));
-  y += lhSmall + 6;
-
+  // ── Recent books card ─────────────────────────────────────────────────────
   const auto& allBooks = BOOK_STATS.getBooks();
   if (!allBooks.empty()) {
-    // Sort by lastReadTimestamp descending, show up to 5 recent books
+    // Collect & sort up to 5 most-recent books
     struct BookRef { const char* title; uint32_t secs; uint8_t progress; uint32_t ts; };
     BookRef recent[5];
     int count = 0;
@@ -1056,7 +1086,6 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
       if (count < 5) {
         recent[count++] = {e.title, e.totalSeconds, e.progress, e.lastReadTimestamp};
       } else {
-        // Replace the oldest in our list if this one is newer
         int minIdx = 0;
         for (int j = 1; j < 5; j++) {
           if (recent[j].ts < recent[minIdx].ts) minIdx = j;
@@ -1066,7 +1095,6 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
         }
       }
     }
-    // Sort descending by timestamp (simple insertion sort)
     for (int i = 1; i < count; i++) {
       BookRef tmp = recent[i];
       int j = i - 1;
@@ -1074,65 +1102,58 @@ void SleepActivity::renderReadingStatsSleepScreen() const {
       recent[j + 1] = tmp;
     }
 
-    constexpr int BAR_H = 4;
-    const int barW = pageWidth - MARGIN * 2;
-    const int maxY = pageHeight - 100;  // Reserve space for pet sprite
+    constexpr int BAR_H   = 4;
+    constexpr int PET_RSV = 110;  // reserve bottom-right for pet sprite
+    const int maxY = pageHeight - PET_RSV;
 
-    for (int i = 0; i < count && y < maxY; i++) {
-      // Title (truncated) + reading time on right
-      char timeBuf[24];
-      formatDuration(timeBuf, sizeof(timeBuf), recent[i].secs);
-      const int timeW = renderer.getTextWidth(SMALL_FONT_ID, timeBuf);
-      const int titleMaxW = pageWidth - MARGIN * 2 - timeW - 8;
-      const std::string titleStr = renderer.truncatedText(
-          SMALL_FONT_ID, recent[i].title, titleMaxW, EpdFontFamily::BOLD);
-      renderer.drawText(SMALL_FONT_ID, MARGIN, y, titleStr.c_str(), true, EpdFontFamily::BOLD);
-      renderer.drawText(SMALL_FONT_ID, pageWidth - MARGIN - timeW, y, timeBuf);
-      y += lhSmall + 3;
+    // Estimate card content height (may be capped by maxY)
+    const int rowH = lhSmall + 3 + BAR_H + 10;
+    const int booksToShow = std::min(count, (maxY - y - CARD_PAD * 2 - lhSmall - 6) / rowH);
 
-      // Progress bar + percentage
-      char progBuf[8];
-      snprintf(progBuf, sizeof(progBuf), "%u%%", (unsigned)recent[i].progress);
-      const int progW = renderer.getTextWidth(SMALL_FONT_ID, progBuf);
-      const int progBarW = barW - progW - 8;
+    if (booksToShow > 0) {
+      const int booksCardH = CARD_PAD + lhSmall + 6 + booksToShow * rowH + CARD_PAD;
+      renderer.drawRoundedRect(MARGIN, y, cardW, booksCardH, 1, CARD_R, true);
 
-      // Draw progress bar outline
-      renderer.fillRect(MARGIN, y, progBarW, 1);
-      renderer.fillRect(MARGIN, y + BAR_H - 1, progBarW, 1);
-      renderer.fillRect(MARGIN, y, 1, BAR_H);
-      renderer.fillRect(MARGIN + progBarW - 1, y, 1, BAR_H);
-      const int filledW = static_cast<int>((progBarW - 2) * recent[i].progress / 100);
-      if (filledW > 0) {
-        renderer.fillRect(MARGIN + 1, y + 1, filledW, BAR_H - 2);
+      int iy = y + CARD_PAD;
+      renderer.drawText(SMALL_FONT_ID, MARGIN + CARD_PAD, iy, tr(STR_STATS_LAST_BOOK));
+      iy += lhSmall + 6;
+
+      const int barW = cardW - CARD_PAD * 2;
+      for (int i = 0; i < booksToShow; i++) {
+        char timeBuf[24];
+        formatDuration(timeBuf, sizeof(timeBuf), recent[i].secs);
+        const int timeW = renderer.getTextWidth(SMALL_FONT_ID, timeBuf);
+        const int titleMaxW = barW - timeW - 8;
+        const std::string titleStr = renderer.truncatedText(
+            SMALL_FONT_ID, recent[i].title, titleMaxW, EpdFontFamily::BOLD);
+        renderer.drawText(SMALL_FONT_ID, MARGIN + CARD_PAD, iy, titleStr.c_str(), true, EpdFontFamily::BOLD);
+        renderer.drawText(SMALL_FONT_ID, MARGIN + CARD_PAD + barW - timeW, iy, timeBuf);
+        iy += lhSmall + 3;
+
+        // Progress bar outline + fill + percentage
+        char progBuf[8];
+        snprintf(progBuf, sizeof(progBuf), "%u%%", (unsigned)recent[i].progress);
+        const int progW    = renderer.getTextWidth(SMALL_FONT_ID, progBuf);
+        const int progBarW = barW - progW - 8;
+        renderer.fillRect(MARGIN + CARD_PAD, iy, progBarW, 1);
+        renderer.fillRect(MARGIN + CARD_PAD, iy + BAR_H - 1, progBarW, 1);
+        renderer.fillRect(MARGIN + CARD_PAD, iy, 1, BAR_H);
+        renderer.fillRect(MARGIN + CARD_PAD + progBarW - 1, iy, 1, BAR_H);
+        const int filledW = static_cast<int>((progBarW - 2) * recent[i].progress / 100);
+        if (filledW > 0) {
+          renderer.fillRect(MARGIN + CARD_PAD + 1, iy + 1, filledW, BAR_H - 2);
+        }
+        renderer.drawText(SMALL_FONT_ID, MARGIN + CARD_PAD + progBarW + 6,
+                          iy - (lhSmall - BAR_H) / 2, progBuf);
+        iy += BAR_H + 10;
       }
-      // Percentage text right of bar
-      renderer.drawText(SMALL_FONT_ID, MARGIN + progBarW + 6, y - (lhSmall - BAR_H) / 2, progBuf);
-      y += BAR_H + 10;
     }
   } else {
     renderer.drawText(UI_10_FONT_ID, MARGIN, y, tr(STR_STATS_NO_BOOKS), true, EpdFontFamily::REGULAR);
   }
 
-  // Pet sprite — bottom-right corner (same as other screens)
-  if (PET_MANAGER.exists()) {
-    const auto& petState = PET_MANAGER.getState();
-    const PetMood petMood = PET_MANAGER.isAlive()
-                                ? (petState.attentionCall ? PetMood::NEEDY
-                                   : petState.isSick      ? PetMood::SICK
-                                   : petState.hunger <= 30 ? PetMood::SAD
-                                   : PetMood::SLEEPING)
-                                : PetMood::DEAD;
-    constexpr int PET_SCALE = 2;
-    const int pSize = PetSpriteRenderer::displaySize(PET_SCALE);
-    const int petX  = pageWidth  - pSize - 10;
-    const int petY  = pageHeight - pSize - 10;
-    PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, PET_SCALE,
-                               petState.evolutionVariant, petState.petType);
-    if (petState.attentionCall) {
-      renderer.drawText(SMALL_FONT_ID, petX + pSize / 2 - 2,
-                        petY - lhSmall - 2, "!");
-    }
-  }
+  // Pet sprite — bottom-right corner, shared helper
+  renderSleepPet(2);
 
   renderer.setFadingFix(true);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
@@ -1312,5 +1333,11 @@ void SleepActivity::renderOverlaySleepScreen() const {
   }
 
   renderer.setOrientation(savedOrientation);
+
+  // Full refresh first to eliminate e-ink ghosting from the reader page beneath the overlay,
+  // then a half refresh for the final crisp composite image.
+  renderer.setFadingFix(true);
+  renderer.displayBuffer(HalDisplay::FULL_REFRESH);
   renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
 }
