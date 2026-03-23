@@ -258,10 +258,13 @@ void SleepImagePickerActivity::renderSlideshow() {
   }
 
   const int sw = renderer.getScreenWidth(), sh = renderer.getScreenHeight();
+  const int total = static_cast<int>(fileList.size());
   renderer.fillRect(0, sh - 32, sw, 32, true);
-  char info[64];
-  snprintf(info, sizeof(info), "%d/%d  %s", slideshowIndex + 1, (int)fileList.size(), fileList[slideshowIndex].c_str());
-  renderer.drawCenteredText(SMALL_FONT_ID, sh - 28, info, false);
+  if (total > 0 && slideshowIndex >= 0 && slideshowIndex < total) {
+    char info[64];
+    snprintf(info, sizeof(info), "%d/%d  %s", slideshowIndex + 1, total, fileList[slideshowIndex].c_str());
+    renderer.drawCenteredText(SMALL_FONT_ID, sh - 28, info, false);
+  }
 
   renderer.setOrientation(savedOr);
   renderer.displayBuffer(HalDisplay::FAST_REFRESH);
@@ -272,6 +275,7 @@ void SleepImagePickerActivity::renderSlideshow() {
 void SleepImagePickerActivity::loop() {
   if (slideshowActive) {
     const int total = static_cast<int>(fileList.size());
+    if (total == 0) { slideshowActive = false; requestUpdate(); return; }
     buttonNavigator.onNext([this, total] { slideshowIndex = (slideshowIndex + 1) % total; renderSlideshow(); });
     buttonNavigator.onPrevious([this, total] { slideshowIndex = (slideshowIndex - 1 + total) % total; renderSlideshow(); });
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {

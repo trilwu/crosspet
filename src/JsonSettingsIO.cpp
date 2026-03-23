@@ -251,8 +251,14 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
 
   s.autoPageTurnSpeed = doc["autoPageTurnSpeed"] | (uint8_t)0;
   if (s.autoPageTurnSpeed > 20) s.autoPageTurnSpeed = 0;
-  s.autoPageTurnEnabled = doc["autoPageTurnEnabled"] | (uint8_t)0;
-  if (s.autoPageTurnEnabled > 1) s.autoPageTurnEnabled = 0;
+  // Migration: users upgrading from pre-v1.8 had speed > 0 meaning "on".
+  // If autoPageTurnEnabled key is missing but speed is set, auto-enable.
+  if (doc.containsKey("autoPageTurnEnabled")) {
+    s.autoPageTurnEnabled = doc["autoPageTurnEnabled"] | (uint8_t)0;
+    if (s.autoPageTurnEnabled > 1) s.autoPageTurnEnabled = 0;
+  } else {
+    s.autoPageTurnEnabled = (s.autoPageTurnSpeed > 0) ? 1 : 0;
+  }
 
   LOG_DBG("CPS", "Settings loaded from file");
 
