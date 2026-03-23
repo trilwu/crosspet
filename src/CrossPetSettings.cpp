@@ -15,6 +15,7 @@ bool CrossPetSettings::saveToFile() const {
   Storage.mkdir("/.crosspoint");
 
   JsonDocument doc;
+  doc["fileSortMode"] = fileSortMode;
   doc["homeShowClock"] = homeShowClock;
   doc["homeShowWeather"] = homeShowWeather;
   doc["homeShowPetStatus"] = homeShowPetStatus;
@@ -42,6 +43,7 @@ bool CrossPetSettings::loadFromFile() {
         LOG_ERR("CPS", "CrossPet settings JSON parse error: %s", error.c_str());
         return false;
       }
+      fileSortMode = doc["fileSortMode"] | (uint8_t)0;
       homeShowClock = doc["homeShowClock"] | (uint8_t)1;
       homeShowWeather = doc["homeShowWeather"] | (uint8_t)1;
       homeShowPetStatus = doc["homeShowPetStatus"] | (uint8_t)1;

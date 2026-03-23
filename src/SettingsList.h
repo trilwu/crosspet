@@ -182,6 +182,10 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CUSTOMISE_STATUS_BAR),
       SettingInfo::Toggle(StrId::STR_CLOCK, &CrossPointSettings::statusBarClock, "statusBarClock",
                           StrId::STR_CUSTOMISE_STATUS_BAR),
+      SettingInfo::Toggle(StrId::STR_TIME_ESTIMATE, &CrossPointSettings::statusBarTimeEstimate,
+                          "statusBarTimeEstimate", StrId::STR_CUSTOMISE_STATUS_BAR),
+      SettingInfo::Toggle(StrId::STR_SESSION_TIMER, &CrossPointSettings::statusBarSessionTimer,
+                          "statusBarSessionTimer", StrId::STR_CUSTOMISE_STATUS_BAR),
   };
   return list;
 }

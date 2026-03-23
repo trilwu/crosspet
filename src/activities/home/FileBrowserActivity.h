@@ -20,6 +20,7 @@ class FileBrowserActivity final : public Activity {
   // Files state
   std::string basepath = "/";
   std::vector<std::string> files;
+  std::vector<size_t> fileSizes;  // Parallel to files; 0 for directories
 
   // Data loading
   void loadFiles();

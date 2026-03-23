@@ -11,14 +11,16 @@
 #include "fontIds.h"
 
 namespace {
-constexpr int MENU_ITEMS = 7;
+constexpr int MENU_ITEMS = 9;
 const StrId menuNames[MENU_ITEMS] = {StrId::STR_CHAPTER_PAGE_COUNT,
                                      StrId::STR_BOOK_PROGRESS_PERCENTAGE,
                                      StrId::STR_PROGRESS_BAR,
                                      StrId::STR_PROGRESS_BAR_THICKNESS,
                                      StrId::STR_TITLE,
                                      StrId::STR_BATTERY,
-                                     StrId::STR_CLOCK};
+                                     StrId::STR_CLOCK,
+                                     StrId::STR_TIME_ESTIMATE,
+                                     StrId::STR_SESSION_TIMER};
 constexpr int PROGRESS_BAR_ITEMS = 3;
 const StrId progressBarNames[PROGRESS_BAR_ITEMS] = {StrId::STR_BOOK, StrId::STR_CHAPTER, StrId::STR_HIDE};
 
@@ -114,6 +116,12 @@ void StatusBarSettingsActivity::handleSelection() {
   } else if (selectedIndex == 6) {
     // Show Clock
     SETTINGS.statusBarClock = (SETTINGS.statusBarClock + 1) % 2;
+  } else if (selectedIndex == 7) {
+    // Time Estimate
+    SETTINGS.statusBarTimeEstimate = (SETTINGS.statusBarTimeEstimate + 1) % 2;
+  } else if (selectedIndex == 8) {
+    // Session Timer
+    SETTINGS.statusBarSessionTimer = (SETTINGS.statusBarSessionTimer + 1) % 2;
   }
   SETTINGS.saveToFile();
 }
@@ -149,6 +157,10 @@ void StatusBarSettingsActivity::render(RenderLock&&) {
           return SETTINGS.statusBarBattery ? tr(STR_SHOW) : tr(STR_HIDE);
         } else if (index == 6) {
           return SETTINGS.statusBarClock ? tr(STR_SHOW) : tr(STR_HIDE);
+        } else if (index == 7) {
+          return SETTINGS.statusBarTimeEstimate ? tr(STR_SHOW) : tr(STR_HIDE);
+        } else if (index == 8) {
+          return SETTINGS.statusBarSessionTimer ? tr(STR_SHOW) : tr(STR_HIDE);
         } else {
           return tr(STR_HIDE);
         }

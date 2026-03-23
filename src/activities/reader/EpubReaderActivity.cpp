@@ -99,6 +99,7 @@ void EpubReaderActivity::onEnter() {
 
   // Begin tracking how long this reading session lasts
   READ_STATS.startSession();
+  sessionStartMs = millis();
 
   // Auto-activate page turn if persistent setting is configured
   if (SETTINGS.autoPageTurnEnabled && SETTINGS.autoPageTurnSpeed > 0) {
@@ -670,6 +671,20 @@ void EpubReaderActivity::toggleAutoPageTurn(const uint8_t selectedPageTurnOption
 }
 
 void EpubReaderActivity::pageTurn(bool isForwardTurn) {
+  // Record manual page turn duration for reading time estimate (skip auto-turn)
+  if (!automaticPageTurnActive && lastUserPageTurnMs > 0) {
+    const unsigned long duration = millis() - lastUserPageTurnMs;
+    // Only record plausible durations (1s-10min per page)
+    if (duration >= 1000 && duration <= 600000) {
+      pageTurnTimes[pageTurnTimesIdx] = duration;
+      pageTurnTimesIdx = (pageTurnTimesIdx + 1) % 10;
+      if (pageTurnTimesCount < 10) pageTurnTimesCount++;
+    }
+  }
+  if (!automaticPageTurnActive) {
+    lastUserPageTurnMs = millis();
+  }
+
   if (isForwardTurn) {
     if (section->currentPage < section->pageCount - 1) {
       section->currentPage++;
@@ -1093,6 +1108,70 @@ void EpubReaderActivity::renderStatusBar() const {
   const bool isStarred = section && bookmarkStore.has(static_cast<uint16_t>(currentSpineIndex),
                                                       static_cast<uint16_t>(section->currentPage));
   GUI.drawStatusBar(renderer, bookProgress, currentPage, pageCount, title, 0, textYOffset, isStarred);
+
+  // Draw session timer and/or time estimate inside the status bar area
+  if (SETTINGS.statusBarSessionTimer || SETTINGS.statusBarTimeEstimate) {
+    const auto& metrics = UITheme::getInstance().getMetrics();
+    int orientedMarginTop, orientedMarginRight, orientedMarginBottom, orientedMarginLeft;
+    renderer.getOrientedViewableTRBL(&orientedMarginTop, &orientedMarginRight, &orientedMarginBottom,
+                                     &orientedMarginLeft);
+    const int barH = UITheme::getInstance().getStatusBarHeight();
+    // Position text inside the status bar: bar starts at (screenH - barH - marginBottom)
+    const int textY = renderer.getScreenHeight() - orientedMarginBottom - barH + 2;
+
+    // Session timer — rendered on the right side, left of progress text
+    if (SETTINGS.statusBarSessionTimer && sessionStartMs > 0) {
+      const uint32_t elapsedSec = (millis() - sessionStartMs) / 1000;
+      char sessBuf[12];
+      const uint32_t h = elapsedSec / 3600;
+      const uint32_t m = (elapsedSec % 3600) / 60;
+      if (h > 0) {
+        snprintf(sessBuf, sizeof(sessBuf), "%uh%um", (unsigned)h, (unsigned)m);
+      } else {
+        snprintf(sessBuf, sizeof(sessBuf), "%um", (unsigned)m);
+      }
+      const int sessW = renderer.getTextWidth(SMALL_FONT_ID, sessBuf);
+      renderer.drawText(SMALL_FONT_ID,
+                        renderer.getScreenWidth() - metrics.statusBarHorizontalMargin - orientedMarginRight - sessW,
+                        textY, sessBuf);
+    }
+
+    // Time estimate — rendered on the left side, after clock/battery gap
+    if (SETTINGS.statusBarTimeEstimate) {
+      const int minsLeft = getEstimatedMinutesLeft();
+      if (minsLeft > 0) {
+        char estimBuf[16];
+        if (minsLeft >= 60) {
+          snprintf(estimBuf, sizeof(estimBuf), "~%uh%um", (unsigned)(minsLeft / 60), (unsigned)(minsLeft % 60));
+        } else {
+          snprintf(estimBuf, sizeof(estimBuf), "~%um", (unsigned)minsLeft);
+        }
+        // Position after the left content (clock + battery) — use a conservative offset
+        const int leftOffset = metrics.statusBarHorizontalMargin + orientedMarginLeft +
+                               (SETTINGS.statusBarClock ? 36 : 0) +
+                               (SETTINGS.statusBarBattery ? 46 : 0);
+        renderer.drawText(SMALL_FONT_ID, leftOffset, textY, estimBuf);
+      }
+    }
+  }
+}
+
+int EpubReaderActivity::getEstimatedMinutesLeft() const {
+  if (pageTurnTimesCount == 0 || !section) return 0;
+
+  // Average page turn duration from circular buffer
+  unsigned long total = 0;
+  for (int i = 0; i < pageTurnTimesCount; i++) {
+    total += pageTurnTimes[i];
+  }
+  const unsigned long avgMs = total / pageTurnTimesCount;
+
+  // Remaining pages: rest of current chapter
+  const int pagesLeft = section->pageCount - section->currentPage - 1;
+  if (pagesLeft <= 0) return 0;
+
+  const unsigned long totalMs = avgMs * static_cast<unsigned long>(pagesLeft);
+  return static_cast<int>(totalMs / 60000);
 }
 
 void EpubReaderActivity::navigateToHref(const std::string& hrefStr, const bool savePosition) {

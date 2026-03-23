@@ -20,6 +20,15 @@ class EpubReaderActivity final : public Activity {
   int cachedChapterTotalPageCount = 0;
   unsigned long lastPageTurnTime = 0UL;
   unsigned long pageTurnDuration = 0UL;
+
+  // Reading time estimate: circular buffer of manual page turn durations (ms)
+  unsigned long pageTurnTimes[10] = {};
+  int pageTurnTimesIdx = 0;
+  int pageTurnTimesCount = 0;
+  unsigned long lastUserPageTurnMs = 0;
+
+  // Session timer: millis() at reader entry
+  unsigned long sessionStartMs = 0;
   // Signals that the next render should reposition within the newly loaded section
   // based on a cross-book percentage jump.
   bool pendingPercentJump = false;
@@ -58,6 +67,7 @@ class EpubReaderActivity final : public Activity {
   void renderContents(std::unique_ptr<Page> page, int orientedMarginTop, int orientedMarginRight,
                       int orientedMarginBottom, int orientedMarginLeft);
   void renderStatusBar() const;
+  int getEstimatedMinutesLeft() const;
   void saveProgress(int spineIndex, int currentPage, int pageCount);
   // Jump to a percentage of the book (0-100), mapping it to spine and page.
   void jumpToPercent(int percent);

@@ -276,6 +276,26 @@ void SettingsActivity::toggleCurrentSetting() {
   SETTINGS.saveToFile();
 }
 
+static const char* getSettingDescription(const SettingInfo& s) {
+  if (!s.key) return nullptr;
+  if (strcmp(s.key, "keepClockAlive") == 0) return tr(STR_HELP_KEEP_CLOCK_ALIVE);
+  if (strcmp(s.key, "sleepRefreshInterval") == 0) return tr(STR_HELP_SLEEP_REFRESH);
+  if (strcmp(s.key, "fadingFix") == 0) return tr(STR_HELP_FADING_FIX);
+  if (strcmp(s.key, "textDarkness") == 0) return tr(STR_HELP_TEXT_DARKNESS);
+  if (strcmp(s.key, "refreshFrequency") == 0) return tr(STR_HELP_REFRESH_FREQ);
+  if (strcmp(s.key, "textAntiAliasing") == 0) return tr(STR_HELP_TEXT_AA);
+  if (strcmp(s.key, "darkMode") == 0) return tr(STR_HELP_DARK_MODE);
+  if (strcmp(s.key, "sleepScreen") == 0) return tr(STR_HELP_SLEEP_SCREEN);
+  if (strcmp(s.key, "fontFamily") == 0) return tr(STR_HELP_FONT_FAMILY);
+  if (strcmp(s.key, "fontSize") == 0) return tr(STR_HELP_FONT_SIZE);
+  if (strcmp(s.key, "orientation") == 0) return tr(STR_HELP_ORIENTATION);
+  if (strcmp(s.key, "hyphenationEnabled") == 0) return tr(STR_HELP_HYPHENATION);
+  if (strcmp(s.key, "embeddedStyle") == 0) return tr(STR_HELP_EMBEDDED_STYLE);
+  if (strcmp(s.key, "hideBatteryPercentage") == 0) return tr(STR_HELP_HIDE_BATTERY);
+  if (strcmp(s.key, "sleepTimeout") == 0) return tr(STR_HELP_TIME_TO_SLEEP);
+  return nullptr;
+}
+
 void SettingsActivity::render(RenderLock&&) {
   renderer.clearScreen();
 
@@ -310,7 +330,12 @@ void SettingsActivity::render(RenderLock&&) {
         }
         return std::string(I18N.get(s.nameId));
       },
-      nullptr, nullptr,
+      [&settings, this](int index) -> std::string {
+        if (index != selectedSettingIndex - 1) return "";
+        const auto* desc = getSettingDescription(settings[index]);
+        return desc ? std::string(desc) : "";
+      },
+      nullptr,
       [&settings](int i) {
         const auto& setting = settings[i];
         // Section headers have no value
