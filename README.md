@@ -15,7 +15,7 @@ CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoi
 | Flash | 16MB |
 | Display | 800x480 E-Ink (SSD1677) |
 | Storage | SD Card |
-| Wireless | WiFi 802.11 b/g/n |
+| Wireless | WiFi 802.11 b/g/n, BLE 5.0 (hardware present, not used by firmware) |
 
 ---
 
@@ -26,27 +26,26 @@ CrossPet builds on top of [CrossPoint Reader](https://github.com/crosspoint-read
 | Feature | CrossPoint | CrossPet |
 |---------|-----------|----------|
 | **EPUB reading** | EPUB 2 & 3 with images | Same |
-| **Font families** | Bookerly, Noto Sans | Bookerly, Noto Sans, **Lexend**, **Bokerlam** (Vietnamese serif) |
-| **File formats** | EPUB | EPUB, **XTC/XTCH** (native, >2GB), **TXT/Markdown** |
-| **Sleep screens** | Custom image, Cover | **9 modes**: Dark, Light, Custom, Cover, None, Cover+Custom, Clock, Reading Stats, **Page Overlay** |
+| **Font families** | Bookerly (1 reader font) | Bookerly, **Lexend**, **Bokerlam** (3 reader fonts) |
+| **File formats** | EPUB, XTC | EPUB, XTC **(>2GB support)**, **TXT/Markdown** |
+| **Sleep screens** | Dark, Custom, Cover (3 modes) | **9 modes** including Clock, Reading Stats, **Page Overlay** |
 | **Sleep image config** | Manual file placement | **All-in-one app** with mode selector + image picker + overlay slideshow |
-| **Virtual pet** | — | **Full Tamagotchi-style pet** that grows with reading (5 stages, 3 variants) |
+| **Virtual pet** | — | **Tamagotchi-style chicken** that grows with reading (5 stages, 3 variants) |
 | **Mini games** | — | **Chess, Caro, Sudoku, Minesweeper, 2048** |
-| **Auto page turn** | — | **On/off toggle + 1-20 PPM speed**, configurable as power button action |
+| **Auto page turn** | — | **On/off toggle + 1-20 PPM**, configurable as power button action |
 | **Reading stats** | — | **Daily/lifetime tracking** with streaks that reduce pet feeding cost |
 | **Weather** | — | **Open-Meteo API** (Hanoi/TPHCM/Da Nang) |
 | **Lunar calendar** | — | **Vietnamese lunar dates** in clock app |
 | **Pomodoro timer** | — | **Work/break timer** with pet happiness bonus |
-| **Home screen** | File browser list | **Cover art grid**, recent books with progress, clock/weather/pet widgets |
+| **Home screen** | File browser list | **Cover art cards**, recent books grid, clock/weather/pet widgets |
 | **Recent books** | Text list | **3-column cover grid** with progress bars |
 | **UI themes** | Default | **5 themes**: Classic, Lyra, Lyra Extended, CrossPet, CrossPet Classic |
 | **Dark mode** | — | Invertible display |
-| **Power button** | Sleep only | **9 configurable actions** (single/double/triple click) |
+| **Power button** | Basic (sleep/ignore) | **9 configurable actions** per single/double/triple click |
 | **Status bar** | Basic | **Fully customizable** (6 independent elements) |
 | **OPDS browser** | Built-in | Same |
 | **KOReader Sync** | Built-in | Same |
 | **WiFi upload/OTA** | Built-in | Same |
-| **BLE Presenter** | — | Removed (RAM constraints) |
 | **Language** | English + community translations | Same + **Vietnamese UI** |
 
 > CrossPet inherits all core reading features from CrossPoint and adds pet gameplay, tools, games, and UI enhancements on top. Both firmwares run on the same Xteink X4 hardware.
