@@ -62,9 +62,9 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
   LOG_INF("BT", "Connecting to device %s", address.c_str());
 
   try {
-    // Look up the address type from NimBLE scan cache before clearing
+    // Look up address type: scan cache first, then bonded device settings
     NimBLEScan* pScan = NimBLEDevice::getScan();
-    uint8_t addrType = BLE_ADDR_PUBLIC;
+    uint8_t addrType = 0xFF;  // sentinel: not found
     {
       const NimBLEScanResults& results = pScan->getResults();
       for (int i = 0; i < static_cast<int>(results.getCount()); i++) {
@@ -76,6 +76,12 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
         }
       }
     }
+    // Fallback: use saved address type from bonded device
+    if (addrType == 0xFF && address == _bondedDeviceAddress) {
+      addrType = _bondedDeviceAddrType;
+      LOG_INF("BT", "Using saved address type=%d for bonded device", addrType);
+    }
+    if (addrType == 0xFF) addrType = BLE_ADDR_RANDOM;  // Default to random for BLE peripherals
 
     // Extract device name before clearing scan results
     std::string deviceName;
@@ -306,9 +312,10 @@ void BluetoothHIDManager::setButtonInjector(std::function<void(uint8_t)> injecto
   LOG_DBG("BT", "Button injector registered");
 }
 
-void BluetoothHIDManager::setBondedDevice(const std::string& address, const std::string& name) {
+void BluetoothHIDManager::setBondedDevice(const std::string& address, const std::string& name, uint8_t addrType) {
   _bondedDeviceAddress = address;
   _bondedDeviceName = name;
-  LOG_INF("BT", "Bonded device set: %s (%s)", _bondedDeviceAddress.c_str(), _bondedDeviceName.c_str());
+  _bondedDeviceAddrType = addrType;
+  LOG_INF("BT", "Bonded device set: %s (%s) type=%d", _bondedDeviceAddress.c_str(), _bondedDeviceName.c_str(), addrType);
 }
 #endif // ENABLE_BLE

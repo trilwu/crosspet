@@ -94,7 +94,7 @@ void BluetoothSettingsActivity::handleDeviceListInput() {
 
     if (btMgr->connectToDevice(devAddr)) {
       // Persist bonded device in manager and settings
-      btMgr->setBondedDevice(devAddr, devName);
+      btMgr->setBondedDevice(devAddr, devName, devAddrType);
       strncpy(SETTINGS.bleBondedDeviceAddr, devAddr.c_str(), sizeof(SETTINGS.bleBondedDeviceAddr) - 1);
       strncpy(SETTINGS.bleBondedDeviceName, devName.c_str(), sizeof(SETTINGS.bleBondedDeviceName) - 1);
       SETTINGS.bleBondedDeviceAddrType = devAddrType;

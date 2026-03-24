@@ -66,7 +66,7 @@ public:
   void processInputEvents();
   void setInputCallback(std::function<void(uint16_t keycode)> callback);
   void setButtonInjector(std::function<void(uint8_t buttonIndex)> injector);
-  void setBondedDevice(const std::string& address, const std::string& name = "");
+  void setBondedDevice(const std::string& address, const std::string& name = "", uint8_t addrType = 0xFF);
   void updateActivity();  // Call periodically to check inactivity timeout
   void checkAutoReconnect(bool userInputDetected = false);  // Reconnect bonded device when disconnected
   
@@ -104,6 +104,7 @@ private:
   std::function<void(uint8_t)> _buttonInjector;
   std::string _bondedDeviceAddress;
   std::string _bondedDeviceName;
+  uint8_t _bondedDeviceAddrType = 0xFF;  // BLE address type for reconnect
   
   // Inactivity timeout (milliseconds)
   static constexpr unsigned long INACTIVITY_TIMEOUT_MS = 300000;  // 5 minutes

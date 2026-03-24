@@ -421,7 +421,7 @@ void setup() {
       gpio.injectButtonPress(buttonIndex);
     });
     if (SETTINGS.bleEnabled && SETTINGS.bleBondedDeviceAddr[0]) {
-      btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName);
+      btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName, SETTINGS.bleBondedDeviceAddrType);
     }
   }
 #endif
