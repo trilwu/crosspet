@@ -52,10 +52,20 @@ void ToolsActivity::loop() {
   });
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    switch (selectorIndex) {
-      case 0:
-        activityManager.goToFileTransfer();
-        break;
+    int idx = selectorIndex;
+    // Index 0 = File Transfer, then BLE (if compiled), then rest
+    if (idx == 0) {
+      activityManager.goToFileTransfer();
+      return;
+    }
+#ifdef ENABLE_BLE
+    if (idx == 1) {
+      activityManager.pushActivity(std::make_unique<BluetoothSettingsActivity>(renderer, mappedInput));
+      return;
+    }
+    idx--;  // shift remaining indices down by 1 (BLE consumed slot 1)
+#endif
+    switch (idx) {
       case 1:
         activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
         break;
@@ -75,23 +85,16 @@ void ToolsActivity::loop() {
         activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
         break;
       default: {
-        // Dynamic items: BLE (if compiled), OPDS (if configured), then games
+        // Dynamic items: OPDS (if configured), then games
         int dynamicBase = 7;
-#ifdef ENABLE_BLE
-        if (selectorIndex == dynamicBase) {
-          activityManager.pushActivity(std::make_unique<BluetoothSettingsActivity>(renderer, mappedInput));
-          break;
-        }
-        dynamicBase++;
-#endif
         if (SETTINGS.opdsServerUrl[0]) {
-          if (selectorIndex == dynamicBase) {
+          if (idx == dynamicBase) {
             activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
             break;
           }
           dynamicBase++;
         }
-        int gameIdx = selectorIndex - dynamicBase;
+        int gameIdx = idx - dynamicBase;
         switch (gameIdx) {
           case 0: activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput)); break;
           case 1: activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput)); break;
@@ -133,12 +136,17 @@ void ToolsActivity::render(RenderLock&&) {
 
   GUI.drawList(renderer, Rect{0, menuTop, pageWidth, menuHeight}, menuCount, selectorIndex,
                [&](int index) -> std::string {
-                 if (index < 7) return baseLabels[index];
-                 int dynamicIdx = index - 7;
+                 // Index 0 = File Transfer
+                 if (index == 0) return baseLabels[0];
+                 int i = index;
 #ifdef ENABLE_BLE
-                 if (dynamicIdx == 0) return tr(STR_BLE_REMOTE);
-                 dynamicIdx--;
+                 // Index 1 = Bluetooth Remote (BLE build only)
+                 if (i == 1) return tr(STR_BLE_REMOTE);
+                 i--;  // shift for remaining items
 #endif
+                 // Indices 1-6 (or 2-7 with BLE) = base tools
+                 if (i >= 1 && i <= 6) return baseLabels[i];
+                 int dynamicIdx = i - 7;
                  if (hasOpds) {
                    if (dynamicIdx == 0) return tr(STR_OPDS_BROWSER);
                    dynamicIdx--;
