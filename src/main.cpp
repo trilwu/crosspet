@@ -533,7 +533,12 @@ void loop() {
 
   // Check for any user activity (button press or release) or active background work
   static unsigned long lastActivityTime = millis();
-  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep()) {
+  bool hasActivity = gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep();
+#ifdef ENABLE_BLE
+  // BLE HID reports count as user activity — prevent auto-sleep while remote is in use
+  hasActivity = hasActivity || BluetoothHIDManager::getInstance().hasRecentActivity();
+#endif
+  if (hasActivity) {
     lastActivityTime = millis();         // Reset inactivity timer
     powerManager.setPowerSaving(false);  // Restore normal CPU frequency on user activity
   }
@@ -621,7 +626,12 @@ void loop() {
     powerManager.setPowerSaving(false);  // Make sure we're at full performance when skipLoopDelay is requested
     yield();                             // Give FreeRTOS a chance to run tasks, but return immediately
   } else {
-    if (millis() - lastActivityTime >= HalPowerManager::IDLE_POWER_SAVING_MS) {
+    bool canSavePower = (millis() - lastActivityTime >= HalPowerManager::IDLE_POWER_SAVING_MS);
+#ifdef ENABLE_BLE
+    // BLE needs >=80MHz — don't drop to 10MHz while NimBLE is active
+    if (BluetoothHIDManager::getInstance().isEnabled()) canSavePower = false;
+#endif
+    if (canSavePower) {
       // If we've been inactive for a while, increase the delay to save power
       powerManager.setPowerSaving(true);  // Lower CPU frequency after extended inactivity
       delay(50);
