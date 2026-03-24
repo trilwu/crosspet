@@ -212,8 +212,12 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
     // Check for section header marker (\x01 prefix)
     auto itemName = rowTitle(i);
     if (!itemName.empty() && itemName[0] == '\x01') {
-      // Section header: small uppercase text with top padding, no highlight
-      renderer.drawText(SMALL_FONT_ID, textX, itemY + 14, itemName.c_str() + 1, true);
+      // Section header: bold small text + subtle bottom line
+      renderer.drawText(SMALL_FONT_ID, textX, itemY + 14, itemName.c_str() + 1, true, EpdFontFamily::BOLD);
+      renderer.fillRectDither(rect.x + CrossPetMetrics::values.contentSidePadding + kHPad,
+                              itemY + rowH - 1,
+                              contentW - CrossPetMetrics::values.contentSidePadding * 2 - kHPad * 2,
+                              1, Color::DarkGray);
       continue;
     }
 
@@ -275,9 +279,11 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
           renderer.drawText(SMALL_FONT_ID, pillX + pillPad, pillY + 2, valueText.c_str(), true);
         }
       } else {
-        // Enum/value text in DarkGray for visual hierarchy (label=black, value=gray)
+        // Enum/value text — subtle bg only when not selected (avoids LightGray-on-LightGray)
         const int valX = rect.x + contentW - CrossPetMetrics::values.contentSidePadding - valueW;
-        renderer.fillRectDither(valX - 2, itemY + 4, valueW + 2, rowH - 8, Color::LightGray);
+        if (!isSelected) {
+          renderer.fillRectDither(valX - 2, itemY + 4, valueW + 2, rowH - 8, Color::LightGray);
+        }
         renderer.drawText(UI_10_FONT_ID, valX, itemY + 6, valueText.c_str(), true);
       }
     }
