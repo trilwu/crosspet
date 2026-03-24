@@ -1046,11 +1046,11 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
   }
 
   // Save bw buffer to reset buffer state after grayscale data sync
-  renderer.storeBwBuffer();
+  // Skip AA if storeBwBuffer fails (not enough heap, e.g. BLE active needs 48KB)
+  const bool bwStored = renderer.storeBwBuffer();
 
-  // grayscale rendering
-  // TODO: Only do this if font supports it
-  if (SETTINGS.textAntiAliasing) {
+  // grayscale rendering — requires stored BW buffer for restore after gray pass
+  if (SETTINGS.textAntiAliasing && bwStored) {
     renderer.clearScreen(0x00);
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_LSB);
     page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
@@ -1067,8 +1067,8 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
     renderer.setRenderMode(GfxRenderer::BW);
   }
 
-  // restore the bw data
-  renderer.restoreBwBuffer();
+  // restore the bw data (only if we successfully stored it)
+  if (bwStored) renderer.restoreBwBuffer();
 }
 
 void EpubReaderActivity::renderStatusBar() const {
