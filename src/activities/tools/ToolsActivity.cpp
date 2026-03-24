@@ -15,15 +15,23 @@
 #include "WeatherActivity.h"
 #include "ReadingStatsActivity.h"
 #include "SleepImagePickerActivity.h"
+#ifdef ENABLE_BLE
+#include "activities/settings/BluetoothSettingsActivity.h"
+#endif
 #include "activities/browser/OpdsBookBrowserActivity.h"
 #include "components/UITheme.h"
 #include "CrossPointSettings.h"
 #include "fontIds.h"
 
-static constexpr int BASE_MENU_COUNT = 12;  // File Transfer added to Apps
+static constexpr int BASE_MENU_COUNT_NO_BLE = 12;
 
 int ToolsActivity::getMenuCount() const {
-  return BASE_MENU_COUNT + (SETTINGS.opdsServerUrl[0] ? 1 : 0);
+  int count = BASE_MENU_COUNT_NO_BLE;
+#ifdef ENABLE_BLE
+  count++;
+#endif
+  if (SETTINGS.opdsServerUrl[0]) count++;
+  return count;
 }
 
 void ToolsActivity::onEnter() {
@@ -67,16 +75,23 @@ void ToolsActivity::loop() {
         activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
         break;
       default: {
-        // Dynamic items: OPDS (if configured) then games
-        int gameBase = 7;  // After 7 base items (0-6)
+        // Dynamic items: BLE (if compiled), OPDS (if configured), then games
+        int dynamicBase = 7;
+#ifdef ENABLE_BLE
+        if (selectorIndex == dynamicBase) {
+          activityManager.pushActivity(std::make_unique<BluetoothSettingsActivity>(renderer, mappedInput));
+          break;
+        }
+        dynamicBase++;
+#endif
         if (SETTINGS.opdsServerUrl[0]) {
-          if (selectorIndex == 7) {
+          if (selectorIndex == dynamicBase) {
             activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
             break;
           }
-          gameBase = 8;
+          dynamicBase++;
         }
-        int gameIdx = selectorIndex - gameBase;
+        int gameIdx = selectorIndex - dynamicBase;
         switch (gameIdx) {
           case 0: activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput)); break;
           case 1: activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput)); break;
@@ -120,6 +135,10 @@ void ToolsActivity::render(RenderLock&&) {
                [&](int index) -> std::string {
                  if (index < 7) return baseLabels[index];
                  int dynamicIdx = index - 7;
+#ifdef ENABLE_BLE
+                 if (dynamicIdx == 0) return tr(STR_BLE_REMOTE);
+                 dynamicIdx--;
+#endif
                  if (hasOpds) {
                    if (dynamicIdx == 0) return tr(STR_OPDS_BROWSER);
                    dynamicIdx--;
