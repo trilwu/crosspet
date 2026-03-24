@@ -125,10 +125,9 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
     pClient->setClientCallbacks(&clientCallbacks);
     // NimBLE 2.x API: timeout in MILLISECONDS (not seconds!)
     pClient->setConnectTimeout(10000);  // 10 seconds
-    // Connection params: interval 30-50ms, latency=4 (save power), supervision timeout=20s
-    // HID remotes are idle between presses — long timeout + latency needed
-    // scanInterval/scanWindow 60ms/60ms for 100% duty cycle during connect
-    pClient->setConnectionParams(24, 40, 4, 2000, 96, 96);
+    // Don't set connection params — let the remote use its preferred values.
+    // Many BLE HID remotes disconnect if the central forces incompatible params.
+    // The onConnParamsUpdateRequest callback accepts whatever the peripheral requests.
 
     // Connect using address + type saved from scan cache
     NimBLEAddress bleAddress(address, addrType);

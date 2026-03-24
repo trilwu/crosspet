@@ -139,40 +139,26 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
                                        uint8_t* pData, size_t length, bool isNotify) {
   if (!g_instance || !pData || length == 0) return;
 
-  // Log raw data for debugging
-  char hexStr[128] = {0};
-  int offset = 0;
-  for (size_t i = 0; i < length && i < 16; i++) {
-    offset += snprintf(hexStr + offset, sizeof(hexStr) - offset, "%02X ", pData[i]);
-  }
-  LOG_DBG("BT", "HID Report (%d bytes): %s", length, hexStr);
+  // Minimal logging — avoid blocking serial inside callback
+  LOG_DBG("BT", "HID %d bytes", length);
 
-  // Protect _connectedDevices — this callback runs on NimBLE host task
-  portENTER_CRITICAL(&g_instance->_devicesMux);
-
-  // Resolve the sending device
+  // Resolve sending device — use taskENTER_CRITICAL instead of portENTER_CRITICAL
+  // to avoid disabling interrupts for too long on single-core ESP32-C3
   ConnectedDevice* device = nullptr;
-  if (pChar && pChar->getRemoteService()) {
-    auto client = pChar->getRemoteService()->getClient();
-    if (client) {
-      std::string deviceAddr = client->getPeerAddress().toString();
-      device = g_instance->findConnectedDevice(deviceAddr);
+  {
+    portENTER_CRITICAL(&g_instance->_devicesMux);
+    if (pChar && pChar->getRemoteService()) {
+      auto client = pChar->getRemoteService()->getClient();
+      if (client) {
+        std::string deviceAddr = client->getPeerAddress().toString();
+        device = g_instance->findConnectedDevice(deviceAddr);
+      }
     }
-  }
-
-  if (!device) {
+    if (device) device->lastActivityTime = millis();
     portEXIT_CRITICAL(&g_instance->_devicesMux);
-    return;
   }
 
-  // Refresh activity timestamp
-  device->lastActivityTime = millis();
-
-  if (length < 2) {
-    LOG_DBG("BT", "HID report too short (%d bytes)", length);
-    portEXIT_CRITICAL(&g_instance->_devicesMux);
-    return;
-  }
+  if (!device || length < 2) return;
 
   uint8_t keycode = 0xFF;
   bool isPressed = false;
@@ -191,7 +177,6 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
                 pData[0], keycode);
         device->lastButtonState = false;
         device->lastHIDKeycode = 0x00;
-        portEXIT_CRITICAL(&g_instance->_devicesMux);
         return;
       }
 
@@ -205,7 +190,6 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
           LOG_DBG("BT", "Game Brick: ignoring startup pressed frame keycode=0x%02X", keycode);
           device->lastButtonState = true;
           device->lastHIDKeycode = keycode;
-          portEXIT_CRITICAL(&g_instance->_devicesMux);
           return;
         }
       }
@@ -242,7 +226,6 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
   if (keycode == 0x00 || keycode == 0xFF) {
     device->lastButtonState = isPressed;
     device->lastHIDKeycode = keycode;
-    portEXIT_CRITICAL(&g_instance->_devicesMux);
     return;
   }
 
@@ -251,7 +234,6 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
     LOG_DBG("BT", "Startup gate active: ignoring keycode 0x%02X (waiting for first release)", keycode);
     device->lastButtonState = isPressed;
     device->lastHIDKeycode = keycode;
-    portEXIT_CRITICAL(&g_instance->_devicesMux);
     return;
   }
 
@@ -288,7 +270,6 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
   device->lastButtonState = isPressed;
   device->lastHIDKeycode = keycode;
 
-  portEXIT_CRITICAL(&g_instance->_devicesMux);
 }
 
 // ---- HID Report Parsing ----

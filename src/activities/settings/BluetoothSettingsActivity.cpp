@@ -247,8 +247,9 @@ void BluetoothSettingsActivity::renderMainMenu() {
   }
   std::string statusLine = statusBuf;
 
+  // Show last action result as right-side label in subheader
   GUI.drawSubHeader(renderer, Rect{0, metrics.topPadding + metrics.headerHeight, pageWidth, metrics.tabBarHeight},
-                    statusLine.c_str());
+                    statusLine.c_str(), lastError.empty() ? nullptr : lastError.c_str());
 
   // Build dynamic menu labels matching handleMainMenuInput actions
   const bool hasBonded = strlen(SETTINGS.bleBondedDeviceAddr) > 0;
@@ -279,7 +280,7 @@ void BluetoothSettingsActivity::renderMainMenu() {
            pageHeight - (metrics.topPadding + metrics.headerHeight + metrics.tabBarHeight + metrics.buttonHintsHeight +
                          metrics.verticalSpacing * 2)},
       menuCount, selectedIndex, [&itemLabels](int index) { return itemLabels[index]; }, nullptr, nullptr,
-      [this](int /*i*/) { return lastError; }, true);
+      nullptr, false);
 
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_LEFT), tr(STR_DIR_RIGHT));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
