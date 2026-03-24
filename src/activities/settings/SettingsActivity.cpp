@@ -5,6 +5,9 @@
 #include <Logging.h>
 #include <WiFi.h>
 
+#ifdef ENABLE_BLE
+#include "BluetoothSettingsActivity.h"
+#endif
 #include "ButtonRemapActivity.h"
 #include "CalibreSettingsActivity.h"
 #include "ClearCacheActivity.h"
@@ -55,6 +58,9 @@ void SettingsActivity::onEnter() {
   systemSettings.push_back(SettingInfo::Action(StrId::STR_CLEAR_READING_CACHE, SettingAction::ClearCache));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_CHECK_UPDATES, SettingAction::CheckForUpdates));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_LANGUAGE, SettingAction::Language));
+#ifdef ENABLE_BLE
+  systemSettings.push_back(SettingInfo::Action(StrId::STR_BLE_REMOTE, SettingAction::BleRemote));
+#endif
   systemSettings.push_back(SettingInfo::Action(StrId::STR_DEVICE_INFO, SettingAction::DeviceInfo));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_REBOOT, SettingAction::Reboot));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_CUSTOMISE_STATUS_BAR, SettingAction::CustomiseStatusBar));
@@ -253,6 +259,11 @@ void SettingsActivity::toggleCurrentSetting() {
       case SettingAction::Language:
         startActivityForResult(std::make_unique<LanguageSelectActivity>(renderer, mappedInput), resultHandler);
         break;
+#ifdef ENABLE_BLE
+      case SettingAction::BleRemote:
+        startActivityForResult(std::make_unique<BluetoothSettingsActivity>(renderer, mappedInput), resultHandler);
+        break;
+#endif
       case SettingAction::DeviceInfo:
         startActivityForResult(std::make_unique<DeviceInfoActivity>(renderer, mappedInput), resultHandler);
         break;

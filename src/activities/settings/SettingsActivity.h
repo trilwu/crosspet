@@ -21,6 +21,9 @@ enum class SettingAction {
   ClearCache,
   CheckForUpdates,
   Language,
+#ifdef ENABLE_BLE
+  BleRemote,
+#endif
   DeviceInfo,
   Reboot,
 };

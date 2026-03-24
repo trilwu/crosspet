@@ -238,6 +238,14 @@ class CrossPointSettings {
   // Auto page turn master switch: 0=off, 1=on (speed controlled by autoPageTurnSpeed)
   uint8_t autoPageTurnEnabled = 0;
 
+#ifdef ENABLE_BLE
+  // BLE HID remote settings
+  uint8_t bleEnabled = 0;                    // 0=disabled, 1=auto-connect on startup
+  char bleBondedDeviceAddr[18] = "";         // BLE bonded device MAC address
+  char bleBondedDeviceName[32] = "";         // BLE bonded device display name
+  uint8_t bleBondedDeviceAddrType = 0;       // BLE address type (0=public, 1=random)
+#endif
+
   // Keep RTC alive during deep sleep (GPIO13 HIGH) for accurate clock on wake.
   // Trade-off: ~3-4mA battery drain vs accurate time. Only useful for clock/stats sleep screens.
   uint8_t keepClockAlive = 0;

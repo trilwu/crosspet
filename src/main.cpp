@@ -37,6 +37,9 @@
 #include "activities/tools/WeatherActivity.h"
 #include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
+#ifdef ENABLE_BLE
+#include <BluetoothHIDManager.h>
+#endif
 
 HalDisplay display;
 HalGPIO gpio;
@@ -256,6 +259,16 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
+#ifdef ENABLE_BLE
+  // Disable BLE before deep sleep to save power
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    if (btMgr.isEnabled()) {
+      btMgr.disable();
+    }
+  }
+#endif
+
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
@@ -400,6 +413,19 @@ void setup() {
   PET_MANAGER.load();
   PET_MANAGER.tick();
 
+#ifdef ENABLE_BLE
+  // Configure BLE HID button injector (lazy — NimBLE not started until user enables BLE)
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    btMgr.setButtonInjector([](uint8_t buttonIndex) {
+      gpio.injectButtonPress(buttonIndex);
+    });
+    if (SETTINGS.bleEnabled && SETTINGS.bleBondedDeviceAddr[0]) {
+      btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName);
+    }
+  }
+#endif
+
   switch (gpio.getWakeupReason()) {
     case HalGPIO::WakeupReason::PowerButton:
       // For normal wakeups, verify power button press duration
@@ -466,6 +492,11 @@ void loop() {
   static unsigned long lastMemPrint = 0;
 
   gpio.update();
+
+#ifdef ENABLE_BLE
+  // Check BLE inactivity timeout (auto-disable after 5 min idle)
+  BluetoothHIDManager::getInstance().updateActivity();
+#endif
 
   renderer.setFadingFix(SETTINGS.fadingFix);
   {
