@@ -83,23 +83,25 @@ void BluetoothSettingsActivity::handleDeviceListInput() {
     return;
   }
 
-  // Connect to selected device
+  // Connect to selected device — copy info before connect (scan results may be invalidated)
   if (selectedIndex >= 0 && selectedIndex < static_cast<int>(devices.size())) {
-    const auto& device = devices[selectedIndex];
-    LOG_INF("BT", "Connecting to %s (%s)", device.name.c_str(), device.address.c_str());
+    const std::string devAddr = devices[selectedIndex].address;
+    const std::string devName = devices[selectedIndex].name;
+    const uint8_t devAddrType = devices[selectedIndex].addressType;
+    LOG_INF("BT", "Connecting to %s (%s)", devName.c_str(), devAddr.c_str());
     lastError = "Connecting...";
     requestUpdateAndWait();  // Force render before blocking connect
 
-    if (btMgr->connectToDevice(device.address)) {
+    if (btMgr->connectToDevice(devAddr)) {
       // Persist bonded device in manager and settings
-      btMgr->setBondedDevice(device.address, device.name);
-      strncpy(SETTINGS.bleBondedDeviceAddr, device.address.c_str(), sizeof(SETTINGS.bleBondedDeviceAddr) - 1);
-      strncpy(SETTINGS.bleBondedDeviceName, device.name.c_str(), sizeof(SETTINGS.bleBondedDeviceName) - 1);
-      SETTINGS.bleBondedDeviceAddrType = device.addressType;
+      btMgr->setBondedDevice(devAddr, devName);
+      strncpy(SETTINGS.bleBondedDeviceAddr, devAddr.c_str(), sizeof(SETTINGS.bleBondedDeviceAddr) - 1);
+      strncpy(SETTINGS.bleBondedDeviceName, devName.c_str(), sizeof(SETTINGS.bleBondedDeviceName) - 1);
+      SETTINGS.bleBondedDeviceAddrType = devAddrType;
       SETTINGS.bleEnabled = 1;
       SETTINGS.saveToFile();
-      lastError = std::string("Connected to ") + device.name;
-      LOG_INF("BT", "Successfully connected to %s", device.name.c_str());
+      lastError = std::string("Connected to ") + devName;
+      LOG_INF("BT", "Successfully connected to %s", devName.c_str());
     } else {
       lastError = btMgr->lastError.empty() ? "Connection failed" : btMgr->lastError;
       LOG_ERR("BT", "Failed to connect: %s", lastError.c_str());
