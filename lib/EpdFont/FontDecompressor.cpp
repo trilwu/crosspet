@@ -72,10 +72,21 @@ bool FontDecompressor::decompressGroup(const EpdFontData* fontData, uint16_t gro
   }
   entry->valid = false;
 
-  // Allocate output buffer
+  // Allocate output buffer — evict other cache entries if allocation fails
   auto* outBuf = static_cast<uint8_t*>(malloc(group.uncompressedSize));
   if (!outBuf) {
-    LOG_ERR("FDC", "Failed to allocate %u bytes for group %u", group.uncompressedSize, groupIndex);
+    // Low memory: free all other cache entries and retry
+    for (auto& slot : cache) {
+      if (&slot != entry && slot.data) {
+        free(slot.data);
+        slot.data = nullptr;
+        slot.valid = false;
+      }
+    }
+    outBuf = static_cast<uint8_t*>(malloc(group.uncompressedSize));
+  }
+  if (!outBuf) {
+    LOG_ERR("FDC", "Failed to allocate %u bytes for group %u (even after eviction)", group.uncompressedSize, groupIndex);
     return false;
   }
 

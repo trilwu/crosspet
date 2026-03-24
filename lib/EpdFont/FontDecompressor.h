@@ -17,7 +17,7 @@ class FontDecompressor {
   void clearCache();
 
  private:
-  static constexpr uint8_t CACHE_SLOTS = 4;
+  static constexpr uint8_t CACHE_SLOTS = 2;  // Reduced from 4 to save heap for BLE builds
 
   struct CacheEntry {
     const EpdFontData* font = nullptr;
