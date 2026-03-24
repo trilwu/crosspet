@@ -170,6 +170,7 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
 
   if (length < 2) {
     LOG_DBG("BT", "HID report too short (%d bytes)", length);
+    portEXIT_CRITICAL(&g_instance->_devicesMux);
     return;
   }
 
@@ -190,6 +191,7 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
                 pData[0], keycode);
         device->lastButtonState = false;
         device->lastHIDKeycode = 0x00;
+        portEXIT_CRITICAL(&g_instance->_devicesMux);
         return;
       }
 
@@ -203,6 +205,7 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
           LOG_DBG("BT", "Game Brick: ignoring startup pressed frame keycode=0x%02X", keycode);
           device->lastButtonState = true;
           device->lastHIDKeycode = keycode;
+          portEXIT_CRITICAL(&g_instance->_devicesMux);
           return;
         }
       }
@@ -239,6 +242,7 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
   if (keycode == 0x00 || keycode == 0xFF) {
     device->lastButtonState = isPressed;
     device->lastHIDKeycode = keycode;
+    portEXIT_CRITICAL(&g_instance->_devicesMux);
     return;
   }
 
@@ -247,6 +251,7 @@ void BluetoothHIDManager::onHIDNotify(NimBLERemoteCharacteristic* pChar,
     LOG_DBG("BT", "Startup gate active: ignoring keycode 0x%02X (waiting for first release)", keycode);
     device->lastButtonState = isPressed;
     device->lastHIDKeycode = keycode;
+    portEXIT_CRITICAL(&g_instance->_devicesMux);
     return;
   }
 
