@@ -34,6 +34,13 @@ constexpr ThemeMetrics values = {.batteryWidth = 16,
                                  .keyboardKeySpacing = 0,
                                  .keyboardBottomAligned = true,
                                  .keyboardCenteredText = true};
+
+// Unified spacing constants for CrossPet layout
+constexpr int cardMargin = 12;   // outer margin for cards
+constexpr int cardPadding = 14;  // inner padding within cards
+constexpr int cardRadius = 14;   // standard card corner radius
+constexpr int rowHPad = 8;       // horizontal padding inside list rows
+constexpr int shadowOffset = 2;  // fake drop shadow offset for cards
 }
 
 // CrossPet design language: card-first, soft selection (LightGray), thin headers,

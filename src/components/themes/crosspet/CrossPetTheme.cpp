@@ -52,7 +52,7 @@ const uint8_t* cpIconForName(UIIcon icon, int size) {
 }
 constexpr int kCardRadius = 12;
 constexpr int kSelectionRadius = 8;
-constexpr int kHPad = 8;           // horizontal padding inside rows
+constexpr int kHPad = CrossPetMetrics::rowHPad;
 constexpr int kMaxValueWidth = 200;
 constexpr int kPopupMarginX = 16;
 constexpr int kPopupMarginY = 12;
@@ -182,12 +182,13 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
   const int contentW = rect.width -
       (totalPages > 1 ? (CrossPetMetrics::values.scrollBarWidth + CrossPetMetrics::values.scrollBarRightOffset) : 1);
 
-  // Selection highlight — black fill with side padding
+  // Selection highlight — LightGray rounded fill (keeps icons visible)
   if (selectedIndex >= 0) {
-    renderer.fillRect(rect.x + CrossPetMetrics::values.contentSidePadding,
-                      rect.y + (selectedIndex % pageItems) * rowH,
-                      contentW - CrossPetMetrics::values.contentSidePadding * 2,
-                      rowH, true);
+    const int selY = rect.y + (selectedIndex % pageItems) * rowH;
+    renderer.fillRoundedRect(rect.x + CrossPetMetrics::values.contentSidePadding,
+                             selY,
+                             contentW - CrossPetMetrics::values.contentSidePadding * 2,
+                             rowH, kSelectionRadius, Color::LightGray);
   }
 
   const int pageStart = selectedIndex / pageItems * pageItems;
@@ -226,12 +227,12 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
       rowTextW -= valueW;
     }
 
-    // Title (inverted when selected) — offset +4 from top to avoid overlapping separator below
+    // Title — text stays black on LightGray selection
     auto item = renderer.truncatedText(UI_10_FONT_ID, itemName.c_str(), rowTextW);
-    renderer.drawText(UI_10_FONT_ID, textX, itemY + 4, item.c_str(), !isSelected);
+    renderer.drawText(UI_10_FONT_ID, textX, itemY + 4, item.c_str(), true);
 
-    // Icon — skip on selected row (black-on-black is invisible on e-ink)
-    if (rowIcon != nullptr && !isSelected) {
+    // Icon — always visible (LightGray selection keeps icons readable)
+    if (rowIcon != nullptr) {
       const int iconY = (rowSubtitle != nullptr) ? 16 : 10;
       const uint8_t* iconBmp = cpIconForName(rowIcon(i), iconSize);
       if (iconBmp) {
@@ -241,14 +242,14 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
       }
     }
 
-    // Subtitle (inverted when selected)
+    // Subtitle
     if (rowSubtitle != nullptr) {
       std::string subtitleText = rowSubtitle(i);
       auto subtitle = renderer.truncatedText(SMALL_FONT_ID, subtitleText.c_str(), rowTextW);
-      renderer.drawText(SMALL_FONT_ID, textX, itemY + 30, subtitle.c_str(), !isSelected);
+      renderer.drawText(SMALL_FONT_ID, textX, itemY + 30, subtitle.c_str(), true);
     }
 
-    // Value — toggle pill badges for ON/OFF, plain text otherwise
+    // Value — toggle pill badges for ON/OFF, DarkGray for enum values
     if (!valueText.empty()) {
       const bool isOn = (valueText == I18N.get(StrId::STR_STATE_ON));
       const bool isOff = (valueText == I18N.get(StrId::STR_STATE_OFF));
@@ -257,7 +258,7 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
       if (isToggle) {
         // Pill badge: rounded rect with text inside
         constexpr int pillH = 22;
-        constexpr int pillR = 6;  // softer rounded rectangle (was 11 = perfect semicircle)
+        constexpr int pillR = 6;
         constexpr int pillPad = 10;
         const int pillTextW = renderer.getTextWidth(SMALL_FONT_ID, valueText.c_str());
         const int pillW = pillTextW + 2 * pillPad;
@@ -265,23 +266,29 @@ void CrossPetTheme::drawList(const GfxRenderer& renderer, Rect rect, int itemCou
         const int pillY = itemY + (rowH - pillH) / 2;
 
         if (isOn) {
-          // Black filled pill (inverts on selected row), white text
-          renderer.fillRoundedRect(pillX, pillY, pillW, pillH, pillR, isSelected ? Color::White : Color::Black);
-          renderer.drawText(SMALL_FONT_ID, pillX + pillPad, pillY + 2, valueText.c_str(), isSelected);
+          // Black filled pill, white text
+          renderer.fillRoundedRect(pillX, pillY, pillW, pillH, pillR, Color::Black);
+          renderer.drawText(SMALL_FONT_ID, pillX + pillPad, pillY + 2, valueText.c_str(), false);
         } else {
           // Gray outline pill, gray text
-          renderer.drawRoundedRect(pillX, pillY, pillW, pillH, 1, pillR, !isSelected);
-          renderer.drawText(SMALL_FONT_ID, pillX + pillPad, pillY + 2, valueText.c_str(), !isSelected);
+          renderer.drawRoundedRect(pillX, pillY, pillW, pillH, 1, pillR, true);
+          renderer.drawText(SMALL_FONT_ID, pillX + pillPad, pillY + 2, valueText.c_str(), true);
         }
       } else {
-        // Regular value text (inverted when selected)
-        renderer.drawText(UI_10_FONT_ID,
-                          rect.x + contentW - CrossPetMetrics::values.contentSidePadding - valueW,
-                          itemY + 6, valueText.c_str(), !isSelected);
+        // Enum/value text in DarkGray for visual hierarchy (label=black, value=gray)
+        const int valX = rect.x + contentW - CrossPetMetrics::values.contentSidePadding - valueW;
+        renderer.fillRectDither(valX - 2, itemY + 4, valueW + 2, rowH - 8, Color::LightGray);
+        renderer.drawText(UI_10_FONT_ID, valX, itemY + 6, valueText.c_str(), true);
       }
     }
 
-    // No separator lines between items — clean minimal look
+    // Thin separator between items (not on selected row, not after last visible item)
+    if (!isSelected && i < pageStart + pageItems - 1 && i < itemCount - 1) {
+      const int sepY = itemY + rowH - 1;
+      renderer.fillRectDither(rect.x + CrossPetMetrics::values.contentSidePadding + kHPad,
+                              sepY, contentW - CrossPetMetrics::values.contentSidePadding * 2 - kHPad * 2,
+                              1, Color::LightGray);
+    }
   }
 }
 

@@ -16,6 +16,7 @@
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
+#include "components/themes/crosspet/CrossPetTheme.h"
 #include "components/icons/cover.h"
 #include "components/icons/library.h"
 #include "components/icons/recent.h"
@@ -27,12 +28,12 @@
 // ── CrossPet layout constants ────────────────────────────────────────────────
 namespace {
 constexpr int CP_HEADER_H       = 30;
-constexpr int CP_CARD_MARGIN    = 12;
+constexpr int CP_CARD_MARGIN    = CrossPetMetrics::cardMargin;
 constexpr int CP_CARD_Y         = 38;
 constexpr int CP_CARD_H         = 216;
-constexpr int CP_CARD_R         = 14;
+constexpr int CP_CARD_R         = CrossPetMetrics::cardRadius;
 constexpr int CP_COVER_H        = 188;
-constexpr int CP_PAD            = 14;
+constexpr int CP_PAD            = CrossPetMetrics::cardPadding;
 constexpr int CP_RECENT_LABEL_Y = 280;
 constexpr int CP_RECENT_COVER_Y = 302;
 constexpr int CP_MAX_RECENT     = 3;
@@ -41,6 +42,7 @@ constexpr int CP_BOTTOM_ITEMS   = 4;
 constexpr int CP_BOTTOM_ICON_SZ = 32;
 constexpr int CP_BOTTOM_R       = 10;
 constexpr int CP_FOCUS_COVER_PCT = 45;  // % of availH used for focus mode cover thumbnail
+constexpr int CP_SHADOW         = CrossPetMetrics::shadowOffset;
 }  // namespace
 
 // ── Continue reading card ─────────────────────────────────────────────────────
@@ -50,6 +52,9 @@ void HomeActivity::renderContinueReadingCard() {
   const int cardX = CP_CARD_MARGIN;
   const int cardW = screenW - 2 * CP_CARD_MARGIN;
 
+  // Fake drop shadow: DarkGray rect offset behind white card
+  renderer.fillRoundedRect(cardX + CP_SHADOW, CP_CARD_Y + CP_SHADOW, cardW, CP_CARD_H, CP_CARD_R, Color::DarkGray);
+  renderer.fillRoundedRect(cardX, CP_CARD_Y, cardW, CP_CARD_H, CP_CARD_R, Color::White);
   renderer.drawRoundedRect(cardX, CP_CARD_Y, cardW, CP_CARD_H, 1, CP_CARD_R, true);
 
   if (recentBooks.empty()) {
@@ -122,9 +127,10 @@ void HomeActivity::renderContinueReadingCard() {
 
   const int barW = infoW;
   const int barH = 8;
-  renderer.drawRect(infoX, infoY, barW, barH);
+  constexpr int barR = 4;
+  renderer.drawRoundedRect(infoX, infoY, barW, barH, 1, barR, true);
   const int fillW = barW * book.progressPercent / 100;
-  if (fillW > 2) renderer.fillRect(infoX + 1, infoY + 1, fillW - 2, barH - 2);
+  if (fillW > barR * 2) renderer.fillRoundedRect(infoX + 1, infoY + 1, fillW - 2, barH - 2, barR - 1, Color::Black);
   infoY += barH + 12;
 
   // 2-column per-book stats: time read + estimated remaining
@@ -177,6 +183,9 @@ void HomeActivity::renderRecentCovers() {
     const RecentBook& b = recentBooks[i];
     const int cx = CP_CARD_MARGIN + count * (cardW + gap);
 
+    // Shadow + card
+    renderer.fillRoundedRect(cx + CP_SHADOW, CP_RECENT_COVER_Y + CP_SHADOW, cardW, cardH, coverR, Color::DarkGray);
+    renderer.fillRoundedRect(cx, CP_RECENT_COVER_Y, cardW, cardH, coverR, Color::White);
     renderer.drawRoundedRect(cx, CP_RECENT_COVER_Y, cardW, cardH, 1, coverR, true);
 
     if (!b.coverBmpPath.empty()) {
@@ -193,13 +202,15 @@ void HomeActivity::renderRecentCovers() {
       }
     }
 
-    // Progress bar at bottom of card
-    const int barY = CP_RECENT_COVER_Y + cardH - 5;
-    const int barX = cx + 4;
-    const int barW = cardW - 8;
-    renderer.fillRect(barX, barY, barW, 4, false);
-    const int fillW = barW * b.progressPercent / 100;
-    if (fillW > 1) renderer.fillRect(barX, barY, fillW, 4);
+    // Rounded progress bar at bottom of card
+    const int pbarY = CP_RECENT_COVER_Y + cardH - 6;
+    const int pbarX = cx + 4;
+    const int pbarW = cardW - 8;
+    constexpr int pbarH = 4;
+    constexpr int pbarR = 2;
+    renderer.drawRoundedRect(pbarX, pbarY, pbarW, pbarH, 1, pbarR, true);
+    const int fillW = pbarW * b.progressPercent / 100;
+    if (fillW > pbarR * 2) renderer.fillRoundedRect(pbarX, pbarY, fillW, pbarH, pbarR, Color::Black);
 
     // Title below card
     const int titleY = CP_RECENT_COVER_Y + cardH + 6;
@@ -302,6 +313,8 @@ void HomeActivity::renderBottomBarIcons() {
   const int screenH = renderer.getScreenHeight();
 
   const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
+  // LightGray background for bottom bar — separates from content
+  renderer.fillRectDither(0, barY, screenW, CP_BOTTOM_BAR_H, Color::LightGray);
   renderer.drawLine(0, barY, screenW, barY);
 
   constexpr int barPad = 8;
@@ -578,14 +591,15 @@ void HomeActivity::renderFocusCard() {
   }
   y += 12;
 
-  // Progress bar
+  // Progress bar with rounded caps
   constexpr int barMargin = 30;
   const int pBarW = cardW - 2 * barMargin;
   const int pBarX = cardX + barMargin;
   constexpr int pBarH = 6;
-  renderer.drawRect(pBarX, y, pBarW, pBarH);
+  constexpr int pBarR = 3;
+  renderer.drawRoundedRect(pBarX, y, pBarW, pBarH, 1, pBarR, true);
   const int fillW = pBarW * book.progressPercent / 100;
-  if (fillW > 2) renderer.fillRect(pBarX + 1, y + 1, fillW - 2, pBarH - 2);
+  if (fillW > pBarR * 2) renderer.fillRoundedRect(pBarX + 1, y + 1, fillW - 2, pBarH - 2, pBarR - 1, Color::Black);
   y += pBarH + 6;
 
   // Info line: "42% · 2h 30m read · ~1h left"
