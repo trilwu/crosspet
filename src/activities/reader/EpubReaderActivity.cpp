@@ -468,6 +468,29 @@ void EpubReaderActivity::jumpToPercent(int percent) {
   }
 }
 
+void EpubReaderActivity::openStarredPages() {
+  startActivityForResult(
+      std::make_unique<StarredPagesActivity>(renderer, mappedInput, bookmarkStore.getAll(), epub),
+      [this](const ActivityResult& result) {
+        if (!result.isCancelled) {
+          const auto& starred = std::get<StarredPageResult>(result.data);
+          if (starred.action == StarredPageResult::DELETE) {
+            bookmarkStore.toggle(static_cast<uint16_t>(starred.spineIndex),
+                                 static_cast<uint16_t>(starred.pageNumber));
+            bookmarkStore.save();
+            if (!bookmarkStore.isEmpty()) {
+              openStarredPages();
+            }
+          } else if (currentSpineIndex != starred.spineIndex || !section || section->currentPage != starred.pageNumber) {
+            RenderLock lock(*this);
+            currentSpineIndex = starred.spineIndex;
+            nextPageNumber = starred.pageNumber;
+            section.reset();
+          }
+        }
+      });
+}
+
 void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction action) {
   switch (action) {
     case EpubReaderMenuActivity::MenuAction::SELECT_CHAPTER: {
@@ -546,19 +569,7 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
       break;
     }
     case EpubReaderMenuActivity::MenuAction::STARRED_PAGES: {
-      startActivityForResult(
-          std::make_unique<StarredPagesActivity>(renderer, mappedInput, bookmarkStore.getAll(), epub),
-          [this](const ActivityResult& result) {
-            if (!result.isCancelled) {
-              const auto& starred = std::get<StarredPageResult>(result.data);
-              if (currentSpineIndex != starred.spineIndex || !section || section->currentPage != starred.pageNumber) {
-                RenderLock lock(*this);
-                currentSpineIndex = starred.spineIndex;
-                nextPageNumber = starred.pageNumber;
-                section.reset();
-              }
-            }
-          });
+      openStarredPages();
       break;
     }
     case EpubReaderMenuActivity::MenuAction::GO_HOME: {
