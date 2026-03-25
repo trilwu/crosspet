@@ -85,7 +85,7 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
 }
 
 // Sleep mode display names (matches SLEEP_SCREEN_MODE enum order)
-const char* modeNames[] = {"Dark", "Light", "Custom", "Cover", "None", "Cover+Custom", "Clock", "Reading Stats", "Page Overlay"};
+const char* modeNames[] = {"Dark", "Light", "Custom", "Cover", "None", "Cover+Custom", "Clock", "Reading Stats", "Page Overlay", "Keep Screen"};
 
 }  // namespace
 
@@ -112,11 +112,12 @@ const char* SleepImagePickerActivity::modeDescription() const {
     case CrossPointSettings::LIGHT: return "White screen";
     case CrossPointSettings::CUSTOM: return "Image from /sleep/ folder";
     case CrossPointSettings::COVER: return "Book cover art";
-    case CrossPointSettings::BLANK: return "Keep last screen";
+    case CrossPointSettings::BLANK: return "Blank white screen";
     case CrossPointSettings::COVER_CUSTOM: return "Cover + image overlay";
     case CrossPointSettings::CLOCK: return "Digital clock + calendar";
     case CrossPointSettings::READING_STATS: return "Reading statistics";
     case CrossPointSettings::OVERLAY: return "Image on book page";
+    case CrossPointSettings::KEEP_SCREEN: return "Keep last screen + sleep icon";
     default: return "";
   }
 }
@@ -329,6 +330,17 @@ void SleepImagePickerActivity::loop() {
     return;
   }
 
+  if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
+    if (isFileItem(selectorIndex) && isCurrentImageSelection(selectorIndex)) {
+      // Clear pinned image — revert to random selection
+      SETTINGS.sleepImagePath[0] = '\0';
+      SETTINGS.saveToFile();
+      SleepScreenCache::invalidateAll();
+      requestUpdate();
+    }
+    return;
+  }
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) { finish(); }
 }
 
@@ -359,7 +371,9 @@ void SleepImagePickerActivity::renderList(int pageWidth, int pageHeight) {
       return "";
     });
 
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const bool canUnpin = isFileItem(selectorIndex) && isCurrentImageSelection(selectorIndex);
+  const char* leftLabel = canUnpin ? tr(STR_UNPIN) : "";
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), leftLabel, "");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
 
