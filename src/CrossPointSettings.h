@@ -212,8 +212,6 @@ class CrossPointSettings {
   uint8_t uiTheme = CROSSPET;
   // Sunlight fading compensation
   uint8_t fadingFix = 0;
-  // Dark mode: invert display colors (white text on black background)
-  uint8_t darkMode = 0;
   // Sleep image path — selected via SleepImagePickerActivity
   char sleepImagePath[64] = "";
   // Use book's embedded CSS styles for EPUB rendering (1 = enabled, 0 = disabled)
@@ -222,10 +220,6 @@ class CrossPointSettings {
   uint8_t showHiddenFiles = 0;
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
-  // Text darkness: 0=normal, 1=dark (light gray→dark gray), 2=extra dark (all→black)
-  // Default 1 (dark) — closer to the bold BW look users expect from e-ink
-  uint8_t textDarkness = 1;
-
   // Developer: show free heap in header (0=off, 1=on)
   uint8_t showFreeHeap = 0;
 

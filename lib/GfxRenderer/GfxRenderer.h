@@ -38,10 +38,6 @@ class GfxRenderer {
   RenderMode renderMode;
   Orientation orientation;
   bool fadingFix;
-  bool darkMode = false;
-  uint8_t textDarkness = 0;  // 0=normal, 1=dark, 2=extra dark
-  mutable bool nextRefreshFull = false;  // if true, next displayBuffer() upgrades to FULL_REFRESH
-  mutable bool nextRefreshHalf = false;  // if true, next displayBuffer() upgrades to HALF_REFRESH
   uint8_t* frameBuffer = nullptr;
   uint8_t* bwBufferChunks[BW_BUFFER_NUM_CHUNKS] = {nullptr};
   std::map<int, EpdFontFamily> fontMap;
@@ -79,18 +75,6 @@ class GfxRenderer {
   // Orientation control (affects logical width/height and coordinate transforms)
   void setOrientation(const Orientation o) { orientation = o; }
   Orientation getOrientation() const { return orientation; }
-
-  // Dark mode: invert framebuffer on display (white text on black)
-  void setDarkMode(const bool enabled) { darkMode = enabled; }
-  bool isDarkMode() const { return darkMode; }
-
-  // Text darkness control (0=normal, 1=dark, 2=extra dark; only affects AA/grayscale rendering)
-  void setTextDarkness(const uint8_t d) { textDarkness = d; }
-  uint8_t getTextDarkness() const { return textDarkness; }
-
-  // Request that the next displayBuffer() call uses FULL_REFRESH to clear ghosting.
-  void requestNextFullRefresh() { nextRefreshFull = true; }
-  void requestNextHalfRefresh() { nextRefreshHalf = true; }
 
   // Fading fix control
   void setFadingFix(const bool enabled) { fadingFix = enabled; }

@@ -58,7 +58,7 @@ ActivityManager activityManager(renderer, mappedInputManager);
 FontDecompressor fontDecompressor;
 FontCacheManager fontCacheManager(renderer.getFontMap());
 
-// Fonts
+// Fonts — Bookerly (default reader, 14 outside OMIT_FONTS for minimal builds)
 EpdFont bookerly14RegularFont(&bookerly_14_regular);
 EpdFont bookerly14BoldFont(&bookerly_14_bold);
 EpdFont bookerly14ItalicFont(&bookerly_14_italic);
@@ -85,7 +85,33 @@ EpdFont bookerly18BoldItalicFont(&bookerly_18_bolditalic);
 EpdFontFamily bookerly18FontFamily(&bookerly18RegularFont, &bookerly18BoldFont, &bookerly18ItalicFont,
                                    &bookerly18BoldItalicFont);
 
-// Lexend fonts (no Italic available — uses Regular as fallback)
+// NotoSans reader fonts
+EpdFont notosans12RegularFont(&notosans_12_regular);
+EpdFont notosans12BoldFont(&notosans_12_bold);
+EpdFont notosans12ItalicFont(&notosans_12_italic);
+EpdFont notosans12BoldItalicFont(&notosans_12_bolditalic);
+EpdFontFamily notosans12FontFamily(&notosans12RegularFont, &notosans12BoldFont, &notosans12ItalicFont,
+                                   &notosans12BoldItalicFont);
+EpdFont notosans14RegularFont(&notosans_14_regular);
+EpdFont notosans14BoldFont(&notosans_14_bold);
+EpdFont notosans14ItalicFont(&notosans_14_italic);
+EpdFont notosans14BoldItalicFont(&notosans_14_bolditalic);
+EpdFontFamily notosans14FontFamily(&notosans14RegularFont, &notosans14BoldFont, &notosans14ItalicFont,
+                                   &notosans14BoldItalicFont);
+EpdFont notosans16RegularFont(&notosans_16_regular);
+EpdFont notosans16BoldFont(&notosans_16_bold);
+EpdFont notosans16ItalicFont(&notosans_16_italic);
+EpdFont notosans16BoldItalicFont(&notosans_16_bolditalic);
+EpdFontFamily notosans16FontFamily(&notosans16RegularFont, &notosans16BoldFont, &notosans16ItalicFont,
+                                   &notosans16BoldItalicFont);
+EpdFont notosans18RegularFont(&notosans_18_regular);
+EpdFont notosans18BoldFont(&notosans_18_bold);
+EpdFont notosans18ItalicFont(&notosans_18_italic);
+EpdFont notosans18BoldItalicFont(&notosans_18_bolditalic);
+EpdFontFamily notosans18FontFamily(&notosans18RegularFont, &notosans18BoldFont, &notosans18ItalicFont,
+                                   &notosans18BoldItalicFont);
+
+// Lexend reader fonts (no italic — uses Regular as fallback)
 EpdFont lexend12RegularFont(&lexend_12_regular);
 EpdFont lexend12BoldFont(&lexend_12_bold);
 EpdFontFamily lexend12FontFamily(&lexend12RegularFont, &lexend12BoldFont, &lexend12RegularFont, &lexend12BoldFont);
@@ -99,9 +125,7 @@ EpdFont lexend18RegularFont(&lexend_18_regular);
 EpdFont lexend18BoldFont(&lexend_18_bold);
 EpdFontFamily lexend18FontFamily(&lexend18RegularFont, &lexend18BoldFont, &lexend18RegularFont, &lexend18BoldFont);
 
-#endif  // OMIT_FONTS
-
-// Bokerlam reader fonts (no BoldItalic available — uses Italic as fallback)
+// Bokerlam reader fonts (no bolditalic — uses Italic as fallback)
 EpdFont bokerlam12RegularFont(&bokerlam_12_regular);
 EpdFont bokerlam12BoldFont(&bokerlam_12_bold);
 EpdFont bokerlam12ItalicFont(&bokerlam_12_italic);
@@ -118,14 +142,15 @@ EpdFont bokerlam18RegularFont(&bokerlam_18_regular);
 EpdFont bokerlam18BoldFont(&bokerlam_18_bold);
 EpdFont bokerlam18ItalicFont(&bokerlam_18_italic);
 EpdFontFamily bokerlam18FontFamily(&bokerlam18RegularFont, &bokerlam18BoldFont, &bokerlam18ItalicFont, &bokerlam18ItalicFont);
+#endif  // OMIT_FONTS
 
 EpdFont smallFont(&notosans_8_regular);
 EpdFontFamily smallFontFamily(&smallFont);
 
-// UI fonts use NotoSans 12 (clean sans-serif, lighter than Lexend)
-EpdFont notoUI12Regular(&notosans_12_regular);
-EpdFont notoUI12Bold(&notosans_12_bold);
-EpdFontFamily ui12FontFamily(&notoUI12Regular, &notoUI12Bold);
+// UI fonts use NotoSans 12
+EpdFont ui12RegularFont(&notosans_12_regular);
+EpdFont ui12BoldFont(&notosans_12_bold);
+EpdFontFamily ui12FontFamily(&ui12RegularFont, &ui12BoldFont);
 
 // RTC memory persists across deep sleep — used to restore clock with elapsed time correction.
 // Magic sentinel confirms the values were set by a clean sleep entry (not stale/garbage).
@@ -306,10 +331,16 @@ void setupDisplayAndFonts() {
   renderer.insertFont(BOOKERLY_16_FONT_ID, bookerly16FontFamily);
   renderer.insertFont(BOOKERLY_18_FONT_ID, bookerly18FontFamily);
 
+  renderer.insertFont(NOTOSANS_12_FONT_ID, notosans12FontFamily);
+  renderer.insertFont(NOTOSANS_14_FONT_ID, notosans14FontFamily);
+  renderer.insertFont(NOTOSANS_16_FONT_ID, notosans16FontFamily);
+  renderer.insertFont(NOTOSANS_18_FONT_ID, notosans18FontFamily);
+
   renderer.insertFont(LEXEND_12_FONT_ID, lexend12FontFamily);
   renderer.insertFont(LEXEND_14_FONT_ID, lexend14FontFamily);
   renderer.insertFont(LEXEND_16_FONT_ID, lexend16FontFamily);
   renderer.insertFont(LEXEND_18_FONT_ID, lexend18FontFamily);
+
   renderer.insertFont(BOKERLAM_12_FONT_ID, bokerlam12FontFamily);
   renderer.insertFont(BOKERLAM_14_FONT_ID, bokerlam14FontFamily);
   renderer.insertFont(BOKERLAM_16_FONT_ID, bokerlam16FontFamily);
@@ -502,15 +533,6 @@ void loop() {
 #endif
 
   renderer.setFadingFix(SETTINGS.fadingFix);
-  {
-    static uint8_t lastDarkMode = 0xFF;
-    if (SETTINGS.darkMode != lastDarkMode) {
-      renderer.setDarkMode(SETTINGS.darkMode);
-      lastDarkMode = SETTINGS.darkMode;
-    }
-    // textDarkness is only applied in reader activities, not globally,
-    // so UI text stays at normal weight (0).
-  }
 
   if (Serial && millis() - lastMemPrint >= 10000) {
     LOG_INF("MEM", "Free: %d bytes, Total: %d bytes, Min Free: %d bytes, MaxAlloc: %d bytes", ESP.getFreeHeap(),
@@ -591,7 +613,6 @@ void loop() {
   // Handle global power button actions (reader-specific ones handled inside reader activities)
   switch (currentPwrAction_) {
     case CrossPointSettings::SHORT_PWRBTN::SCREEN_REFRESH:
-      renderer.requestNextHalfRefresh();
       activityManager.requestUpdate();
       break;
     case CrossPointSettings::SHORT_PWRBTN::READING_STATS_VIEW:
@@ -602,7 +623,6 @@ void loop() {
       int syncResult = WeatherActivity::silentRefresh();
       LOG_INF("PWR", "Sync result: %d (0=ok, 1=no creds, 2=timeout, 4=api, 5=parse)", syncResult);
       // Refresh screen after time/weather sync to show updated clock
-      renderer.requestNextHalfRefresh();
       activityManager.requestUpdate();
       break;
     }

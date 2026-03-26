@@ -50,9 +50,6 @@ void XtcReaderActivity::onEnter() {
 void XtcReaderActivity::onExit() {
   Activity::onExit();
 
-  // Request half refresh for the next screen to clear accumulated reader ghosting
-  renderer.requestNextHalfRefresh();
-
   APP_STATE.readerActivityLoadCount = 0;
   APP_STATE.saveToFile();
   xtc.reset();

@@ -291,10 +291,8 @@ static const char* getSettingDescription(const SettingInfo& s) {
   if (strcmp(s.key, "keepClockAlive") == 0) return tr(STR_HELP_KEEP_CLOCK_ALIVE);
   if (strcmp(s.key, "sleepRefreshInterval") == 0) return tr(STR_HELP_SLEEP_REFRESH);
   if (strcmp(s.key, "fadingFix") == 0) return tr(STR_HELP_FADING_FIX);
-  if (strcmp(s.key, "textDarkness") == 0) return tr(STR_HELP_TEXT_DARKNESS);
   if (strcmp(s.key, "refreshFrequency") == 0) return tr(STR_HELP_REFRESH_FREQ);
   if (strcmp(s.key, "textAntiAliasing") == 0) return tr(STR_HELP_TEXT_AA);
-  if (strcmp(s.key, "darkMode") == 0) return tr(STR_HELP_DARK_MODE);
   if (strcmp(s.key, "sleepScreen") == 0) return tr(STR_HELP_SLEEP_SCREEN);
   if (strcmp(s.key, "fontFamily") == 0) return tr(STR_HELP_FONT_FAMILY);
   if (strcmp(s.key, "fontSize") == 0) return tr(STR_HELP_FONT_SIZE);

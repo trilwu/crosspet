@@ -96,6 +96,21 @@ const char* const LANGUAGE_NAMES[] = {
     "rk\xC3"
     "\xA7"
     "e",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "",
     "Ti\xE1"
     "\xBA"
     "\xBF"
@@ -107,12 +122,12 @@ const char* const LANGUAGE_NAMES[] = {
 
 // Character sets for each language
 const char* const CHARACTER_SETS[] = {
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
     "",  // English
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xA1"
     "\xC2"
     "\xAB"
@@ -120,8 +135,6 @@ const char* const CHARACTER_SETS[] = {
     "\xB0"
     "\xC2"
     "\xBF"
-    "\xC3"
-    "\x9A"
     "\xC3"
     "\xA1"
     "\xC3"
@@ -135,7 +148,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBA"
     "",  // Español
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -165,7 +178,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Français
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -187,7 +200,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Deutsch
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -245,7 +258,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Čeština
-    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -288,8 +301,6 @@ const char* const CHARACTER_SETS[] = {
     "\xD0"
     "\x94"
     "\xD0"
-    "\x95"
-    "\xD0"
     "\x97"
     "\xD0"
     "\x98"
@@ -315,8 +326,6 @@ const char* const CHARACTER_SETS[] = {
     "\xA3"
     "\xD0"
     "\xA4"
-    "\xD0"
-    "\xA6"
     "\xD0"
     "\xA7"
     "\xD0"
@@ -392,7 +401,7 @@ const char* const CHARACTER_SETS[] = {
     "\xD1"
     "\x91"
     "",  // Русский
-    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -415,12 +424,10 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Svenska
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
-    "\xC3"
-    "\x82"
     "\xC3"
     "\x8E"
     "\xC3"
@@ -440,7 +447,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC8"
     "\x9B"
     "",  // Română
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -467,7 +474,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBC"
     "",  // Català
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -609,8 +616,6 @@ const char* const CHARACTER_SETS[] = {
     "\xD0"
     "\x94"
     "\xD0"
-    "\x95"
-    "\xD0"
     "\x97"
     "\xD0"
     "\x9A"
@@ -620,8 +625,6 @@ const char* const CHARACTER_SETS[] = {
     "\x9C"
     "\xD0"
     "\x9D"
-    "\xD0"
-    "\x9E"
     "\xD0"
     "\x9F"
     "\xD0"
@@ -644,8 +647,6 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xD0"
     "\xAD"
-    "\xD0"
-    "\xAF"
     "\xD0"
     "\xB0"
     "\xD0"
@@ -711,7 +712,7 @@ const char* const CHARACTER_SETS[] = {
     "\xD1"
     "\x9E"
     "",  // Беларуская
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -732,7 +733,7 @@ const char* const CHARACTER_SETS[] = {
     "\x86"
     "\xBB"
     "",  // Italiano
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -759,7 +760,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC5"
     "\xBC"
     "",  // Polski
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -770,7 +771,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xB6"
     "",  // Suomi
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -779,15 +780,13 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\x86"
     "\xC3"
-    "\x98"
-    "\xC3"
     "\xA5"
     "\xC3"
     "\xA6"
     "\xC3"
     "\xB8"
     "",  // Dansk
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -798,7 +797,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\xBC"
     "",  // Nederlands
-    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -807,15 +806,11 @@ const char* const CHARACTER_SETS[] = {
     "\xC3"
     "\x96"
     "\xC3"
-    "\x9C"
-    "\xC3"
     "\xA7"
     "\xC3"
     "\xB6"
     "\xC3"
     "\xBC"
-    "\xC4"
-    "\x9E"
     "\xC4"
     "\x9F"
     "\xC4"
@@ -827,7 +822,138 @@ const char* const CHARACTER_SETS[] = {
     "\xC5"
     "\x9F"
     "",  // Türkçe
-    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    "\xAB"
+    "\xC2"
+    "\xB0"
+    "\xD0"
+    "\x86"
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\x99"
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\x9C"
+    "\xD0"
+    "\x9E"
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xA8"
+    "\xD0"
+    "\xAB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x84"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x86"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x8C"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x8E"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\x93"
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\x9B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\xAE"
+    "\xD2"
+    "\xAF"
+    "\xD2"
+    "\xB0"
+    "\xD2"
+    "\xB1"
+    "\xD3"
+    "\x98"
+    "\xD3"
+    "\x99"
+    "\xD3"
+    "\xA8"
+    "\xD3"
+    "\xA9"
+    "",  // Қазақша
+    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -841,8 +967,6 @@ const char* const CHARACTER_SETS[] = {
     "\x83"
     "\xC3"
     "\x8A"
-    "\xC3"
-    "\x93"
     "\xC3"
     "\x94"
     "\xC3"
@@ -1059,9 +1183,6 @@ const char* const CHARACTER_SETS[] = {
     "\xB1"
     "\xE1"
     "\xBB"
-    "\xB3"
-    "\xE1"
-    "\xBB"
     "\xB5"
     "\xE1"
     "\xBB"
@@ -1079,11 +1200,9 @@ const char* const STRINGS_EN[] = {
     "Browse Files",
     "File Transfer",
     "Settings",
-    "Calibre Library",
     "Continue Reading",
     "No open book",
     "Start reading below",
-    "Books",
     "No files found",
     "Select Chapter",
     "No chapters",
@@ -1096,10 +1215,6 @@ const char* const STRINGS_EN[] = {
     "Out of bounds",
     "Loading...",
     "Loading",
-    "Failed to load XTC",
-    "Failed to load TXT",
-    "Failed to load EPUB",
-    "SD card error",
     "WiFi Networks",
     "No networks found",
     "%zu networks found",
@@ -1107,14 +1222,9 @@ const char* const STRINGS_EN[] = {
     "Connecting...",
     "Connected!",
     "Connection Failed",
-    "Connection timeout",
     "Forget Network?",
     "Save password for next time?",
-    "Remove saved password?",
     "Press OK to scan again",
-    "Press any button to continue",
-    "LEFT/RIGHT: Select | OK: Confirm",
-    "How would you like to connect?",
     "Join a Network",
     "Create Hotspot",
     "Connect to an existing WiFi network",
@@ -1127,27 +1237,13 @@ const char* const STRINGS_EN[] = {
     "or scan QR code with your phone:",
     "Calibre Wireless",
     "Calibre Web URL",
-    "Connect as Wireless Device",
     "* = Encrypted | + = Saved",
     "MAC address:",
     "Checking WiFi...",
     "Enter WiFi Password",
-    "Enter Text",
     "to ",
-    "Discovering Calibre...",
-    "Connecting to ",
-    "Connected to ",
-    "Waiting for commands...",
-    "(Connection failed, retrying)",
-    "Calibre disconnected",
-    "Waiting for transfer...",
-    "If transfer fails, enable\n'Ignore free space' in Calibre's\nSmartDevice plugin settings.",
     "Receiving: ",
     "Received: ",
-    "Waiting for more...",
-    "Failed to create file",
-    "Password required",
-    "Transfer interrupted",
     "1) Install CrossPoint Reader plugin",
     "2) Be on the same WiFi network",
     "3) In Calibre: \"Send to device\"",
@@ -1158,45 +1254,31 @@ const char* const STRINGS_EN[] = {
     "System",
     "Sleep Screen",
     "Sleep Screen Cover Mode",
-    "Status Bar",
     "Hide Battery %",
     "Extra Paragraph Spacing",
     "Text Anti-Aliasing",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
     "Suppress",
     "Short Power Button Click",
     "Reading Orientation",
-    "Front Button Layout",
     "Side Button Layout (reader)",
     "Front Button Layout (reader)",
     "Long-press Chapter Skip",
     "Reader Font Family",
-    "External Reader Font",
-    "Reader Font",
-    "UI Font",
     "Reader Font Size",
     "Reader Line Spacing",
-    "ASCII Letter Spacing",
-    "ASCII Digit Spacing",
-    "CJK Spacing",
-    "Color Mode",
     "Reader Screen Margin",
     "Reader Paragraph Alignment",
     "Hyphenation",
     "Time to Sleep",
     "Show Hidden Files",
     "Refresh Frequency",
-    "Calibre Settings",
     "KOReader Sync",
     "Check for updates",
     "Language",
-    "Select Wallpaper",
     "Clear Reading Cache",
-    "Calibre",
     "Username",
     "Password",
     "Sync Server URL",
@@ -1231,8 +1313,6 @@ const char* const STRINGS_EN[] = {
     "None",
     "Fit",
     "Crop",
-    "No Progress",
-    "Full",
     "Never",
     "In Reader",
     "Always",
@@ -1245,9 +1325,6 @@ const char* const STRINGS_EN[] = {
     "Landscape CW",
     "Inverted",
     "Landscape CCW",
-    "Bck, Cnfrm, Lft, Rght",
-    "Lft, Rght, Bck, Cnfrm",
-    "Lft, Bck, Cnfrm, Rght",
     "Prev/Next",
     "Next/Prev",
     "Bookerly",
@@ -1285,8 +1362,6 @@ const char* const STRINGS_EN[] = {
     "Update failed",
     "Update complete",
     "Press and hold power button to turn back on",
-    "External Font",
-    "Built-in (Disabled)",
     "No entries found",
     "Downloading...",
     "Download failed",
@@ -1297,7 +1372,6 @@ const char* const STRINGS_EN[] = {
     "Failed to parse feed",
     "Network: ",
     "IP Address: ",
-    "or scan QR code with your phone to connect to Wifi.",
     "Error: General failure",
     "Error: Network not found",
     "Error: Connection timeout",
@@ -1311,9 +1385,6 @@ const char* const STRINGS_EN[] = {
     "\xC2"
     "\xAB"
     " Home",
-    "\xC2"
-    "\xAB"
-    " Save",
     "Select",
     "Selected",
     "Toggle",
@@ -1334,8 +1405,6 @@ const char* const STRINGS_EN[] = {
     "Right",
     "Up",
     "Down",
-    "CAPS",
-    "caps",
     "OK",
     "Sleep Screen Cover Filter",
     "Contrast",
@@ -1363,7 +1432,6 @@ const char* const STRINGS_EN[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Sunlight Fading Fix",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -1376,6 +1444,8 @@ const char* const STRINGS_EN[] = {
     "OPDS Browser",
     "Cover + Custom",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recents",
     "Recent Books",
     "No recent books",
@@ -1405,9 +1475,6 @@ const char* const STRINGS_EN[] = {
     "Chapter: ",
     " pages  |  ",
     "Book: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "For Calibre, add /opds to your URL",
     "Left/Right: 1%  Up/Down: 10%",
     "Syncing time...",
@@ -1780,10 +1847,8 @@ const char* const STRINGS_EN[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -1804,11 +1869,9 @@ const char* const STRINGS_ES[] = {
     "Explorador de archivos",
     "Transferir archivos",
     "Ajustes",
-    "Biblioteca de Calibre",
     "Continuar leyendo",
     "No hay libros abiertos",
     "Comenzar a leer",
-    "Libros",
     "No se encontraron archivos",
     "Seleccionar cap\xC3"
     "\xAD"
@@ -1833,10 +1896,6 @@ const char* const STRINGS_ES[] = {
     "Fuera de rango",
     "Cargando...",
     "Cargando",
-    "Error al cargar XTC",
-    "Error al cargar TXT",
-    "Error al cargar EPUB",
-    "Error en la tarjeta microSD",
     "Redes Wi-Fi",
     "No hay redes disponibles",
     "%zu redes encontradas",
@@ -1848,7 +1907,6 @@ const char* const STRINGS_ES[] = {
     "Error de conexi\xC3"
     "\xB3"
     "n",
-    "Tiempo de espera agotado",
     "\xC2"
     "\xBF"
     "Olvidar la red?",
@@ -1857,21 +1915,7 @@ const char* const STRINGS_ES[] = {
     "Guardar contrase\xC3"
     "\xB1"
     "a?",
-    "\xC2"
-    "\xBF"
-    "Olvidar contrase\xC3"
-    "\xB1"
-    "a?",
     "Pulse OK para buscar de nuevo",
-    "Pulse cualquier bot\xC3"
-    "\xB3"
-    "n para continuar",
-    "Izq./Der.: Seleccionar | OK: Confirmar",
-    "\xC2"
-    "\xBF"
-    "C\xC3"
-    "\xB3"
-    "mo desea conectarse?",
     "Unirse a una red",
     "Crear punto de acceso",
     "Conectarse a una red Wi-Fi existente",
@@ -1892,41 +1936,15 @@ const char* const STRINGS_ES[] = {
     "\xA1"
     "mbrico",
     "URL del sitio web de Calibre",
-    "Conectar como dispositivo inal\xC3"
-    "\xA1"
-    "mbrico",
     "* (Cifrado) | + (Guardado)",
     "MAC Address:",
     "Verificando Wi-Fi...",
     "Introduzca la contrase\xC3"
     "\xB1"
     "a del Wi-Fi",
-    "Introduzca el texto",
     "a ",
-    "Buscando Calibre...",
-    "Conect\xC3"
-    "\xA1"
-    "ndose a ",
-    "Conectado a ",
-    "Esperando comandos...",
-    "(Error de conexi\xC3"
-    "\xB3"
-    "n, reintentando...)",
-    "Calibre desconectado",
-    "Esperando transferencia...",
-    "Si la transferencia falla, active\n\"Ignorar espacio libre\" en la configuraci\xC3"
-    "\xB3"
-    "n del\ncomplemento SmartDevice de Calibre.",
     "Recibiendo: ",
     "Recibido: ",
-    "Esperando m\xC3"
-    "\xA1"
-    "s...",
-    "Error al crear el archivo",
-    "Contrase\xC3"
-    "\xB1"
-    "a requerida",
-    "Transferencia interrumpida",
     "1) Instale el complemento CrossPoint Reader",
     "2) Con\xC3"
     "\xA9"
@@ -1945,7 +1963,6 @@ const char* const STRINGS_ES[] = {
     "Modo de pantalla de suspensi\xC3"
     "\xB3"
     "n",
-    "Barra de estado",
     "Ocultar % de bater\xC3"
     "\xAD"
     "a",
@@ -1953,8 +1970,6 @@ const char* const STRINGS_ES[] = {
     "\xA1"
     "rrafos",
     "Suavizado de texto",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
@@ -1965,9 +1980,6 @@ const char* const STRINGS_ES[] = {
     "Orientaci\xC3"
     "\xB3"
     "n",
-    "Dise\xC3"
-    "\xB1"
-    "o de los botones frontales",
     "Funci\xC3"
     "\xB3"
     "n botones laterales (lector)",
@@ -1980,25 +1992,10 @@ const char* const STRINGS_ES[] = {
     "Tipograf\xC3"
     "\xAD"
     "a",
-    "Tipograf\xC3"
-    "\xAD"
-    "a externa",
-    "Tipograf\xC3"
-    "\xAD"
-    "a",
-    "Tipograf\xC3"
-    "\xAD"
-    "a (interfaz)",
     "Tama\xC3"
     "\xB1"
     "o",
     "Interlineado",
-    "Espaciado entre letras ASCII",
-    "Espaciado entre d\xC3"
-    "\xAD"
-    "gitos ASCII",
-    "Espaciado entre caracteres CJK",
-    "Modo de color",
     "Margen de lectura",
     "Ajuste de p\xC3"
     "\xA1"
@@ -2009,19 +2006,16 @@ const char* const STRINGS_ES[] = {
     "Auto suspensi\xC3"
     "\xB3"
     "n",
-    "Show Hidden Files",
+    "Mostrar archivos ocultos",
     "Frecuencia de refresco",
-    "Ajustes de Calibre",
     "Sincronizaci\xC3"
     "\xB3"
     "n de KOReader",
     "Verificar actualizaciones",
     "Idioma",
-    "Seleccionar fondo",
     "Borrar cach\xC3"
     "\xA9"
     " de lectura",
-    "Calibre",
     "Usuario",
     "Contrase\xC3"
     "\xB1"
@@ -2092,8 +2086,6 @@ const char* const STRINGS_ES[] = {
     "Ninguno",
     "Ajustar",
     "Recortar",
-    "Sin avance",
-    "Completa",
     "Nunca",
     "En el lector",
     "Siempre",
@@ -2108,15 +2100,6 @@ const char* const STRINGS_ES[] = {
     "Horizontal (horario)",
     "Invertido",
     "Horizontal (antihorario)",
-    "Atr\xC3"
-    "\xA1"
-    "s, Confirmar, Izq., Der.",
-    "Izq., Der., Atr\xC3"
-    "\xA1"
-    "s, Confirmar",
-    "Izq., Atr\xC3"
-    "\xA1"
-    "s, Confirmar, Der.",
     "Ant./Sig.",
     "Sig./Ant.",
     "Bookerly",
@@ -2182,8 +2165,6 @@ const char* const STRINGS_ES[] = {
     "Reinicie manteniendo pulsado bot\xC3"
     "\xB3"
     "n de encendido",
-    "Fuente externa",
-    "Incorporado (desactivado)",
     "No se encontraron elementos",
     "Descargando...",
     "Fallo de descarga",
@@ -2196,7 +2177,6 @@ const char* const STRINGS_ES[] = {
     "Fallo al procesar el feed",
     "Red: ",
     "IP: ",
-    "o lea el QR con su tfno. para conectarse al Wi-Fi.",
     "Error: Fallo general",
     "Error: Red no encontrada",
     "Error: Tiempo de conexi\xC3"
@@ -2214,9 +2194,6 @@ const char* const STRINGS_ES[] = {
     "\xC2"
     "\xAB"
     " Inicio",
-    "\xC2"
-    "\xAB"
-    " Guardar",
     "Selec.",
     "Seleccionado",
     "Cambiar",
@@ -2239,12 +2216,6 @@ const char* const STRINGS_ES[] = {
     "Der.",
     "Subir",
     "Bajar",
-    "MAY\xC3"
-    "\x9A"
-    "SCULAS",
-    "min\xC3"
-    "\xBA"
-    "sculas",
     "OK",
     "Filtro de pantalla de suspensi\xC3"
     "\xB3"
@@ -2292,7 +2263,6 @@ const char* const STRINGS_ES[] = {
     "Correcci\xC3"
     "\xB3"
     "n de desvanecimiento",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -2305,7 +2275,9 @@ const char* const STRINGS_ES[] = {
     "Navegador OPDS",
     "Portada + Pers.",
     "Page overlay",
-    "Recientes",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Libros recientes",
     "No hay libros recientes",
     "Transferir contenido a este dispositivo",
@@ -2370,13 +2342,6 @@ const char* const STRINGS_ES[] = {
     "\xA1"
     "gs.  |  ",
     "Libro: ",
-    "min\xC3"
-    "\xBA"
-    "s.",
-    "MAY\xC3"
-    "\x9A"
-    "S.",
-    "BLOQUEAR",
     "Para Calibre, agregue /opds a su URL",
     "Izq./Der.: 1% | Subir/Bajar: 10%",
     "Tiempo de sincronizaci\xC3"
@@ -2779,10 +2744,8 @@ const char* const STRINGS_ES[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -2805,13 +2768,9 @@ const char* const STRINGS_FR[] = {
     "R\xC3"
     "\xA9"
     "glages",
-    "Biblioth\xC3"
-    "\xA8"
-    "que Calibre",
     "Reprendre la lecture",
     "Aucun livre ouvert",
     "Commencer la lecture",
-    "Livres",
     "Aucun fichier trouv\xC3"
     "\xA9"
     "",
@@ -2835,10 +2794,6 @@ const char* const STRINGS_FR[] = {
     "\xA6"
     "",
     "Chargement",
-    "Erreur de chargement XTC",
-    "Erreur de chargement TXT",
-    "Erreur de chargement EPUB",
-    "Carte SD absente",
     "R\xC3"
     "\xA9"
     "seaux WiFi",
@@ -2862,24 +2817,11 @@ const char* const STRINGS_FR[] = {
     "\xC3"
     "\x89"
     "chec de la connexion",
-    "D\xC3"
-    "\xA9"
-    "lai d\xC3"
-    "\xA9"
-    "pass\xC3"
-    "\xA9"
-    "",
     "Oublier ce r\xC3"
     "\xA9"
     "seau ?",
     "Enregistrer le mot de passe ?",
-    "Supprimer le mot de passe ?",
     "Appuyez sur OK pour scanner",
-    "Appuyez sur une touche pour continuer",
-    "GAUCHE/DROITE : S\xC3"
-    "\xA9"
-    "lection | OK : Valider",
-    "Mode de connexion ?",
     "Rejoindre un r\xC3"
     "\xA9"
     "seau",
@@ -2922,7 +2864,6 @@ const char* const STRINGS_FR[] = {
     "ou scannez le QR code :",
     "Connexion Calibre sans fil",
     "URL Web Calibre",
-    "Connexion appareil sans fil",
     "* = S\xC3"
     "\xA9"
     "curis\xC3"
@@ -2938,61 +2879,13 @@ const char* const STRINGS_FR[] = {
     "\xA6"
     "",
     "Entrez le mot de passe WiFi",
-    "Entrez le texte",
     "vers ",
-    "Recherche de Calibre\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "Connexion \xC3"
-    "\xA0"
-    " ",
-    "Connect\xC3"
-    "\xA9"
-    " \xC3"
-    "\xA0"
-    " ",
-    "En attente de commandes\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "(\xC3"
-    "\x89"
-    "chec connexion, nouvel essai)",
-    "Calibre d\xC3"
-    "\xA9"
-    "connect\xC3"
-    "\xA9"
-    "",
-    "En attente de transfert\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "Si \xC3"
-    "\xA9"
-    "chec, cochez\n'Ignorer l\xE2"
-    "\x80"
-    "\x99"
-    "espace libre' dans les\nr\xC3"
-    "\xA9"
-    "glages du plugin Calibre SmartDevice.",
     "R\xC3"
     "\xA9"
     "ception : ",
     "Re\xC3"
     "\xA7"
     "u : ",
-    "En attente de la suite\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "\xC3"
-    "\x89"
-    "chec cr\xC3"
-    "\xA9"
-    "ation fichier",
-    "Mot de passe requis",
-    "Transfert interrompu",
     "1) Installer plugin CrossPoint Reader",
     "2) \xC3"
     "\x8A"
@@ -3026,26 +2919,19 @@ const char* const STRINGS_FR[] = {
     "Mode \xC3"
     "\xA9"
     "cran de veille",
-    "Barre d\xE2"
-    "\x80"
-    "\x99"
-    "\xC3"
-    "\xA9"
-    "tat",
     "Masquer % batterie",
     "Espacement paragraphes",
     "Lissage du texte",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
-    "Display",
-    "Placeholder",
-    "Suppress",
+    "Affichage",
+    "Espace r\xC3"
+    "\xA9"
+    "serv\xC3"
+    "\xA9"
+    "",
+    "Masquer",
     "Appui court alim.",
     "Orientation de lecture",
-    "Boutons de fa\xC3"
-    "\xA7"
-    "ade",
     "Boutons lat\xC3"
     "\xA9"
     "raux",
@@ -3054,46 +2940,28 @@ const char* const STRINGS_FR[] = {
     "Police de caract\xC3"
     "\xA8"
     "res du lecteur",
-    "Police externe",
-    "Police du lecteur",
-    "Police de l\xE2"
-    "\x80"
-    "\x99"
-    "interface",
     "Taille texte interface",
     "Interligne",
-    "Espacement lettres ASCII",
-    "Espacement chiffres ASCII",
-    "Espacement CJK",
-    "Mode couleur",
     "Marges du lecteur",
     "Alignement du texte",
     "C\xC3"
     "\xA9"
     "sure",
     "Mise en veille auto",
-    "Show Hidden Files",
+    "Afficher les fichiers cach\xC3"
+    "\xA9"
+    "s",
     "Fr\xC3"
     "\xA9"
     "quence rafra\xC3"
     "\xAE"
     "chissement",
-    "R\xC3"
-    "\xA9"
-    "glages Calibre",
     "Synchro KOReader",
     "Mise \xC3"
     "\xA0"
     " jour",
     "Langue",
-    "Fond d\xE2"
-    "\x80"
-    "\x99"
-    "\xC3"
-    "\xA9"
-    "cran",
     "Vider le cache de lecture",
-    "Calibre",
     "Nom d\xE2"
     "\x80"
     "\x99"
@@ -3179,10 +3047,6 @@ const char* const STRINGS_FR[] = {
     "Rogn\xC3"
     "\xA9"
     "",
-    "Sans progression",
-    "Plein \xC3"
-    "\xA9"
-    "cran",
     "Jamais",
     "Dans le lecteur",
     "Toujours",
@@ -3202,9 +3066,6 @@ const char* const STRINGS_FR[] = {
     "Paysage invers\xC3"
     "\xA9"
     "",
-    "Ret, OK, Gauche, Droite",
-    "Gauche, Droite, Ret, OK",
-    "Gauche, Ret, OK, Droite",
     "Pr\xC3"
     "\xA9"
     "c/Suiv",
@@ -3280,12 +3141,6 @@ const char* const STRINGS_FR[] = {
     "Maintenir Power pour red\xC3"
     "\xA9"
     "marrer",
-    "Police externe",
-    "Interne (D\xC3"
-    "\xA9"
-    "sactiv\xC3"
-    "\xA9"
-    "e)",
     "Aucune entr\xC3"
     "\xA9"
     "e",
@@ -3323,7 +3178,6 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "seau : ",
     "IP : ",
-    "ou scannez le QR code pour le WiFi.",
     "Erreur : \xC3"
     "\x89"
     "chec g\xC3"
@@ -3351,11 +3205,12 @@ const char* const STRINGS_FR[] = {
     "\xC2"
     "\xAB"
     " Accueil",
-    "\xC2"
-    "\xAB"
-    " Enregistrer",
     "OK",
-    "Selected",
+    "S\xC3"
+    "\xA9"
+    "lectionn\xC3"
+    "\xA9"
+    "",
     "Modifier",
     "Confirmer",
     "Annuler",
@@ -3371,8 +3226,8 @@ const char* const STRINGS_FR[] = {
     "essayer",
     "Oui",
     "Non",
-    "Show",
-    "Hide",
+    "Afficher",
+    "Masquer",
     "ON",
     "OFF",
     "Non d\xC3"
@@ -3382,28 +3237,34 @@ const char* const STRINGS_FR[] = {
     "Droite",
     "Haut",
     "Bas",
-    "MAJ",
-    "min",
     "OK",
     "Filtre \xC3"
     "\xA9"
     "cran de veille",
     "Contraste",
-    "Customise Status Bar",
-    "Chapter Page Count",
-    "Book Progress Percentage",
-    "Progress Bar",
-    "Progress Bar Thickness",
-    "Thin",
-    "Medium",
-    "Thick",
-    "Book",
-    "Chapter",
-    "Chapter 21",
-    "Book Title",
-    "Preview",
-    "Title",
-    "Battery",
+    "Personnaliser la barre d'\xC3"
+    "\xA9"
+    "tat",
+    "Nombre de pages du chapitre",
+    "Pourcentage de progression",
+    "Barre de progression",
+    "\xC3"
+    "\x89"
+    "paisseur de la barre",
+    "Fine",
+    "Moyenne",
+    "\xC3"
+    "\x89"
+    "paisse",
+    "Livre",
+    "Chapitre",
+    "Chapitre 21",
+    "Titre du livre",
+    "Aper\xC3"
+    "\xA7"
+    "u",
+    "Titre",
+    "Batterie",
     "Reading Time Estimate",
     "Session Timer",
     "Th\xC3"
@@ -3417,7 +3278,6 @@ const char* const STRINGS_FR[] = {
     "Correction lisibilit\xC3"
     "\xA9"
     " au soleil",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -3432,9 +3292,9 @@ const char* const STRINGS_FR[] = {
     "Navigateur OPDS",
     "Couverture + Perso",
     "Page overlay",
-    "R\xC3"
-    "\xA9"
-    "cents",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Livres r\xC3"
     "\xA9"
     "cents",
@@ -3490,13 +3350,10 @@ const char* const STRINGS_FR[] = {
     "Synchro progression",
     "Supprimer cache livre",
     "Supprimer",
-    "Show page as QR",
+    "Afficher la page en QR",
     "Chapitre : ",
     " pages  |  ",
     "Livre : ",
-    "maj",
-    "MAJ",
-    "VERR MAJ",
     "Pour Calibre, ajoutez /opds \xC3"
     "\xA0"
     " l\xE2"
@@ -3561,14 +3418,14 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "",
     "URL serveur OPDS",
-    "Footnotes",
-    "No footnotes on this page",
-    "[link]",
+    "Notes de bas de page",
+    "Aucune note sur cette page",
+    "[lien]",
     "Capture d'\xC3"
     "\xA9"
     "cran",
-    "Auto Turn Enabled: ",
-    "Auto Turn (Pages Per Minute)",
+    "Tourne-page auto : ",
+    "Tourne-page auto (pages par minute)",
     "Auto Page Turn",
     "1 page/min",
     "3 pages/min",
@@ -3909,10 +3766,8 @@ const char* const STRINGS_FR[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -3931,13 +3786,9 @@ const char* const STRINGS_DE[] = {
     "Durchsuchen",
     "Datentransfer",
     "Einstellungen",
-    "Calibre-Bibliothek",
     "Weiterlesen",
     "Aktuell kein Buch",
     "Lesen beginnen",
-    "B\xC3"
-    "\xBC"
-    "cher",
     "Keine Dateien gefunden",
     "Kapitel ausw\xC3"
     "\xA4"
@@ -3957,10 +3808,6 @@ const char* const STRINGS_DE[] = {
     "\xA6"
     "",
     "Laden",
-    "Ladefehler bei XTC",
-    "Ladefehler bei TXT",
-    "Ladefehler bei EPUB",
-    "SD-Karten-Fehler",
     "WLAN-Netzwerke",
     "Kein WLAN gefunden",
     "%zu WLAN-Netzwerke gefunden",
@@ -3968,20 +3815,11 @@ const char* const STRINGS_DE[] = {
     "Verbinden...",
     "Verbunden!",
     "Verbindungsfehler",
-    "Verbindungs-Timeout",
     "WLAN vergessen?",
     "Passwort speichern?",
-    "Passwort entfernen?",
     "OK f\xC3"
     "\xBC"
     "r neue Suche",
-    "Beliebige Taste dr\xC3"
-    "\xBC"
-    "cken",
-    "links/rechts: Auswahl | OK: Best",
-    "Wie m\xC3"
-    "\xB6"
-    "chtest du dich verbinden?",
     "Netzwerk beitreten",
     "Hotspot erstellen",
     "Mit einem bestehenden WLAN verbinden",
@@ -4003,11 +3841,6 @@ const char* const STRINGS_DE[] = {
     "oder QR-Code mit dem Handy scannen:",
     "Calibre Wireless",
     "Calibre-Web-URL",
-    "Als Drahtlos-Ger\xC3"
-    "\xA4"
-    "t hinzuf\xC3"
-    "\xBC"
-    "gen",
     "* = Verschl\xC3"
     "\xBC"
     "sselt | + = Gespeichert",
@@ -4019,36 +3852,9 @@ const char* const STRINGS_DE[] = {
     "\xA6"
     "",
     "WLAN-Passwort eingeben",
-    "Text eingeben",
     "mit ",
-    "Calibre finden...",
-    "Verbinden mit",
-    "Verbunden mit",
-    "Auf Befehle warten\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "(Keine Verbindung, wiederholen)",
-    "Calibre getrennt",
-    "Auf \xC3"
-    "\x9C"
-    "bertragung warten...",
-    "Bei \xC3"
-    "\x9C"
-    "bertragungsfehler \n'Freien Speicher ign.' in den\nCalibre-Einstellungen einschalten.",
     "Empfange:",
     "Empfangen:",
-    "Auf mehr warten\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "Speicherfehler",
-    "Passwort n\xC3"
-    "\xB6"
-    "tig",
-    "\xC3"
-    "\x9C"
-    "bertragung unterbrochen",
     "1) CrossPoint Reader-Plugin installieren",
     "2) Mit selbem WLAN verbinden",
     "3) In Calibre: \"An Ger\xC3"
@@ -4061,59 +3867,45 @@ const char* const STRINGS_DE[] = {
     "System",
     "Standby-Bild",
     "Standby-Bildmodus",
-    "Statusleiste",
     "Batterie % ausblenden",
     "Absatzabstand",
     "Schriftgl\xC3"
     "\xA4"
     "ttung",
-    "Text Darkness",
-    "Extra Dark",
-    "Images",
-    "Display",
-    "Placeholder",
-    "Suppress",
+    "Bilder",
+    "Darstellung",
+    "Platzhalter",
+    "Unterdr\xC3"
+    "\xBC"
+    "cken",
     "An-Taste kurz dr\xC3"
     "\xBC"
     "cken",
     "Leseausrichtung",
-    "Vorderes Tastenlayout",
     "Seitliche Tasten (Lesen)",
     "Front Button Layout (reader)",
     "Langes Dr\xC3"
     "\xBC"
     "cken springt Kap.",
     "Lese-Schriftfamilie",
-    "Externe Schriftart",
-    "Lese-Schriftart",
-    "Men\xC3"
-    "\xBC"
-    "-Schriftart",
     "Schriftgr\xC3"
     "\xB6"
     "\xC3"
     "\x9F"
     "e",
     "Lese-Zeilenabstand",
-    "ASCII-Zeichenabstand",
-    "ASCII-Ziffernabstand",
-    "CJK-Zeichenabstand",
-    "Farbmodus",
     "Lese-Seitenr\xC3"
     "\xA4"
     "nder",
     "Lese-Absatzausrichtung",
     "Silbentrennung",
     "Standby nach",
-    "Show Hidden Files",
+    "Versteckte Dateien anzeigen",
     "Anti-Ghosting nach",
-    "Calibre-Einstellungen",
     "KOReader-Synchr.",
     "Nach Updates suchen",
     "Sprache",
-    "Bildauswahl Standby",
     "Lese-Cache leeren",
-    "Calibre",
     "Benutzername",
     "Passwort",
     "Sync-Server-URL",
@@ -4168,8 +3960,6 @@ const char* const STRINGS_DE[] = {
     "Leer",
     "Anpassen",
     "Zuschnitt",
-    "Ohne Fortschr.",
-    "Vollst.",
     "Nie",
     "Beim Lesen",
     "Immer",
@@ -4184,15 +3974,6 @@ const char* const STRINGS_DE[] = {
     "Querformat rechts",
     "Invertiert",
     "Querformat links",
-    "Zur\xC3"
-    "\xBC"
-    "ck, Bst, L, R",
-    "L, R, Zur\xC3"
-    "\xBC"
-    "ck, Bst",
-    "L, Zur\xC3"
-    "\xBC"
-    "ck, Bst, R",
     "Zur\xC3"
     "\xBC"
     "ck/Weiter",
@@ -4250,8 +4031,6 @@ const char* const STRINGS_DE[] = {
     "An-Knopf lang dr\xC3"
     "\xBC"
     "cken, um neuzustarten",
-    "Externe Schrift",
-    "Vorinstalliert (aus)",
     "Keine Eintr\xC3"
     "\xA4"
     "ge",
@@ -4269,9 +4048,6 @@ const char* const STRINGS_DE[] = {
     "ltig",
     "Netzwerk:",
     "IP-Adresse:",
-    "oder QR-Code mit dem Handy scannen f\xC3"
-    "\xBC"
-    "r WLAN.",
     "Fehler: Allgemeiner Fehler",
     "Fehler: Kein Netzwerk",
     "Fehler: Zeit\xC3"
@@ -4289,9 +4065,6 @@ const char* const STRINGS_DE[] = {
     "\xC2"
     "\xAB"
     " Start",
-    "\xC2"
-    "\xAB"
-    " Speichern",
     "Auswahl",
     "Ausgew\xC3"
     "\xA4"
@@ -4320,8 +4093,6 @@ const char* const STRINGS_DE[] = {
     "Rechts",
     "Hoch",
     "Runter",
-    "UMSCH",
-    "umsch",
     "OK",
     "Standby-Coverfilter",
     "Kontrast",
@@ -4353,7 +4124,6 @@ const char* const STRINGS_DE[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Anti-Verblassen",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -4365,7 +4135,9 @@ const char* const STRINGS_DE[] = {
     "Vordere Tasten belegen",
     "OPDS-Browser",
     "Umschlag + Eigenes",
-    "Page overlay",
+    "Seiten-Overlay",
+    "Keep Screen",
+    "Unpin",
     "Zuletzt",
     "Zuletzt gelesen",
     "Keine B\xC3"
@@ -4412,9 +4184,6 @@ const char* const STRINGS_DE[] = {
     "Kapitel:",
     " Seiten  |  ",
     "Buch: ",
-    "umsch",
-    "UMSCH",
-    "FESTST",
     "Calibre: URL um /opds erg\xC3"
     "\xA4"
     "nzen",
@@ -4796,7 +4565,7 @@ const char* const STRINGS_DE[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
-    "Free RAM",
+    "Freier RAM",
     "Reboot",
     "Version",
     "CURRENTLY READING",
@@ -4808,10 +4577,8 @@ const char* const STRINGS_DE[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -4850,7 +4617,6 @@ const char* const STRINGS_CS[] = {
     "Nastaven\xC3"
     "\xAD"
     "",
-    "Knihovna Calibre",
     "Pokra\xC4"
     "\x8D"
     "ovat ve \xC4"
@@ -4882,7 +4648,6 @@ const char* const STRINGS_CS[] = {
     "\xC5"
     "\xBE"
     "e",
-    "Knihy",
     "Nebyly nalezeny \xC5"
     "\xBE"
     "\xC3"
@@ -4947,28 +4712,6 @@ const char* const STRINGS_CS[] = {
     "n\xC3"
     "\xAD"
     "",
-    "Nepoda\xC5"
-    "\x99"
-    "ilo se na\xC4"
-    "\x8D"
-    "\xC3"
-    "\xAD"
-    "st XTC",
-    "Nepoda\xC5"
-    "\x99"
-    "ilo se na\xC4"
-    "\x8D"
-    "\xC3"
-    "\xAD"
-    "st TXT",
-    "Nepoda\xC5"
-    "\x99"
-    "ilo se na\xC4"
-    "\x8D"
-    "\xC3"
-    "\xAD"
-    "st EPUB",
-    "Chyba SD karty",
     "WiFi s\xC3"
     "\xAD"
     "t\xC4"
@@ -5012,15 +4755,6 @@ const char* const STRINGS_CS[] = {
     " se nezda\xC5"
     "\x99"
     "ilo",
-    "\xC4"
-    "\x8C"
-    "asov\xC3"
-    "\xBD"
-    " limit p\xC5"
-    "\x99"
-    "ipojen\xC3"
-    "\xAD"
-    "",
     "Zapomenout s\xC3"
     "\xAD"
     "\xC5"
@@ -5037,11 +4771,6 @@ const char* const STRINGS_CS[] = {
     "t\xC4"
     "\x9B"
     "?",
-    "Odstranit ulo\xC5"
-    "\xBE"
-    "en\xC3"
-    "\xA9"
-    " heslo?",
     "Stiskn\xC4"
     "\x9B"
     "te OK pro p\xC5"
@@ -5051,17 +4780,6 @@ const char* const STRINGS_CS[] = {
     "n\xC3"
     "\xAD"
     "",
-    "Pokra\xC4"
-    "\x8D"
-    "ujte stiskem libovoln\xC3"
-    "\xA9"
-    " kl\xC3"
-    "\xA1"
-    "vesy",
-    "VLEVO/VPRAVO: Vybrat | OK: Potvrdit",
-    "Jak se chcete p\xC5"
-    "\x99"
-    "ipojit?",
     "P\xC5"
     "\x99"
     "ipojit se k s\xC3"
@@ -5134,19 +4852,6 @@ const char* const STRINGS_CS[] = {
     "d telefonem:",
     "Calibre Wireless",
     "URL webu Calibre",
-    "P\xC5"
-    "\x99"
-    "ipojit jako bezdr\xC3"
-    "\xA1"
-    "tov\xC3"
-    "\xA9"
-    " za\xC5"
-    "\x99"
-    "\xC3"
-    "\xAD"
-    "zen\xC3"
-    "\xAD"
-    "",
     "* = \xC5"
     "\xA0"
     "ifrov\xC3"
@@ -5157,77 +4862,7 @@ const char* const STRINGS_CS[] = {
     "MAC adresa:",
     "Kontrola WiFi...",
     "Zadejte heslo WiFi",
-    "Zadejte text",
     "pro",
-    "Prozkoum\xC3"
-    "\xA1"
-    "v\xC3"
-    "\xA1"
-    "n\xC3"
-    "\xAD"
-    " Calibre...",
-    "P\xC5"
-    "\x99"
-    "ipojov\xC3"
-    "\xA1"
-    "n\xC3"
-    "\xAD"
-    " k",
-    "P\xC5"
-    "\x99"
-    "ipojeno k",
-    "\xC4"
-    "\x8C"
-    "ek\xC3"
-    "\xA1"
-    "m na p\xC5"
-    "\x99"
-    "\xC3"
-    "\xAD"
-    "kazy\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "(P\xC5"
-    "\x99"
-    "ipojen\xC3"
-    "\xAD"
-    " se nezda\xC5"
-    "\x99"
-    "ilo, opakov\xC3"
-    "\xA1"
-    "n\xC3"
-    "\xAD"
-    " pokusu)",
-    "Calibre odpojeno",
-    "\xC4"
-    "\x8C"
-    "ek\xC3"
-    "\xA1"
-    "n\xC3"
-    "\xAD"
-    " na p\xC5"
-    "\x99"
-    "enos...",
-    "Nezda\xC5"
-    "\x99"
-    "\xC3"
-    "\xAD"
-    "-li se p\xC5"
-    "\x99"
-    "enos, povolte\n\xE2"
-    "\x80"
-    "\x9E"
-    "Ignorovat voln\xC3"
-    "\xA9"
-    " m\xC3"
-    "\xAD"
-    "sto\xE2"
-    "\x80"
-    "\x9C"
-    " v Calibre\nnastaven\xC3"
-    "\xAD"
-    " pluginu SmartDevice.",
     "P\xC5"
     "\x99"
     "\xC3"
@@ -5236,34 +4871,6 @@ const char* const STRINGS_CS[] = {
     "P\xC5"
     "\x99"
     "ijato:",
-    "\xC4"
-    "\x8C"
-    "ek\xC3"
-    "\xA1"
-    "n\xC3"
-    "\xAD"
-    " na dal\xC5"
-    "\xA1"
-    "\xC3"
-    "\xAD"
-    "...",
-    "Nepoda\xC5"
-    "\x99"
-    "ilo se vytvo\xC5"
-    "\x99"
-    "it soubor",
-    "Vy\xC5"
-    "\xBE"
-    "adov\xC3"
-    "\xA1"
-    "no heslo",
-    "P\xC5"
-    "\x99"
-    "enos p\xC5"
-    "\x99"
-    "eru\xC5"
-    "\xA1"
-    "en",
     "1) Nainstalujte plugin CrossPoint Reader",
     "2) Bu\xC4"
     "\x8F"
@@ -5324,13 +4931,6 @@ const char* const STRINGS_CS[] = {
     "nku Re\xC5"
     "\xBE"
     "im krytu",
-    "Stavov\xC3"
-    "\xBD"
-    " \xC5"
-    "\x99"
-    "\xC3"
-    "\xA1"
-    "dek",
     "Skr\xC3"
     "\xBD"
     "t baterii %",
@@ -5340,8 +4940,6 @@ const char* const STRINGS_CS[] = {
     "n\xC3"
     "\xAD"
     " textu",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
@@ -5366,19 +4964,6 @@ const char* const STRINGS_CS[] = {
     "ten\xC3"
     "\xAD"
     "",
-    "Rozvr\xC5"
-    "\xBE"
-    "en\xC3"
-    "\xAD"
-    " p\xC5"
-    "\x99"
-    "edn\xC3"
-    "\xAD"
-    "ch tla\xC4"
-    "\x8D"
-    "\xC3"
-    "\xAD"
-    "tek",
     "Rozvr\xC5"
     "\xBE"
     "en\xC3"
@@ -5413,27 +4998,6 @@ const char* const STRINGS_CS[] = {
     "te\xC4"
     "\x8D"
     "ky",
-    "P\xC3"
-    "\xAD"
-    "smo extern\xC3"
-    "\xAD"
-    " \xC4"
-    "\x8D"
-    "te\xC4"
-    "\x8D"
-    "ky",
-    "P\xC3"
-    "\xAD"
-    "smo \xC4"
-    "\x8D"
-    "te\xC4"
-    "\x8D"
-    "ky",
-    "P\xC3"
-    "\xAD"
-    "smo rozhran\xC3"
-    "\xAD"
-    "",
     "Velikost p\xC3"
     "\xAD"
     "sma rozhran\xC3"
@@ -5452,18 +5016,6 @@ const char* const STRINGS_CS[] = {
     "te\xC4"
     "\x8D"
     "ky",
-    "Mezery p\xC3"
-    "\xAD"
-    "smen ASCII",
-    "Mezery \xC4"
-    "\x8D"
-    "\xC3"
-    "\xAD"
-    "slic ASCII",
-    "Mezery CJK",
-    "Re\xC5"
-    "\xBE"
-    "im barev",
     "Okraj obrazovky \xC4"
     "\x8D"
     "te\xC4"
@@ -5496,13 +5048,9 @@ const char* const STRINGS_CS[] = {
     "Frekvence obnoven\xC3"
     "\xAD"
     "",
-    "Nastaven\xC3"
-    "\xAD"
-    " Calibre",
     "KOReaderu Sync",
     "Zkontrolovat aktualizace",
     "Jazyk",
-    "Vybrat tapetu",
     "Vymazat mezipam\xC4"
     "\x9B"
     "\xC5"
@@ -5512,7 +5060,6 @@ const char* const STRINGS_CS[] = {
     "ten\xC3"
     "\xAD"
     "",
-    "Calibre",
     "U\xC5"
     "\xBE"
     "ivatelsk\xC3"
@@ -5715,16 +5262,6 @@ const char* const STRINGS_CS[] = {
     "\xC3"
     "\xAD"
     "znout",
-    "\xC5"
-    "\xBD"
-    "\xC3"
-    "\xA1"
-    "dn\xC3"
-    "\xBD"
-    " postup",
-    "Pln\xC3"
-    "\xA1"
-    "",
     "Nikdy",
     "Ve \xC4"
     "\x8D"
@@ -5787,15 +5324,6 @@ const char* const STRINGS_CS[] = {
     "i\xC4"
     "\x8D"
     "ek",
-    "Zp\xC4"
-    "\x9B"
-    "t, Potvrdit, Vlevo, Vpravo",
-    "Vlevo, Vpravo, Zp\xC4"
-    "\x9B"
-    "t, Potvrdit",
-    "Vlevo, Zp\xC4"
-    "\x9B"
-    "t, Potvrdit, Vpravo",
     "P\xC5"
     "\x99"
     "edchoz\xC3"
@@ -5924,20 +5452,6 @@ const char* const STRINGS_CS[] = {
     " zapnut\xC3"
     "\xAD"
     "",
-    "Extern\xC3"
-    "\xAD"
-    " p\xC3"
-    "\xAD"
-    "smo",
-    "Vestav\xC4"
-    "\x9B"
-    "n\xC3"
-    "\xA9"
-    " (Zak\xC3"
-    "\xA1"
-    "z\xC3"
-    "\xA1"
-    "no)",
     "\xC5"
     "\xBD"
     "\xC3"
@@ -5990,13 +5504,6 @@ const char* const STRINGS_CS[] = {
     "\xA5"
     ":",
     "IP adresa:",
-    "nebo naskenujte QR k\xC3"
-    "\xB3"
-    "d telefonem pro p\xC5"
-    "\x99"
-    "ipojen\xC3"
-    "\xAD"
-    " k WiFi.",
     "Chyba: Obecn\xC3"
     "\xA1"
     " chyba",
@@ -6028,11 +5535,6 @@ const char* const STRINGS_CS[] = {
     " Dom\xC5"
     "\xAF"
     "",
-    "\xC2"
-    "\xAB"
-    " Ulo\xC5"
-    "\xBE"
-    "it",
     "Vybrat",
     "Selected",
     "P\xC5"
@@ -6067,12 +5569,6 @@ const char* const STRINGS_CS[] = {
     "Dol\xC5"
     "\xAF"
     "",
-    "P\xC3"
-    "\x8D"
-    "SMO",
-    "p\xC3"
-    "\xAD"
-    "smo",
     "OK",
     "Filtr obrazovky sp\xC3"
     "\xA1"
@@ -6110,7 +5606,6 @@ const char* const STRINGS_CS[] = {
     "Oprava blednut\xC3"
     "\xAD"
     " na slunci",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -6143,11 +5638,9 @@ const char* const STRINGS_CS[] = {
     "\xAD"
     "",
     "Page overlay",
-    "Ned\xC3"
-    "\xA1"
-    "vn\xC3"
-    "\xA9"
-    "",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Ned\xC3"
     "\xA1"
     "vn\xC3"
@@ -6320,11 +5813,6 @@ const char* const STRINGS_CS[] = {
     "\xA1"
     "nek |",
     "Kniha:",
-    "shift",
-    "SHIFT",
-    "Z\xC3"
-    "\x81"
-    "MEK",
     "Pro Calibre p\xC5"
     "\x99"
     "idejte /opds do URL adresy",
@@ -6819,10 +6307,8 @@ const char* const STRINGS_CS[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -6847,11 +6333,9 @@ const char* const STRINGS_PO[] = {
     "\xC3"
     "\xB5"
     "es",
-    "Biblioteca do Calibre",
     "Continuar lendo",
     "Nenhum livro aberto",
     "Comece a ler abaixo",
-    "Livros",
     "Nenhum arquivo encontrado",
     "Escolher cap\xC3"
     "\xAD"
@@ -6874,12 +6358,6 @@ const char* const STRINGS_PO[] = {
     "Fora dos limites",
     "Carregando...",
     "Carregando",
-    "Falha ao carregar XTC",
-    "Falha ao carregar TXT",
-    "Falha ao carregar EPUB",
-    "Erro no cart\xC3"
-    "\xA3"
-    "o SD",
     "Redes Wi\xE2"
     "\x80"
     "\x91"
@@ -6892,22 +6370,11 @@ const char* const STRINGS_PO[] = {
     "Falha na conex\xC3"
     "\xA3"
     "o",
-    "Tempo limite conex\xC3"
-    "\xA3"
-    "o",
     "Esquecer rede?",
     "Salvar senha a pr\xC3"
     "\xB3"
     "xima vez?",
-    "Remover senha salva?",
     "Pressione OK procurar novamente",
-    "Pressione qualquer bot\xC3"
-    "\xA3"
-    "o continuar",
-    "ESQ/DIR: Escolher | OK: Confirmar",
-    "Como voc\xC3"
-    "\xAA"
-    " gostaria se conectar?",
     "Entrar em uma rede",
     "Criar hotspot",
     "Conecte-se a uma rede Wi\xE2"
@@ -6929,7 +6396,6 @@ const char* const STRINGS_PO[] = {
     "ou escaneie o QR code com seu celular:",
     "Calibre sem fio",
     "URL do Calibre Web",
-    "Conectar como dispositivo sem fio",
     "* = Criptografada | + = Salva",
     "Endere\xC3"
     "\xA7"
@@ -6942,36 +6408,9 @@ const char* const STRINGS_PO[] = {
     "\x80"
     "\x91"
     "Fi",
-    "Inserir texto",
     "para",
-    "Procurando o Calibre...",
-    "Conectando a",
-    "Conectado a",
-    "Aguardando comandos...",
-    "(Falha conex\xC3"
-    "\xA3"
-    "o, tentando novamente)",
-    "Calibre desconectado",
-    "Aguardando transfer\xC3"
-    "\xAA"
-    "ncia...",
-    "Se a transfer\xC3"
-    "\xAA"
-    "ncia falhar, ative\n\n'Ignorar espa\xC3"
-    "\xA7"
-    "o livre'\n nas \nconfigura\xC3"
-    "\xA7"
-    "\xC3"
-    "\xB5"
-    "es do\nplugin SmartDevice\n Calibre.",
     "Recebendo:",
     "Recebido:",
-    "Aguardando mais...",
-    "Falha ao criar o arquivo",
-    "Senha obrigat\xC3"
-    "\xB3"
-    "ria",
-    "Transf. interrompida",
     "1) Instale o plugin CrossPoint Reader",
     "2) Esteja mesma rede Wi\xE2"
     "\x80"
@@ -6985,7 +6424,6 @@ const char* const STRINGS_PO[] = {
     "Sistema",
     "Tela de repouso",
     "Modo capa tela repouso",
-    "Barra de status",
     "Ocultar % da bateria",
     "Espa\xC3"
     "\xA7"
@@ -6997,8 +6435,6 @@ const char* const STRINGS_PO[] = {
     "\xC3"
     "\xA3"
     "o de texto",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
@@ -7017,13 +6453,6 @@ const char* const STRINGS_PO[] = {
     "\xA3"
     "o bot\xC3"
     "\xB5"
-    "es frontais",
-    "Disposi\xC3"
-    "\xA7"
-    "\xC3"
-    "\xA3"
-    "o bot\xC3"
-    "\xB5"
     "es laterais",
     "Front Button Layout (reader)",
     "Pular cap\xC3"
@@ -7032,25 +6461,10 @@ const char* const STRINGS_PO[] = {
     "\xA3"
     "o longa",
     "Fonte do leitor",
-    "Fonte leitor externo",
-    "Fonte do leitor",
-    "Fonte da interface",
     "Tam. fonte UI",
     "Espa\xC3"
     "\xA7"
     "amento entre linhas",
-    "Espa\xC3"
-    "\xA7"
-    "amento letras ASCII",
-    "Espa\xC3"
-    "\xA7"
-    "amento d\xC3"
-    "\xAD"
-    "gitos ASCII",
-    "Espa\xC3"
-    "\xA7"
-    "amento CJK",
-    "Modo de cor",
     "Margens da tela",
     "Alinhamento par\xC3"
     "\xA1"
@@ -7069,11 +6483,6 @@ const char* const STRINGS_PO[] = {
     "\xC3"
     "\xA3"
     "o",
-    "Configura\xC3"
-    "\xA7"
-    "\xC3"
-    "\xA3"
-    "o do Calibre",
     "Sincroniza\xC3"
     "\xA7"
     "\xC3"
@@ -7085,9 +6494,7 @@ const char* const STRINGS_PO[] = {
     "\xB5"
     "es",
     "Idioma",
-    "Escolher papel parede",
     "Limpar cache de leitura",
-    "Calibre",
     "Nome de usu\xC3"
     "\xA1"
     "rio",
@@ -7157,8 +6564,6 @@ const char* const STRINGS_PO[] = {
     "Nenhum",
     "Ajustar",
     "Recortar",
-    "Sem progresso",
-    "Completo",
     "Nunca",
     "No leitor",
     "Sempre",
@@ -7173,9 +6578,6 @@ const char* const STRINGS_PO[] = {
     "Paisagem H",
     "Invertido",
     "Paisagem AH",
-    "Vol, Conf, Esq, Dir",
-    "Esq, Dir, Vol, Conf",
-    "Esq, Vol, Conf, Dir",
     "Ant/Pr\xC3"
     "\xB3"
     "x",
@@ -7261,8 +6663,6 @@ const char* const STRINGS_PO[] = {
     "Pressione e segure o bot\xC3"
     "\xA3"
     "o energia ligar novamente",
-    "Fonte externa",
-    "Integrada (desativada)",
     "Nenhum entries encontrado",
     "Baixando...",
     "Falha no download",
@@ -7275,10 +6675,6 @@ const char* const STRINGS_PO[] = {
     "Endere\xC3"
     "\xA7"
     "o IP:",
-    "ou escaneie o QR code com seu celular conectar ao Wi\xE2"
-    "\x80"
-    "\x91"
-    "Fi.",
     "Erro: falha geral",
     "Erro: rede n\xC3"
     "\xA3"
@@ -7300,9 +6696,6 @@ const char* const STRINGS_PO[] = {
     " In\xC3"
     "\xAD"
     "cio",
-    "\xC2"
-    "\xAB"
-    " Salvar",
     "Escolher",
     "Selected",
     "Alternar",
@@ -7327,8 +6720,6 @@ const char* const STRINGS_PO[] = {
     "Direita",
     "Cima",
     "Baixo",
-    "CAPS",
-    "caps",
     "OK",
     "Filtro capa tela repouso",
     "Contraste",
@@ -7358,7 +6749,6 @@ const char* const STRINGS_PO[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Ajuste desbotamento ao sol",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -7373,7 +6763,9 @@ const char* const STRINGS_PO[] = {
     "Navegador OPDS",
     "Capa + personalizado",
     "Page overlay",
-    "Recentes",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Livros recentes",
     "Sem livros recentes",
     "Usar transfer\xC3"
@@ -7456,9 +6848,6 @@ const char* const STRINGS_PO[] = {
     "\xA1"
     "ginas  |",
     "Livro:",
-    "shift",
-    "SHIFT",
-    "TRAVAR",
     "Para o Calibre, adicione /opds ao seu URL",
     "Esq/Dir: 1%  Cima/Baixo: 10%",
     "Sincronizando hor\xC3"
@@ -7849,10 +7238,8 @@ const char* const STRINGS_PO[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -8000,27 +7387,6 @@ const char* const STRINGS_RU[] = {
     "\xB8"
     "",
     "\xD0"
-    "\x91"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " Calibre",
-    "\xD0"
     "\x9F"
     "\xD1"
     "\x80"
@@ -8118,17 +7484,6 @@ const char* const STRINGS_RU[] = {
     "\xB6"
     "\xD0"
     "\xB5"
-    "",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xB8"
     "",
     "\xD0"
     "\xA4"
@@ -8420,140 +7775,6 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " XTC",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " TXT",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " EPUB",
-    "\xD0"
-    "\x9E"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " SD-\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8B"
-    "",
     "Wi-Fi \xD1"
     "\x81"
     "\xD0"
@@ -8720,43 +7941,6 @@ const char* const STRINGS_RU[] = {
     "\x8F"
     "",
     "\xD0"
-    "\xA2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBC"
-    "-\xD0"
-    "\xB0"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
     "\x97"
     "\xD0"
     "\xB0"
@@ -8795,55 +7979,6 @@ const char* const STRINGS_RU[] = {
     "\x82"
     "\xD1"
     "\x8C"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "?",
-    "\xD0"
-    "\xA3"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x85"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x91"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB9"
     " \xD0"
     "\xBF"
     "\xD0"
@@ -8910,145 +8045,6 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x8E"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\x95"
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x9E"
-    "/\xD0"
-    "\x92"
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xA0"
-    "\xD0"
-    "\x90"
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x9E"
-    ": \xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    " | OK: \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    " \xD1"
-    "\x85"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    "?",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -9487,77 +8483,6 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x81"
     " Calibre",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x83"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "",
     "* = \xD0"
     "\x97"
     "\xD0"
@@ -9649,305 +8574,8 @@ const char* const STRINGS_RU[] = {
     "\x8C"
     " Wi-Fi",
     "\xD0"
-    "\x92"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
     "\xBA"
     " ",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    " Calibre...",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBA"
-    " ",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    " \xD0"
-    "\xBA"
-    " ",
-    "\xD0"
-    "\x9E"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB4"
-    "...",
-    "(\xD0"
-    "\x9E"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    ", \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    ")",
-    "\xD0"
-    "\xA1"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x81"
-    " Calibre \xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "",
-    "\xD0"
-    "\x9E"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB8"
-    "...",
-    "\xD0"
-    "\x95"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB8"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x91"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    "",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -9984,158 +8612,6 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xBE"
     ":",
-    "\xD0"
-    "\x9E"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x89"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x85"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "...",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "",
-    "\xD0"
-    "\xA2"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "",
     "1) \xD0"
     "\xA3"
     "\xD1"
@@ -10462,37 +8938,6 @@ const char* const STRINGS_RU[] = {
     "",
     "\xD0"
     "\xA1"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\xA1"
     "\xD0"
     "\xBA"
     "\xD1"
@@ -10588,12 +9033,76 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "Text Darkness",
-    "Extra Dark",
-    "Images",
-    "Display",
-    "Placeholder",
-    "Suppress",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8C"
+    "",
+    "\xD0"
+    "\x97"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB8"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8C"
+    "",
     "\xD0"
     "\x9A"
     "\xD0"
@@ -10657,33 +9166,6 @@ const char* const STRINGS_RU[] = {
     "\xB8"
     "\xD1"
     "\x8F"
-    "",
-    "\xD0"
-    "\x91"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB8"
     "",
     "\xD0"
     "\x91"
@@ -10784,85 +9266,6 @@ const char* const STRINGS_RU[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x92"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x88"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " \xD1"
-    "\x87"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\xA8"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " CJK",
-    "\xD0"
-    "\xA8"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xB8"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x84"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xB0"
-    "",
-    "\xD0"
     "\xA0"
     "\xD0"
     "\xB0"
@@ -10947,100 +9350,6 @@ const char* const STRINGS_RU[] = {
     "\xBB"
     "",
     "\xD0"
-    "\x98"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " \xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB2"
-    " ASCII",
-    "\xD0"
-    "\x98"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " \xD1"
-    "\x86"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x80"
-    " ASCII",
-    "\xD0"
-    "\x98"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " CJK",
-    "\xD0"
-    "\xA6"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBC"
-    "",
-    "\xD0"
     "\x9F"
     "\xD0"
     "\xBE"
@@ -11138,7 +9447,47 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB7"
     "",
-    "Show Hidden Files",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8C"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x84"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -11174,25 +9523,6 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x8F"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB8"
-    " Calibre",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -11269,29 +9599,6 @@ const char* const STRINGS_RU[] = {
     "\xBA"
     "",
     "\xD0"
-    "\x92"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xBE"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB8"
-    "",
-    "\xD0"
     "\x9E"
     "\xD1"
     "\x87"
@@ -11326,7 +9633,6 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x8F"
     "",
-    "Calibre",
     "\xD0"
     "\x98"
     "\xD0"
@@ -12318,44 +10624,6 @@ const char* const STRINGS_RU[] = {
     "\x8C"
     "",
     "\xD0"
-    "\x91"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB7"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xB0"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
     "\x9D"
     "\xD0"
     "\xB8"
@@ -12587,81 +10855,6 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x82"
     " (CCW)",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    ", \xD0"
-    "\x9E"
-    "\xD0"
-    "\xBA"
-    ", \xD0"
-    "\x9B"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    ", \xD0"
-    "\x9E"
-    "\xD0"
-    "\xBA"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    ", \xD0"
-    "\x9E"
-    "\xD0"
-    "\xBA"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -13332,86 +11525,6 @@ const char* const STRINGS_RU[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x88"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
-    "\x92"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB9"
-    " (\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x91"
-    "\xD0"
-    "\xBD"
-    ")",
-    "\xD0"
     "\x97"
     "\xD0"
     "\xB0"
@@ -13668,73 +11781,6 @@ const char* const STRINGS_RU[] = {
     "\x81"
     ":",
     "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB8"
-    " \xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    " QR-\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBA"
-    " Wi-Fi.",
-    "\xD0"
     "\x9E"
     "\xD1"
     "\x88"
@@ -13908,27 +11954,6 @@ const char* const STRINGS_RU[] = {
     "\xB0"
     "\xD1"
     "\x8F"
-    "",
-    "\xC2"
-    "\xAB"
-    " \xD0"
-    "\xA1"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x85"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
     "",
     "\xD0"
     "\x92"
@@ -14182,8 +12207,6 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB7"
     "",
-    "CAPS",
-    "caps",
     "OK",
     "\xD0"
     "\xA4"
@@ -14505,7 +12528,17 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "Chapter 21",
+    "\xD0"
+    "\x93"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
+    " 21",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -14693,7 +12726,6 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x8F"
     "",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -14796,23 +12828,9 @@ const char* const STRINGS_RU[] = {
     "\xB9"
     "",
     "Page overlay",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB5"
-    "",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -15689,9 +13707,6 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     ":",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "\xD0"
     "\x94"
     "\xD0"
@@ -16590,9 +14605,99 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "Footnotes",
-    "No footnotes on this page",
-    "[link]",
+    "\xD0"
+    "\x9F"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x87"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "",
+    "\xD0"
+    "\x9D"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB9"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xBF"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x87"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB9"
+    "",
+    "[\xD1"
+    "\x81"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "]",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -16632,8 +14737,94 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "Auto Turn Enabled: ",
-    "Auto Turn (Pages Per Minute)",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xB2"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "-\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB2"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8E"
+    "\xD1"
+    "\x87"
+    "\xD1"
+    "\x91"
+    "\xD0"
+    "\xBD"
+    ": ",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xB2"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "-\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " (\xD0"
+    "\xA1"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x86"
+    " \xD0"
+    "\xB2"
+    " \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    ")",
     "Auto Page Turn",
     "1 page/min",
     "3 pages/min",
@@ -16974,10 +15165,8 @@ const char* const STRINGS_RU[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -17009,7 +15198,6 @@ const char* const STRINGS_SV[] = {
     "Inst\xC3"
     "\xA4"
     "llningar",
-    "Calibrebibliotek",
     "Forts\xC3"
     "\xA4"
     "tt l\xC3"
@@ -17023,9 +15211,6 @@ const char* const STRINGS_SV[] = {
     "rja l\xC3"
     "\xA4"
     "sa nedan",
-    "B\xC3"
-    "\xB6"
-    "cker",
     "Inga filer hittades",
     "V\xC3"
     "\xA4"
@@ -17049,10 +15234,6 @@ const char* const STRINGS_SV[] = {
     "\xA6"
     "",
     "Laddar",
-    "Misslyckades ladda XTC",
-    "Misslyckades ladda TCT",
-    "Misslyckades ladda EPUB",
-    "SD-kortfel",
     "Tr\xC3"
     "\xA5"
     "dl\xC3"
@@ -17076,7 +15257,6 @@ const char* const STRINGS_SV[] = {
     "",
     "Ansluten!",
     "Anslutning misslyckades",
-    "Anslutnings timeout",
     "Gl\xC3"
     "\xB6"
     "m n\xC3"
@@ -17089,27 +15269,9 @@ const char* const STRINGS_SV[] = {
     "sta g\xC3"
     "\xA5"
     "ng?",
-    "Radera sparat l\xC3"
-    "\xB6"
-    "senord?",
     "Tryck OK f\xC3"
     "\xB6"
     "r att skanna igen",
-    "Tryck valfri knapp f\xC3"
-    "\xB6"
-    "r att forts\xC3"
-    "\xA4"
-    "tta",
-    "V\xC3"
-    "\x84"
-    "NSTER/H\xC3"
-    "\x96"
-    "GER: V\xC3"
-    "\xA4"
-    "lj OK: Bekr\xC3"
-    "\xA4"
-    "fta",
-    "Hur vill du ansluta?",
     "Anslut till ett n\xC3"
     "\xA4"
     "tverk",
@@ -17153,11 +15315,6 @@ const char* const STRINGS_SV[] = {
     "\xB6"
     "st",
     "Calibre webbadress",
-    "Anslut som tr\xC3"
-    "\xA5"
-    "dl\xC3"
-    "\xB6"
-    "s enhet",
     "* = Krypterad | + = Sparad",
     "MAC-adress:",
     "Kontrollerar tr\xC3"
@@ -17173,67 +15330,9 @@ const char* const STRINGS_SV[] = {
     "Skriv in WiFi-l\xC3"
     "\xB6"
     "senord",
-    "Skriv text",
     "till ",
-    "S\xC3"
-    "\xB6"
-    "ker Calibre\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "Ansluter till",
-    "Ansluten till",
-    "V\xC3"
-    "\xA4"
-    "ntar p\xC3"
-    "\xA5"
-    " kommandon\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "(Anslutning misslyckades. F\xC3"
-    "\xB6"
-    "rs\xC3"
-    "\xB6"
-    "ker igen)",
-    "Calibre nedkopplat",
-    "V\xC3"
-    "\xA4"
-    "ntar p\xC3"
-    "\xA5"
-    " \xC3"
-    "\xB6"
-    "verf\xC3"
-    "\xB6"
-    "ring\xE2"
-    "\x80"
-    "\xA6"
-    "",
-    "Om \xC3"
-    "\xB6"
-    "verf\xC3"
-    "\xB6"
-    "ring misslyckas: Aktivera\n'Ignorera fritt utrymme' i Calibre's\nSmartDevice plugin settings.",
     "Tar emot:",
     "Mottaget:",
-    "V\xC3"
-    "\xA4"
-    "ntar p\xC3"
-    "\xA5"
-    " mer..",
-    "Misslyckades att skapa fil",
-    "L\xC3"
-    "\xB6"
-    "senord kr\xC3"
-    "\xA4"
-    "vs",
-    "\xC3"
-    "\x96"
-    "verf\xC3"
-    "\xB6"
-    "ring avbr\xC3"
-    "\xB6"
-    "ts",
     "1) Installera CrossPoint Reader plugin",
     "2) Anslut till samma tr\xC3"
     "\xA5"
@@ -17280,7 +15379,6 @@ const char* const STRINGS_SV[] = {
     "rmens omslagsl\xC3"
     "\xA4"
     "ge",
-    "Statusrad",
     "D\xC3"
     "\xB6"
     "lj batteriprocent",
@@ -17288,8 +15386,6 @@ const char* const STRINGS_SV[] = {
     "Textkantutj\xC3"
     "\xA4"
     "mning",
-    "Text Darkness",
-    "Extra Dark",
     "Bilder",
     "Visa",
     "Platsh\xC3"
@@ -17304,7 +15400,6 @@ const char* const STRINGS_SV[] = {
     "L\xC3"
     "\xA4"
     "srikting",
-    "Frontknappslayout",
     "Sidoknappslayout (L\xC3"
     "\xA4"
     "sare)",
@@ -17315,33 +15410,12 @@ const char* const STRINGS_SV[] = {
     "Eboksl\xC3"
     "\xA4"
     "sarens typsnittsfamilj",
-    "Extern Eboksl\xC3"
-    "\xA4"
-    "sartypsnitt",
     "Eboksl\xC3"
     "\xA4"
-    "sartypsnitt",
-    "Anv\xC3"
-    "\xA4"
-    "ndargr\xC3"
-    "\xA4"
-    "nssnittets typsnitt",
-    "Anv\xC3"
-    "\xA4"
-    "ndargr\xC3"
-    "\xA4"
-    "nssnittets typsnittsstorlek",
+    "sarens typsnittsstorlek",
     "Eboksl\xC3"
     "\xA4"
     "sarens linjemellanrum",
-    "ASCII-bokstavsmellanrum",
-    "ASCII-siffermellanrum",
-    "CJK-mellanrum",
-    "F\xC3"
-    "\xA4"
-    "rgl\xC3"
-    "\xA4"
-    "ge",
     "Eboksl\xC3"
     "\xA4"
     "sarens sk\xC3"
@@ -17349,30 +15423,23 @@ const char* const STRINGS_SV[] = {
     "rmmarginal",
     "Eboksl\xC3"
     "\xA4"
-    "sarens paragraflinjeplacering",
+    "sarens paragrafjustering",
     "Avstavning",
     "Tid f\xC3"
     "\xB6"
     "r att g\xC3"
     "\xA5"
     " i vila",
-    "Show Hidden Files",
+    "Visa dolda filer",
     "Uppdateringsfrekvens",
-    "Calibreinst\xC3"
-    "\xA4"
-    "llningar",
-    "KorReader-synkronisering",
+    "KOReader-synkronisering",
     "Kolla efter uppdateringar",
     "Spr\xC3"
     "\xA5"
     "k",
-    "V\xC3"
-    "\xA4"
-    "lj bakgrundsbild",
     "Rensa Eboksl\xC3"
     "\xA4"
     "sarens cache",
-    "Calibre",
     "Anv\xC3"
     "\xA4"
     "ndarnamn",
@@ -17455,10 +15522,6 @@ const char* const STRINGS_SV[] = {
     "Besk\xC3"
     "\xA4"
     "r",
-    "Ingen framg\xC3"
-    "\xA5"
-    "ng",
-    "Full",
     "Aldrig",
     "I Eboksl\xC3"
     "\xA4"
@@ -17477,21 +15540,6 @@ const char* const STRINGS_SV[] = {
     "Landskap medurs",
     "Inverterad",
     "Landskap moturs",
-    "Bak, Bekr,V\xC3"
-    "\xA4"
-    "n, H\xC3"
-    "\xB6"
-    "g",
-    "V\xC3"
-    "\xA4"
-    "n, H\xC3"
-    "\xB6"
-    "g, Bak, Bekr",
-    "V\xC3"
-    "\xA4"
-    "n, Bak, Bekr, H\xC3"
-    "\xB6"
-    "g",
     "F\xC3"
     "\xB6"
     "rra/N\xC3"
@@ -17515,11 +15563,7 @@ const char* const STRINGS_SV[] = {
     "Smal",
     "Normal",
     "Bred",
-    "R\xC3"
-    "\xA4"
-    "ttf\xC3"
-    "\xA4"
-    "rdiga",
+    "Justerad",
     "V\xC3"
     "\xA4"
     "nster",
@@ -17571,10 +15615,6 @@ const char* const STRINGS_SV[] = {
     "tta p\xC3"
     "\xA5"
     " igen",
-    "Externt typsnitt",
-    "Inbyggd (Avst\xC3"
-    "\xA4"
-    "ngd)",
     "Inga poster funna",
     "Laddar ner\xE2"
     "\x80"
@@ -17596,9 +15636,6 @@ const char* const STRINGS_SV[] = {
     "\xA4"
     "tverk:",
     "IP-adress;",
-    "eller skanna QR-kod med din telefon f\xC3"
-    "\xB6"
-    "r att ansluta till WiFi.",
     "Fel: Generellt fel",
     "Fel: N\xC3"
     "\xA4"
@@ -17614,9 +15651,6 @@ const char* const STRINGS_SV[] = {
     "\xC2"
     "\xAB"
     " Hem",
-    "\xC2"
-    "\xAB"
-    " Spara",
     "V\xC3"
     "\xA4"
     "lj ",
@@ -17659,8 +15693,6 @@ const char* const STRINGS_SV[] = {
     "ger",
     "Upp",
     "Ner",
-    "VERSALER",
-    "versaler",
     "Okej",
     "Vilosk\xC3"
     "\xA4"
@@ -17696,13 +15728,14 @@ const char* const STRINGS_SV[] = {
     "nssnittstema",
     "Klassisk",
     "Lyra",
-    "Lyra Extended",
+    "Lyra ut\xC3"
+    "\xB6"
+    "kad",
     "CrossPet Reader",
     "CrossPet Classic",
     "Fix f\xC3"
     "\xB6"
     "r solskensmattning",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -17719,7 +15752,9 @@ const char* const STRINGS_SV[] = {
     "sare",
     "Omslag + Valfri",
     "Page overlay",
-    "Senaste",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Senaste b\xC3"
     "\xB6"
     "ckerna",
@@ -17797,9 +15832,6 @@ const char* const STRINGS_SV[] = {
     "Kapitel:",
     " sidor  |  ",
     "Bok:",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "F\xC3"
     "\xB6"
     "r Calibre: l\xC3"
@@ -18221,10 +16253,8 @@ const char* const STRINGS_SV[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -18259,7 +16289,6 @@ const char* const STRINGS_RO[] = {
     "Set\xC4"
     "\x83"
     "ri",
-    "Biblioteca Calibre",
     "Continu\xC4"
     "\x83"
     " lectura",
@@ -18271,11 +16300,6 @@ const char* const STRINGS_RO[] = {
     "ncepe\xC5"
     "\xA3"
     "i lectura",
-    "C\xC4"
-    "\x83"
-    "r\xC5"
-    "\xA3"
-    "i",
     "Nu s-au g\xC4"
     "\x83"
     "sit fi\xC8"
@@ -18320,22 +16344,6 @@ const char* const STRINGS_RO[] = {
     "ncarc\xC4"
     "\x83"
     "...",
-    "Eroare la \xC3"
-    "\xAE"
-    "nc\xC4"
-    "\x83"
-    "rcarea XTC",
-    "Eroare la \xC3"
-    "\xAE"
-    "nc\xC4"
-    "\x83"
-    "rcarea TXT",
-    "Eroare la \xC3"
-    "\xAE"
-    "nc\xC4"
-    "\x83"
-    "rcarea EPUB",
-    "Eroare la cardul SD",
     "Re\xC5"
     "\xA3"
     "ele WiFi",
@@ -18361,11 +16369,6 @@ const char* const STRINGS_RO[] = {
     "uat\xC4"
     "\x83"
     "",
-    "Timp de conectare dep\xC4"
-    "\x83"
-    "\xC5"
-    "\x9F"
-    "it",
     "Uita\xC5"
     "\xA3"
     "i re\xC5"
@@ -18374,39 +16377,11 @@ const char* const STRINGS_RO[] = {
     "Salva\xC5"
     "\xA3"
     "i parola?",
-    "\xC5"
-    "\x9E"
-    "terge\xC5"
-    "\xA3"
-    "i parola salvat\xC4"
-    "\x83"
-    "?",
     "Ap\xC4"
     "\x83"
     "sa\xC5"
     "\xA3"
     "i OK pentru a scana din nou",
-    "Ap\xC4"
-    "\x83"
-    "sa\xC5"
-    "\xA3"
-    "i orice buton pentru a continua",
-    "ST\xC3"
-    "\x82"
-    "NGA/DREAPTA: Selecta\xC5"
-    "\xA3"
-    "i | OK: Confirma\xC5"
-    "\xA3"
-    "i",
-    "Cum dori\xC5"
-    "\xA3"
-    "i s\xC4"
-    "\x83"
-    " v\xC4"
-    "\x83"
-    " conecta\xC5"
-    "\xA3"
-    "i?",
     "Conecta\xC5"
     "\xA3"
     "i-v\xC4"
@@ -18453,11 +16428,6 @@ const char* const STRINGS_RO[] = {
     "i codul QR cu telefonul dvs.:",
     "Calibre Wireless",
     "Calibre URL",
-    "Conecta\xC5"
-    "\xA3"
-    "i-v\xC4"
-    "\x83"
-    " ca dispozitiv wireless",
     "* = Criptat | + = Salvat",
     "Adres\xC4"
     "\x83"
@@ -18466,78 +16436,11 @@ const char* const STRINGS_RO[] = {
     "Introduce\xC5"
     "\xA3"
     "i parola WiFi",
-    "Introduce\xC5"
-    "\xA3"
-    "i textul",
     "la ",
-    "Descoper\xC4"
-    "\x83"
-    " Calibre...",
-    "Se conecteaz\xC4"
-    "\x83"
-    " la ",
-    "Conectat la ",
-    "Se a\xC5"
-    "\x9F"
-    "teapt\xC4"
-    "\x83"
-    " comenzi...",
-    "(Conexiune e\xC5"
-    "\x9F"
-    "uat\xC4"
-    "\x83"
-    ", se re\xC3"
-    "\xAE"
-    "ncearc\xC4"
-    "\x83"
-    ")",
-    "Calibre deconectat",
-    "Se a\xC5"
-    "\x9F"
-    "teapt\xC4"
-    "\x83"
-    " transfer...",
-    "Dac\xC4"
-    "\x83"
-    " transferul e\xC5"
-    "\x9F"
-    "ueaz\xC4"
-    "\x83"
-    ", activa\xC5"
-    "\xA3"
-    "i\n'Ignora\xC5"
-    "\xA3"
-    "i spa\xC5"
-    "\xA3"
-    "iul liber' \xC3"
-    "\xAE"
-    "n set\xC4"
-    "\x83"
-    "rile\nplugin-ului SmartDevice din Calibre.",
     "Se prime\xC5"
     "\x9F"
     "te: ",
     "Primite: ",
-    "Se a\xC5"
-    "\x9F"
-    "teapt\xC4"
-    "\x83"
-    " mai multe...",
-    "Creare fi\xC5"
-    "\x9F"
-    "ier e\xC5"
-    "\x9F"
-    "uat\xC4"
-    "\x83"
-    "",
-    "Necesit\xC4"
-    "\x83"
-    " parol\xC4"
-    "\x83"
-    "",
-    "Transfer \xC3"
-    "\xAE"
-    "ntrerupt",
     "1) Instala\xC5"
     "\xA3"
     "i plugin-ul CrossPoint Reader",
@@ -18572,7 +16475,6 @@ const char* const STRINGS_RO[] = {
     "Mod ecran de repaus cu copert\xC4"
     "\x83"
     "",
-    "Bara de stare",
     "Ascunde procentul bateriei",
     "Spa\xC5"
     "\xA3"
@@ -18582,8 +16484,6 @@ const char* const STRINGS_RO[] = {
     "\xAE"
     "ntre paragrafe",
     "Anti-Aliasing text",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
@@ -18600,7 +16500,6 @@ const char* const STRINGS_RO[] = {
     "Orientare lectur\xC4"
     "\x83"
     "",
-    "Aspect butoane frontale",
     "Aspect butoane laterale (lectur\xC4"
     "\x83"
     ")",
@@ -18615,13 +16514,6 @@ const char* const STRINGS_RO[] = {
     "Familie font lectur\xC4"
     "\x83"
     "",
-    "Font lectur\xC4"
-    "\x83"
-    " extern",
-    "Font lectur\xC4"
-    "\x83"
-    "",
-    "Font meniu",
     "Dimensiune font",
     "Spa\xC5"
     "\xA3"
@@ -18630,16 +16522,6 @@ const char* const STRINGS_RO[] = {
     "ntre r\xC3"
     "\xA2"
     "nduri",
-    "Spa\xC5"
-    "\xA3"
-    "iere litere ASCII ",
-    "Spa\xC5"
-    "\xA3"
-    "iere cifre ASCII",
-    "Spa\xC5"
-    "\xA3"
-    "iere CJK",
-    "Mod culoare",
     "Margine ecran lectur\xC4"
     "\x83"
     "",
@@ -18660,9 +16542,6 @@ const char* const STRINGS_RO[] = {
     "mprosp\xC4"
     "\x83"
     "tare",
-    "Set\xC4"
-    "\x83"
-    "ri Calibre",
     "Sincronizare KOReader",
     "C\xC4"
     "\x83"
@@ -18674,15 +16553,11 @@ const char* const STRINGS_RO[] = {
     "Limb\xC4"
     "\x83"
     "",
-    "Selecta\xC5"
-    "\xA3"
-    "i imaginea de fundal",
     "Goli\xC5"
     "\xA3"
     "i cache-ul de lectur\xC4"
     "\x83"
     "",
-    "Calibre",
     "Utilizator",
     "Parol\xC4"
     "\x83"
@@ -18789,12 +16664,6 @@ const char* const STRINGS_RO[] = {
     "Niciunul",
     "Potrivit",
     "Decupat",
-    "F\xC4"
-    "\x83"
-    "r\xC4"
-    "\x83"
-    " progres",
-    "Complet",
     "Niciodat\xC4"
     "\x83"
     "",
@@ -18827,15 +16696,6 @@ const char* const STRINGS_RO[] = {
     "Orizontal st\xC3"
     "\xA2"
     "nga",
-    "\xC3"
-    "\x8E"
-    "napoi, Cnfrm, St, Dr",
-    "St, Dr, \xC3"
-    "\x8E"
-    "napoi, Cnfrm",
-    "St, \xC3"
-    "\x8E"
-    "napoi, Cnfrm, Dr",
     "\xC3"
     "\x8E"
     "nainte/\xC3"
@@ -18923,10 +16783,6 @@ const char* const STRINGS_RO[] = {
     "ntrerup\xC4"
     "\x83"
     "torul pentru a porni din nou",
-    "Font extern",
-    "\xC3"
-    "\x8E"
-    "ncorporat (Dezactivat)",
     "Niciun rezultat g\xC4"
     "\x83"
     "sit",
@@ -18959,11 +16815,6 @@ const char* const STRINGS_RO[] = {
     "Adres\xC4"
     "\x83"
     " IP: ",
-    "sau scana\xC5"
-    "\xA3"
-    "i codul QR cu telefonul pentru a v\xC4"
-    "\x83"
-    " conecta la Wifi.",
     "Eroare: E\xC5"
     "\x9F"
     "ec general",
@@ -18995,9 +16846,6 @@ const char* const STRINGS_RO[] = {
     " Acas\xC4"
     "\x83"
     "",
-    "\xC2"
-    "\xAB"
-    " Salvare",
     "Selecteaz\xC4"
     "\x83"
     "",
@@ -19034,8 +16882,6 @@ const char* const STRINGS_RO[] = {
     "Dreapta",
     "Sus",
     "Jos",
-    "CAPS",
-    "caps",
     "OK",
     "Filtru ecran de repaus",
     "Contrast",
@@ -19085,7 +16931,6 @@ const char* const STRINGS_RO[] = {
     "ie estompare lumin\xC4"
     "\x83"
     "",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -19100,7 +16945,9 @@ const char* const STRINGS_RO[] = {
     "\x83"
     " + Personalizat",
     "Page overlay",
-    "Recente",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "C\xC4"
     "\x83"
     "r\xC5"
@@ -19183,9 +17030,6 @@ const char* const STRINGS_RO[] = {
     "Capitol: ",
     " pagini  |  ",
     "Carte: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "Pentru Calibre, ad\xC4"
     "\x83"
     "uga\xC5"
@@ -19632,10 +17476,8 @@ const char* const STRINGS_RO[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -19662,13 +17504,11 @@ const char* const STRINGS_CA[] = {
     "Configuraci\xC3"
     "\xB3"
     "",
-    "Biblioteca del Calibre",
     "Continua llegint",
     "Cap llibre obert",
     "Inicia la lectura a continuaci\xC3"
     "\xB3"
     "",
-    "Llibres",
     "No s'han trobat fitxers",
     "Selecciona el cap\xC3"
     "\xAD"
@@ -19699,10 +17539,6 @@ const char* const STRINGS_CA[] = {
     "S'est\xC3"
     "\xA0"
     " carregant",
-    "No s'ha pogut carregar l'XTC",
-    "No s'ha pogut carregar el TXT",
-    "No s'ha pogut carregar l'EPUB",
-    "Error de targeta SD",
     "Xarxes WiFi",
     "No s'han trobat xarxes",
     "%zu xarxes trobades",
@@ -19716,18 +17552,9 @@ const char* const STRINGS_CA[] = {
     "Error de connexi\xC3"
     "\xB3"
     "",
-    "S'ha esgotat el temps de connexi\xC3"
-    "\xB3"
-    "",
     "Voleu oblidar aquesta xarxa?",
     "Voleu desar la contrasenya per a la propera vegada?",
-    "Voleu suprimir la contrasenya desada?",
     "Premeu OK per tornar a escanejar",
-    "Premeu qualsevol bot\xC3"
-    "\xB3"
-    " per continuar",
-    "ESQUERRA/DRETA: Selecciona | OK: Confirma",
-    "Com voleu connectar-vos?",
     "Uneix-te a una xarxa",
     "Crea un punt d'acc\xC3"
     "\xA9"
@@ -19750,7 +17577,6 @@ const char* const STRINGS_CA[] = {
     "fon:",
     "Calibre sense fils",
     "URL web del Calibre",
-    "Connecta com a dispositiu sense fils",
     "* = Encriptat | + = Desat",
     "Adre\xC3"
     "\xA7"
@@ -19761,48 +17587,11 @@ const char* const STRINGS_CA[] = {
     "Introdu\xC3"
     "\xAF"
     "u la contrasenya WiFi",
-    "Introdu\xC3"
-    "\xAF"
-    "u el text",
     "a ",
-    "S'est\xC3"
-    "\xA0"
-    " descobrint el Calibre...",
-    "S'est\xC3"
-    "\xA0"
-    " connectant a ",
-    "S'ha connectat a ",
-    "S'estan esperant les ordres...",
-    "(La connexi\xC3"
-    "\xB3"
-    " ha fallat, s'est\xC3"
-    "\xA0"
-    " tornant a intentar)",
-    "Calibre desconnectat",
-    "S'est\xC3"
-    "\xA0"
-    " esperant la transfer\xC3"
-    "\xA8"
-    "ncia...",
-    "Si la transfer\xC3"
-    "\xA8"
-    "ncia falla, activeu\n'Ignora l'espai lliure' a la configuraci\xC3"
-    "\xB3"
-    " del\nconnector SmartDevice a Calibre.",
     "S'est\xC3"
     "\xA0"
     " rebent: ",
     "S'ha rebut: ",
-    "S'est\xC3"
-    "\xA0"
-    " esperant m\xC3"
-    "\xA9"
-    "s...",
-    "No s'ha pogut crear el fitxer",
-    "Contrasenya requerida",
-    "Transfer\xC3"
-    "\xA8"
-    "ncia interrompuda",
     "1) Instal\xC2"
     "\xB7"
     "leu el connector CrossPoint Reader",
@@ -19821,7 +17610,6 @@ const char* const STRINGS_CA[] = {
     "Mode de pantalla de rep\xC3"
     "\xB2"
     "s",
-    "Barra d'estat",
     "Oculta el % de bateria",
     "Espaiat de par\xC3"
     "\xA0"
@@ -19829,8 +17617,6 @@ const char* const STRINGS_CA[] = {
     "Antiali\xC3"
     "\xA0"
     "sing del text",
-    "Text Darkness",
-    "Extra Dark",
     "Imatges",
     "Mostrar",
     "Text de mostra",
@@ -19843,9 +17629,6 @@ const char* const STRINGS_CA[] = {
     " de lectura",
     "Disposici\xC3"
     "\xB3"
-    " dels botons frontals",
-    "Disposici\xC3"
-    "\xB3"
     " botons laterals",
     "Front Button Layout (reader)",
     "Pressi\xC3"
@@ -19854,17 +17637,8 @@ const char* const STRINGS_CA[] = {
     "\xAD"
     "tol",
     "Tipus de lletra",
-    "Tipus de lletra extern",
-    "Tipus de lletra",
-    "Tipus de lletra (UI)",
     "Mida de la lletra (UI)",
     "Interlineat del lector",
-    "Espaiat de la lletra ASCII",
-    "Espaiat del d\xC3"
-    "\xAD"
-    "git ASCII",
-    "Espaiat CJK",
-    "Mode de color",
     "Marge de pantalla del lector",
     "Alineaci\xC3"
     "\xB3"
@@ -19877,25 +17651,20 @@ const char* const STRINGS_CA[] = {
     "Temps per entrar en rep\xC3"
     "\xB2"
     "s",
-    "Show Hidden Files",
+    "Mostra fitxers ocults",
     "Freq\xC3"
     "\xBC"
     "\xC3"
     "\xA8"
     "ncia de refresc",
-    "Configuraci\xC3"
-    "\xB3"
-    " del Calibre",
     "Sincronitzaci\xC3"
     "\xB3"
     " del KOReader",
     "Comprova si hi ha actualitzacions",
     "Idioma",
-    "Selecciona un fons de pantalla",
     "Esborra la mem\xC3"
     "\xB2"
     "ria cau de lectura",
-    "Calibre",
     "Nom d'usuari",
     "Contrasenya",
     "URL del servidor de sincronitzaci\xC3"
@@ -19968,10 +17737,6 @@ const char* const STRINGS_CA[] = {
     "Cap",
     "Ajustar",
     "Retallar",
-    "Sense progr\xC3"
-    "\xA9"
-    "s",
-    "Completa",
     "Mai",
     "Al lector",
     "Sempre",
@@ -19986,9 +17751,6 @@ const char* const STRINGS_CA[] = {
     "Horitzontal horari",
     "Invertit",
     "Horitzontal antihorari",
-    "Enr, Cnfrm, Esq, Dreta",
-    "Esq, Dreta, Enr, Cnfrm",
-    "Esq, Enr, Cnfrm, Dreta",
     "Anterior/Seg\xC3"
     "\xBC"
     "ent",
@@ -20056,8 +17818,6 @@ const char* const STRINGS_CA[] = {
     "Premeu i manteniu premut el bot\xC3"
     "\xB3"
     " d'encesa per tornar a engegar",
-    "Tipus de lletra extern",
-    "Integrat (desactivat)",
     "No s'ha trobat cap entrada",
     "S'est\xC3"
     "\xA0"
@@ -20076,9 +17836,6 @@ const char* const STRINGS_CA[] = {
     "Adre\xC3"
     "\xA7"
     "a IP: ",
-    "o escanegeu el codi QR amb el tel\xC3"
-    "\xA8"
-    "fon per connectar el WiFi.",
     "Error: Fallada general",
     "Error: No s'ha trobat la xarxa",
     "Error: temps de connexi\xC3"
@@ -20094,9 +17851,6 @@ const char* const STRINGS_CA[] = {
     "\xC2"
     "\xAB"
     " Inici",
-    "\xC2"
-    "\xAB"
-    " Desa",
     "Selecciona",
     "Seleccionat",
     "Canvia",
@@ -20121,8 +17875,6 @@ const char* const STRINGS_CA[] = {
     "Dreta",
     "Amunt",
     "Avall",
-    "MAJS",
-    "majs",
     "OK",
     "Filtre de pantalla de rep\xC3"
     "\xB2"
@@ -20180,7 +17932,6 @@ const char* const STRINGS_CA[] = {
     " de l'esva\xC3"
     "\xAF"
     "ment pel sol",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -20193,6 +17944,8 @@ const char* const STRINGS_CA[] = {
     "Navegador OPDS",
     "Portada + Personalitzat",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recents",
     "Llibres recents",
     "No hi ha llibres recents",
@@ -20256,9 +18009,6 @@ const char* const STRINGS_CA[] = {
     "\xA0"
     "gines  |  ",
     "Llibre: ",
-    "maj",
-    "MAJ",
-    "BLOCA",
     "Per al Calibre, afegiu /opds a la URL",
     "Esquerra/Dreta: 1% Amunt/Avall: 10%",
     "S'est\xC3"
@@ -20675,10 +18425,8 @@ const char* const STRINGS_CA[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -20844,27 +18592,6 @@ const char* const STRINGS_UK[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x91"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " Calibre",
-    "\xD0"
     "\x9F"
     "\xD1"
     "\x80"
@@ -20976,17 +18703,6 @@ const char* const STRINGS_UK[] = {
     "\x87"
     "\xD0"
     "\xB5"
-    "",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xB8"
     "",
     "\xD0"
     "\xA4"
@@ -21327,156 +19043,6 @@ const char* const STRINGS_UK[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    " XTC",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    " TXT",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    " EPUB",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " SD \xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB8"
-    "",
-    "\xD0"
     "\x9C"
     "\xD0"
     "\xB5"
@@ -21650,43 +19216,6 @@ const char* const STRINGS_UK[] = {
     "\x8F"
     "",
     "\xD0"
-    "\xA2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
     "\x97"
     "\xD0"
     "\xB0"
@@ -21767,55 +19296,6 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     "\xD0"
     "\xB7"
-    "?",
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
     "?",
     "\xD0"
     "\x9D"
@@ -21882,175 +19362,6 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x8F"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x8C"
-    "-\xD1"
-    "\x8F"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x9E"
-    "/\xD0"
-    "\x9F"
-    "\xD0"
-    "\xA0"
-    "\xD0"
-    "\x90"
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x9E"
-    ": \xD0"
-    "\x92"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x80"
-    " | OK: \xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    "",
-    "\xD0"
-    "\xAF"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xB8"
-    " \xD1"
-    "\x85"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    "?",
     "\xD0"
     "\x9F"
     "\xD1"
@@ -22561,73 +19872,6 @@ const char* const STRINGS_UK[] = {
     "\xB9"
     "",
     "URL Calibre Web",
-    "\xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD1"
-    "\x8F"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB9"
-    "",
     "* = \xD0"
     "\x97"
     "\xD0"
@@ -22729,405 +19973,10 @@ const char* const STRINGS_UK[] = {
     "\x8C"
     " WiFi",
     "\xD0"
-    "\x92"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
     "\xB4"
     "\xD0"
     "\xBE"
     " ",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x88"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xBA"
-    " Calibre...",
-    "\xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    " ",
-    "\xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    " ",
-    "\xD0"
-    "\x9E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB4"
-    "...",
-    "(\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    ", \xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB0"
-    ")",
-    "Calibre \xD0"
-    "\xB2"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "",
-    "\xD0"
-    "\x9E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x96"
-    "...",
-    "\xD0"
-    "\xAF"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x89"
-    "\xD0"
-    "\xBE"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    ", \xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    "\n'\xD0"
-    "\x86"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    " \xD0"
-    "\xB2"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x80"
-    "' \xD0"
-    "\xB2"
-    " \xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x88"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "\xD1"
-    "\x85"
-    "\n\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    " SmartDevice Calibre.",
     "\xD0"
     "\x9E"
     "\xD1"
@@ -23164,138 +20013,6 @@ const char* const STRINGS_UK[] = {
     "\xD0"
     "\xBE"
     ": ",
-    "\xD0"
-    "\x9E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD1"
-    "\x89"
-    "\xD0"
-    "\xB5"
-    "...",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x83"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "",
     "1) \xD0"
     "\x92"
     "\xD1"
@@ -23630,29 +20347,6 @@ const char* const STRINGS_UK[] = {
     "",
     "\xD0"
     "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\x9F"
     "\xD1"
     "\x80"
     "\xD0"
@@ -23780,12 +20474,80 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x83"
     "",
-    "Text Darkness",
-    "Extra Dark",
-    "Images",
-    "Display",
-    "Placeholder",
-    "Suppress",
+    "\xD0"
+    "\x97"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8F"
+    "",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "",
+    "\xD0"
+    "\x97"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x9F"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x85"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "",
     "\xD0"
     "\x9A"
     "\xD0"
@@ -23883,59 +20645,6 @@ const char* const STRINGS_UK[] = {
     "\xBD"
     "\xD1"
     "\x8F"
-    "",
-    "\xD0"
-    "\xA0"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x88"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x85"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
     "",
     "\xD0"
     "\xA0"
@@ -24100,77 +20809,6 @@ const char* const STRINGS_UK[] = {
     "\xB2"
     "",
     "\xD0"
-    "\x97"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x88"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
-    "\xA8"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
-    "\xA8"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " \xD1"
-    "\x96"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x84"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
     "\xA0"
     "\xD0"
     "\xBE"
@@ -24253,126 +20891,6 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     "\xD0"
     "\xBB"
-    "",
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " \xD0"
-    "\xBC"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB6"
-    " \xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB8"
-    " ASCII",
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " \xD0"
-    "\xBC"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB6"
-    " \xD1"
-    "\x86"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB8"
-    " ASCII",
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " CJK",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBC"
     "",
     "\xD0"
     "\x9F"
@@ -24474,7 +20992,51 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x83"
     "",
-    "Show Hidden Files",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    " \xD0"
+    "\xBF"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x85"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x84"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB8"
+    "",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -24508,31 +21070,6 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x8F"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x88"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " Calibre",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -24609,37 +21146,6 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     "",
     "\xD0"
-    "\x92"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x88"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
     "\x9E"
     "\xD1"
     "\x87"
@@ -24676,7 +21182,6 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x8F"
     "",
-    "Calibre",
     "\xD0"
     "\x86"
     "\xD0"
@@ -25821,46 +22326,6 @@ const char* const STRINGS_UK[] = {
     "",
     "\xD0"
     "\x9D"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x94"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    "",
-    "\xD0"
-    "\x9D"
     "\xD1"
     "\x96"
     "\xD0"
@@ -26160,123 +22625,6 @@ const char* const STRINGS_UK[] = {
     "\xBE"
     "\xD1"
     "\x97"
-    "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9B"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    ", \xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    ", \xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
     "",
     "\xD0"
     "\x9F"
@@ -26970,72 +23318,6 @@ const char* const STRINGS_UK[] = {
     "\xD0"
     "\x97"
     "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x88"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    " (\xD0"
-    "\x92"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    ")",
-    "\xD0"
-    "\x97"
-    "\xD0"
     "\xB0"
     "\xD0"
     "\xBF"
@@ -27338,91 +23620,6 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     ": ",
     "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBE"
-    " \xD0"
-    "\xB2"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    " QR-\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    " \xD1"
-    "\x82"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x84"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBC"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    " WiFi.",
-    "\xD0"
     "\x9F"
     "\xD0"
     "\xBE"
@@ -27618,25 +23815,6 @@ const char* const STRINGS_UK[] = {
     "\xBC"
     "\xD1"
     "\x83"
-    "",
-    "\xC2"
-    "\xAB"
-    " \xD0"
-    "\x97"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB8"
     "",
     "\xD0"
     "\x92"
@@ -27909,28 +24087,6 @@ const char* const STRINGS_UK[] = {
     "\xB8"
     "\xD0"
     "\xB7"
-    "",
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x95"
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\x98"
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\x86"
-    "",
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
     "",
     "OK",
     "\xD0"
@@ -28459,7 +24615,6 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x96"
     "",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -28580,21 +24735,9 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     "",
     "Page overlay",
-    "\xD0"
-    "\x9E"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "\xD0"
     "\x9E"
     "\xD1"
@@ -29529,9 +25672,6 @@ const char* const STRINGS_UK[] = {
     "\xD0"
     "\xB0"
     ": ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "\xD0"
     "\x94"
     "\xD0"
@@ -31050,10 +27190,8 @@ const char* const STRINGS_UK[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -31193,27 +27331,6 @@ const char* const STRINGS_BE[] = {
     "\x8B"
     "",
     "\xD0"
-    "\x91"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x8F"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " Calibre",
-    "\xD0"
     "\x9F"
     "\xD1"
     "\x80"
@@ -31321,17 +27438,6 @@ const char* const STRINGS_BE[] = {
     "\x8D"
     "\xD0"
     "\xB9"
-    "",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x96"
     "",
     "\xD0"
     "\xA4"
@@ -31640,142 +27746,6 @@ const char* const STRINGS_BE[] = {
     "\xB0"
     "",
     "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x9E"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " XTC",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x9E"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " TXT",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x9E"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " EPUB",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBC"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " SD-\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8B"
-    "",
-    "\xD0"
     "\xA1"
     "\xD0"
     "\xB5"
@@ -31951,43 +27921,6 @@ const char* const STRINGS_BE[] = {
     "\x8F"
     "",
     "\xD0"
-    "\xA2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBC"
-    "-\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
     "\x97"
     "\xD0"
     "\xB0"
@@ -32026,51 +27959,6 @@ const char* const STRINGS_BE[] = {
     "\x86"
     "\xD1"
     "\x8C"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "?",
-    "\xD0"
-    "\x92"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x85"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
     " \xD0"
     "\xBF"
     "\xD0"
@@ -32141,145 +28029,6 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x83"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x8E"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\xA3"
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\x95"
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x90"
-    "/\xD0"
-    "\xA3"
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xA0"
-    "\xD0"
-    "\x90"
-    "\xD0"
-    "\x92"
-    "\xD0"
-    "\x90"
-    ": \xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    " | OK: \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\xAF"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    " \xD1"
-    "\x85"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB0"
-    "?",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -32732,69 +28481,6 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x81"
     " Calibre",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x8F"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB1"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x8E"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x83"
-    "",
     "* = \xD0"
     "\x90"
     "\xD0"
@@ -32888,305 +28574,10 @@ const char* const STRINGS_BE[] = {
     "\x8C"
     " Wi-Fi",
     "\xD0"
-    "\xA3"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x82"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
     "\xB4"
     "\xD0"
     "\xB0"
     " ",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x88"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xBA"
-    " Calibre...",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    " ",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    " ",
-    "\xD0"
-    "\xA7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB4"
-    "...",
-    "(\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBC"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    ", \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x8F"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB0"
-    ")",
-    "\xD0"
-    "\x97"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xB7"
-    " Calibre \xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "",
-    "\xD0"
-    "\xA7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8B"
-    "...",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x9E"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB0"
-    "",
     "\xD0"
     "\x90"
     "\xD1"
@@ -33223,166 +28614,6 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB0"
     ":",
-    "\xD0"
-    "\xA7"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x85"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    "...",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x9E"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "",
     "1) \xD0"
     "\xA3"
     "\xD1"
@@ -33702,27 +28933,6 @@ const char* const STRINGS_BE[] = {
     "\x83"
     "",
     "\xD0"
-    "\xA0"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
     "\xA1"
     "\xD1"
     "\x85"
@@ -33825,8 +29035,6 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x83"
     "",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
@@ -33902,33 +29110,6 @@ const char* const STRINGS_BE[] = {
     "\xBD"
     "\xD1"
     "\x8F"
-    "",
-    "\xD0"
-    "\x91"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x96"
     "",
     "\xD0"
     "\x91"
@@ -34043,85 +29224,6 @@ const char* const STRINGS_BE[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x97"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    " \xD1"
-    "\x88"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " \xD1"
-    "\x87"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\xA8"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " CJK",
-    "\xD0"
-    "\xA8"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    " \xD1"
-    "\x96"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x84"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
     "\x9F"
     "\xD0"
     "\xB0"
@@ -34200,106 +29302,6 @@ const char* const STRINGS_BE[] = {
     "\xB0"
     "\xD0"
     "\xBB"
-    "",
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " \xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    " ASCII",
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " \xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    " ASCII",
-    "\xD0"
-    "\x86"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    " CJK",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    " \xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xB6"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBC"
     "",
     "\xD0"
     "\x9F"
@@ -34436,19 +29438,6 @@ const char* const STRINGS_BE[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x8B"
-    " Calibre",
-    "\xD0"
     "\xA1"
     "\xD1"
     "\x96"
@@ -34525,33 +29514,6 @@ const char* const STRINGS_BE[] = {
     "",
     "\xD0"
     "\x90"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x88"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "",
-    "\xD0"
-    "\x90"
     "\xD1"
     "\x87"
     "\xD1"
@@ -34587,7 +29549,6 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x8F"
     "",
-    "Calibre",
     "\xD0"
     "\x86"
     "\xD0"
@@ -35597,42 +30558,6 @@ const char* const STRINGS_BE[] = {
     "\x8C"
     "",
     "\xD0"
-    "\x91"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB7"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x9E"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
     "\x9D"
     "\xD1"
     "\x96"
@@ -35858,81 +30783,6 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x82"
     " (CCW)",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    ", \xD0"
-    "\x9E"
-    "\xD0"
-    "\xBA"
-    ", \xD0"
-    "\x9B"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    ", \xD0"
-    "\x9E"
-    "\xD0"
-    "\xBA"
-    "",
-    "\xD0"
-    "\x9B"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xB2"
-    ", \xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    ", \xD0"
-    "\x9E"
-    "\xD0"
-    "\xBA"
-    ", \xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -36615,82 +31465,6 @@ const char* const STRINGS_BE[] = {
     "\x8F"
     "",
     "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x96"
-    " \xD1"
-    "\x88"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x84"
-    "\xD1"
-    "\x82"
-    "",
-    "\xD0"
-    "\xA3"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
-    " (\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
-    ")",
-    "\xD0"
     "\x97"
     "\xD0"
     "\xB0"
@@ -36963,75 +31737,6 @@ const char* const STRINGS_BE[] = {
     "\x81"
     ":",
     "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB1"
-    "\xD0"
-    "\xBE"
-    " \xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x83"
-    "\xD0"
-    "\xB9"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB5"
-    " QR-\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB4"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    " Wi-Fi.",
-    "\xD0"
     "\x9F"
     "\xD0"
     "\xB0"
@@ -37223,25 +31928,6 @@ const char* const STRINGS_BE[] = {
     "\xB0"
     "\xD1"
     "\x8F"
-    "",
-    "\xC2"
-    "\xAB"
-    " \xD0"
-    "\x97"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x85"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
     "",
     "\xD0"
     "\x90"
@@ -37457,8 +32143,6 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB7"
     "",
-    "CAPS",
-    "caps",
     "OK",
     "\xD0"
     "\xA4"
@@ -37620,7 +32304,6 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x8F"
     "",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -37725,23 +32408,9 @@ const char* const STRINGS_BE[] = {
     "\xB9"
     "",
     "Page overlay",
-    "\xD0"
-    "\x9D"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x8F"
-    "",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "\xD0"
     "\x9D"
     "\xD1"
@@ -38564,9 +33233,6 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB0"
     ":",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "\xD0"
     "\x94"
     "\xD0"
@@ -39845,10 +34511,8 @@ const char* const STRINGS_BE[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -39871,11 +34535,9 @@ const char* const STRINGS_IT[] = {
     "Sfoglia file",
     "Trasferimento file",
     "Impostazioni",
-    "Libreria Calibre",
     "Continua a leggere",
     "Nessun libro aperto",
     "Inizia a leggere di seguito",
-    "Libri",
     "Nessun file trovato",
     "Seleziona capitolo",
     "Nessun capitolo",
@@ -39888,10 +34550,6 @@ const char* const STRINGS_IT[] = {
     "Fuori dai limiti",
     "Caricamento in corso...",
     "Caricamento",
-    "Impossibile caricare XTC",
-    "Impossibile caricare TXT",
-    "Impossibile caricare EPUB",
-    "Errore della scheda SD",
     "Reti WiFi",
     "Nessuna rete trovata",
     "%zu reti trovate",
@@ -39899,14 +34557,9 @@ const char* const STRINGS_IT[] = {
     "Connessione in corso...",
     "Connesso!",
     "Connessione fallita",
-    "Timeout di connessione",
     "Dimenticare la rete?",
     "Salvare la password per la prossima volta?",
-    "Rimuovere la password salvata?",
     "Premi OK per scansionare di nuovo",
-    "Premi un pulsante qualsiasi per continuare",
-    "SINISTRA/DESTRA: Seleziona | OK: Conferma",
-    "Cosa desideri fare?",
     "Connettiti a una rete",
     "Crea Hotspot",
     "Connettiti a una rete WiFi esistente",
@@ -39921,28 +34574,13 @@ const char* const STRINGS_IT[] = {
     "o scansiona il codice QR con il tuo telefono:",
     "Calibre Wireless",
     "URL Web Calibre",
-    "Connetti come dispositivo wireless",
     "* = Criptata | + = Salvata",
     "Indirizzo MAC:",
     "Controllo WiFi in corso...",
     "Inserisci password WiFi",
-    "Inserisci testo",
     "a ",
-    "Ricerca Calibre in corso...",
-    "Connessione a ",
-    "Connesso a ",
-    "In attesa di comandi...",
-    "(Connessione fallita, nuovo tentativo)",
-    "Calibre disconnesso",
-    "In attesa di trasferimento...",
-    "Se il trasferimento fallisce, abilita\n'Ignora spazio libero' nelle impostazioni\ndel plugin SmartDevice di "
-    "Calibre.",
     "Ricezione in corso: ",
     "Ricevuto: ",
-    "In attesa di altro...",
-    "Impossibile creare il file",
-    "Password richiesta",
-    "Trasferimento interrotto",
     "1) Installa il plugin CrossPoint Reader",
     "2) Assicurati di essere sulla stessa rete WiFi",
     "3) In Calibre: \"Invia al dispositivo\"",
@@ -39955,47 +34593,31 @@ const char* const STRINGS_IT[] = {
     "Modalit\xC3"
     "\xA0"
     " copertina in sleep",
-    "Barra di stato",
     "Nascondi % batteria",
     "Spaziatura extra paragrafi",
     "Anti-Aliasing testo",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
     "Suppress",
     "Pressione breve tasto accensione",
     "Orientamento di lettura",
-    "Layout pulsanti frontali",
     "Layout pulsanti laterali (lettore)",
     "Front Button Layout (reader)",
     "Pressione lunga salta capitolo",
     "Famiglia di font del lettore",
-    "Font esterno lettore",
-    "Font cinese lettore",
-    "Font UI",
     "Dimensione font UI",
     "Interlinea lettore",
-    "Spaziatura lettere ASCII",
-    "Spaziatura cifre ASCII",
-    "Spaziatura CJK",
-    "Modalit\xC3"
-    "\xA0"
-    " colore",
     "Margine schermo lettore",
     "Allineamento paragrafo lettore",
     "Sillabazione",
     "Tempo prima di sospensione",
     "Show Hidden Files",
     "Frequenza di aggiornamento",
-    "Impostazioni Calibre",
     "Sincronizzazione KOReader",
     "Cerca aggiornamenti",
     "Lingua",
-    "Seleziona sfondo",
     "Svuota cache di lettura",
-    "Calibre",
     "Nome utente",
     "Password",
     "URL server di sincronizzazione",
@@ -40032,8 +34654,6 @@ const char* const STRINGS_IT[] = {
     "Nessuno",
     "Adatta",
     "Ritaglia",
-    "Nessun progresso",
-    "Intero",
     "Mai",
     "Nel lettore",
     "Sempre",
@@ -40052,9 +34672,6 @@ const char* const STRINGS_IT[] = {
     "\x86"
     "\xBA"
     "",
-    "Indtr, Conf, Sin, Des",
-    "Sin, Des, Indtr, Conf",
-    "Sin, Indtr, Conf, Des",
     "Prec/Succ",
     "Succ/Prec",
     "Bookerly",
@@ -40092,8 +34709,6 @@ const char* const STRINGS_IT[] = {
     "Aggiornamento fallito",
     "Aggiornamento completato",
     "Tenere premuto il pulsante d'accensione per riaccendere",
-    "Font esterno",
-    "Integrato (Disabilitato)",
     "Nessuna voce trovata",
     "Download in corso...",
     "Download fallito",
@@ -40104,7 +34719,6 @@ const char* const STRINGS_IT[] = {
     "Parsing feed fallito",
     "Rete: ",
     "Indirizzo IP: ",
-    "o scansiona il codice QR con lo smartphone per connetterti al WiFi.",
     "Errore: Fallimento generico",
     "Errore: Rete non trovata",
     "Errore: Timeout di connessione",
@@ -40118,9 +34732,6 @@ const char* const STRINGS_IT[] = {
     "\xC2"
     "\xAB"
     " Home",
-    "\xC2"
-    "\xAB"
-    " Salva",
     "Seleziona",
     "Selezionato",
     "Attiva/Disattiva",
@@ -40145,8 +34756,6 @@ const char* const STRINGS_IT[] = {
     "Gi\xC3"
     "\xB9"
     "",
-    "MAIUSC",
-    "maiusc",
     "OK",
     "Filtro copertina modalit\xC3"
     "\xA0"
@@ -40176,7 +34785,6 @@ const char* const STRINGS_IT[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Fix Sbiadimento da Luce Solare",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -40189,7 +34797,9 @@ const char* const STRINGS_IT[] = {
     "Browser OPDS",
     "Copertina + Personalizzato",
     "Page overlay",
-    "Recenti",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Libri Recenti",
     "Nessun libro recente",
     "Usa i trasferimenti wireless del dispositivo di Calibre",
@@ -40230,9 +34840,6 @@ const char* const STRINGS_IT[] = {
     "Capitolo: ",
     " pagine  |  ",
     "Libro: ",
-    "maiusc",
-    "MAIUSC",
-    "BLOCC",
     "Per Calibre, aggiungi /opds all'URL",
     "Sinistra/Destra: 1%  Su/Gi\xC3"
     "\xB9"
@@ -40607,10 +35214,8 @@ const char* const STRINGS_IT[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -40639,7 +35244,6 @@ const char* const STRINGS_PL[] = {
     "\xB3"
     "w",
     "Ustawienia",
-    "Biblioteka Calibre",
     "Wzn\xC3"
     "\xB3"
     "w czytanie",
@@ -40651,11 +35255,6 @@ const char* const STRINGS_PL[] = {
     "Zacznij czyta\xC4"
     "\x87"
     "",
-    "Ksi\xC4"
-    "\x85"
-    "\xC5"
-    "\xBC"
-    "ki",
     "Nie znaleziono plik\xC3"
     "\xB3"
     "w",
@@ -40698,32 +35297,6 @@ const char* const STRINGS_PL[] = {
     "\xC5"
     "\x81"
     "adowanie",
-    "B\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "d przy \xC5"
-    "\x82"
-    "adowaniu XTC",
-    "B\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "d przy \xC5"
-    "\x82"
-    "adowaniu TXT",
-    "B\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "d przy \xC5"
-    "\x82"
-    "adowaniu EPUB",
-    "B\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "d karty SD",
     "Sieci WiFi",
     "Nie znaleziono sieci",
     "Znaleziono %zu sieci",
@@ -40743,11 +35316,6 @@ const char* const STRINGS_PL[] = {
     "\xC4"
     "\x85"
     "czenie nieudane",
-    "Przekroczenie limitu czasu po\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czenia",
     "Zapomnie\xC4"
     "\x87"
     " sie\xC4"
@@ -40764,39 +35332,11 @@ const char* const STRINGS_PL[] = {
     "\xC4"
     "\x87"
     "?",
-    "Usun\xC4"
-    "\x85"
-    "\xC4"
-    "\x87"
-    " zapisane has\xC5"
-    "\x82"
-    "o?",
     "Naci\xC5"
     "\x9B"
     "nij OK aby skanowa\xC4"
     "\x87"
     " ponownie",
-    "Naci\xC5"
-    "\x9B"
-    "nij dowolny przycisk aby kontynuowa\xC4"
-    "\x87"
-    "",
-    "LEWO/PRAWO: Wybierz | OK: Potwierd\xC5"
-    "\xBA"
-    "",
-    "Chcia\xC5"
-    "\x82"
-    "by\xC5"
-    "\x9B"
-    " si\xC4"
-    "\x99"
-    " po\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czy\xC4"
-    "\x87"
-    "?",
     "Do\xC5"
     "\x82"
     "\xC4"
@@ -40851,15 +35391,6 @@ const char* const STRINGS_PL[] = {
     "\x85"
     "czenie z Calibre",
     "Calibre Web URL",
-    "Pod\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "cz si\xC4"
-    "\x99"
-    " jako urz\xC4"
-    "\x85"
-    "dzenie bezprzewodowe",
     "* = Zaszyfrowane | + = Zapisane",
     "Adres MAC:",
     "Sprawdzanie WiFi...",
@@ -40868,56 +35399,9 @@ const char* const STRINGS_PL[] = {
     " has\xC5"
     "\x82"
     "o WiFi",
-    "Wprowad\xC5"
-    "\xBA"
-    " tekst",
     "Z ",
-    "Odkrywanie Calibre...",
-    "\xC5"
-    "\x81"
-    "\xC4"
-    "\x85"
-    "czenie do ",
-    "Pod\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czony do ",
-    "Oczekiwanie na komendy...",
-    "(Po\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czenie nieudane, ponawiam)",
-    "Calibre roz\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czone",
-    "Oczekiwanie na transfer...",
-    "Je\xC5"
-    "\x9B"
-    "li transfer si\xC4"
-    "\x99"
-    " nie powiedzie, w\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "cz\n'Ignoruj wolne miejsce' w ustawieniach pluginu Calibre's\nSmartDevice.",
     "Odbieranie: ",
     "Odebrano: ",
-    "Oczekiwanie na wi\xC4"
-    "\x99"
-    "cej...",
-    "B\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "d tworzenia pliku",
-    "Wymagane has\xC5"
-    "\x82"
-    "o",
-    "Transfer przerwany",
     "1) Zainstaluj plugin CrossPoint Reader",
     "2) B\xC4"
     "\x85"
@@ -40942,7 +35426,6 @@ const char* const STRINGS_PL[] = {
     "Ok\xC5"
     "\x82"
     "adki wygaszacza",
-    "Status Bar",
     "Ukryj % baterii",
     "Dodatkowe odst\xC4"
     "\x99"
@@ -40952,8 +35435,6 @@ const char* const STRINGS_PL[] = {
     "Wyg\xC5"
     "\x82"
     "adzanie tekstu",
-    "Text Darkness",
-    "Extra Dark",
     "Obrazki",
     "Pokazuj",
     "Ramki",
@@ -40970,11 +35451,6 @@ const char* const STRINGS_PL[] = {
     "ad czytania",
     "Uk\xC5"
     "\x82"
-    "ad przednich przycisk\xC3"
-    "\xB3"
-    "w",
-    "Uk\xC5"
-    "\x82"
     "ad przycisk\xC3"
     "\xB3"
     "w bocznych",
@@ -40985,27 +35461,12 @@ const char* const STRINGS_PL[] = {
     "\x82"
     "",
     "Czcionka",
-    "Zewn\xC4"
-    "\x99"
-    "trzna czcionka czytnika",
-    "Czcionka czytnika",
-    "Czcionka UI",
     "Rozmiar czcionki",
     "Odst\xC4"
     "\x99"
     "py mi\xC4"
     "\x99"
     "dzy wierszami",
-    "Odst\xC4"
-    "\x99"
-    "py liter ASCII",
-    "Odst\xC4"
-    "\x99"
-    "py cyfr ASCII",
-    "Odst\xC4"
-    "\x99"
-    "py CJK",
-    "Tryb koloru",
     "Marginesy ekranu",
     "Wyjustowanie paragraf\xC3"
     "\xB3"
@@ -41016,7 +35477,9 @@ const char* const STRINGS_PL[] = {
     "Czas do u\xC5"
     "\x9B"
     "pienia",
-    "Show Hidden Files",
+    "Poka\xC5"
+    "\xBC"
+    " ukryte pliki",
     "Cz\xC4"
     "\x99"
     "stotliwo\xC5"
@@ -41028,7 +35491,6 @@ const char* const STRINGS_PL[] = {
     "wie\xC5"
     "\xBC"
     "ania",
-    "Ustawienia Calibre",
     "KOReader Sync",
     "Sprawd\xC5"
     "\xBA"
@@ -41036,9 +35498,6 @@ const char* const STRINGS_PL[] = {
     "J\xC4"
     "\x99"
     "zyk",
-    "Wybierz tapet\xC4"
-    "\x99"
-    "",
     "Wyczy\xC5"
     "\x9B"
     "\xC4"
@@ -41052,7 +35511,6 @@ const char* const STRINGS_PL[] = {
     "czn\xC4"
     "\x85"
     " czytnika",
-    "Calibre",
     "U\xC5"
     "\xBC"
     "ytkownik",
@@ -41169,12 +35627,6 @@ const char* const STRINGS_PL[] = {
     "Brak",
     "Dopasuj",
     "Przytnij",
-    "Brak post\xC4"
-    "\x99"
-    "pu",
-    "Pe\xC5"
-    "\x82"
-    "ny",
     "Nigdy",
     "W czytniku",
     "Zawsze",
@@ -41193,15 +35645,6 @@ const char* const STRINGS_PL[] = {
     "\xB3"
     "cony",
     "Poziomo L",
-    "Wstecz, Potwierd\xC5"
-    "\xBA"
-    ", Lewo, Prawo",
-    "Lewo, Prawo, Wstecz, Potwierd\xC5"
-    "\xBA"
-    "",
-    "Lewo, Wstecz, Potwierd\xC5"
-    "\xBA"
-    ", Prawo",
     "Poprz./Nast.",
     "Nast./Poprz.",
     "Bookerly",
@@ -41273,14 +35716,6 @@ const char* const STRINGS_PL[] = {
     "czy\xC4"
     "\x87"
     " ponownie",
-    "Czcionka zewn\xC4"
-    "\x99"
-    "trzna",
-    "Wbudowana (wy\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czona)",
     "Brak wpis\xC3"
     "\xB3"
     "w",
@@ -41319,15 +35754,6 @@ const char* const STRINGS_PL[] = {
     "\x87"
     ": ",
     "Adres IP: ",
-    "albo skanuj kod QR telefonem aby po\xC5"
-    "\x82"
-    "\xC4"
-    "\x85"
-    "czy\xC4"
-    "\x87"
-    " si\xC4"
-    "\x99"
-    " do Wifi.",
     "B\xC5"
     "\x82"
     "\xC4"
@@ -41361,9 +35787,6 @@ const char* const STRINGS_PL[] = {
     "\xC2"
     "\xAB"
     " Home",
-    "\xC2"
-    "\xAB"
-    " Zapisz",
     "Wybierz",
     "Wybrano",
     "Zmie\xC5"
@@ -41408,8 +35831,6 @@ const char* const STRINGS_PL[] = {
     "\xC5"
     "\x82"
     "",
-    "CAPS",
-    "caps",
     "OK",
     "Filtr ok\xC5"
     "\x82"
@@ -41485,7 +35906,6 @@ const char* const STRINGS_PL[] = {
     "o\xC5"
     "\x84"
     "ca",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -41502,7 +35922,9 @@ const char* const STRINGS_PL[] = {
     "\x82"
     "asne",
     "Page overlay",
-    "Ostatnie",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Ostatnio czytane",
     "Brak ostatnio czytanych",
     "Przesy\xC5"
@@ -41605,9 +36027,6 @@ const char* const STRINGS_PL[] = {
     "\xC5"
     "\xBC"
     "ka: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "Dla Calibre, dodaj /opds do adresu URL",
     "Lewo/Prawo: 1%  G\xC3"
     "\xB3"
@@ -42040,10 +36459,8 @@ const char* const STRINGS_PL[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -42068,11 +36485,9 @@ const char* const STRINGS_FI[] = {
     "Selaa tiedostoja",
     "Tiedostonsiirto",
     "Asetukset",
-    "Calibre-kirjasto",
     "Jatka lukemista",
     "Kirjaa ei valittu",
     "Aloita lukeminen",
-    "Kirjat",
     "Ei tiedostoja l\xC3"
     "\xB6"
     "ytynyt",
@@ -42091,16 +36506,6 @@ const char* const STRINGS_FI[] = {
     "Alueen ulkopuolella",
     "Ladataan...",
     "Ladataan",
-    "XTC:n lataus ep\xC3"
-    "\xA4"
-    "onnistui",
-    "TXT:n lataus ep\xC3"
-    "\xA4"
-    "onnistui",
-    "EPUB:n lataus ep\xC3"
-    "\xA4"
-    "onnistui",
-    "SD-korttivirhe",
     "WiFi-verkot",
     "Verkkoja ei l\xC3"
     "\xB6"
@@ -42122,22 +36527,11 @@ const char* const STRINGS_FI[] = {
     "Yhteys ep\xC3"
     "\xA4"
     "onnistui",
-    "Yhteys aikakatkaistiin",
     "Unohda verkko?",
     "Tallenna salasana seuraavaa kertaa varten?",
-    "Poista tallennettu salasana?",
     "Paina OK etsi\xC3"
     "\xA4"
     "ksesi uudelleen",
-    "Paina mit\xC3"
-    "\xA4"
-    " tahansa painiketta jatkaaksesi",
-    "VASEN/OIKEA: Valitse | OK: Vahvista",
-    "Miten haluat yhdist\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "?",
     "Liity verkkoon",
     "Luo yhteyspiste",
     "Yhdist\xC3"
@@ -42170,9 +36564,6 @@ const char* const STRINGS_FI[] = {
     "tai skannaa QR-koodi puhelimellasi:",
     "Calibre langaton",
     "Calibre-verkko-osoite",
-    "Yhdist\xC3"
-    "\xA4"
-    " langattomana laitteena",
     "* = Salattu | + = Tallennettu",
     "MAC-osoite:",
     "Tarkistetaan WiFi...",
@@ -42181,56 +36572,9 @@ const char* const STRINGS_FI[] = {
     "t\xC3"
     "\xA4"
     " WiFi-salasana",
-    "Sy\xC3"
-    "\xB6"
-    "t\xC3"
-    "\xA4"
-    " teksti",
     "verkkoon ",
-    "Etsit\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "n Calibrea...",
-    "Yhdistet\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "n: ",
-    "Yhdistetty: ",
-    "Odotetaan komentoja...",
-    "(Yhteys ep\xC3"
-    "\xA4"
-    "onnistui, yritet\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "n uudelleen)",
-    "Yhteys Calibreen katkaistiin",
-    "Odotetaan siirtoa...",
-    "Jos siirto ep\xC3"
-    "\xA4"
-    "onnistuu, ota k\xC3"
-    "\xA4"
-    "ytt\xC3"
-    "\xB6"
-    "\xC3"
-    "\xB6"
-    "n\n'Ignore free space' Calibren\nSmartDevice-lis\xC3"
-    "\xA4"
-    "osan asetuksissa.",
     "Vastaanotetaan: ",
     "Vastaanotettu: ",
-    "Odotetaan lis\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "...",
-    "Tiedoston luonti ep\xC3"
-    "\xA4"
-    "onnistui",
-    "Salasana vaaditaan",
-    "Siirto keskeytyi",
     "1) Asenna CrossPoint Reader -lis\xC3"
     "\xA4"
     "osa",
@@ -42275,7 +36619,6 @@ const char* const STRINGS_FI[] = {
     "yt\xC3"
     "\xB6"
     "n kansitila",
-    "Tilapalkki",
     "Piilota akun %",
     "Kappaleiden lis\xC3"
     "\xA4"
@@ -42283,30 +36626,18 @@ const char* const STRINGS_FI[] = {
     "\xA4"
     "li",
     "Tekstin reunanpehmennys",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
     "Suppress",
     "Lyhyt virtapainikkeen painallus",
     "Lukusuunta",
-    "Etupainikkeiden asettelu",
     "Sivupainikkeiden asettelu (lukija)",
     "Front Button Layout (reader)",
     "Pitk\xC3"
     "\xA4"
     " painallus: lukuhyppy",
     "Lukijan fonttiperhe",
-    "Ulkoinen lukijafontti",
-    "Lukijafontti",
-    "K\xC3"
-    "\xA4"
-    "ytt\xC3"
-    "\xB6"
-    "liittym\xC3"
-    "\xA4"
-    "fontti",
     "K\xC3"
     "\xA4"
     "ytt\xC3"
@@ -42317,18 +36648,6 @@ const char* const STRINGS_FI[] = {
     "Lukijan riviv\xC3"
     "\xA4"
     "li",
-    "ASCII-kirjainv\xC3"
-    "\xA4"
-    "li",
-    "ASCII-numerov\xC3"
-    "\xA4"
-    "li",
-    "CJK-v\xC3"
-    "\xA4"
-    "listys",
-    "V\xC3"
-    "\xA4"
-    "ritila",
     "Lukijan n\xC3"
     "\xA4"
     "ytt\xC3"
@@ -42341,19 +36660,16 @@ const char* const STRINGS_FI[] = {
     "P\xC3"
     "\xA4"
     "ivitystaajuus",
-    "Calibre-asetukset",
     "KOReader-synkronointi",
     "Tarkista p\xC3"
     "\xA4"
     "ivitykset",
     "Kieli",
-    "Valitse taustakuva",
     "Tyhjenn\xC3"
     "\xA4"
     " lukuv\xC3"
     "\xA4"
     "limuisti",
-    "Calibre",
     "K\xC3"
     "\xA4"
     "ytt\xC3"
@@ -42448,12 +36764,6 @@ const char* const STRINGS_FI[] = {
     "n",
     "Sovita",
     "Rajaa",
-    "Ei edistymist\xC3"
-    "\xA4"
-    "",
-    "T\xC3"
-    "\xA4"
-    "ysi",
     "Ei koskaan",
     "Lukijassa",
     "Aina",
@@ -42494,9 +36804,6 @@ const char* const STRINGS_FI[] = {
     "\xC3"
     "\xA4"
     "n",
-    "Tak, Vah, Vas, Oik",
-    "Vas, Oik, Tak, Vah",
-    "Vas, Tak, Vah, Oik",
     "Edell/Seur",
     "Seur/Edell",
     "Bookerly",
@@ -42572,18 +36879,6 @@ const char* const STRINGS_FI[] = {
     "\xC3"
     "\xA4"
     "ksesi",
-    "Ulkoinen fontti",
-    "Sis\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "nrakennettu (pois k\xC3"
-    "\xA4"
-    "yt\xC3"
-    "\xB6"
-    "st\xC3"
-    "\xA4"
-    ")",
     "Merkint\xC3"
     "\xB6"
     "j\xC3"
@@ -42618,11 +36913,6 @@ const char* const STRINGS_FI[] = {
     "onnistui",
     "Verkko: ",
     "IP-osoite: ",
-    "tai skannaa QR-koodi puhelimellasi yhdist\xC3"
-    "\xA4"
-    "\xC3"
-    "\xA4"
-    "ksesi WiFiin.",
     "Virhe: Yleinen virhe",
     "Virhe: Verkkoa ei l\xC3"
     "\xB6"
@@ -42638,9 +36928,6 @@ const char* const STRINGS_FI[] = {
     "\xC2"
     "\xAB"
     " Koti",
-    "\xC2"
-    "\xAB"
-    " Tallenna",
     "Valitse",
     "Selected",
     "Vaihda",
@@ -42675,8 +36962,6 @@ const char* const STRINGS_FI[] = {
     "\xB6"
     "s",
     "Alas",
-    "ISOT",
-    "pienet",
     "OK",
     "Lepotilan\xC3"
     "\xA4"
@@ -42714,7 +36999,6 @@ const char* const STRINGS_FI[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Auringonvalon haalistumiskorjaus",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -42733,9 +37017,9 @@ const char* const STRINGS_FI[] = {
     "OPDS-selain",
     "Kansi + mukautettu",
     "Page overlay",
-    "Viimeisimm\xC3"
-    "\xA4"
-    "t",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Viimeisimm\xC3"
     "\xA4"
     "t kirjat",
@@ -42798,9 +37082,6 @@ const char* const STRINGS_FI[] = {
     "Luku: ",
     " sivua  |  ",
     "Kirja: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "Calibrelle lis\xC3"
     "\xA4"
     "\xC3"
@@ -43239,10 +37520,8 @@ const char* const STRINGS_FI[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -43267,7 +37546,6 @@ const char* const STRINGS_DA[] = {
     "\xB8"
     "relse",
     "Indstillinger",
-    "Calibre bibliotek",
     "Forts\xC3"
     "\xA6"
     "t med at l\xC3"
@@ -43279,9 +37557,6 @@ const char* const STRINGS_DA[] = {
     "Start l\xC3"
     "\xA6"
     "sning nedenfor",
-    "B\xC3"
-    "\xB8"
-    "ger",
     "Ingen filer fundet",
     "V\xC3"
     "\xA6"
@@ -43306,16 +37581,6 @@ const char* const STRINGS_DA[] = {
     "Indl\xC3"
     "\xA6"
     "ser",
-    "Mislykkedes at indl\xC3"
-    "\xA6"
-    "se XTC",
-    "Mislykkedes at indl\xC3"
-    "\xA6"
-    "se TXT",
-    "Mislykkedes at indl\xC3"
-    "\xA6"
-    "se EPUB",
-    "SD kort fejl",
     "Tr\xC3"
     "\xA5"
     "dl\xC3"
@@ -43333,28 +37598,13 @@ const char* const STRINGS_DA[] = {
     "Forbinder...",
     "Forbundet!",
     "Forbindelsen mislykkedes",
-    "Forbindelses timeout",
     "Glem netv\xC3"
     "\xA6"
     "rk?",
     "Gem adgangskode til n\xC3"
     "\xA6"
     "ste gang?",
-    "Fjern gemt adgangskode?",
     "Tryk OK for at scanne igen",
-    "Tryk p\xC3"
-    "\xA5"
-    " en knap for at forts\xC3"
-    "\xA6"
-    "tte",
-    "VENSTRE/H\xC3"
-    "\x98"
-    "JRE: V\xC3"
-    "\xA6"
-    "lg | OK: Bekr\xC3"
-    "\xA6"
-    "ft",
-    "Hvordan vil du oprette forbindelse?",
     "Tilslut netv\xC3"
     "\xA6"
     "rk",
@@ -43377,49 +37627,13 @@ const char* const STRINGS_DA[] = {
     "eller scan QR-kode med din telefon:",
     "Calibre Wireless",
     "Calibre Web URL",
-    "Opret forbindelse som tr\xC3"
-    "\xA5"
-    "dl\xC3"
-    "\xB8"
-    "s enhed",
     "* = Krypteret | + = Gemt",
     "MAC-adresse:",
     "Tjekker WiFi...",
     "Indtast WiFi-adgangskode",
-    "Indtast tekst",
     "til ",
-    "Opdager Calibre...",
-    "Forbinder til ",
-    "Forbundet til ",
-    "Venter p\xC3"
-    "\xA5"
-    " kommandoer...",
-    "(Forbindelsen mislykkedes, pr\xC3"
-    "\xB8"
-    "ver igen)",
-    "Calibre afbrudt",
-    "Venter p\xC3"
-    "\xA5"
-    " overf\xC3"
-    "\xB8"
-    "relse...",
-    "Hvis overf\xC3"
-    "\xB8"
-    "rslen mislykkes, aktiver\n'Ignorer ledig plads' i Calibres\nSmartDevice-plugin-indstillinger.",
     "Modtager: ",
     "Modtaget: ",
-    "Venter p\xC3"
-    "\xA5"
-    " mere...",
-    "Kunne ikke oprette fil",
-    "Adgangskode p\xC3"
-    "\xA5"
-    "kr\xC3"
-    "\xA6"
-    "vet",
-    "Overf\xC3"
-    "\xB8"
-    "relse afbrudt",
     "1) Installer CrossPoint Reader-plugin",
     "2) V\xC3"
     "\xA6"
@@ -43448,12 +37662,9 @@ const char* const STRINGS_DA[] = {
     "Hvile-sk\xC3"
     "\xA6"
     "rm omslag-tilstand",
-    "Statuslinje",
     "Skjul batteri %",
     "Ekstra afsnitsafstand",
     "Tekst Anti-Aliasing",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
@@ -43466,7 +37677,6 @@ const char* const STRINGS_DA[] = {
     "L\xC3"
     "\xA6"
     "seretning",
-    "Knaplayout foran",
     "Knaplayout p\xC3"
     "\xA5"
     " siden (l\xC3"
@@ -43477,25 +37687,12 @@ const char* const STRINGS_DA[] = {
     "L\xC3"
     "\xA6"
     "ser skrifttype",
-    "Ekstern l\xC3"
-    "\xA6"
-    "serskrifttype",
-    "L\xC3"
-    "\xA6"
-    "serskrifttype",
-    "Brugergr\xC3"
-    "\xA6"
-    "nseflade skrifttype",
     "Brugergr\xC3"
     "\xA6"
     "nseflade skriftst\xC3"
     "\xB8"
     "rrelse",
     "Linjeafstand",
-    "ASCII bogstavafstand",
-    "ASCII cifreafstand",
-    "CJK afstand",
-    "Farvetilstand",
     "Sk\xC3"
     "\xA6"
     "rmmargen",
@@ -43504,19 +37701,14 @@ const char* const STRINGS_DA[] = {
     "Tid til hvile",
     "Show Hidden Files",
     "Opdateringsfrekvens",
-    "Calibre-indstillinger",
     "KOReader Sync",
     "S\xC3"
     "\xB8"
     "g efter opdateringer",
     "Sprog",
-    "V\xC3"
-    "\xA6"
-    "lg baggrundsbillede",
     "Ryd l\xC3"
     "\xA6"
     "secache",
-    "Calibre",
     "Brugernavn",
     "Adgangskode",
     "Synkroniseringsserver-URL",
@@ -43571,8 +37763,6 @@ const char* const STRINGS_DA[] = {
     "Besk\xC3"
     "\xA6"
     "r",
-    "Ingen fremskridt",
-    "Fuld",
     "Aldrig",
     "I l\xC3"
     "\xA6"
@@ -43589,9 +37779,6 @@ const char* const STRINGS_DA[] = {
     "Liggende med uret",
     "Inverteret",
     "Liggende mod uret",
-    "Bck, Cnfrm, Lft, Rght",
-    "Lft, Rght, Bck, Cnfrm",
-    "Lft, Bck, Cnfrm, Rght",
     "Forrige/N\xC3"
     "\xA6"
     "ste",
@@ -43651,8 +37838,6 @@ const char* const STRINGS_DA[] = {
     "nd/sluk-knappen nede for at t\xC3"
     "\xA6"
     "nde igen",
-    "Ekstern skrifttype",
-    "Indbygget (deaktiveret)",
     "Ingen poster fundet",
     "Downloader...",
     "Download mislykkedes",
@@ -43665,7 +37850,6 @@ const char* const STRINGS_DA[] = {
     "\xA6"
     "rk: ",
     "IP-adresse: ",
-    "eller scan QR-kode med din telefon for at oprette forbindelse til WiFi.",
     "Fejl: Generel fejl",
     "Fejl: Netv\xC3"
     "\xA6"
@@ -43681,9 +37865,6 @@ const char* const STRINGS_DA[] = {
     "\xC2"
     "\xAB"
     " Hjem",
-    "\xC2"
-    "\xAB"
-    " Gem",
     "V\xC3"
     "\xA6"
     "lg",
@@ -43716,8 +37897,6 @@ const char* const STRINGS_DA[] = {
     "jre",
     "Op",
     "Ned",
-    "CAPS",
-    "caps",
     "OK",
     "Hvile-sk\xC3"
     "\xA6"
@@ -43749,7 +37928,6 @@ const char* const STRINGS_DA[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Sollysfading-rettelse",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -43762,7 +37940,9 @@ const char* const STRINGS_DA[] = {
     "OPDS Browser",
     "Omslag + Brugerdefineret",
     "Page overlay",
-    "Seneste",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Seneste b\xC3"
     "\xB8"
     "ger",
@@ -43815,9 +37995,6 @@ const char* const STRINGS_DA[] = {
     "Kapitel: ",
     " sider  |  ",
     "Bog: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "Tilf\xC3"
     "\xB8"
     "j /opds til din URL for Calibre",
@@ -44200,10 +38377,8 @@ const char* const STRINGS_DA[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -44222,11 +38397,9 @@ const char* const STRINGS_NL[] = {
     "Bestanden bladeren",
     "Bestandsoverdracht",
     "Instellingen",
-    "Calibre Bibliotheek",
     "Verder lezen",
     "Geen geopend boek",
     "Begin hieronder met lezen",
-    "Boeken",
     "Geen bestanden gevonden",
     "Selecteer hoofdstuk",
     "Geen hoofdstukken",
@@ -44239,10 +38412,6 @@ const char* const STRINGS_NL[] = {
     "Buiten bereik",
     "Laden...",
     "Laden",
-    "Laden XTC mislukt",
-    "Laden TXT mislukt",
-    "Laden EPUB mislukt",
-    "SD-kaart fout",
     "Wifi-netwerken",
     "Geen netwerken gevonden",
     "%zu netwerken gevonden",
@@ -44250,14 +38419,9 @@ const char* const STRINGS_NL[] = {
     "Verbinden...",
     "Verbonden!",
     "Verbinding mislukt",
-    "Verbindingstime-out",
     "Netwerk vergeten?",
     "Wachtwoord opslaan voor volgende keer?",
-    "Opgeslagen wachtwoord verwijderen?",
     "Druk op OK om opnieuw te scannen",
-    "Druk op een knop om door te gaan",
-    "LINKS/RECHTS: Selecteer | OK: Bevestig",
-    "Hoe wil je verbinding maken?",
     "Verbind met netwerk",
     "Hotspot maken",
     "Verbind met een bestaand wifi-netwerk",
@@ -44270,27 +38434,13 @@ const char* const STRINGS_NL[] = {
     "of scan de QR-code met je telefoon:",
     "Calibre Wireless",
     "Calibre Web URL",
-    "Verbind als draadloos apparaat",
     "* = Beveiligd | + = Opgeslagen",
     "MAC-adres:",
     "Wifi controleren...",
     "Voer wifi-wachtwoord in",
-    "Tekst invoeren",
     "met ",
-    "Calibre zoeken...",
-    "Verbinden met ",
-    "Verbonden met ",
-    "Wachten op opdrachten...",
-    "(Verbinding mislukt, opnieuw proberen)",
-    "Calibre verbinding verbroken",
-    "Wachten op overdracht...",
-    "Als de overdracht mislukt, schakel dan\n'Ignore free space' in bij de Calibre\nSmartDevice plugin instellingen.",
     "Bezig met ontvangen: ",
     "Ontvangen: ",
-    "Wachten op meer...",
-    "Bestand aanmaken mislukt",
-    "Wachtwoord vereist",
-    "Overdracht onderbroken",
     "1) Installeer CrossPoint Reader plugin",
     "2) Gebruik hetzelfde wifi-netwerk",
     "3) In Calibre: \"Send to device\"",
@@ -44301,45 +38451,31 @@ const char* const STRINGS_NL[] = {
     "Systeem",
     "Slaapscherm",
     "Slaapscherm omslag-modus",
-    "Statusbalk",
     "Batterij % verbergen",
     "Extra regelafstand alinea",
     "Tekst Anti-Aliasing",
-    "Text Darkness",
-    "Extra Dark",
     "Images",
     "Display",
     "Placeholder",
     "Suppress",
     "Korte klik aan/uit-knop",
     "Leesstand",
-    "Indeling knoppen voorzijde",
     "Indeling zijknoppen (lezer)",
     "Front Button Layout (reader)",
     "Hoofdstuk overslaan (lang indrukken)",
     "Lettertype lezer",
-    "Extern lettertype lezer",
-    "Lettertype lezer",
-    "UI Lettertype",
     "Lettergrootte lezer",
     "Regelafstand lezer",
-    "ASCII Letterafstand",
-    "ASCII Cijferafstand",
-    "CJK Afstand",
-    "Kleurmodus",
     "Schermmarge lezer",
     "Uitlijning alinea lezer",
     "Woordafbreking",
     "Tijd tot slaapstand",
     "Show Hidden Files",
     "Verversingsfrequentie",
-    "Calibre instellingen",
     "KOReader Sync",
     "Controleren op updates",
     "Taal",
-    "Achtergrond selecteren",
     "Leescache wissen",
-    "Calibre",
     "Gebruikersnaam",
     "Wachtwoord",
     "Sync-server URL",
@@ -44378,8 +38514,6 @@ const char* const STRINGS_NL[] = {
     "Geen",
     "Passend",
     "Bijsnijden",
-    "Geen voortgang",
-    "Volledig",
     "Nooit",
     "In lezer",
     "Altijd",
@@ -44392,9 +38526,6 @@ const char* const STRINGS_NL[] = {
     "Liggend (rechtsom)",
     "Omgekeerd",
     "Liggend (linksom)",
-    "Terug, Bev., Links, Rechts",
-    "Links, Rechts, Terug, Bev.",
-    "Links, Terug, Bev., Rechts",
     "Vorige/Volgende",
     "Volgende/Vorige",
     "Bookerly",
@@ -44432,8 +38563,6 @@ const char* const STRINGS_NL[] = {
     "Update mislukt",
     "Update voltooid",
     "Houd de aan/uit-knop ingedrukt om in te schakelen",
-    "Extern lettertype",
-    "Ingebouwd (Uitgeschakeld)",
     "Geen items gevonden",
     "Downloaden...",
     "Download mislukt",
@@ -44444,7 +38573,6 @@ const char* const STRINGS_NL[] = {
     "Verwerken feed mislukt",
     "Netwerk: ",
     "IP-adres: ",
-    "of scan de QR-code met je telefoon voor wifi-verbinding.",
     "Fout: Algemene fout",
     "Fout: Netwerk niet gevonden",
     "Fout: Verbindingstime-out",
@@ -44458,9 +38586,6 @@ const char* const STRINGS_NL[] = {
     "\xC2"
     "\xAB"
     " Home",
-    "\xC2"
-    "\xAB"
-    " Opslaan",
     "Kies",
     "Selected",
     "Wissel",
@@ -44481,8 +38606,6 @@ const char* const STRINGS_NL[] = {
     "Rechts",
     "Omhoog",
     "Omlaag",
-    "CAPS",
-    "caps",
     "OK",
     "Slaapscherm omslag-filter",
     "Contrast",
@@ -44510,7 +38633,6 @@ const char* const STRINGS_NL[] = {
     "CrossPet Reader",
     "CrossPet Classic",
     "Zonlicht vervaging fix",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -44523,7 +38645,9 @@ const char* const STRINGS_NL[] = {
     "OPDS-browser",
     "Omslag + Aangepast",
     "Page overlay",
-    "Recent",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Recente boeken",
     "Geen recente boeken",
     "Gebruik Calibre draadloze overdracht",
@@ -44552,9 +38676,6 @@ const char* const STRINGS_NL[] = {
     "Hoofdstuk: ",
     " pagina's  |  ",
     "Boek: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
     "Voeg voor Calibre /opds toe aan de URL",
     "Links/Rechts: 1%  Omhoog/Omlaag: 10%",
     "Tijd synchroniseren...",
@@ -44929,10 +39050,8 @@ const char* const STRINGS_NL[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -44957,11 +39076,6 @@ const char* const STRINGS_TR[] = {
     "z At",
     "Dosya Transferi",
     "Ayarlar",
-    "Calibre K\xC3"
-    "\xBC"
-    "t\xC3"
-    "\xBC"
-    "phanesi",
     "Okumaya Devam Et",
     "A\xC3"
     "\xA7"
@@ -44979,7 +39093,6 @@ const char* const STRINGS_TR[] = {
     "lay\xC4"
     "\xB1"
     "n",
-    "Kitaplar",
     "Dosya bulunamad\xC4"
     "\xB1"
     "",
@@ -45036,18 +39149,6 @@ const char* const STRINGS_TR[] = {
     "Y\xC3"
     "\xBC"
     "kleniyor",
-    "XTC y\xC3"
-    "\xBC"
-    "klenemedi",
-    "TXT y\xC3"
-    "\xBC"
-    "klenemedi",
-    "EPUB y\xC3"
-    "\xBC"
-    "klenemedi",
-    "SD card hatas\xC4"
-    "\xB1"
-    "",
     "WiFi A\xC4"
     "\x9F"
     "lar\xC4"
@@ -45085,17 +39186,6 @@ const char* const STRINGS_TR[] = {
     "s\xC4"
     "\xB1"
     "z",
-    "Ba\xC4"
-    "\x9F"
-    "lant\xC4"
-    "\xB1"
-    " zaman a\xC5"
-    "\x9F"
-    "\xC4"
-    "\xB1"
-    "m\xC4"
-    "\xB1"
-    "",
     "A\xC4"
     "\x9F"
     "\xC4"
@@ -45104,35 +39194,11 @@ const char* const STRINGS_TR[] = {
     "\xC5"
     "\x9E"
     "ifre kaydedilsin mi?",
-    "Kay\xC4"
-    "\xB1"
-    "tl\xC4"
-    "\xB1"
-    " \xC5"
-    "\x9F"
-    "ifre silinsin mi?",
     "Tekrar taramak i\xC3"
     "\xA7"
     "in OK'e bas\xC4"
     "\xB1"
     "n",
-    "Devam etmek i\xC3"
-    "\xA7"
-    "in bir tu\xC5"
-    "\x9F"
-    "a bas\xC4"
-    "\xB1"
-    "n",
-    "SOL/SA\xC4"
-    "\x9E"
-    ": Se\xC3"
-    "\xA7"
-    " | OK: Onayla",
-    "Nas\xC4"
-    "\xB1"
-    "l ba\xC4"
-    "\x9F"
-    "lanmak istersiniz?",
     "Bir A\xC4"
     "\x9F"
     "a Kat\xC4"
@@ -45215,9 +39281,6 @@ const char* const STRINGS_TR[] = {
     "n:",
     "Calibre Kablosuz",
     "Calibre Web Adresi",
-    "Kablosuz Cihaz Olarak Ba\xC4"
-    "\x9F"
-    "lan",
     "* = \xC5"
     "\x9E"
     "ifreli | + = Kay\xC4"
@@ -45230,56 +39293,9 @@ const char* const STRINGS_TR[] = {
     "WiFi \xC5"
     "\x9E"
     "ifresini Girin",
-    "Metin Girin",
     "A\xC4"
     "\x9F"
     ": ",
-    "Calibre aran\xC4"
-    "\xB1"
-    "yor...",
-    "Ba\xC4"
-    "\x9F"
-    "lan\xC4"
-    "\xB1"
-    "l\xC4"
-    "\xB1"
-    "yor: ",
-    "Ba\xC4"
-    "\x9F"
-    "land\xC4"
-    "\xB1"
-    ": ",
-    "Komutlar bekleniyor...",
-    "(Ba\xC4"
-    "\x9F"
-    "lant\xC4"
-    "\xB1"
-    " ba\xC5"
-    "\x9F"
-    "ar\xC4"
-    "\xB1"
-    "s\xC4"
-    "\xB1"
-    "z, tekrar deneniyor)",
-    "Calibre ba\xC4"
-    "\x9F"
-    "lant\xC4"
-    "\xB1"
-    "s\xC4"
-    "\xB1"
-    " kesildi",
-    "Transfer bekleniyor...",
-    "Transfer ba\xC5"
-    "\x9F"
-    "ar\xC4"
-    "\xB1"
-    "s\xC4"
-    "\xB1"
-    "z olursa, Calibre\nSmartDevice eklenti ayarlar\xC4"
-    "\xB1"
-    "ndan\n'Ignore free space'i etkinle\xC5"
-    "\x9F"
-    "tirin.",
     "Al\xC4"
     "\xB1"
     "n\xC4"
@@ -45290,22 +39306,6 @@ const char* const STRINGS_TR[] = {
     "nd\xC4"
     "\xB1"
     ": ",
-    "Devam\xC4"
-    "\xB1"
-    " bekleniyor...",
-    "Dosya olu\xC5"
-    "\x9F"
-    "turulamad\xC4"
-    "\xB1"
-    "",
-    "\xC5"
-    "\x9E"
-    "ifre gerekli",
-    "Transfer kesintiye u\xC4"
-    "\x9F"
-    "rad\xC4"
-    "\xB1"
-    "",
     "1) CrossPoint Reader eklentisini kurun",
     "2) Ayn\xC4"
     "\xB1"
@@ -45340,11 +39340,6 @@ const char* const STRINGS_TR[] = {
     "Uyku Ekran\xC4"
     "\xB1"
     " Kapak Modu",
-    "Durum \xC3"
-    "\x87"
-    "ubu\xC4"
-    "\x9F"
-    "u",
     "Pil Y\xC3"
     "\xBC"
     "zdesini Gizle",
@@ -45356,8 +39351,6 @@ const char* const STRINGS_TR[] = {
     "Metin Yumu\xC5"
     "\x9F"
     "atma (AA)",
-    "Text Darkness",
-    "Extra Dark",
     "G\xC3"
     "\xB6"
     "rseller",
@@ -45386,11 +39379,6 @@ const char* const STRINGS_TR[] = {
     "n\xC3"
     "\xBC"
     "",
-    "\xC3"
-    "\x96"
-    "n Tu\xC5"
-    "\x9F"
-    " Dizilimi",
     "Yan Tu\xC5"
     "\x9F"
     " Dizilimi (okuyucu)",
@@ -45407,17 +39395,6 @@ const char* const STRINGS_TR[] = {
     "Okuyucu Yaz\xC4"
     "\xB1"
     " Tipi Ailesi",
-    "Harici Okuyucu Yaz\xC4"
-    "\xB1"
-    " Tipi",
-    "Okuyucu Yaz\xC4"
-    "\xB1"
-    " Tipi",
-    "Aray\xC3"
-    "\xBC"
-    "z Yaz\xC4"
-    "\xB1"
-    " Tipi",
     "Aray\xC3"
     "\xBC"
     "z Yaz\xC4"
@@ -45432,28 +39409,6 @@ const char* const STRINGS_TR[] = {
     "\xC4"
     "\xB1"
     "",
-    "ASCII Harf Aral\xC4"
-    "\xB1"
-    "\xC4"
-    "\x9F"
-    "\xC4"
-    "\xB1"
-    "",
-    "ASCII Rakam Aral\xC4"
-    "\xB1"
-    "\xC4"
-    "\x9F"
-    "\xC4"
-    "\xB1"
-    "",
-    "CJK Aral\xC4"
-    "\xB1"
-    "\xC4"
-    "\x9F"
-    "\xC4"
-    "\xB1"
-    "",
-    "Renk Modu",
     "Okuyucu Ekran Kenar Bo\xC5"
     "\x9F"
     "lu\xC4"
@@ -45470,7 +39425,11 @@ const char* const STRINGS_TR[] = {
     "me S\xC3"
     "\xBC"
     "resi",
-    "Show Hidden Files",
+    "Gizli Dosyalar\xC4"
+    "\xB1"
+    " G\xC3"
+    "\xB6"
+    "ster",
     "Yenileme S\xC4"
     "\xB1"
     "kl\xC4"
@@ -45480,29 +39439,16 @@ const char* const STRINGS_TR[] = {
     "\xC4"
     "\xB1"
     "",
-    "Calibre Ayarlar\xC4"
-    "\xB1"
-    "",
     "KOReader Senkronizasyonu",
     "G\xC3"
     "\xBC"
     "ncellemeleri denetle",
     "Dil",
-    "Duvar Ka\xC4"
-    "\x9F"
-    "\xC4"
-    "\xB1"
-    "d\xC4"
-    "\xB1"
-    " Se\xC3"
-    "\xA7"
-    "",
     "Okuma \xC3"
     "\x96"
     "nbelle\xC4"
     "\x9F"
     "ini Temizle",
-    "Calibre",
     "Kullan\xC4"
     "\xB1"
     "c\xC4"
@@ -45681,10 +39627,6 @@ const char* const STRINGS_TR[] = {
     "K\xC4"
     "\xB1"
     "rp",
-    "\xC4"
-    "\xB0"
-    "lerleme Yok",
-    "Tam",
     "Asla",
     "Okuyucuda",
     "Her Zaman",
@@ -45711,15 +39653,6 @@ const char* const STRINGS_TR[] = {
     "n\xC3"
     "\xBC"
     " Tersi)",
-    "Geri, Onayla, Sol, Sa\xC4"
-    "\x9F"
-    "",
-    "Sol, Sa\xC4"
-    "\x9F"
-    ", Geri, Onayla",
-    "Sol, Geri, Onayla, Sa\xC4"
-    "\x9F"
-    "",
     "\xC3"
     "\x96"
     "nceki/Sonraki",
@@ -45827,18 +39760,6 @@ const char* const STRINGS_TR[] = {
     "l\xC4"
     "\xB1"
     " tutun",
-    "Harici Yaz\xC4"
-    "\xB1"
-    " Tipi",
-    "Yerle\xC5"
-    "\x9F"
-    "ik (Devre D\xC4"
-    "\xB1"
-    "\xC5"
-    "\x9F"
-    "\xC4"
-    "\xB1"
-    ")",
     "Girdi bulunamad\xC4"
     "\xB1"
     "",
@@ -45891,13 +39812,6 @@ const char* const STRINGS_TR[] = {
     "\x9F"
     ": ",
     "IP Adresi: ",
-    "veya WiFi'ye ba\xC4"
-    "\x9F"
-    "lanmak i\xC3"
-    "\xA7"
-    "in QR kodu taray\xC4"
-    "\xB1"
-    "n.",
     "Hata: Genel hata",
     "Hata: A\xC4"
     "\x9F"
@@ -45933,9 +39847,6 @@ const char* const STRINGS_TR[] = {
     "\xC2"
     "\xAB"
     " Ana Sayfa",
-    "\xC2"
-    "\xAB"
-    " Kaydet",
     "Se\xC3"
     "\xA7"
     "",
@@ -45990,18 +39901,6 @@ const char* const STRINGS_TR[] = {
     "\xC4"
     "\xB1"
     "",
-    "B\xC3"
-    "\x9C"
-    "Y\xC3"
-    "\x9C"
-    "K",
-    "k\xC3"
-    "\xBC"
-    "\xC3"
-    "\xA7"
-    "\xC3"
-    "\xBC"
-    "k",
     "Tamam",
     "Uyku Ekran\xC4"
     "\xB1"
@@ -46119,7 +40018,6 @@ const char* const STRINGS_TR[] = {
     " Solma D\xC3"
     "\xBC"
     "zeltmesi",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -46144,7 +40042,9 @@ const char* const STRINGS_TR[] = {
     "\x96"
     "zel",
     "Page overlay",
-    "Son Okunanlar",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
     "Son Kitaplar",
     "Son okunan kitap yok",
     "Calibre kablosuz cihaz transferini kullan",
@@ -46249,15 +40149,6 @@ const char* const STRINGS_TR[] = {
     "m: ",
     " sayfa  |  ",
     "Kitap: ",
-    "shift",
-    "\xC3"
-    "\x9C"
-    "ST",
-    "K\xC4"
-    "\xB0"
-    "L\xC4"
-    "\xB0"
-    "T",
     "Calibre i\xC3"
     "\xA7"
     "in URL'nize /opds ekleyin",
@@ -46716,10 +40607,8089 @@ const char* const STRINGS_TR[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
+    "What to show when device sleeps",
+    "Reader text font",
+    "Reader text size",
+    "Screen rotation for reading",
+    "Break words at line ends",
+    "Use book's own CSS styling",
+    "Hide battery % in header",
+    "Idle time before entering sleep",
+};
+
+const char* const STRINGS_KK[] = {
+    "CrossPoint",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\x95"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\x99"
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xAB"
+    " \xD0"
+    "\xA0"
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\x9C"
+    "\xD0"
+    "\x86"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB6"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x8F"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    " \xD1"
+    "\x84"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "",
+    "\xD0"
+    "\xA8"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "",
+    "WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "%zu \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x86"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\xB1"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "?",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    " \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "?",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " OK \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " URL \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    " http://",
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " QR \xD0"
+    "\xBA"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    ":",
+    "Calibre \xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "Calibre Web URL",
+    "* = \xD0"
+    "\xA8"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " | + = \xD0"
+    "\xA1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "MAC \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    ":",
+    "WiFi \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "WiFi \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "to ",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    ": ",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    ": ",
+    "1) CrossPoint Reader \xD0"
+    "\xBF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "2) \xD0"
+    "\x91"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "3) Calibre-\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    ": \"\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB6"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "\"",
+    "\"\xD0"
+    "\x96"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "\"",
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB5"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBC"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    " \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x8F"
+    " % \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9C"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    " (\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    ")",
+    "Front Button Layout (reader)",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x81"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBF"
+    " \xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "Show Hidden Files",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "",
+    "KOReader \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    " URL",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "",
+    "KOReader \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "KOReader \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "WiFi \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "...",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "!",
+    "KOReader \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "KOReader \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    ".",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    ".",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD1"
+    "\x8D"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD3"
+    "\xA8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9C"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x95"
+    "\xD1"
+    "\x88"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x95"
+    "\xD1"
+    "\x88"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD3"
+    "\x98"
+    "\xD1"
+    "\x80"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "Screen Refresh",
+    "Block Front",
+    "\xD0"
+    "\xA2"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    " (\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    ")",
+    "\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    " (\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    ")",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "/\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "/\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "Bookerly",
+    "Lexend",
+    "Open Dyslexic",
+    "Bokerlam",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD3"
+    "\xA8"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "",
+    "1 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "5 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "10 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "15 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "30 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "1 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "5 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "10 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "15 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "30 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "!",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBD"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    ": ",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBD"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    ": ",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x8F"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBF"
+    " \xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ":",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    " URL \xD0"
+    "\xBA"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    ": ",
+    "IP \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    ": ",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ": \xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ": \xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ": \xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "",
+    "SD \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xC2"
+    "\xAB"
+    " \xD0"
+    "\x90"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xC2"
+    "\xAB"
+    " \xD0"
+    "\xA8"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x83"
+    "",
+    "\xC2"
+    "\xAB"
+    " \xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x98"
+    "\xD3"
+    "\x99"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\x9E"
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\xAB"
+    "",
+    "\xD3"
+    "\xA8"
+    "\xD0"
+    "\xA8"
+    "\xD0"
+    "\x86"
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\x86"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD0"
+    "\x9A"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBC"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    " \xD1"
+    "\x81"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "21-\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x8F"
+    "",
+    "Reading Time Estimate",
+    "Session Timer",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x81"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "",
+    "Lyra",
+    "Lyra \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "CrossPet Reader",
+    "CrossPet Classic",
+    "\xD0"
+    "\x9A"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "Keep Clock Alive",
+    "Off",
+    "Sleep Refresh",
+    "1 min",
+    "5 min",
+    "10 min",
+    "30 min",
+    "60 min",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "OPDS \xD1"
+    "\x88"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9C"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    " + \xD3"
+    "\xA8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "Page overlay",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
+    "\xD0"
+    "\x96"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "Calibre \xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\xB1"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB6"
+    "\xD3"
+    "\x99"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8E"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "?",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "Calibre \xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD3"
+    "\x98"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD3"
+    "\x98"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x80"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    " \xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    ": \xD3"
+    "\x98"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    ": \xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    " (1-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " (2-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    " (3-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    " (4-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "%-\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8E"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8E"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " QR \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBA"
+    "\xD3"
+    "\xA9"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    ": ",
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "  |  ",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    ": ",
+    "Calibre \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " URL-\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    " /opds \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "/\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    ": 1%  \xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "/\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    ": 10%",
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x85"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x85"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\xA2"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " KOReader \xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    ":",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    ":",
+    "%d-\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    ", \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    " %.2f%%",
+    "%d/%d-\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    ", \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    " %.2f%%",
+    "  \xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    ": %s",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "?",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " ",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8C"
+    "",
+    "OPDS \xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    " URL",
+    "\xD0"
+    "\xA2"
+    "\xD2"
+    "\xAF"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "[\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "]",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xB2"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    ": ",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xB2"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    " (\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    ")",
+    "Auto Page Turn",
+    "1 page/min",
+    "3 pages/min",
+    "6 pages/min",
+    "12 pages/min",
+    "Apps",
+    "Clock",
+    "Pomodoro",
+    "Daily Quote",
+    "Conference Badge",
+    "Connect WiFi to sync time",
+    "Place quotes.txt on SD card",
+    "Place badge.txt on SD card",
+    "Setup Badge",
+    "Name",
+    "Title / Role",
+    "QR Data (URL)",
+    "Badge saved!",
+    "Edit",
+    "(Built-in quote)",
+    "Ready",
+    "Focus",
+    "Short Break",
+    "Long Break",
+    "Paused",
+    "Start",
+    "Pause",
+    "Resume",
+    "Skip",
+    "Bluetooth Remote",
+    "Auto-connect BT",
+    "Pair Remote",
+    "Scanning...",
+    "Connecting...",
+    "Connected",
+    "Not connected",
+    "No devices found",
+    "Paired: %s",
+    "Forget Device",
+    "Forget paired remote?",
+    "Learn Keys",
+    "Press NEXT on remote",
+    "Press PREV on remote",
+    "Keys learned!",
+    "Presenter Pen",
+    "Waiting for connection...",
+    "Pair this device as a Bluetooth keyboard",
+    "Right ->",
+    "Next slide",
+    "<- Left",
+    "Prev slide",
+    "OK",
+    "Start (F5)",
+    "Back",
+    "End (Esc)",
+    "Next >",
+    "< Prev",
+    "F5",
+    "Esc",
+    "My Pet",
+    "Hunger",
+    "Pet",
+    "Health",
+    "Egg",
+    "Hatchling",
+    "Youngster",
+    "Companion",
+    "Elder",
+    "Your pet has passed...",
+    "Hatch New Egg?",
+    "No pet yet",
+    "Hatch Egg?",
+    "Weight",
+    "Discipline",
+    "Mistakes",
+    "Sleeping",
+    "Sick",
+    "Dirty",
+    "Needs attention!",
+    "Scholarly Young",
+    "Wild Youngster",
+    "Scholar",
+    "Wild Companion",
+    "Nom nom! +Hunger",
+    "Yummy! +Happy",
+    "Feeling better~",
+    "Great workout!",
+    "All clean!",
+    "Good discipline!",
+    "That was mean...",
+    "Good training!",
+    "Feeling neglected...",
+    "Goodnight~",
+    "Lights on!",
+    "Your pet lived a full life. Farewell~",
+    "Your pet has passed from neglect...",
+    "Too sick to eat...",
+    "Shh... sleeping",
+    "Not ready yet...",
+    "Feed Meal",
+    "Feed Snack",
+    "Medicine",
+    "Exercise",
+    "Clean",
+    "Scold",
+    "Ignore",
+    "Lights",
+    "Pet",
+    "Rename",
+    "Change Type",
+    "Pet Name",
+    "Select Pet Type",
+    "Chicken",
+    "Cat",
+    "Dog",
+    "Dragon",
+    "Bunny",
+    "Robot",
+    "Bear",
+    "Slime",
+    "Chapter Complete!",
+    "%ud",
+    "Daily goal reached!",
+    "Streak up! %u days",
+    "%lu pages read!",
+    "%s: Feed me! Read more",
+    "%s: I miss you...",
+    "%s: I feel sick...",
+    "%s: Play with me!",
+    "%s: Zzz...",
+    "%s: %ud streak!",
+    "%s: Let's read!",
+    "%s: Read with me~",
+    "No pet!",
+    "Not sick!",
+    "Already clean!",
+    "Too sick to exercise",
+    "Nothing to ignore",
+    "Hey! That's not fair...",
+    "Read 20 pages",
+    "Pet 3 times",
+    "Keep fed (>40%)",
+    "%s (%s)  |  Day %lu  |  Streak %u",
+    "%s %s  |  Day %lu  |  Streak %u",
+    "%s  |  Day %lu  |  Streak %u",
+    "Photo Frame",
+    "Maze",
+    "Game of Life",
+    "New Maze",
+    "Snake",
+    "2048",
+    "New Game",
+    "Reading Stats",
+    "TODAY",
+    "ALL TIME",
+    "LAST BOOK",
+    "Sessions",
+    "Finished",
+    "Streak",
+    "Best",
+    "%ud",
+    "No books read yet",
+    "Game Over!",
+    "You Win!",
+    "Score: %lu    Best: %lu",
+    "Score:%d Hi:%d",
+    "Up/Down: speed",
+    "Done! %d moves",
+    "Moves: %d",
+    "Gen %lu",
+    "Mistakes: %d",
+    "No photos found",
+    "Place .bmp files in /sleep/",
+    "Happy",
+    "Reading",
+    "Feed me~",
+    "Need medicine...",
+    "It's dirty...",
+    "So bored...",
+    "Hey!",
+    "Not feeling well...",
+    "Zzz...",
+    "Purr~",
+    "Sweet dreams",
+    "Dreaming...",
+    "Hungry...",
+    "Read more!",
+    "%s | %d alive",
+    "Fast",
+    "Med",
+    "Slow",
+    "Slowest",
+    "Sudoku",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Completed!",
+    "1-9",
+    "Minesweeper",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Mines: %d",
+    "Reveal",
+    "Flag",
+    "Caro",
+    "Turn: X",
+    "Turn: O",
+    "X Wins!",
+    "O Wins!",
+    "Draw!",
+    "Place",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Select Difficulty",
+    "Chess",
+    "White's Turn",
+    "Black's Turn",
+    "White Wins!",
+    "Black Wins!",
+    "Select",
+    "Move",
+    "Set Time",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "S",
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "Lunar",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Hour",
+    "Minute",
+    "Day",
+    "Month",
+    "Year",
+    "Sync time via WiFi",
+    "Weather",
+    "Fetching weather...",
+    "Temperature",
+    "\xC2"
+    "\xB0"
+    "C",
+    "\xC2"
+    "\xB0"
+    "F",
+    "Failed to load weather",
+    "Feels like",
+    "Humidity",
+    "Wind",
+    "Refresh",
+    "City",
+    "Clear sky",
+    "Partly cloudy",
+    "Fog",
+    "Drizzle",
+    "Rain",
+    "Snow",
+    "Showers",
+    "Thunderstorm",
+    "Updated",
+    "News",
+    "Loading news...",
+    "Failed to load news",
+    "No articles found",
+    "Focus:",
+    "Short break:",
+    "Long break:",
+    "%s %2lu min",
+    "Start >",
+    "Location",
+    "Home clock",
+    "Home weather",
+    "Home pet status",
+    "Reading Stats",
+    "RECENTLY READ",
+    "Today",
+    "Total",
+    "Sessions",
+    "EST. LEFT",
+    "TIME READ",
+    "%d times",
+    "%d min",
+    "%dh %dm",
+    "Sync",
+    "Sync OK",
+    "WiFi timeout",
+    "API error %d",
+    "Sleep Image",
+    "Image selected!",
+    "No .bmp files found",
+    "Place .bmp files in /sleep/",
+    "Any (random)",
+    "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
+    "Page starred",
+    "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
+    "Updates clock during sleep. Drains ~3-4mA battery",
+    "How often sleep screen updates. Needs Keep Clock Alive",
+    "Compensates for sunlight-induced e-ink fading",
+    "Full refresh every N pages. Less = faster but more ghosting",
+    "Smoother text edges using grayscale",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -46784,12 +48754,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xB7"
     "t",
-    "Th\xC6"
-    "\xB0"
-    " vi\xE1"
-    "\xBB"
-    "\x87"
-    "n Calibre",
     "\xC4"
     "\x90"
     "\xE1"
@@ -46830,9 +48794,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9B"
     "i",
-    "S\xC3"
-    "\xA1"
-    "ch",
     "Kh\xC3"
     "\xB4"
     "ng t\xC3"
@@ -46935,52 +48896,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA3"
     "i",
-    "Kh\xC3"
-    "\xB4"
-    "ng t\xE1"
-    "\xBA"
-    "\xA3"
-    "i \xC4"
-    "\x91"
-    "\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\xA3"
-    "c XTC",
-    "Kh\xC3"
-    "\xB4"
-    "ng t\xE1"
-    "\xBA"
-    "\xA3"
-    "i \xC4"
-    "\x91"
-    "\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\xA3"
-    "c TXT",
-    "Kh\xC3"
-    "\xB4"
-    "ng t\xE1"
-    "\xBA"
-    "\xA3"
-    "i \xC4"
-    "\x91"
-    "\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\xA3"
-    "c EPUB",
-    "L\xE1"
-    "\xBB"
-    "\x97"
-    "i th\xE1"
-    "\xBA"
-    "\xBB"
-    " SD",
     "M\xE1"
     "\xBA"
     "\xA1"
@@ -47043,19 +48958,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA1"
     "i",
-    "H\xE1"
-    "\xBA"
-    "\xBF"
-    "t th\xE1"
-    "\xBB"
-    "\x9D"
-    "i gian k\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i",
     "Qu\xC3"
     "\xAA"
     "n m\xE1"
@@ -47073,21 +48975,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA9"
     "u?",
-    "X\xC3"
-    "\xB3"
-    "a m\xE1"
-    "\xBA"
-    "\xAD"
-    "t kh\xE1"
-    "\xBA"
-    "\xA9"
-    "u \xC4"
-    "\x91"
-    "\xC3"
-    "\xA3"
-    " l\xC6"
-    "\xB0"
-    "u?",
     "Nh\xE1"
     "\xBA"
     "\xA5"
@@ -47102,61 +48989,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA1"
     "i",
-    "Nh\xE1"
-    "\xBA"
-    "\xA5"
-    "n n\xC3"
-    "\xBA"
-    "t b\xE1"
-    "\xBA"
-    "\xA5"
-    "t k\xE1"
-    "\xBB"
-    "\xB3"
-    " \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x83"
-    " ti\xE1"
-    "\xBA"
-    "\xBF"
-    "p t\xE1"
-    "\xBB"
-    "\xA5"
-    "c",
-    "TR\xC3"
-    "\x81"
-    "I/PH\xE1"
-    "\xBA"
-    "\xA2"
-    "I: Ch\xE1"
-    "\xBB"
-    "\x8D"
-    "n | OK: X\xC3"
-    "\xA1"
-    "c nh\xE1"
-    "\xBA"
-    "\xAD"
-    "n",
-    "B\xE1"
-    "\xBA"
-    "\xA1"
-    "n mu\xE1"
-    "\xBB"
-    "\x91"
-    "n k\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i th\xE1"
-    "\xBA"
-    "\xBF"
-    " n\xC3"
-    "\xA0"
-    "o?",
     "K\xE1"
     "\xBA"
     "\xBF"
@@ -47301,23 +49133,6 @@ const char* const STRINGS_VI[] = {
     "\xA2"
     "y",
     "URL Web Calibre",
-    "K\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i thi\xE1"
-    "\xBA"
-    "\xBF"
-    "t b\xE1"
-    "\xBB"
-    "\x8B"
-    " kh\xC3"
-    "\xB4"
-    "ng d\xC3"
-    "\xA2"
-    "y",
     "* = M\xC3"
     "\xA3"
     " h\xC3"
@@ -47354,142 +49169,12 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA9"
     "u WiFi",
-    "Nh\xE1"
-    "\xBA"
-    "\xAD"
-    "p v\xC4"
-    "\x83"
-    "n b\xE1"
-    "\xBA"
-    "\xA3"
-    "n",
     "\xC4"
     "\x91"
     "\xE1"
     "\xBA"
     "\xBF"
     "n ",
-    "\xC4"
-    "\x90"
-    "ang t\xC3"
-    "\xAC"
-    "m Calibre...",
-    "\xC4"
-    "\x90"
-    "ang k\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i t\xE1"
-    "\xBB"
-    "\x9B"
-    "i ",
-    "\xC4"
-    "\x90"
-    "\xC3"
-    "\xA3"
-    " k\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i t\xE1"
-    "\xBB"
-    "\x9B"
-    "i ",
-    "\xC4"
-    "\x90"
-    "ang ch\xE1"
-    "\xBB"
-    "\x9D"
-    " l\xE1"
-    "\xBB"
-    "\x87"
-    "nh...",
-    "(K\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i th\xE1"
-    "\xBA"
-    "\xA5"
-    "t b\xE1"
-    "\xBA"
-    "\xA1"
-    "i, \xC4"
-    "\x91"
-    "ang th\xE1"
-    "\xBB"
-    "\xAD"
-    " l\xE1"
-    "\xBA"
-    "\xA1"
-    "i)",
-    "Calibre \xC4"
-    "\x91"
-    "\xC3"
-    "\xA3"
-    " ng\xE1"
-    "\xBA"
-    "\xAF"
-    "t k\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i",
-    "\xC4"
-    "\x90"
-    "ang ch\xE1"
-    "\xBB"
-    "\x9D"
-    " truy\xE1"
-    "\xBB"
-    "\x81"
-    "n t\xE1"
-    "\xBB"
-    "\x87"
-    "p...",
-    "N\xE1"
-    "\xBA"
-    "\xBF"
-    "u th\xE1"
-    "\xBA"
-    "\xA5"
-    "t b\xE1"
-    "\xBA"
-    "\xA1"
-    "i, b\xE1"
-    "\xBA"
-    "\xAD"
-    "t\n'B\xE1"
-    "\xBB"
-    "\x8F"
-    " qua dung l\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\xA3"
-    "ng tr\xE1"
-    "\xBB"
-    "\x91"
-    "ng' trong\nc\xC3"
-    "\xA0"
-    "i \xC4"
-    "\x91"
-    "\xE1"
-    "\xBA"
-    "\xB7"
-    "t plugin SmartDevice c\xE1"
-    "\xBB"
-    "\xA7"
-    "a Calibre.",
     "\xC4"
     "\x90"
     "ang nh\xE1"
@@ -47504,59 +49189,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xAD"
     "n: ",
-    "\xC4"
-    "\x90"
-    "ang ch\xE1"
-    "\xBB"
-    "\x9D"
-    " th\xC3"
-    "\xAA"
-    "m...",
-    "Kh\xC3"
-    "\xB4"
-    "ng t\xE1"
-    "\xBA"
-    "\xA1"
-    "o \xC4"
-    "\x91"
-    "\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\xA3"
-    "c t\xE1"
-    "\xBB"
-    "\x87"
-    "p",
-    "Y\xC3"
-    "\xAA"
-    "u c\xE1"
-    "\xBA"
-    "\xA7"
-    "u m\xE1"
-    "\xBA"
-    "\xAD"
-    "t kh\xE1"
-    "\xBA"
-    "\xA9"
-    "u",
-    "Truy\xE1"
-    "\xBB"
-    "\x81"
-    "n t\xE1"
-    "\xBB"
-    "\x87"
-    "p b\xE1"
-    "\xBB"
-    "\x8B"
-    " gi\xC3"
-    "\xA1"
-    "n \xC4"
-    "\x91"
-    "o\xE1"
-    "\xBA"
-    "\xA1"
-    "n",
     "1) C\xC3"
     "\xA0"
     "i plugin CrossPoint Reader",
@@ -47647,12 +49279,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xA7"
     "",
-    "Thanh tr\xE1"
-    "\xBA"
-    "\xA1"
-    "ng th\xC3"
-    "\xA1"
-    "i",
     "\xE1"
     "\xBA"
     "\xA8"
@@ -47678,29 +49304,6 @@ const char* const STRINGS_VI[] = {
     "ng c\xC6"
     "\xB0"
     "a",
-    "\xC4"
-    "\x90"
-    "\xE1"
-    "\xBB"
-    "\x99"
-    " \xC4"
-    "\x91"
-    "\xE1"
-    "\xBA"
-    "\xAD"
-    "m ch\xE1"
-    "\xBB"
-    "\xAF"
-    "",
-    "R\xE1"
-    "\xBA"
-    "\xA5"
-    "t \xC4"
-    "\x91"
-    "\xE1"
-    "\xBA"
-    "\xAD"
-    "m",
     "H\xC3"
     "\xAC"
     "nh \xE1"
@@ -47745,19 +49348,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x8D"
     "c",
-    "B\xE1"
-    "\xBB"
-    "\x91"
-    " tr\xC3"
-    "\xAD"
-    " n\xC3"
-    "\xBA"
-    "t tr\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\x9B"
-    "c",
     "N\xC3"
     "\xBA"
     "t b\xC3"
@@ -47797,34 +49387,6 @@ const char* const STRINGS_VI[] = {
     "c s\xC3"
     "\xA1"
     "ch",
-    "Ph\xC3"
-    "\xB4"
-    "ng ch\xE1"
-    "\xBB"
-    "\xAF"
-    " ngo\xC3"
-    "\xA0"
-    "i",
-    "Ph\xC3"
-    "\xB4"
-    "ng ch\xE1"
-    "\xBB"
-    "\xAF"
-    " \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x8D"
-    "c",
-    "Ph\xC3"
-    "\xB4"
-    "ng ch\xE1"
-    "\xBB"
-    "\xAF"
-    " giao di\xE1"
-    "\xBB"
-    "\x87"
-    "n",
     "C\xE1"
     "\xBB"
     "\xA1"
@@ -47840,35 +49402,6 @@ const char* const STRINGS_VI[] = {
     "n d\xC3"
     "\xB2"
     "ng",
-    "Gi\xC3"
-    "\xA3"
-    "n ch\xE1"
-    "\xBB"
-    "\xAF"
-    " ASCII",
-    "Gi\xC3"
-    "\xA3"
-    "n s\xE1"
-    "\xBB"
-    "\x91"
-    " ASCII",
-    "Gi\xC3"
-    "\xA3"
-    "n ch\xE1"
-    "\xBB"
-    "\xAF"
-    " CJK",
-    "Ch\xE1"
-    "\xBA"
-    "\xBF"
-    " \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x99"
-    " m\xC3"
-    "\xA0"
-    "u",
     "L\xE1"
     "\xBB"
     "\x81"
@@ -47922,14 +49455,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9B"
     "i",
-    "C\xC3"
-    "\xA0"
-    "i \xC4"
-    "\x91"
-    "\xE1"
-    "\xBA"
-    "\xB7"
-    "t Calibre",
     "\xC4"
     "\x90"
     "\xE1"
@@ -47955,15 +49480,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xAF"
     "",
-    "Ch\xE1"
-    "\xBB"
-    "\x8D"
-    "n h\xC3"
-    "\xAC"
-    "nh n\xE1"
-    "\xBB"
-    "\x81"
-    "n",
     "X\xC3"
     "\xB3"
     "a b\xE1"
@@ -47978,7 +49494,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x87"
     "m",
-    "Calibre",
     "T\xC3"
     "\xAA"
     "n ng\xC6"
@@ -48331,20 +49846,6 @@ const char* const STRINGS_VI[] = {
     "t",
     "Kh\xC3"
     "\xB4"
-    "ng ti\xE1"
-    "\xBA"
-    "\xBF"
-    "n tr\xC3"
-    "\xAC"
-    "nh",
-    "To\xC3"
-    "\xA0"
-    "n ph\xE1"
-    "\xBA"
-    "\xA7"
-    "n",
-    "Kh\xC3"
-    "\xB4"
     "ng bao gi\xE1"
     "\xBB"
     "\x9D"
@@ -48403,30 +49904,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x8B"
     "ch",
-    "L\xC3"
-    "\xB9"
-    "i, OK, Tr\xC3"
-    "\xA1"
-    "i, Ph\xE1"
-    "\xBA"
-    "\xA3"
-    "i",
-    "Tr\xC3"
-    "\xA1"
-    "i, Ph\xE1"
-    "\xBA"
-    "\xA3"
-    "i, L\xC3"
-    "\xB9"
-    "i, OK",
-    "Tr\xC3"
-    "\xA1"
-    "i, L\xC3"
-    "\xB9"
-    "i, OK, Ph\xE1"
-    "\xBA"
-    "\xA3"
-    "i",
     "Tr\xC6"
     "\xB0"
     "\xE1"
@@ -48635,23 +50112,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA1"
     "i",
-    "Ph\xC3"
-    "\xB4"
-    "ng ch\xE1"
-    "\xBB"
-    "\xAF"
-    " ngo\xC3"
-    "\xA0"
-    "i",
-    "T\xC3"
-    "\xAD"
-    "ch h\xE1"
-    "\xBB"
-    "\xA3"
-    "p (T\xE1"
-    "\xBA"
-    "\xAF"
-    "t)",
     "Kh\xC3"
     "\xB4"
     "ng t\xC3"
@@ -48761,25 +50221,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x89"
     " IP: ",
-    "ho\xE1"
-    "\xBA"
-    "\xB7"
-    "c qu\xC3"
-    "\xA9"
-    "t m\xC3"
-    "\xA3"
-    " QR \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x83"
-    " k\xE1"
-    "\xBA"
-    "\xBF"
-    "t n\xE1"
-    "\xBB"
-    "\x91"
-    "i WiFi.",
     "L\xE1"
     "\xBB"
     "\x97"
@@ -48841,11 +50282,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xA7"
     "",
-    "\xC2"
-    "\xAB"
-    " L\xC6"
-    "\xB0"
-    "u",
     "Ch\xE1"
     "\xBB"
     "\x8D"
@@ -48943,13 +50379,6 @@ const char* const STRINGS_VI[] = {
     "Xu\xE1"
     "\xBB"
     "\x91"
-    "ng",
-    "HOA",
-    "th\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\x9D"
     "ng",
     "OK",
     "B\xE1"
@@ -49132,7 +50561,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xAF"
     "ng",
-    "Dark Mode",
     "Keep Clock Alive",
     "Off",
     "Sleep Refresh",
@@ -49169,6 +50597,8 @@ const char* const STRINGS_VI[] = {
     "\x89"
     "nh",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "G\xE1"
     "\xBA"
     "\xA7"
@@ -49429,11 +50859,6 @@ const char* const STRINGS_VI[] = {
     "S\xC3"
     "\xA1"
     "ch: ",
-    "shift",
-    "SHIFT",
-    "KH\xC3"
-    "\x93"
-    "A",
     "V\xE1"
     "\xBB"
     "\x9B"
@@ -51831,10 +53256,8 @@ const char* const STRINGS_VI[] = {
     "Updates clock during sleep. Drains ~3-4mA battery",
     "How often sleep screen updates. Needs Keep Clock Alive",
     "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
     "Full refresh every N pages. Less = faster but more ghosting",
     "Smoother text edges using grayscale",
-    "Inverts display colors",
     "What to show when device sleeps",
     "Reader text font",
     "Reader text size",
@@ -51902,6 +53325,9 @@ static_assert(sizeof(i18n_strings::STRINGS_NL) / sizeof(i18n_strings::STRINGS_NL
 static_assert(sizeof(i18n_strings::STRINGS_TR) / sizeof(i18n_strings::STRINGS_TR[0]) ==
                   static_cast<size_t>(StrId::_COUNT),
               "STRINGS_TR size mismatch");
+static_assert(sizeof(i18n_strings::STRINGS_KK) / sizeof(i18n_strings::STRINGS_KK[0]) ==
+                  static_cast<size_t>(StrId::_COUNT),
+              "STRINGS_KK size mismatch");
 static_assert(sizeof(i18n_strings::STRINGS_VI) / sizeof(i18n_strings::STRINGS_VI[0]) ==
                   static_cast<size_t>(StrId::_COUNT),
               "STRINGS_VI size mismatch");

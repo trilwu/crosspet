@@ -8,6 +8,7 @@
 #include <HalStorage.h>
 #include <I18n.h>
 #include <Logging.h>
+#include <esp_system.h>
 
 #include <memory>
 
@@ -60,9 +61,6 @@ void EpubReaderActivity::onEnter() {
   // NOTE: This affects layout math and must be applied before any render calls.
   ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
 
-  // Apply text darkness setting for grayscale/AA rendering
-  renderer.setTextDarkness(SETTINGS.textDarkness);
-
   epub->setupCacheDir();
 
   FsFile f;
@@ -114,12 +112,6 @@ void EpubReaderActivity::onEnter() {
 void EpubReaderActivity::onExit() {
   Activity::onExit();
 
-  // Reset text darkness to normal for UI screens
-  renderer.setTextDarkness(0);
-
-  // Request half refresh for the next screen to clear accumulated reader ghosting
-  renderer.requestNextHalfRefresh();
-
   // Accumulate reading time and record book progress before resetting state
   uint8_t progress = 0;
   const char* title = epub ? epub->getTitle().c_str() : nullptr;
@@ -159,8 +151,6 @@ void EpubReaderActivity::loop() {
                          mappedInput.wasReleased(MappedInputManager::Button::PageBack);
     if (millis() - chapterPopupTime > 2000 || anyBtn) {
       showChapterPopup = false;
-      // Request half refresh to clear popup ghosting on next render
-      renderer.requestNextHalfRefresh();
       // Check for milestone that fired during chapter popup
       if (!showMilestoneToast) {
         auto milestone = PET_MANAGER.consumePendingMilestone();
@@ -1026,18 +1016,30 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
 void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int orientedMarginTop,
                                         const int orientedMarginRight, const int orientedMarginBottom,
                                         const int orientedMarginLeft) {
+  const auto t0 = millis();
+  auto* fcm = renderer.getFontCacheManager();
+  fcm->resetStats();
+
   // Font prewarm: scan pass records text, then bulk-decompress all needed glyphs.
   // PrewarmScope lives at function scope so the page buffer survives all render passes.
-  auto* fcm = renderer.getFontCacheManager();
+  const uint32_t heapBefore = esp_get_free_heap_size();
   auto scope = fcm->createPrewarmScope();
   page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);  // scan pass (no draw)
   scope.endScanAndPrewarm();
+  const uint32_t heapAfter = esp_get_free_heap_size();
+  fcm->logStats("prewarm");
+  const auto tPrewarm = millis();
+
+  LOG_DBG("ERS", "Heap: before=%lu after=%lu delta=%ld", heapBefore, heapAfter,
+          (int32_t)heapAfter - (int32_t)heapBefore);
 
   // Force special handling for pages with images when anti-aliasing is on
   bool imagePageWithAA = page->hasImages() && SETTINGS.textAntiAliasing;
 
   page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
   renderStatusBar();
+  fcm->logStats("bw_render");
+  const auto tBwRender = millis();
 
   // Milestone toast — small banner at bottom of page content area
   if (showMilestoneToast && milestoneText[0]) {
@@ -1068,10 +1070,12 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
   } else {
     ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
   }
+  const auto tDisplay = millis();
 
   // Save bw buffer to reset buffer state after grayscale data sync
   // Skip AA if storeBwBuffer fails (not enough heap, e.g. BLE active needs 48KB)
   const bool bwStored = renderer.storeBwBuffer();
+  const auto tBwStore = millis();
 
   // grayscale rendering — requires stored BW buffer for restore after gray pass
   if (SETTINGS.textAntiAliasing && bwStored) {
@@ -1079,20 +1083,41 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_LSB);
     page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
     renderer.copyGrayscaleLsbBuffers();
+    const auto tGrayLsb = millis();
 
     // Render and copy to MSB buffer
     renderer.clearScreen(0x00);
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_MSB);
     page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
     renderer.copyGrayscaleMsbBuffers();
+    const auto tGrayMsb = millis();
 
     // display grayscale part
     renderer.displayGrayBuffer();
+    const auto tGrayDisplay = millis();
     renderer.setRenderMode(GfxRenderer::BW);
-  }
+    fcm->logStats("gray");
 
-  // restore the bw data (only if we successfully stored it)
-  if (bwStored) renderer.restoreBwBuffer();
+    // restore the bw data
+    renderer.restoreBwBuffer();
+    const auto tBwRestore = millis();
+    const auto tEnd = millis();
+    LOG_DBG("ERS",
+            "Page render: prewarm=%lums bw_render=%lums display=%lums bw_store=%lums "
+            "gray_lsb=%lums gray_msb=%lums gray_display=%lums bw_restore=%lums total=%lums",
+            tPrewarm - t0, tBwRender - tPrewarm, tDisplay - tBwRender, tBwStore - tDisplay,
+            tGrayLsb - tBwStore, tGrayMsb - tGrayLsb, tGrayDisplay - tGrayMsb,
+            tBwRestore - tGrayDisplay, tEnd - t0);
+  } else {
+    // restore the bw data (only if we successfully stored it)
+    if (bwStored) renderer.restoreBwBuffer();
+    const auto tBwRestore = millis();
+    const auto tEnd = millis();
+    LOG_DBG("ERS",
+            "Page render: prewarm=%lums bw_render=%lums display=%lums bw_store=%lums bw_restore=%lums total=%lums",
+            tPrewarm - t0, tBwRender - tPrewarm, tDisplay - tBwRender, tBwStore - tDisplay,
+            tBwRestore - tBwStore, tEnd - t0);
+  }
 }
 
 void EpubReaderActivity::renderStatusBar() const {

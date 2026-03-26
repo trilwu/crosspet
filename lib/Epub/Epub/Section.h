@@ -32,7 +32,12 @@ class Section {
         spineIndex(spineIndex),
         renderer(renderer),
         filePath(epub->getCachePath() + "/sections/" + std::to_string(spineIndex) + ".bin") {}
-  ~Section() = default;
+  ~Section() { file.close(); }
+
+  // Explicitly close the section file handle (e.g. before SD power-down).
+  // LUT remains cached; loadPageFromSectionFile() will reopen if needed.
+  void closeSectionFile() { file.close(); }
+
   bool loadSectionFile(int fontId, float lineCompression, bool extraParagraphSpacing, uint8_t paragraphAlignment,
                        uint16_t viewportWidth, uint16_t viewportHeight, bool hyphenationEnabled, bool embeddedStyle,
                        uint8_t imageRendering);
