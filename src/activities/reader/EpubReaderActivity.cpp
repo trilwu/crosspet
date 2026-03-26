@@ -1026,13 +1026,14 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
 void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int orientedMarginTop,
                                         const int orientedMarginRight, const int orientedMarginBottom,
                                         const int orientedMarginLeft) {
-  // Font prewarm: scan pass records text, then bulk-decompress all needed glyphs.
-  // The prewarmed page buffer must survive through ALL render passes (BW + grayscale LSB + MSB).
-  // PrewarmScope lives at function scope — its destructor calls clearCache() on return.
+  // Font prewarm: only needed when AA is on (multiple render passes reuse the cache).
+  // With AA off, there's a single BW pass — fonts decompress on-the-fly via hot group path.
   auto* fcm = renderer.getFontCacheManager();
   auto scope = fcm->createPrewarmScope();
-  page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);  // scan pass (no draw)
-  scope.endScanAndPrewarm();
+  if (SETTINGS.textAntiAliasing) {
+    page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);  // scan pass (no draw)
+    scope.endScanAndPrewarm();
+  }
 
   // Force special handling for pages with images when anti-aliasing is on
   bool imagePageWithAA = page->hasImages() && SETTINGS.textAntiAliasing;
