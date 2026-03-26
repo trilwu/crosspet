@@ -1,5 +1,6 @@
 #include "HalPowerManager.h"
 
+#include <HalStorage.h>
 #include <Logging.h>
 #include <WiFi.h>
 #include <esp_sleep.h>
@@ -57,6 +58,10 @@ void HalPowerManager::startDeepSleep(HalGPIO& gpio, const bool keepClockAlive, c
   while (gpio.isPressed(HalGPIO::BTN_POWER)) {
     delay(50);
     gpio.update();
+  }
+  // Put SD card into low-power state to reduce sleep current draw
+  if (keepClockAlive) {
+    Storage.sleep();
   }
   // Pre-sleep routines from the original firmware
   // GPIO13 is connected to battery latch MOSFET. LOW = MCU powered off (saves battery, ~5µA).

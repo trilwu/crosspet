@@ -45,6 +45,9 @@ class HalStorage {
   bool openFileForWrite(const char* moduleName, const String& path, HalFile& file);
   bool removeDir(const char* path);
 
+  // Put SD card into low-power state before deep sleep
+  void sleep();
+
   static HalStorage& getInstance() { return instance; }
 
   class StorageLock;  // private class, used internally
