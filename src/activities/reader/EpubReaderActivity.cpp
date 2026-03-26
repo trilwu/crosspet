@@ -1055,43 +1055,16 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
     // Double FAST_REFRESH with selective image blanking (pablohc's technique):
     // HALF_REFRESH sets particles too firmly for the grayscale LUT to adjust.
     // Instead, blank only the image area and do two fast refreshes.
-    // Step 1: Display page with image area blanked (text appears, image area white)
-    // Step 2: Re-render with images and display again (images appear clean)
     int16_t imgX, imgY, imgW, imgH;
     if (page->getImageBoundingBox(imgX, imgY, imgW, imgH)) {
       renderer.fillRect(imgX + orientedMarginLeft, imgY + orientedMarginTop, imgW, imgH, false);
       renderer.displayBuffer(HalDisplay::FAST_REFRESH);
 
-      // Re-render page content to restore images into the blanked area
-      // Status bar is not re-rendered here to avoid reading stale dynamic values (e.g. battery %)
       page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
       renderer.displayBuffer(HalDisplay::FAST_REFRESH);
     } else {
-      // Fallback when bounding box unavailable: AA needs FAST_REFRESH to avoid ghosting
-      if (SETTINGS.textAntiAliasing) {
-        renderer.displayBuffer(HalDisplay::FAST_REFRESH);
-      } else {
-        renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-      }
-    }
-    // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
-  } else if (SETTINGS.textAntiAliasing) {
-    // Anti-aliasing on: always use FAST_REFRESH for BW pass.
-    // HALF_REFRESH sets e-ink particles too firmly, preventing the subsequent
-    // grayscale LUT from adjusting them — causing ghost artifacts on next page.
-    // Periodic full clear: flash blank screen to reset accumulated ghosting,
-    // then render the page with FAST_REFRESH so grayscale LUT works correctly.
-    pagesUntilFullRefresh--;
-    if (pagesUntilFullRefresh <= 0) {
-      pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
-      renderer.clearScreen();
       renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-      // Re-render page content into framebuffer after the blank flash
-      renderer.clearScreen();
-      page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
-      renderStatusBar();
     }
-    renderer.displayBuffer(HalDisplay::FAST_REFRESH);
   } else {
     ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
   }
