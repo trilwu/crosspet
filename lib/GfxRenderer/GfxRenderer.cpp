@@ -1,16 +1,23 @@
 #include "GfxRenderer.h"
 
+#include <FontDecompressor.h>
 #include <Logging.h>
 #include <Utf8.h>
 
+#include "FontCacheManager.h"
+
 const uint8_t* GfxRenderer::getGlyphBitmap(const EpdFontData* fontData, const EpdGlyph* glyph) const {
   if (fontData->groups != nullptr) {
-    if (!fontDecompressor) {
+    auto* fd = fontCacheManager_ ? fontCacheManager_->getDecompressor() : nullptr;
+    if (!fd) {
       LOG_ERR("GFX", "Compressed font but no FontDecompressor set");
       return nullptr;
     }
     uint32_t glyphIndex = static_cast<uint32_t>(glyph - fontData->glyph);
-    return fontDecompressor->getBitmap(fontData, glyph, glyphIndex);
+    // For page-buffer hits the pointer is stable for the page lifetime.
+    // For hot-group hits it is valid only until the next getBitmap() call — callers
+    // must consume it (draw the glyph) before requesting another bitmap.
+    return fd->getBitmap(fontData, glyph, glyphIndex);
   }
   return &fontData->bitmap[glyph->dataOffset];
 }
@@ -113,17 +120,13 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
           // the direct bit from the font is 0 -> white, 1 -> light gray, 2 -> dark gray, 3 -> black
           // we swap this to better match the way images and screen think about colors:
           // 0 -> black, 1 -> dark grey, 2 -> light grey, 3 -> white
-          uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
+          const uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
 
           if (renderMode == GfxRenderer::BW) {
             if (bmpVal < 3) renderer.drawPixel(screenX, screenY, pixelState);
           } else if (renderMode == GfxRenderer::GRAYSCALE_MSB) {
             // Text darkness shifts more AA pixels into the "draw" bucket for bolder text.
             // bmpVal: 0=black, 1=dark gray, 2=light gray, 3=white
-            // MSB controls the "heavier" gray channel.
-            // Normal: only light gray (2) → subtle fringe
-            // Dark: dark+light gray (1,2) → bolder fringe
-            // Extra Dark: all non-white (1,2) → max bold
             const uint8_t darkness = renderer.getTextDarkness();
             bool hit;
             if (renderer.isDarkMode()) {
@@ -137,10 +140,6 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
             }
             if (hit) renderer.drawPixel(screenX, screenY, false);
           } else if (renderMode == GfxRenderer::GRAYSCALE_LSB) {
-            // LSB controls the "lighter" gray channel.
-            // Normal: only dark gray (1) → minimal
-            // Dark: dark gray (1) → same as normal (MSB does the heavy lifting)
-            // Extra Dark: dark+light gray (1,2) → pushes everything darker
             const uint8_t darkness = renderer.getTextDarkness();
             bool hit;
             if (renderer.isDarkMode()) {
@@ -199,11 +198,7 @@ void GfxRenderer::drawPixel(const int x, const int y, const bool state) const {
   const uint16_t byteIndex = phyY * HalDisplay::DISPLAY_WIDTH_BYTES + (phyX / 8);
   const uint8_t bitPosition = 7 - (phyX % 8);  // MSB first
 
-  // Dark mode: invert pixel state in BW mode so all drawing is automatically inverted.
-  // This keeps BW RAM and RED RAM coherent, avoiding ghosting on differential refresh.
-  const bool effectiveState = (darkMode && renderMode == BW) ? !state : state;
-
-  if (effectiveState) {
+  if (state) {
     frameBuffer[byteIndex] &= ~(1 << bitPosition);  // Clear bit
   } else {
     frameBuffer[byteIndex] |= 1 << bitPosition;  // Set bit
@@ -233,12 +228,16 @@ void GfxRenderer::drawText(const int fontId, const int x, const int y, const cha
   const int yPos = y + getFontAscenderSize(fontId);
   int32_t xPosFP = fp4::fromPixel(x);  // 12.4 fixed-point accumulator
   int lastBaseX = x;
-  int lastBaseLeft = 0;
-  int lastBaseWidth = 0;
+  int lastBaseAdvanceFP = 0;  // 12.4 fixed-point
   int lastBaseTop = 0;
 
   // cannot draw a NULL / empty string
   if (text == nullptr || *text == '\0') {
+    return;
+  }
+
+  if (fontCacheManager_ && fontCacheManager_->isScanning()) {
+    fontCacheManager_->recordText(text, fontId, style);
     return;
   }
 
@@ -248,17 +247,24 @@ void GfxRenderer::drawText(const int fontId, const int x, const int y, const cha
     return;
   }
   const auto& font = fontIt->second;
+  constexpr int MIN_COMBINING_GAP_PX = 1;
 
   uint32_t cp;
   uint32_t prevCp = 0;
   while ((cp = utf8NextCodepoint(reinterpret_cast<const uint8_t**>(&text)))) {
     if (utf8IsCombiningMark(cp)) {
       const EpdGlyph* combiningGlyph = font.getGlyph(cp, style);
-      if (!combiningGlyph) continue;
-      const int raiseBy = combiningMark::raiseAboveBase(combiningGlyph->top, combiningGlyph->height, lastBaseTop);
-      const int combiningX = combiningMark::centerOver(lastBaseX, lastBaseLeft, lastBaseWidth, combiningGlyph->left,
-                                                       combiningGlyph->width);
-      renderCharImpl<TextRotation::None>(*this, renderMode, font, cp, combiningX, yPos - raiseBy, black, style);
+      int raiseBy = 0;
+      if (combiningGlyph) {
+        const int currentGap = combiningGlyph->top - combiningGlyph->height - lastBaseTop;
+        if (currentGap < MIN_COMBINING_GAP_PX) {
+          raiseBy = MIN_COMBINING_GAP_PX - currentGap;
+        }
+      }
+
+      const int combiningX = lastBaseX + fp4::toPixel(lastBaseAdvanceFP / 2);
+      const int combiningY = yPos - raiseBy;
+      renderCharImpl<TextRotation::None>(*this, renderMode, font, cp, combiningX, combiningY, black, style);
       continue;
     }
 
@@ -269,8 +275,7 @@ void GfxRenderer::drawText(const int fontId, const int x, const int y, const cha
     lastBaseX = fp4::toPixel(xPosFP);  // snap 12.4 fixed-point to nearest pixel
     const EpdGlyph* glyph = font.getGlyph(cp, style);
 
-    lastBaseLeft = glyph ? glyph->left : 0;
-    lastBaseWidth = glyph ? glyph->width : 0;
+    lastBaseAdvanceFP = glyph ? glyph->advanceX : 0;
     lastBaseTop = glyph ? glyph->top : 0;
 
     renderCharImpl<TextRotation::None>(*this, renderMode, font, cp, lastBaseX, yPos, black, style);
@@ -282,6 +287,7 @@ void GfxRenderer::drawText(const int fontId, const int x, const int y, const cha
 }
 
 void GfxRenderer::drawLine(int x1, int y1, int x2, int y2, const bool state) const {
+  if (fontCacheManager_ && fontCacheManager_->isScanning()) return;
   if (x1 == x2) {
     if (y2 < y1) {
       std::swap(y1, y2);
@@ -616,6 +622,7 @@ void GfxRenderer::drawIcon(const uint8_t bitmap[], const int x, const int y, con
 
 void GfxRenderer::drawBitmap(const Bitmap& bitmap, const int x, const int y, const int maxWidth, const int maxHeight,
                              const float cropX, const float cropY) const {
+  if (fontCacheManager_ && fontCacheManager_->isScanning()) return;
   // For 1-bit bitmaps, use optimized 1-bit rendering path (no crop support for 1-bit)
   if (bitmap.is1Bit() && cropX == 0.0f && cropY == 0.0f) {
     drawBitmap1Bit(bitmap, x, y, maxWidth, maxHeight);
@@ -851,9 +858,7 @@ static unsigned long start_ms = 0;
 
 void GfxRenderer::clearScreen(const uint8_t color) const {
   start_ms = millis();
-  // Dark mode: invert clear color in BW mode (white→black background)
-  const uint8_t effectiveColor = (darkMode && renderMode == BW) ? ~color : color;
-  display.clearScreen(effectiveColor);
+  display.clearScreen(color);
 }
 
 void GfxRenderer::invertScreen() const {
@@ -865,16 +870,7 @@ void GfxRenderer::invertScreen() const {
 void GfxRenderer::displayBuffer(const HalDisplay::RefreshMode refreshMode) const {
   auto elapsed = millis() - start_ms;
   LOG_DBG("GFX", "Time = %lu ms from clearScreen to displayBuffer", elapsed);
-  HalDisplay::RefreshMode mode = refreshMode;
-  if (nextRefreshFull) {
-    mode = HalDisplay::FULL_REFRESH;
-    nextRefreshFull = false;
-    nextRefreshHalf = false;
-  } else if (nextRefreshHalf) {
-    mode = HalDisplay::HALF_REFRESH;
-    nextRefreshHalf = false;
-  }
-  display.displayBuffer(mode, fadingFix);
+  display.displayBuffer(refreshMode, fadingFix);
 }
 
 std::string GfxRenderer::truncatedText(const int fontId, const char* text, const int maxWidth,
@@ -1095,20 +1091,25 @@ void GfxRenderer::drawTextRotated90CW(const int fontId, const int x, const int y
 
   int32_t yPosFP = fp4::fromPixel(y);  // 12.4 fixed-point accumulator
   int lastBaseY = y;
-  int lastBaseLeft = 0;
-  int lastBaseWidth = 0;
+  int lastBaseAdvanceFP = 0;  // 12.4 fixed-point
   int lastBaseTop = 0;
+  constexpr int MIN_COMBINING_GAP_PX = 1;
 
   uint32_t cp;
   uint32_t prevCp = 0;
   while ((cp = utf8NextCodepoint(reinterpret_cast<const uint8_t**>(&text)))) {
     if (utf8IsCombiningMark(cp)) {
       const EpdGlyph* combiningGlyph = font.getGlyph(cp, style);
-      if (!combiningGlyph) continue;
-      const int raiseBy = combiningMark::raiseAboveBase(combiningGlyph->top, combiningGlyph->height, lastBaseTop);
+      int raiseBy = 0;
+      if (combiningGlyph) {
+        const int currentGap = combiningGlyph->top - combiningGlyph->height - lastBaseTop;
+        if (currentGap < MIN_COMBINING_GAP_PX) {
+          raiseBy = MIN_COMBINING_GAP_PX - currentGap;
+        }
+      }
+
       const int combiningX = x - raiseBy;
-      const int combiningY = combiningMark::centerOverRotated90CW(lastBaseY, lastBaseLeft, lastBaseWidth,
-                                                                  combiningGlyph->left, combiningGlyph->width);
+      const int combiningY = lastBaseY - fp4::toPixel(lastBaseAdvanceFP / 2);
       renderCharImpl<TextRotation::Rotated90CW>(*this, renderMode, font, cp, combiningX, combiningY, black, style);
       continue;
     }
@@ -1121,8 +1122,7 @@ void GfxRenderer::drawTextRotated90CW(const int fontId, const int x, const int y
     lastBaseY = fp4::toPixel(yPosFP);  // snap 12.4 fixed-point to nearest pixel
     const EpdGlyph* glyph = font.getGlyph(cp, style);
 
-    lastBaseLeft = glyph ? glyph->left : 0;
-    lastBaseWidth = glyph ? glyph->width : 0;
+    lastBaseAdvanceFP = glyph ? glyph->advanceX : 0;  // 12.4 fixed-point
     lastBaseTop = glyph ? glyph->top : 0;
 
     renderCharImpl<TextRotation::Rotated90CW>(*this, renderMode, font, cp, x, lastBaseY, black, style);

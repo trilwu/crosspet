@@ -2710,6 +2710,7 @@ static const EpdFontData bokerlam_18_regular = {
     true,
     bokerlam_18_regularGroups,
     12,
+    nullptr,
     bokerlam_18_regularKernLeftClasses,
     bokerlam_18_regularKernRightClasses,
     bokerlam_18_regularKernMatrix,
