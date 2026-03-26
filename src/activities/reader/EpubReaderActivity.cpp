@@ -1027,6 +1027,15 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
 void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int orientedMarginTop,
                                         const int orientedMarginRight, const int orientedMarginBottom,
                                         const int orientedMarginLeft) {
+  // Font prewarm: scan pass records text, then bulk-decompress glyphs, then real render
+  auto* fcm = renderer.getFontCacheManager();
+  if (fcm) {
+    fcm->resetStats();
+    auto scope = fcm->createPrewarmScope();
+    page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);  // scan pass (no draw)
+    scope.endScanAndPrewarm();
+  }
+
   // Force special handling for pages with images when anti-aliasing is on
   bool imagePageWithAA = page->hasImages() && SETTINGS.textAntiAliasing;
 
