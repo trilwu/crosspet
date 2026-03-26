@@ -9,7 +9,7 @@ const uint8_t* GfxRenderer::getGlyphBitmap(const EpdFontData* fontData, const Ep
       LOG_ERR("GFX", "Compressed font but no FontDecompressor set");
       return nullptr;
     }
-    uint16_t glyphIndex = static_cast<uint16_t>(glyph - fontData->glyph);
+    uint32_t glyphIndex = static_cast<uint32_t>(glyph - fontData->glyph);
     return fontDecompressor->getBitmap(fontData, glyph, glyphIndex);
   }
   return &fontData->bitmap[glyph->dataOffset];
