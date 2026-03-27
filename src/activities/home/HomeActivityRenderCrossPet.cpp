@@ -315,7 +315,7 @@ void HomeActivity::renderBottomBarIcons() {
   const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
   // LightGray background for bottom bar — separates from content
   renderer.fillRectDither(0, barY, screenW, CP_BOTTOM_BAR_H, Color::LightGray);
-  renderer.drawLine(0, barY, screenW, barY);
+  renderer.drawLine(0, barY, screenW - 1, barY);
 
   constexpr int barPad = 8;
   constexpr int innerTop = 10;

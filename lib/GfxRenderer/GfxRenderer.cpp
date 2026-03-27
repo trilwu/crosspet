@@ -572,7 +572,13 @@ void GfxRenderer::drawImage(const uint8_t bitmap[], const int x, const int y, co
     case LandscapeCounterClockwise:
       break;
   }
-  // TODO: Rotate bits
+  // Bounds check: negative coords cast to uint16_t wrap to 65535+ and corrupt heap
+  if (rotatedX < 0 || rotatedY < 0 ||
+      rotatedX + width > HalDisplay::DISPLAY_WIDTH ||
+      rotatedY + height > HalDisplay::DISPLAY_HEIGHT) {
+    LOG_ERR("GFX", "drawImage out of bounds: (%d,%d) %dx%d", rotatedX, rotatedY, width, height);
+    return;
+  }
   display.drawImage(bitmap, rotatedX, rotatedY, width, height);
 }
 
@@ -595,11 +601,25 @@ void GfxRenderer::drawImageTransparent(const uint8_t bitmap[], const int x, cons
     case LandscapeCounterClockwise:
       break;
   }
+  // Bounds check: negative coords wrap to huge uint16_t values and corrupt heap
+  if (rotatedX < 0 || rotatedY < 0 ||
+      rotatedX + width > HalDisplay::DISPLAY_WIDTH ||
+      rotatedY + height > HalDisplay::DISPLAY_HEIGHT) {
+    LOG_ERR("GFX", "drawImageTransparent out of bounds: (%d,%d) %dx%d", rotatedX, rotatedY, width, height);
+    return;
+  }
   display.drawImageTransparent(bitmap, rotatedX, rotatedY, width, height);
 }
 
 void GfxRenderer::drawIcon(const uint8_t bitmap[], const int x, const int y, const int width, const int height) const {
-  display.drawImageTransparent(bitmap, y, getScreenWidth() - width - x, height, width);
+  const int phyX = y;
+  const int phyY = getScreenWidth() - width - x;
+  // Bounds check: negative coords cast to uint16_t wrap to 65535+ and corrupt heap
+  if (phyX < 0 || phyY < 0 || phyX + height > HalDisplay::DISPLAY_WIDTH || phyY + width > HalDisplay::DISPLAY_HEIGHT) {
+    LOG_ERR("GFX", "drawIcon out of bounds: logical(%d,%d) physical(%d,%d) %dx%d", x, y, phyX, phyY, width, height);
+    return;
+  }
+  display.drawImageTransparent(bitmap, phyX, phyY, height, width);
 }
 
 void GfxRenderer::drawBitmap(const Bitmap& bitmap, const int x, const int y, const int maxWidth, const int maxHeight,

@@ -77,11 +77,11 @@ void SettingsActivity::onEnter() {
   displaySettings.insert(displaySettings.begin() + 5, SettingInfo::Section("APPEARANCE"));
   displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
 
-  // Reader: TEXT (font/layout), NAVIGATION (orientation/turn), ACTIONS (status bar)
+  // Reader: TEXT (font/layout), READING (orientation/spacing), ACTIONS (status bar)
   // Items order: Font Family(0), Font Size(1), Line Spacing(2), Screen Margin(3), Para Alignment(4),
   //              Embedded Style(5), Hyphenation(6), Orientation(7), Extra Spacing(8), Text AA(9),
-  //              Text Darkness(10), Images(11), Auto Page Turn(12), Customise Status Bar(13)
-  readerSettings.insert(readerSettings.begin() + 13, SettingInfo::Section("ACTIONS"));
+  //              Images(10), Customise Status Bar(11)
+  readerSettings.insert(readerSettings.begin() + 11, SettingInfo::Section("ACTIONS"));
   readerSettings.insert(readerSettings.begin() + 7, SettingInfo::Section("READING"));
   readerSettings.insert(readerSettings.begin(), SettingInfo::Section("TEXT"));
 
