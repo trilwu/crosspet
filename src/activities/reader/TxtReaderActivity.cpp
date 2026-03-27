@@ -389,7 +389,7 @@ void TxtReaderActivity::renderPage() {
   renderLines();
   renderStatusBar();
 
-  ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
+  ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh, true);
 
   if (SETTINGS.textAntiAliasing) {
     ReaderUtils::renderAntiAliased(renderer, [&renderLines]() { renderLines(); });

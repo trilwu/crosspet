@@ -22,12 +22,17 @@ class HalPowerManager {
 
  public:
   static constexpr int LOW_POWER_FREQ = 10;                    // MHz
+  static constexpr int READING_FREQ = 80;                      // MHz — balanced for reading idle
   static constexpr unsigned long IDLE_POWER_SAVING_MS = 3000;  // ms
 
   void begin();
 
   // Control CPU frequency for power saving
   void setPowerSaving(bool enabled);
+
+  // Drop to READING_FREQ while idle between page turns; restore before rendering.
+  // No-op when WiFi is active or a Lock is held.
+  void setReadingMode(bool active);
 
   // Setup wake up GPIO and enter deep sleep
   // Should be called inside main loop() to handle the currentLockMode

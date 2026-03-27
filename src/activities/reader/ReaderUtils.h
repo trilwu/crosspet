@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include <CrossPointSettings.h>
 #include <GfxRenderer.h>
 #include <Logging.h>
@@ -49,10 +51,14 @@ inline PageTurnResult detectPageTurn(const MappedInputManager& input, const bool
   return {prev, next};
 }
 
-inline void displayWithRefreshCycle(const GfxRenderer& renderer, int& pagesUntilFullRefresh) {
+// isPureBwText: when true (no images, AA off), doubles the interval before a full refresh,
+// capped at 30 pages. This reduces the number of power-hungry HALF_REFRESH cycles.
+inline void displayWithRefreshCycle(const GfxRenderer& renderer, int& pagesUntilFullRefresh,
+                                    bool isPureBwText = false) {
   if (pagesUntilFullRefresh <= 1) {
     renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-    pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
+    const int base = SETTINGS.getRefreshFrequency();
+    pagesUntilFullRefresh = isPureBwText ? std::min(base * 2, 30) : base;
   } else {
     renderer.displayBuffer();
     pagesUntilFullRefresh--;

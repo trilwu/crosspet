@@ -91,6 +91,16 @@ uint16_t HalPowerManager::getBatteryPercentage() const {
   return battery.readPercentage();
 }
 
+void HalPowerManager::setReadingMode(bool active) {
+  if (normalFreq <= 0) return;
+  if (WiFi.getMode() != WIFI_MODE_NULL) return;  // WiFi takes priority
+  if (currentLockMode != None) return;           // Lock takes priority
+  const int targetFreq = active ? READING_FREQ : normalFreq;
+  if (getCpuFrequencyMhz() != targetFreq) {
+    setCpuFrequencyMhz(targetFreq);
+  }
+}
+
 HalPowerManager::Lock::Lock() {
   xSemaphoreTake(powerManager.modeMutex, portMAX_DELAY);
   // Current limitation: only one lock at a time

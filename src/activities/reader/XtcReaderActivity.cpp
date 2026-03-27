@@ -7,6 +7,8 @@
 
 #include "XtcReaderActivity.h"
 
+#include <algorithm>
+
 #include <FsHelpers.h>
 #include <GfxRenderer.h>
 #include <HalStorage.h>
@@ -238,10 +240,10 @@ static bool renderPage2bitStrip(GfxRenderer& renderer, Xtc* xtc, uint32_t curren
   doPass(0, true);
   if (!passOk) { free(stripBuf); return false; }
 
-  // Display BW
+  // Display BW — XTC is always pure BW text (pre-rendered, no AA), double refresh interval
   if (pagesUntilFullRefresh <= 1) {
     renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-    pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
+    pagesUntilFullRefresh = std::min(SETTINGS.getRefreshFrequency() * 2, 30);
   } else {
     renderer.displayBuffer();
     pagesUntilFullRefresh--;
@@ -345,10 +347,10 @@ void XtcReaderActivity::renderPage() {
 
   // XTC pages already have status bar pre-rendered, no need to add our own
 
-  // Display with appropriate refresh
+  // Display with appropriate refresh — XTC is always pure BW text, double refresh interval
   if (pagesUntilFullRefresh <= 1) {
     renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-    pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
+    pagesUntilFullRefresh = std::min(SETTINGS.getRefreshFrequency() * 2, 30);
   } else {
     renderer.displayBuffer();
     pagesUntilFullRefresh--;
