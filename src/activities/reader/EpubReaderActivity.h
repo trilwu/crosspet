@@ -51,6 +51,9 @@ class EpubReaderActivity final : public Activity {
   unsigned long milestoneToastTime = 0;
   char milestoneText[48] = {};
 
+  // Per-book auto page turn speed override (0 = use global setting, 1-20 = ppm)
+  uint8_t perBookPageTurnSpeed = 0;
+
   // Bookmarks (starred pages)
   BookmarkStore bookmarkStore;
 

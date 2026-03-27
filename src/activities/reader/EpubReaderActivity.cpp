@@ -5,6 +5,7 @@
 #include <FsHelpers.h>
 #include <FontCacheManager.h>
 #include <GfxRenderer.h>
+#include <HalPowerManager.h>
 #include <HalStorage.h>
 #include <I18n.h>
 #include <Logging.h>
@@ -65,16 +66,19 @@ void EpubReaderActivity::onEnter() {
 
   FsFile f;
   if (Storage.openFileForRead("ERS", epub->getCachePath() + "/progress.bin", f)) {
-    uint8_t data[6];
-    int dataSize = f.read(data, 6);
-    if (dataSize == 4 || dataSize == 6) {
+    uint8_t data[7];
+    int dataSize = f.read(data, 7);
+    if (dataSize == 4 || dataSize >= 6) {
       currentSpineIndex = data[0] + (data[1] << 8);
       nextPageNumber = data[2] + (data[3] << 8);
       cachedSpineIndex = currentSpineIndex;
       LOG_DBG("ERS", "Loaded cache: %d, %d", currentSpineIndex, nextPageNumber);
     }
-    if (dataSize == 6) {
+    if (dataSize >= 6) {
       cachedChapterTotalPageCount = data[4] + (data[5] << 8);
+    }
+    if (dataSize >= 7) {
+      perBookPageTurnSpeed = data[6];
     }
     f.close();
   }
@@ -100,9 +104,10 @@ void EpubReaderActivity::onEnter() {
   READ_STATS.startSession();
   sessionStartMs = millis();
 
-  // Auto-activate page turn if persistent setting is configured
+  // Auto-activate page turn: use per-book speed if set, otherwise fall back to global
   if (SETTINGS.autoPageTurnEnabled && SETTINGS.autoPageTurnSpeed > 0) {
-    toggleAutoPageTurn(SETTINGS.autoPageTurnSpeed);
+    const uint8_t speed = (perBookPageTurnSpeed > 0) ? perBookPageTurnSpeed : SETTINGS.autoPageTurnSpeed;
+    toggleAutoPageTurn(speed);
   }
 
   // Trigger first update
@@ -111,6 +116,8 @@ void EpubReaderActivity::onEnter() {
 
 void EpubReaderActivity::onExit() {
   Activity::onExit();
+  // Restore full CPU speed when leaving reader
+  powerManager.setReadingMode(false);
 
   // Accumulate reading time and record book progress before resetting state
   uint8_t progress = 0;
@@ -289,6 +296,8 @@ void EpubReaderActivity::loop() {
                              applyOrientation(menu.orientation);
                              // Apply auto page turn based on enabled flag set in menu
                              toggleAutoPageTurn(SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0);
+                             // Persist per-book speed override when user explicitly sets speed in menu
+                             perBookPageTurnSpeed = SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0;
                              // Reset section if font changed to force re-layout with new font/size
                              if (SETTINGS.fontFamily != prevFontFamily || SETTINGS.fontSize != prevFontSize) {
                                RenderLock lock(*this);
@@ -757,6 +766,9 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
 
 // TODO: Failure handling
 void EpubReaderActivity::render(RenderLock&& lock) {
+  // Restore full CPU speed before rendering
+  powerManager.setReadingMode(false);
+
   if (!epub) {
     return;
   }
@@ -842,6 +854,11 @@ void EpubReaderActivity::render(RenderLock&& lock) {
   if (!section) {
     const auto filepath = epub->getSpineItem(currentSpineIndex).href;
     LOG_DBG("ERS", "Loading file: %s, index: %d", filepath.c_str(), currentSpineIndex);
+
+    // Show loading overlay immediately before blocking section work
+    GUI.drawPopup(renderer, tr(STR_LOADING_POPUP));
+    renderer.displayBuffer();
+
     section = std::unique_ptr<Section>(new Section(epub, currentSpineIndex, renderer));
 
     if (!section->loadSectionFile(SETTINGS.getReaderFontId(), SETTINGS.getReaderLineCompression(),
@@ -993,14 +1010,15 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
 
   FsFile f;
   if (Storage.openFileForWrite("ERS", epub->getCachePath() + "/progress.bin", f)) {
-    uint8_t data[6];
+    uint8_t data[7];
     data[0] = spineIndex & 0xFF;
     data[1] = (spineIndex >> 8) & 0xFF;
     data[2] = currentPage & 0xFF;
     data[3] = (currentPage >> 8) & 0xFF;
     data[4] = pageCount & 0xFF;
     data[5] = (pageCount >> 8) & 0xFF;
-    f.write(data, 6);
+    data[6] = perBookPageTurnSpeed;
+    f.write(data, 7);
     f.close();
     LOG_DBG("ERS", "Progress saved: Chapter %d, Page %d", spineIndex, currentPage);
   } else {
@@ -1068,8 +1086,11 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderer.displayBuffer(HalDisplay::HALF_REFRESH);
     }
   } else {
-    ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh);
+    const bool isPureBwText = !page->hasImages() && !SETTINGS.textAntiAliasing;
+    ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh, isPureBwText);
   }
+  // Page rendered — drop to reading frequency while user reads
+  powerManager.setReadingMode(true);
   const auto tDisplay = millis();
 
   // Save bw buffer to reset buffer state after grayscale data sync
