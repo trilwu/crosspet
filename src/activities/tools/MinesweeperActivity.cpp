@@ -83,6 +83,7 @@ const char* MinesweeperActivity::difficultyLabel() const {
 
 void MinesweeperActivity::onEnter() {
   Activity::onEnter();
+  lastInputMs = millis();
   mineCount = MINE_COUNTS[(int)difficulty];
   memset(grid, 0, sizeof(grid));
   for (int r = 0; r < ROWS; r++)
@@ -99,6 +100,18 @@ void MinesweeperActivity::onEnter() {
 }
 
 void MinesweeperActivity::loop() {
+  // Reset idle timer on any button input
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Left) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Right) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Up) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    lastInputMs = millis();
+  }
+  // Auto-exit after 5 min of no input
+  if (millis() - lastInputMs > IDLE_TIMEOUT_MS) { finish(); return; }
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
     finish();
     return;

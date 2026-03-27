@@ -545,6 +545,7 @@ STR_CHESS_WHITE_WINS: "White Wins!"
 STR_CHESS_BLACK_WINS: "Black Wins!"
 STR_CHESS_SELECT: "Select"
 STR_CHESS_MOVE: "Move"
+STR_CHESS_THINKING: "Thinking..."
 
 STR_CLOCK_SET_TIME: "Set Time"
 STR_DAY_SUN: "Sunday"

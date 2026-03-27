@@ -35,6 +35,10 @@ class SudokuActivity final : public Activity {
   bool checkCompleted() const;
   const char* difficultyLabel() const;
 
+  // Idle timeout: auto-exit after 5 min of no input
+  unsigned long lastInputMs = 0;
+  static constexpr unsigned long IDLE_TIMEOUT_MS = 5UL * 60UL * 1000UL;
+
  public:
   explicit SudokuActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
       : Activity("Sudoku", renderer, mappedInput) {}

@@ -594,6 +594,7 @@ STR_CHESS_WHITE_WINS: "Trắng thắng!"
 STR_CHESS_BLACK_WINS: "Đen thắng!"
 STR_CHESS_SELECT: "Chọn"
 STR_CHESS_MOVE: "Đi"
+STR_CHESS_THINKING: "Đang nghĩ..."
 
 STR_CLOCK_SET_TIME: "Đặt Giờ"
 STR_DAY_SUN: "Chủ Nhật"

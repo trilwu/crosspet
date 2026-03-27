@@ -1007,6 +1007,8 @@ const char* const CHARACTER_SETS[] = {
     "\x90"
     "\xC4"
     "\x91"
+    "\xC4"
+    "\xA9"
     "\xC6"
     "\xA1"
     "\xC6"
@@ -1730,6 +1732,7 @@ const char* const STRINGS_EN[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -2627,6 +2630,7 @@ const char* const STRINGS_ES[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -3649,6 +3653,7 @@ const char* const STRINGS_FR[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -4460,6 +4465,7 @@ const char* const STRINGS_DE[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -6190,6 +6196,7 @@ const char* const STRINGS_CS[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -7121,6 +7128,7 @@ const char* const STRINGS_PO[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -15048,6 +15056,7 @@ const char* const STRINGS_RU[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -16136,6 +16145,7 @@ const char* const STRINGS_SV[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -17359,6 +17369,7 @@ const char* const STRINGS_RO[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -18308,6 +18319,7 @@ const char* const STRINGS_CA[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -27073,6 +27085,7 @@ const char* const STRINGS_UK[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -34394,6 +34407,7 @@ const char* const STRINGS_BE[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -35097,6 +35111,7 @@ const char* const STRINGS_IT[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -36342,6 +36357,7 @@ const char* const STRINGS_PL[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -37403,6 +37419,7 @@ const char* const STRINGS_FI[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -38260,6 +38277,7 @@ const char* const STRINGS_DA[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -38933,6 +38951,7 @@ const char* const STRINGS_NL[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -40490,6 +40509,7 @@ const char* const STRINGS_TR[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -48571,6 +48591,7 @@ const char* const STRINGS_KK[] = {
     "Black Wins!",
     "Select",
     "Move",
+    "Thinking...",
     "Set Time",
     "Sunday",
     "Monday",
@@ -52606,6 +52627,11 @@ const char* const STRINGS_VI[] = {
     "\xC4"
     "\x90"
     "i",
+    "\xC4"
+    "\x90"
+    "ang ngh\xC4"
+    "\xA9"
+    "...",
     "\xC4"
     "\x90"
     "\xE1"

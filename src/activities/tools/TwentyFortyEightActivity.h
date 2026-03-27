@@ -26,6 +26,10 @@ class TwentyFortyEightActivity final : public Activity {
   void spawnTile();
   bool hasMovesLeft() const;
 
+  // Idle timeout: auto-exit after 5 min of no input
+  unsigned long lastInputMs = 0;
+  static constexpr unsigned long IDLE_TIMEOUT_MS = 5UL * 60UL * 1000UL;
+
  public:
   explicit TwentyFortyEightActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
       : Activity("2048", renderer, mappedInput) {}

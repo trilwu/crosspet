@@ -170,6 +170,9 @@ void CrossPointWebServerActivity::onWifiSelectionComplete(const bool connected) 
       LOG_DBG("WEBACT", "mDNS started: http://%s.local/", AP_HOSTNAME);
     }
 
+    // Enable modem sleep in STA mode to reduce idle radio power draw
+    esp_wifi_set_ps(WIFI_PS_MIN_MODEM);
+
     // Start the web server
     startWebServer();
   } else {

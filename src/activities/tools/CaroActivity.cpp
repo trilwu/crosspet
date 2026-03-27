@@ -157,10 +157,23 @@ void CaroActivity::initBoard() {
 void CaroActivity::onEnter() {
   Activity::onEnter();
   showingDifficultySelect = true;
+  lastInputMs = millis();
   requestUpdate();
 }
 
 void CaroActivity::loop() {
+  // Reset idle timer on any button input
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Left) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Right) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Up) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    lastInputMs = millis();
+  }
+  // Auto-exit after 5 min of no input
+  if (millis() - lastInputMs > IDLE_TIMEOUT_MS) { finish(); return; }
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
     if (showingDifficultySelect) {
       finish();

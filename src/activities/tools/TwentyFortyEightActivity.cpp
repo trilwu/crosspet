@@ -133,6 +133,7 @@ bool TwentyFortyEightActivity::hasMovesLeft() const {
 
 void TwentyFortyEightActivity::onEnter() {
   Activity::onEnter();
+  lastInputMs = millis();
   // Persist best score before resetting for a new game
   if (score > GAME_SCORES.best2048) {
     GAME_SCORES.best2048 = score;
@@ -149,6 +150,18 @@ void TwentyFortyEightActivity::onEnter() {
 }
 
 void TwentyFortyEightActivity::loop() {
+  // Reset idle timer on any button input
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Left) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Right) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Up) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    lastInputMs = millis();
+  }
+  // Auto-exit after 5 min of no input
+  if (millis() - lastInputMs > IDLE_TIMEOUT_MS) { finish(); return; }
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
     finish();
     return;

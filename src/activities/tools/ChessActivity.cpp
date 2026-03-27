@@ -227,6 +227,7 @@ void ChessActivity::onEnter() {
   savedOrientation = renderer.getOrientation();
   renderer.setOrientation(GfxRenderer::Orientation::Portrait);
   showingDifficultySelect = true;
+  lastInputMs = millis();
   requestUpdate();
 }
 
@@ -237,6 +238,18 @@ void ChessActivity::onExit() {
 }
 
 void ChessActivity::loop() {
+  // Reset idle timer on any button input
+  if (mappedInput.wasReleased(MappedInputManager::Button::Back) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Left) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Right) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Up) ||
+      mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    lastInputMs = millis();
+  }
+  // Auto-exit after 5 min of no input
+  if (millis() - lastInputMs > IDLE_TIMEOUT_MS) { finish(); return; }
+
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
     if (showingDifficultySelect) {
       finish();
@@ -339,6 +352,11 @@ void ChessActivity::loop() {
         // Render white's move, then AI plays
         if (!gameOver) {
           requestUpdate();
+          // Show thinking indicator for non-trivial AI difficulty before blocking call
+          if (difficulty != Difficulty::EASY) {
+            GUI.drawPopup(renderer, tr(STR_CHESS_THINKING));
+            renderer.displayBuffer();
+          }
           doAiMove();
           checkGameEnd();
           whiteTurn = true;
