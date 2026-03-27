@@ -19,6 +19,7 @@
 #include "components/themes/crosspet/CrossPetTheme.h"
 #include "components/icons/cover.h"
 #include "components/icons/library.h"
+#include "components/icons/pet.h"
 #include "components/icons/recent.h"
 #include "components/icons/settings2.h"
 #include "components/icons/tools.h"
@@ -40,6 +41,9 @@ constexpr int CP_MAX_RECENT     = 3;
 constexpr int CP_BOTTOM_BAR_H   = 80;
 constexpr int CP_BOTTOM_ITEMS   = 4;
 constexpr int CP_BOTTOM_ICON_SZ = 32;
+constexpr int CP_QUICK_ITEMS    = 4;   // Quick-access shortcut bar item count
+constexpr int CP_QUICK_ICON_SZ  = 24;  // Icon size for quick-access bar
+constexpr int CP_QUICK_R        = 8;   // Corner radius for quick-access selection
 constexpr int CP_BOTTOM_R       = 10;
 constexpr int CP_FOCUS_COVER_PCT = 45;  // % of availH used for focus mode cover thumbnail
 constexpr int CP_SHADOW         = CrossPetMetrics::shadowOffset;
@@ -305,6 +309,46 @@ void HomeActivity::renderReadingStatsBar() {
   }
 }
 
+// ── Quick-access shortcut bar ─────────────────────────────────────────────────
+
+// Renders a row of 4 shortcut icons in the gap between recent covers and the
+// bottom navigation bar. Selection highlight is drawn dynamically by
+// renderQuickAccessSelection() based on selectorIndex.
+void HomeActivity::renderQuickAccessBar() {
+  const int screenW = renderer.getScreenWidth();
+  const int areaW = screenW - 2 * CP_CARD_MARGIN;
+
+  // Compute vertical centre of the gap (same calculation as renderReadingStatsBar)
+  constexpr int coverGap = 10;
+  const int totalGap = coverGap * (CP_MAX_RECENT - 1);
+  const int coverCardW = (areaW - totalGap) / CP_MAX_RECENT;
+  const int coverCardH = (int)(coverCardW * 1.4f);
+  const int recentBottom = CP_RECENT_COVER_Y + coverCardH + 6 + renderer.getLineHeight(SMALL_FONT_ID);
+  const int barY = renderer.getScreenHeight() - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
+
+  struct QuickItem { const uint8_t* icon; const char* label; };
+  const QuickItem items[CP_QUICK_ITEMS] = {
+    {Settings2Icon, tr(STR_SETTINGS_TITLE)},
+    {PetIcon,       tr(STR_VIRTUAL_PET)},
+    {ToolsIcon,     tr(STR_APPS)},
+    {RecentIcon,    tr(STR_RECENTS)},
+  };
+
+  const int itemW = areaW / CP_QUICK_ITEMS;
+  const int smallH = renderer.getLineHeight(SMALL_FONT_ID);
+  const int totalH = CP_QUICK_ICON_SZ + 4 + smallH;
+  const int barCentreY = (recentBottom + barY) / 2;
+  const int startY = barCentreY - totalH / 2;
+
+  for (int i = 0; i < CP_QUICK_ITEMS; i++) {
+    const int x = CP_CARD_MARGIN + i * itemW;
+    renderer.drawIcon(items[i].icon, x + (itemW - CP_QUICK_ICON_SZ) / 2, startY, CP_QUICK_ICON_SZ, CP_QUICK_ICON_SZ);
+    auto label = renderer.truncatedText(SMALL_FONT_ID, items[i].label, itemW - 4);
+    const int lw = renderer.getTextWidth(SMALL_FONT_ID, label.c_str());
+    renderer.drawText(SMALL_FONT_ID, x + (itemW - lw) / 2, startY + CP_QUICK_ICON_SZ + 4, label.c_str(), true);
+  }
+}
+
 // ── Bottom navigation bar ─────────────────────────────────────────────────────
 
 // Render bottom bar icons + labels (static, cached in cover buffer)
@@ -348,7 +392,9 @@ void HomeActivity::renderBottomBarSelection() {
   const int screenH = renderer.getScreenHeight();
   const bool focusMode = PET_SETTINGS.homeFocusMode;
   const int recentCount = focusMode ? 0 : std::max(0, std::min(CP_MAX_RECENT, static_cast<int>(recentBooks.size()) - 1));
-  const int barStart = 1 + recentCount;
+  // Quick-access zone sits between recents and bottom bar; skip its indices
+  const int quickItems = focusMode ? 0 : CP_QUICK_ITEMS;
+  const int barStart = 1 + recentCount + quickItems;
 
   const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
   constexpr int barPad = 8;
@@ -377,6 +423,50 @@ void HomeActivity::renderBottomBarSelection() {
       break;
     }
   }
+}
+
+// Renders the selection highlight for the quick-access shortcut bar (dynamic).
+void HomeActivity::renderQuickAccessSelection() {
+  if (PET_SETTINGS.homeFocusMode) return;
+  const int recentCount = std::max(0, std::min(CP_MAX_RECENT, static_cast<int>(recentBooks.size()) - 1));
+  const int quickStart = 1 + recentCount;
+
+  // Only draw if selectorIndex falls within the quick-access zone
+  const int rel = selectorIndex - quickStart;
+  if (rel < 0 || rel >= CP_QUICK_ITEMS) return;
+
+  const int screenW = renderer.getScreenWidth();
+  const int areaW = screenW - 2 * CP_CARD_MARGIN;
+
+  constexpr int coverGap = 10;
+  const int totalGap = coverGap * (CP_MAX_RECENT - 1);
+  const int coverCardW = (areaW - totalGap) / CP_MAX_RECENT;
+  const int coverCardH = (int)(coverCardW * 1.4f);
+  const int recentBottom = CP_RECENT_COVER_Y + coverCardH + 6 + renderer.getLineHeight(SMALL_FONT_ID);
+  const int barY = renderer.getScreenHeight() - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
+
+  const int itemW = areaW / CP_QUICK_ITEMS;
+  const int smallH = renderer.getLineHeight(SMALL_FONT_ID);
+  const int totalH = CP_QUICK_ICON_SZ + 4 + smallH;
+  const int barCentreY = (recentBottom + barY) / 2;
+  const int startY = barCentreY - totalH / 2;
+
+  // Draw selection outline around the focused item
+  const int x = CP_CARD_MARGIN + rel * itemW;
+  renderer.drawRoundedRect(x + 1, startY - 4, itemW - 2, totalH + 8, 2, CP_QUICK_R, true);
+
+  // Redraw icon + label inside the highlight (no inversion — outline style)
+  struct QuickItem { const uint8_t* icon; const char* label; };
+  const QuickItem items[CP_QUICK_ITEMS] = {
+    {Settings2Icon, tr(STR_SETTINGS_TITLE)},
+    {PetIcon,       tr(STR_VIRTUAL_PET)},
+    {ToolsIcon,     tr(STR_APPS)},
+    {RecentIcon,    tr(STR_RECENTS)},
+  };
+  renderer.drawIcon(items[rel].icon, x + (itemW - CP_QUICK_ICON_SZ) / 2, startY, CP_QUICK_ICON_SZ, CP_QUICK_ICON_SZ);
+  auto label = renderer.truncatedText(SMALL_FONT_ID, items[rel].label, itemW - 4);
+  const int lw = renderer.getTextWidth(SMALL_FONT_ID, label.c_str());
+  renderer.drawText(SMALL_FONT_ID, x + (itemW - lw) / 2, startY + CP_QUICK_ICON_SZ + 4, label.c_str(), true);
 }
 
 void HomeActivity::renderSelectionHighlight() {
@@ -412,8 +502,11 @@ void HomeActivity::renderSelectionHighlight() {
 void HomeActivity::loopCrossPet() {
   const bool focusMode = PET_SETTINGS.homeFocusMode;
   const int recentCount = focusMode ? 0 : std::max(0, std::min(CP_MAX_RECENT, static_cast<int>(recentBooks.size()) - 1));
-  const int barStart = 1 + recentCount;
-  const int itemCount = barStart + CP_BOTTOM_ITEMS;
+  // Quick-access zone: CP_QUICK_ITEMS slots between recents and bottom bar
+  const int quickItems = focusMode ? 0 : CP_QUICK_ITEMS;
+  const int quickStart = 1 + recentCount;
+  const int barStart   = quickStart + quickItems;
+  const int itemCount  = barStart + CP_BOTTOM_ITEMS;
 
   buttonNavigator.onNext([this, itemCount] {
     selectorIndex = ButtonNavigator::nextIndex(selectorIndex, itemCount);
@@ -441,6 +534,14 @@ void HomeActivity::loopCrossPet() {
       if (!recentBooks.empty()) onSelectBook(recentBooks[0].path);
     } else if (selectorIndex <= recentCount) {
       onSelectBook(recentBooks[selectorIndex].path);
+    } else if (selectorIndex < barStart) {
+      // Quick-access shortcuts: Settings, Pet, Tools, Recents
+      switch (selectorIndex - quickStart) {
+        case 0: onSettingsOpen(); break;
+        case 1: onVirtualPetOpen(); break;
+        case 2: onToolsOpen(); break;
+        case 3: onRecentBooksOpen(); break;
+      }
     } else {
       switch (selectorIndex - barStart) {
         case 0: onToolsOpen(); break;
@@ -654,7 +755,7 @@ void HomeActivity::renderCrossPet() {
     } else {
       renderContinueReadingCard();
       renderRecentCovers();
-      renderReadingStatsBar();
+      renderQuickAccessBar();
     }
     renderBottomBarIcons();
     renderButtonHints();
@@ -673,6 +774,7 @@ void HomeActivity::renderCrossPet() {
   // Selection highlights only (not full bottom bar redraw)
   renderSelectionHighlight();
   if (!focusMode) renderRecentSelection();
+  if (!focusMode) renderQuickAccessSelection();
   renderBottomBarSelection();
 
   renderer.displayBuffer();
