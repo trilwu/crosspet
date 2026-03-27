@@ -178,11 +178,19 @@ void HomeActivity::renderPetStatusWidget(int headerH) {
   if (SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS) {
     rightMargin += renderer.getTextWidth(SMALL_FONT_ID, "100%") + 4;
   }
-  const int availW = screenW - rightMargin - 4;
+  // Reserve extra space for "!" attention badge when pet has an active call
+  const int badgeW = ps.attentionCall ? renderer.getTextWidth(SMALL_FONT_ID, "! ") : 0;
+  const int availW = screenW - rightMargin - 4 - badgeW;
   auto truncated = renderer.truncatedText(SMALL_FONT_ID, petBuf, availW);
   const int finalW = renderer.getTextWidth(SMALL_FONT_ID, truncated.c_str());
-  const int x = screenW - rightMargin - finalW;
-  renderer.drawText(SMALL_FONT_ID, x, 5, truncated.c_str(), true);
+  const int x = screenW - rightMargin - finalW - badgeW;
+  if (ps.attentionCall) {
+    // Draw "!" attention badge to the left of the status text
+    renderer.drawText(SMALL_FONT_ID, x, 5, "!", true);
+    renderer.drawText(SMALL_FONT_ID, x + badgeW, 5, truncated.c_str(), true);
+  } else {
+    renderer.drawText(SMALL_FONT_ID, x, 5, truncated.c_str(), true);
+  }
 }
 
 void HomeActivity::renderHeaderClock() {

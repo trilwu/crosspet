@@ -375,8 +375,9 @@ void SleepActivity::renderSleepPet(int scale) const {
     }
 
     // Speech bubble above the pet (need-specific or mood-varied message)
+    // Fake discipline-test calls show only the "!" badge — no speech bubble.
     const char* msg = nullptr;
-    if (petMood == PetMood::NEEDY) {
+    if (petMood == PetMood::NEEDY && !petState.isFakeCall) {
       switch (petState.currentNeed) {
         case PetNeed::HUNGRY: msg = tr(STR_PET_SLEEP_FEED_ME); break;
         case PetNeed::SICK:   msg = tr(STR_PET_SLEEP_MEDICINE); break;
