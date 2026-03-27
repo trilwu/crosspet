@@ -171,12 +171,21 @@ struct SettingInfo {
 class SettingsActivity final : public Activity {
   ButtonNavigator buttonNavigator;
 
-  int selectedSettingIndex = 0;  // Index into allSettings; always points to a selectable (non-SECTION) item
+  int selectedCategoryIndex = 0;  // Currently selected category
+  int selectedSettingIndex = 0;
+  int settingsCount = 0;
 
-  // Flat list of all settings with SECTION separators
-  std::vector<SettingInfo> allSettings;
+  // Per-category settings derived from shared list + device-only actions
+  std::vector<SettingInfo> displaySettings;
+  std::vector<SettingInfo> readerSettings;
+  std::vector<SettingInfo> controlsSettings;
+  std::vector<SettingInfo> systemSettings;
+  const std::vector<SettingInfo>* currentSettings = nullptr;
 
-  int nextSelectableIndex(int current, int dir) const;
+  static constexpr int categoryCount = 4;
+  static const StrId categoryNames[categoryCount];
+
+  void enterCategory(int categoryIndex);
   void toggleCurrentSetting();
 
  public:

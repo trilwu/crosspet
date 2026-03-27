@@ -15,7 +15,6 @@
 inline const std::vector<SettingInfo>& getSettingsList() {
   static const std::vector<SettingInfo> list = {
       // --- Display ---
-      SettingInfo::Section("Display"),
       SettingInfo::Enum(StrId::STR_SLEEP_SCREEN, &CrossPointSettings::sleepScreen,
                         {StrId::STR_DARK, StrId::STR_LIGHT, StrId::STR_CUSTOM, StrId::STR_COVER, StrId::STR_NONE_OPT,
                          StrId::STR_COVER_CUSTOM, StrId::STR_CLOCK, StrId::STR_READING_STATS, StrId::STR_PAGE_OVERLAY,
@@ -68,7 +67,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
           "homeFocusMode", StrId::STR_CAT_DISPLAY),
 
       // --- Reader ---
-      SettingInfo::Section("Reader"),
       SettingInfo::Enum(StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,
                         {StrId::STR_BOOKERLY, StrId::STR_LEXEND, StrId::STR_BOKERLAM}, "fontFamily",
                         StrId::STR_CAT_READER),
@@ -98,7 +96,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         {StrId::STR_IMAGES_DISPLAY, StrId::STR_IMAGES_PLACEHOLDER, StrId::STR_IMAGES_SUPPRESS},
                         "imageRendering", StrId::STR_CAT_READER),
       // --- Controls ---
-      SettingInfo::Section("Controls"),
       SettingInfo::Enum(StrId::STR_SIDE_BTN_LAYOUT, &CrossPointSettings::sideButtonLayout,
                         {StrId::STR_PREV_NEXT, StrId::STR_NEXT_PREV}, "sideButtonLayout", StrId::STR_CAT_CONTROLS),
       SettingInfo::Enum(StrId::STR_FRONT_PAGE_BTN_LAYOUT, &CrossPointSettings::frontPageButtonLayout,
@@ -116,7 +113,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         "shortPwrBtn3Click", StrId::STR_CAT_CONTROLS),
 
       // --- System ---
-      SettingInfo::Section("System"),
       SettingInfo::Enum(StrId::STR_TIME_TO_SLEEP, &CrossPointSettings::sleepTimeout,
                         {StrId::STR_MIN_1, StrId::STR_MIN_5, StrId::STR_MIN_10, StrId::STR_MIN_15, StrId::STR_MIN_30},
                         "sleepTimeout", StrId::STR_CAT_SYSTEM),
