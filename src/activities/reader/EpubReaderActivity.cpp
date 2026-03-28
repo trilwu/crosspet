@@ -370,37 +370,7 @@ void EpubReaderActivity::loop() {
     return;
   }
 
-  // Quick font size cycling: Left = smaller, Right = larger (skipped if button hints still showing)
-  if (!showButtonHints) {
-    if (mappedInput.wasReleased(MappedInputManager::Button::Left) && !ignoreFrontButtons) {
-      if (SETTINGS.fontSize > 0) {
-        RenderLock lock(*this);
-        if (section) {
-          cachedSpineIndex = currentSpineIndex;
-          cachedChapterTotalPageCount = section->pageCount;
-          nextPageNumber = section->currentPage;
-        }
-        SETTINGS.fontSize--;
-        section.reset();
-        requestUpdate();
-      }
-      return;
-    }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Right) && !ignoreFrontButtons) {
-      if (SETTINGS.fontSize < 3) {  // 0=Small, 1=Medium, 2=Large, 3=XL
-        RenderLock lock(*this);
-        if (section) {
-          cachedSpineIndex = currentSpineIndex;
-          cachedChapterTotalPageCount = section->pageCount;
-          nextPageNumber = section->currentPage;
-        }
-        SETTINGS.fontSize++;
-        section.reset();
-        requestUpdate();
-      }
-      return;
-    }
-  }
+  // Note: Left/Right are page turn buttons — font size cycling removed (caused section.reset on every turn)
 
   // Star page toggle via power button multi-click
   if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::STAR_PAGE) {
