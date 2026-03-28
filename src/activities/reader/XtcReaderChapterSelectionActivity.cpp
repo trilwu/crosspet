@@ -136,5 +136,14 @@ void XtcReaderChapterSelectionActivity::render(RenderLock&&) {
     GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   }
 
+  // Position indicator: "3/12" at bottom-right
+  const int totalItems = static_cast<int>(chapters.size());
+  if (totalItems > 0) {
+    char pos[12];
+    snprintf(pos, sizeof(pos), "%d/%d", selectorIndex + 1, totalItems);
+    const int posW = renderer.getTextWidth(SMALL_FONT_ID, pos);
+    renderer.drawText(SMALL_FONT_ID, contentX + contentWidth - posW - 8, renderer.getScreenHeight() - 52, pos, true);
+  }
+
   renderer.displayBuffer();
 }
