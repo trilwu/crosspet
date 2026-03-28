@@ -47,10 +47,8 @@ class HomeActivity final : public Activity {
   void renderRecentCovers();       // Draw cover thumbnails (cached in buffer)
   void renderRecentSelection();    // Selection highlight for recent covers
   void renderReadingStatsBar();    // Pet widget or reading stats in gap
-  void renderQuickAccessBar();     // Quick-access shortcut row (4 icons)
-  void renderBottomBarIcons();        // Static icons + labels (cached in buffer)
-  void renderBottomBarSelection();    // Selection highlight only (per-frame)
-  void renderQuickAccessSelection();  // Quick-access selection highlight (per-frame)
+  void renderBottomBarIcons();      // Static icons + labels (cached in buffer)
+  void renderBottomBarSelection();  // Selection highlight only (per-frame)
   void renderButtonHints();         // Static button hint shapes (cached in buffer)
   void renderSelectionHighlight();
   void renderFocusCard();           // Focus mode: large single-book card
