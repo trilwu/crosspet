@@ -104,6 +104,14 @@ void EpubReaderActivity::onEnter() {
   READ_STATS.startSession();
   sessionStartMs = millis();
 
+  // Show button hints overlay on entry for 3 seconds
+  showButtonHints = true;
+  buttonHintsStartMs = millis();
+
+  // Record entry position for session summary popup on exit
+  sessionStartPage = nextPageNumber;
+  sessionStartSpineIndex = currentSpineIndex;
+
   // Auto-activate page turn: use per-book speed if set, otherwise fall back to global
   if (SETTINGS.autoPageTurnEnabled && SETTINGS.autoPageTurnSpeed > 0) {
     const uint8_t speed = (perBookPageTurnSpeed > 0) ? perBookPageTurnSpeed : SETTINGS.autoPageTurnSpeed;
@@ -185,6 +193,20 @@ void EpubReaderActivity::loop() {
   if (showMilestoneToast && millis() - milestoneToastTime > 1500) {
     showMilestoneToast = false;
     requestUpdate();
+  }
+
+  // Dismiss button hints overlay: auto-dismiss after 3s or on any button press
+  if (showButtonHints) {
+    const bool anyBtnHints = mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
+                             mappedInput.wasReleased(MappedInputManager::Button::Back) ||
+                             mappedInput.wasReleased(MappedInputManager::Button::Left) ||
+                             mappedInput.wasReleased(MappedInputManager::Button::Right) ||
+                             mappedInput.wasReleased(MappedInputManager::Button::PageBack) ||
+                             mappedInput.wasReleased(MappedInputManager::Button::PageForward);
+    if (millis() - buttonHintsStartMs > BUTTON_HINTS_DURATION_MS || anyBtnHints) {
+      showButtonHints = false;
+      requestUpdate();
+    }
   }
 
   if (automaticPageTurnActive) {
@@ -328,8 +350,57 @@ void EpubReaderActivity::loop() {
       restoreSavedPosition();
       return;
     }
+    // Session summary popup: show time read + current book progress before exiting
+    if (sessionStartMs > 0) {
+      const unsigned long sessionMinutes = (millis() - sessionStartMs) / 60000;
+      uint8_t bookProgressPercent = 0;
+      if (epub && epub->getBookSize() > 0 && section && section->pageCount > 0) {
+        const float chapterProgress =
+            static_cast<float>(section->currentPage) / static_cast<float>(section->pageCount);
+        bookProgressPercent = static_cast<uint8_t>(
+            clampPercent(static_cast<int>(epub->calculateProgress(currentSpineIndex, chapterProgress) * 100.0f + 0.5f)));
+      }
+      char summaryBuf[48];
+      snprintf(summaryBuf, sizeof(summaryBuf), "%lu min \xb7 %d%%",
+               sessionMinutes, static_cast<int>(bookProgressPercent));
+      GUI.drawPopup(renderer, summaryBuf);
+      renderer.displayBuffer();
+      delay(1500);
+    }
     onGoHome();
     return;
+  }
+
+  // Quick font size cycling: Left = smaller, Right = larger (skipped if button hints still showing)
+  if (!showButtonHints) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Left) && !ignoreFrontButtons) {
+      if (SETTINGS.fontSize > 0) {
+        RenderLock lock(*this);
+        if (section) {
+          cachedSpineIndex = currentSpineIndex;
+          cachedChapterTotalPageCount = section->pageCount;
+          nextPageNumber = section->currentPage;
+        }
+        SETTINGS.fontSize--;
+        section.reset();
+        requestUpdate();
+      }
+      return;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right) && !ignoreFrontButtons) {
+      if (SETTINGS.fontSize < 3) {  // 0=Small, 1=Medium, 2=Large, 3=XL
+        RenderLock lock(*this);
+        if (section) {
+          cachedSpineIndex = currentSpineIndex;
+          cachedChapterTotalPageCount = section->pageCount;
+          nextPageNumber = section->currentPage;
+        }
+        SETTINGS.fontSize++;
+        section.reset();
+        requestUpdate();
+      }
+      return;
+    }
   }
 
   // Star page toggle via power button multi-click
@@ -1058,6 +1129,12 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
   renderStatusBar();
   fcm->logStats("bw_render");
   const auto tBwRender = millis();
+
+  // Button hints overlay — drawn over rendered page on reader entry, auto-dismisses after 3s
+  if (showButtonHints) {
+    const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_LEFT), tr(STR_DIR_RIGHT));
+    GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  }
 
   // Milestone toast — small banner at bottom of page content area
   if (showMilestoneToast && milestoneText[0]) {

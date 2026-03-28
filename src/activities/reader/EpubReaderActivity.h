@@ -51,6 +51,15 @@ class EpubReaderActivity final : public Activity {
   unsigned long milestoneToastTime = 0;
   char milestoneText[48] = {};
 
+  // Button hints overlay: shown for 3s on reader entry, dismissed by any button press
+  bool showButtonHints = false;
+  unsigned long buttonHintsStartMs = 0;
+  static constexpr unsigned long BUTTON_HINTS_DURATION_MS = 3000;
+
+  // Session summary: page position at reader entry for exit popup
+  int sessionStartPage = 0;
+  int sessionStartSpineIndex = 0;
+
   // Per-book auto page turn speed override (0 = use global setting, 1-20 = ppm)
   uint8_t perBookPageTurnSpeed = 0;
 
