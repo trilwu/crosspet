@@ -124,8 +124,7 @@ void EpubReaderActivity::onEnter() {
 
 void EpubReaderActivity::onExit() {
   Activity::onExit();
-  // Restore full CPU speed when leaving reader
-  powerManager.setReadingMode(false);
+  // Note: adaptive CPU freq removed — 80MHz caused slow SD I/O on page turns
 
   // Accumulate reading time and record book progress before resetting state
   uint8_t progress = 0;
@@ -837,9 +836,6 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
 
 // TODO: Failure handling
 void EpubReaderActivity::render(RenderLock&& lock) {
-  // Restore full CPU speed before rendering
-  powerManager.setReadingMode(false);
-
   if (!epub) {
     return;
   }
@@ -1166,8 +1162,6 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
     const bool isPureBwText = !page->hasImages() && !SETTINGS.textAntiAliasing;
     ReaderUtils::displayWithRefreshCycle(renderer, pagesUntilFullRefresh, isPureBwText);
   }
-  // Page rendered — drop to reading frequency while user reads
-  powerManager.setReadingMode(true);
   const auto tDisplay = millis();
 
   // Save bw buffer to reset buffer state after grayscale data sync
