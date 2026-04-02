@@ -150,33 +150,44 @@
 - Power cycle device and verify reading stats restored
 - Brief wake (power button) and verify reading stats screen updates
 
-### FR5: WiFi & OTA
+### FR5: WiFi & Network Connectivity
 
-**Requirement:** Device shall support wireless connectivity for updates and file management.
+**Requirement:** Device shall support wireless connectivity for updates, time synchronization, and file management.
 
 **Sub-requirements:**
-- FR4.1: WiFi connection (SSID/password entry)
-- FR4.2: OTA firmware update via HTTP
-- FR4.3: WebDAV file upload/download
-- FR4.4: Web-based settings interface
-- FR4.5: KOReader Sync API integration
+- FR5.1: WiFi connection (SSID/password entry)
+- FR5.2: OTA firmware update via HTTP
+- FR5.3: WebDAV file upload/download
+- FR5.4: Web-based settings interface
+- FR5.5: KOReader Sync API integration
+- **FR5.6: Automatic NTP time synchronization** (v1.4.0+)
+  - FR5.6.1: Smart triggering only during active reading sessions
+  - FR5.6.2: Configurable sync interval (1-48 hours, default 20 hours)
+  - FR5.6.3: Enable/disable via Settings UI (System category)
+  - FR5.6.4: Respects idle state detection to minimize battery drain
+  - FR5.6.5: Reuses existing NTP/SNTP infrastructure from WeatherActivity
+  - FR5.6.6: Graceful error handling with informative logging
 
 **Test Cases:**
 - Connect to WiFi, verify stability
 - Upload EPUB via WebDAV, verify on device
 - Download firmware via OTA, verify integrity
 - Change settings via web interface
+- **Verify time sync only triggers during reading (not in menu/sleep)**
+- **Change sync interval in Settings, verify new interval applied**
+- **Disable auto sync, verify no WiFi connection during reading**
+- **Simulate WiFi failure, verify graceful fallback**
 
 ### FR6: Input & Navigation
 
 **Requirement:** Device shall respond to button input with clear navigation feedback.
 
 **Sub-requirements:**
-- FR5.1: Up/Down navigation (menu scrolling)
-- FR5.2: Confirm selection (enter/select action)
-- FR5.3: Back navigation (exit activity, return to previous)
-- FR5.4: Customizable button mapping
-- FR5.5: D-pad support for navigation
+- FR6.1: Up/Down navigation (menu scrolling)
+- FR6.2: Confirm selection (enter/select action)
+- FR6.3: Back navigation (exit activity, return to previous)
+- FR6.4: Customizable button mapping
+- FR6.5: D-pad support for navigation
 
 **Test Cases:**
 - Navigate settings menu, verify highlighting

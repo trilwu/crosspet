@@ -6,7 +6,7 @@
 #include <Serialization.h>
 
 namespace {
-constexpr uint8_t STATE_FILE_VERSION = 4;
+constexpr uint8_t STATE_FILE_VERSION = 5;
 constexpr char STATE_FILE_BIN[] = "/.crosspoint/state.bin";
 constexpr char STATE_FILE_JSON[] = "/.crosspoint/state.json";
 constexpr char STATE_FILE_BAK[] = "/.crosspoint/state.bin.bak";
@@ -74,6 +74,12 @@ bool CrossPointState::loadFromBinaryFile() {
     serialization::readPod(inputFile, lastSleepFromReader);
   } else {
     lastSleepFromReader = false;
+  }
+
+  if (version >= 5) {
+    serialization::readPod(inputFile, lastTimeSyncMs);
+  } else {
+    lastTimeSyncMs = 0;
   }
 
   inputFile.close();

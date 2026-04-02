@@ -28,6 +28,7 @@
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
+#include "activities/tools/WeatherActivity.h"
 #include "pet/PetManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
@@ -184,9 +185,8 @@ bool restoreClockFromSD() {
   return true;
 }
 
-// measurement of power button press duration calibration value
-unsigned long t1 = 0;
-unsigned long t2 = 0;
+// Constants for time calculations
+static constexpr unsigned long HOURS_TO_MS = 3600000UL;  // 60 * 60 * 1000
 
 // Forward declaration — defined later in setup section
 void setupDisplayAndFonts();
@@ -610,6 +610,47 @@ void loop() {
   const unsigned long activityStartTime = millis();
   activityManager.loop();
   const unsigned long activityDuration = millis() - activityStartTime;
+
+  // Auto time sync: only when reading a book and device is not idle
+  // This minimizes battery drain by only connecting to WiFi during active reading sessions
+  if (PET_SETTINGS.autoTimeSyncEnabled && activityManager.isReaderActivity()) {
+    const unsigned long now = millis();
+    const unsigned long syncIntervalMs = (unsigned long)PET_SETTINGS.autoTimeSyncIntervalHours * HOURS_TO_MS;
+
+    // Check if enough time has passed since last sync (handle millis() overflow)
+    bool shouldSync = false;
+    if (APP_STATE.lastTimeSyncMs == 0) {
+      // First sync after boot - allow immediate sync
+      shouldSync = true;
+    } else if (now >= APP_STATE.lastTimeSyncMs) {
+      // Normal case: no overflow
+      shouldSync = (now - APP_STATE.lastTimeSyncMs) >= syncIntervalMs;
+    } else {
+      // Millis overflow occurred - assume enough time has passed
+      shouldSync = true;
+    }
+
+    if (shouldSync) {
+      // Check if device has been active recently (not idle)
+      const unsigned long sleepTimeoutMs = SETTINGS.getSleepTimeoutMs();
+      const bool deviceIsActive = (now - lastActivityTime < sleepTimeoutMs);
+
+      if (deviceIsActive) {
+        LOG_INF("SYNC", "Auto time sync triggered (interval: %uh)", PET_SETTINGS.autoTimeSyncIntervalHours);
+        int syncResult = WeatherActivity::silentRefresh();
+        if (syncResult == 0) {
+          // Success: update timestamp and refresh screen to show updated time
+          APP_STATE.lastTimeSyncMs = now;
+          APP_STATE.saveToFile();
+          renderer.requestNextHalfRefresh();
+          activityManager.requestUpdate();
+          LOG_INF("SYNC", "Auto time sync successful");
+        } else {
+          LOG_INF("SYNC", "Auto time sync failed with result: %d", syncResult);
+        }
+      }
+    }
+  }
 
   const unsigned long loopDuration = millis() - loopStartTime;
   if (loopDuration > maxLoopDuration) {

@@ -416,6 +416,100 @@ SD Card Layout:
 - Device reboots, bootloader switches partitions
 - Automatic rollback if boot fails
 
+#### NTP Time Synchronization (v1.4.0+) [NEW]
+
+**Location:** `src/main.cpp` (integration point), `src/activities/tools/WeatherActivity.h/cpp` (NTP infrastructure), `src/CrossPetSettings.h` (settings)
+
+**Purpose:** Automatically maintain accurate device clock via NTP (SNTP) while minimizing battery drain by syncing only during active reading sessions.
+
+**Architecture:**
+
+```
+Main Event Loop (main.cpp)
+    │
+    ▼
+Activity Manager & Input System
+    │
+    ├─ Check: Is user reading? (ReaderActivity active)
+    │
+    ├─ Check: Is device idle? (lastActivityTime vs sleepTimeout)
+    │
+    └─ If reading AND active (not idle):
+        │
+        ├─ Has syncInterval elapsed since lastTimeSyncMs?
+        │   (interval: 1-48 hours, default 20h)
+        │
+        └─ If time to sync:
+            │
+            ├─ WiFi::connect() [if not connected]
+            │
+            ├─ Call WeatherActivity::silentRefresh()
+            │   └─ Internally calls esp_sntp APIs
+            │
+            ├─ Record successful sync: APP_STATE.lastTimeSyncMs = now
+            │   └─ Persisted to APP_STATE_FILE
+            │
+            ├─ Refresh screen half-refresh on success
+            │   (updates clock display)
+            │
+            └─ Log sync result:
+                0 = success
+                1 = no WiFi credentials
+                2 = timeout
+                4 = HTTP API error
+                5 = JSON parse error
+```
+
+**Settings (User-Configurable):**
+
+| Setting | Type | Range | Default | Persistent |
+|---------|------|-------|---------|------------|
+| `autoTimeSyncEnabled` | boolean | true/false | true | JSON /.crosspoint/pet_settings.json |
+| `autoTimeSyncIntervalHours` | uint8_t | 1-48 | 20 | JSON /.crosspoint/pet_settings.json |
+
+**Code Integration Points:**
+
+1. **Main Loop** (`src/main.cpp` lines ~616-650):
+   ```cpp
+   if (PET_SETTINGS.autoTimeSyncEnabled && activityManager.isReaderActivity()) {
+     const unsigned long syncIntervalMs = PET_SETTINGS.autoTimeSyncIntervalHours * HOURS_TO_MS;
+     bool shouldSync = checkTimeSinceLastSync(APP_STATE.lastTimeSyncMs);
+     
+     if (shouldSync && isDeviceActive()) {
+       int syncResult = WeatherActivity::silentRefresh();
+       if (syncResult == 0) {
+         APP_STATE.lastTimeSyncMs = millis();
+         APP_STATE.saveToFile();
+         renderer.requestNextHalfRefresh();
+       }
+     }
+   }
+   ```
+
+2. **Settings UI** (`src/SettingsList.h`):
+   - Auto Time Sync: Toggle (on/off)
+   - Sync Interval: Slider (1-48 hours)
+   - Both in Settings → System category
+
+3. **State Persistence** (`src/CrossPetSettings.h/cpp`):
+   - Both settings saved to JSON with safe defaults
+   - Migration: unknown old saves default to enabled=true, interval=20h
+
+**Key Design Decisions:**
+
+- **Reading-Only Syncs:** Only activates during EpubReaderActivity to avoid battery drain during idle/gaming
+- **Idle Detection:** Respects `SETTINGS.getSleepTimeoutMs()` to ensure device is actively being used
+- **Graceful Fallback:** Sync failures are logged but don't interrupt user session (async operation concept)
+- **Reuses NTP Infrastructure:** Leverages existing `esp_sntp` init and `WeatherActivity::silentRefresh()` to minimize code duplication
+- **Minimal Latency:** Sync completes in seconds during normal reading; user sees updated clock after next screen refresh
+- **First-Sync Timing:** First sync after boot can occur immediately on first reading session
+
+**Battery Impact:**
+
+- **Disabled:** No WiFi power drain from time sync
+- **Enabled (20h interval):** ~80-200mA for ~2-5 seconds every 20 hours of reading
+- **Impact calculation:** 1 sync per 20h reading = ~5-20 seconds of 100mA drain per week = negligible (<1% weekly drain vs WiFi idle)
+
 ### 6. Internationalization (i18n)
 
 **System:**

@@ -156,6 +156,7 @@ Your chicken grows with every page you read.
 - **KOReader Sync** — sync reading progress across devices
 - **WiFi OTA updates** — update firmware over-the-air
 - **Weather sync** — Open-Meteo API (no account required)
+- **Automatic time sync** — keeps device clock accurate via NTP (SNTP protocol), runs only during reading sessions to save battery
 
 > **Note:** WiFi uses 80-200mA. Charge your device before OTA updates or long sync sessions.
 
@@ -198,6 +199,20 @@ Fully customizable — each element can be shown or hidden independently:
 | **UI Theme** | Classic, Lyra, Lyra Extended, CrossPet, CrossPet Classic | Visual theme for UI |
 | **Text Darkness** | Normal, Dark, Extra Dark | Adjusts rendered text intensity |
 | **Text Anti-Aliasing** | On/Off | 4-level grayscale smoothing |
+
+### Network & Synchronization Settings
+
+| Setting | Options | Default | Notes |
+|---------|---------|---------|-------|
+| **Auto Time Sync** | On/Off | On | Automatically sync device clock via NTP |
+| **Sync Interval** | 1-48 hours | 20 hours | Time between sync attempts (only during reading) |
+
+**Auto Time Sync Details:**
+- Syncs only when actively reading a book and device is not idle
+- Keeps device clock accurate without constant WiFi drain
+- First sync may occur shortly after starting a reading session
+- Falls back gracefully if WiFi connection fails
+- Log entry shows sync result (0 = success, other codes indicate specific failures)
 
 ---
 
