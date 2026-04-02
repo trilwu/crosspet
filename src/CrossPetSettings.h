@@ -26,6 +26,10 @@ class CrossPetSettings {
   uint8_t homeShowPetStatus = 1;
   uint8_t homeFocusMode = 0;  // 1=show only current book (no recent covers/stats)
 
+  // Automatic time sync settings
+  uint8_t autoTimeSyncEnabled = 1;        // 1=enabled, 0=disabled
+  uint8_t autoTimeSyncIntervalHours = 20; // Hours between sync attempts (1-48)
+
  private:
   CrossPetSettings() = default;
   static CrossPetSettings instance;

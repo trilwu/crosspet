@@ -125,6 +125,15 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_SYSTEM),
       SettingInfo::Toggle(StrId::STR_SHOW_FREE_HEAP, &CrossPointSettings::showFreeHeap, "showFreeHeap",
                           StrId::STR_CAT_SYSTEM),
+      SettingInfo::DynamicToggle(
+          StrId::STR_AUTO_TIME_SYNC,
+          [] { return PET_SETTINGS.autoTimeSyncEnabled; },
+          [](uint8_t v) { PET_SETTINGS.autoTimeSyncEnabled = v; PET_SETTINGS.saveToFile(); },
+          "autoTimeSyncEnabled", StrId::STR_CAT_SYSTEM),
+      SettingInfo::DynamicValue(
+          StrId::STR_TIME_SYNC_INTERVAL, [] { return PET_SETTINGS.autoTimeSyncIntervalHours; },
+          [](uint8_t v) { PET_SETTINGS.autoTimeSyncIntervalHours = v; PET_SETTINGS.saveToFile(); },
+          {1, 48, 1}, "autoTimeSyncIntervalHours", StrId::STR_CAT_SYSTEM),
 
       // --- KOReader Sync (web-only, uses KOReaderCredentialStore) ---
       SettingInfo::DynamicString(

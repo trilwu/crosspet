@@ -26,6 +26,14 @@
 - **Clock Refresh on Brief Wake:** Brief power button press re-renders dynamic sleep screens (CLOCK, READING_STATS) before re-entering sleep
 - **ReadingStats Persistence:** Binary persistence at `/.crosspoint/reading_stats.bin` with auto-load on boot
 
+#### Connectivity & System Features
+- **Automatic Time Synchronization:** Smart NTP time sync that runs only during active reading sessions to minimize battery drain
+  - Configurable interval: 1-48 hours (default 20 hours)
+  - Enable/disable via Settings UI (System → Auto Time Sync)
+  - Intelligent triggering: syncs only when reading AND device is not idle
+  - Reuses existing NTP infrastructure from WeatherActivity
+  - Graceful fallback on WiFi/NTP failures with informative logging
+
 ### Removed Activities
 - **PhotoFrameActivity** - Removed due to feature consolidation
 - **GameOfLifeActivity** - Removed due to maintenance burden
@@ -52,8 +60,10 @@ src/
 - `src/activities/home/HomeActivity.cpp` - Added renderHeaderClock() method
 - `src/activities/tools/ToolsActivity.cpp/h` - Expanded menu to 11 items
 - `src/activities/boot_sleep/SleepActivity.cpp` - Added daily quotes rendering, reading stats screen
-- `src/main.cpp` - Added ReadingStats load on boot, verifyPowerButtonDuration() for clock refresh
-- `src/CrossPointSettings.h` - Added `statusBarClock` boolean setting
+- `src/main.cpp` - Added ReadingStats load on boot, verifyPowerButtonDuration() for clock refresh, **automatic time sync loop with idle state detection**
+- `src/CrossPointSettings.h` - Added `statusBarClock` boolean setting, **`autoTimeSyncEnabled` and `autoTimeSyncIntervalHours` (1-48)**
+- `src/CrossPetSettings.cpp` - JSON serialization for time sync settings (defaults: enabled=true, interval=20h)
+- `src/SettingsList.h` - Added time sync settings UI entries in System category
 
 **Deleted Files:**
 - `src/activities/tools/PhotoFrameActivity.h/cpp`
@@ -68,13 +78,18 @@ src/
 - Clock refresh on brief wake tested
 - Daily quotes rotation validated
 - Home screen clock display alignment checked
+- **Auto time sync: Verified triggers only during active reading sessions**
+- **Auto time sync: Settings UI enable/disable tested**
+- **Auto time sync: Interval range (1-48h) validated**
+- **Auto time sync: Idle state detection prevents syncs during device inactivity**
 
 ### Documentation
 
 - Updated `docs/code-standards.md` with new activity patterns
-- Updated `docs/system-architecture.md` with ReadingStats subsystem
+- Updated `docs/system-architecture.md` with ReadingStats subsystem, **network (NTP) subsystem documentation**
 - Updated `docs/codebase-summary.md` with complete tools list
-- Updated `docs/project-overview-pdr.md` with v1.3 release status
+- Updated `docs/project-overview-pdr.md` with v1.3 release status, **FR5: Network Connectivity & Time Synchronization**
+- Updated [README.md](../README.md) with automatic time sync feature, settings table, and battery/WiFi notes
 
 ### Known Issues
 

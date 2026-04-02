@@ -20,6 +20,8 @@ bool CrossPetSettings::saveToFile() const {
   doc["homeShowWeather"] = homeShowWeather;
   doc["homeShowPetStatus"] = homeShowPetStatus;
   doc["homeFocusMode"] = homeFocusMode;
+  doc["autoTimeSyncEnabled"] = autoTimeSyncEnabled;
+  doc["autoTimeSyncIntervalHours"] = autoTimeSyncIntervalHours;
 
   String json;
   serializeJson(doc, json);
@@ -48,6 +50,12 @@ bool CrossPetSettings::loadFromFile() {
       homeShowWeather = doc["homeShowWeather"] | (uint8_t)1;
       homeShowPetStatus = doc["homeShowPetStatus"] | (uint8_t)1;
       homeFocusMode = doc["homeFocusMode"] | (uint8_t)0;
+      autoTimeSyncEnabled = doc["autoTimeSyncEnabled"] | (uint8_t)1;
+      autoTimeSyncIntervalHours = doc["autoTimeSyncIntervalHours"] | (uint8_t)20;
+      // Validate interval bounds (1-48 hours)
+      if (autoTimeSyncIntervalHours < 1 || autoTimeSyncIntervalHours > 48) {
+        autoTimeSyncIntervalHours = 20;
+      }
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
     }
