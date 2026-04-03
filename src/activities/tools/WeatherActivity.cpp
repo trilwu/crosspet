@@ -7,6 +7,8 @@
 #include <Logging.h>
 #include <WiFi.h>
 #include <esp_sntp.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 #include "CrossPointSettings.h"
 #include "WifiCredentialStore.h"
@@ -103,8 +105,35 @@ static bool trySilentWifiConnect() {
   return false;
 }
 
+namespace {
+enum class AsyncSyncState : uint8_t { IDLE = 0, RUNNING = 1, DONE = 2 };
+
+volatile AsyncSyncState g_asyncSyncState = AsyncSyncState::IDLE;
+volatile int g_asyncSyncResult = -1;
+volatile uint32_t g_asyncSyncCompletionVersion = 0;
+volatile bool g_weatherActivityForegroundActive = false;
+TaskHandle_t g_asyncSyncTaskHandle = nullptr;
+
+void weatherSilentRefreshTask(void*) {
+  const int rc = WeatherActivity::silentRefresh();
+
+  taskENTER_CRITICAL(nullptr);
+  g_asyncSyncResult = rc;
+  g_asyncSyncState = AsyncSyncState::DONE;
+  g_asyncSyncCompletionVersion++;
+  g_asyncSyncTaskHandle = nullptr;
+  taskEXIT_CRITICAL(nullptr);
+
+  vTaskDelete(nullptr);
+}
+}  // namespace
+
 void WeatherActivity::onEnter() {
   Activity::onEnter();
+  taskENTER_CRITICAL(nullptr);
+  g_weatherActivityForegroundActive = true;
+  taskEXIT_CRITICAL(nullptr);
+
   selectedCity = SETTINGS.weatherCity;
   if (selectedCity > CITY_COUNT) selectedCity = 0;  // 0=Auto, 1..3=manual
   lastUpdateTime[0] = '\0';
@@ -472,7 +501,55 @@ int WeatherActivity::silentRefresh() {
   return 0;
 }
 
+SilentRefreshStartResult WeatherActivity::startSilentRefreshAsync() {
+  taskENTER_CRITICAL(nullptr);
+  if (g_weatherActivityForegroundActive) {
+    taskEXIT_CRITICAL(nullptr);
+    return SilentRefreshStartResult::BUSY_FOREGROUND;
+  }
+  if (g_asyncSyncState == AsyncSyncState::RUNNING || g_asyncSyncTaskHandle != nullptr) {
+    taskEXIT_CRITICAL(nullptr);
+    return SilentRefreshStartResult::ALREADY_RUNNING;
+  }
+
+  g_asyncSyncState = AsyncSyncState::RUNNING;
+  g_asyncSyncResult = -1;
+  taskEXIT_CRITICAL(nullptr);
+
+  BaseType_t created = xTaskCreate(&weatherSilentRefreshTask,
+                                   "WeatherSilentSync",
+                                   8192,
+                                   nullptr,
+                                   1,
+                                   &g_asyncSyncTaskHandle);
+  if (created != pdPASS) {
+    taskENTER_CRITICAL(nullptr);
+    g_asyncSyncState = AsyncSyncState::IDLE;
+    g_asyncSyncTaskHandle = nullptr;
+    taskEXIT_CRITICAL(nullptr);
+    return SilentRefreshStartResult::TASK_CREATE_FAILED;
+  }
+
+  return SilentRefreshStartResult::STARTED;
+}
+
+SilentRefreshSnapshot WeatherActivity::getSilentRefreshSnapshot() {
+  SilentRefreshSnapshot snapshot;
+
+  taskENTER_CRITICAL(nullptr);
+  snapshot.active = (g_asyncSyncState == AsyncSyncState::RUNNING);
+  snapshot.result = g_asyncSyncResult;
+  snapshot.completionVersion = g_asyncSyncCompletionVersion;
+  taskEXIT_CRITICAL(nullptr);
+
+  return snapshot;
+}
+
 void WeatherActivity::onExit() {
+  taskENTER_CRITICAL(nullptr);
+  g_weatherActivityForegroundActive = false;
+  taskEXIT_CRITICAL(nullptr);
+
   SETTINGS.weatherCity = selectedCity;
   SETTINGS.saveToFile();
   WiFi.disconnect(false);

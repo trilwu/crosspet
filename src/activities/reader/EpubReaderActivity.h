@@ -51,6 +51,28 @@ class EpubReaderActivity final : public Activity {
   unsigned long milestoneToastTime = 0;
   char milestoneText[48] = {};
 
+  // Bookmark toast (non-blocking)
+  bool showBookmarkToast = false;
+  unsigned long bookmarkToastTime = 0;
+  char bookmarkToastText[32] = {};
+
+  // Progress write debounce state
+  int lastSavedSpineIndex = -1;
+  int lastSavedPage = -1;
+  int lastSavedPageCount = -1;
+  unsigned long lastProgressSaveMs = 0;
+
+  // Font cache invalidation state
+  bool forceFontCacheClear = true;
+  uint8_t lastRenderedFontFamily = 0xFF;
+  uint8_t lastRenderedFontSize = 0xFF;
+  uint8_t lastRenderedOrientation = 0xFF;
+
+  // Page load failure guard to avoid infinite retry loops
+  int failedLoadSpineIndex = -1;
+  int failedLoadPage = -1;
+  uint8_t consecutiveLoadFailures = 0;
+
   // Bookmarks (starred pages)
   BookmarkStore bookmarkStore;
 
@@ -69,6 +91,10 @@ class EpubReaderActivity final : public Activity {
   void renderStatusBar() const;
   int getEstimatedMinutesLeft() const;
   void saveProgress(int spineIndex, int currentPage, int pageCount);
+  void queueBookmarkToast(const char* text);
+  void maybeSaveProgress(int spineIndex, int currentPage, int pageCount);
+  void flushProgressSave(int spineIndex, int currentPage, int pageCount);
+  bool shouldClearFontCache() const;
   // Jump to a percentage of the book (0-100), mapping it to spine and page.
   void jumpToPercent(int percent);
   void onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction action);

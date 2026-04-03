@@ -490,6 +490,7 @@ void loop() {
   static unsigned long maxLoopDuration = 0;
   const unsigned long loopStartTime = millis();
   static unsigned long lastMemPrint = 0;
+  static uint32_t weatherSyncSeenVersion = 0;
 
   gpio.update();
 
@@ -515,6 +516,14 @@ void loop() {
     lastMemPrint = millis();
   }
 
+  const auto weatherSync = WeatherActivity::getSilentRefreshSnapshot();
+  if (weatherSync.completionVersion != weatherSyncSeenVersion) {
+    weatherSyncSeenVersion = weatherSync.completionVersion;
+    LOG_INF("PWR", "Async sync result: %d (0=ok, 1=no creds, 2=timeout, 4=api, 5=parse)", weatherSync.result);
+    renderer.requestNextHalfRefresh();
+    activityManager.requestUpdate();
+  }
+
   // Handle incoming serial commands,
   // nb: we use logSerial from logging to avoid deprecation warnings
   if (logSerial.available() > 0) {
@@ -534,6 +543,7 @@ void loop() {
   // Check for any user activity (button press or release) or active background work
   static unsigned long lastActivityTime = millis();
   bool hasActivity = gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep();
+  hasActivity = hasActivity || weatherSync.active;
 #ifdef ENABLE_BLE
   // BLE HID reports count as user activity — prevent auto-sleep while remote is in use
   hasActivity = hasActivity || BluetoothHIDManager::getInstance().hasRecentActivity();
@@ -596,11 +606,14 @@ void loop() {
       break;
     case CrossPointSettings::SHORT_PWRBTN::SYNC_WEATHER_TIME: {
       LOG_INF("PWR", "Sync weather/time triggered");
-      int syncResult = WeatherActivity::silentRefresh();
-      LOG_INF("PWR", "Sync result: %d (0=ok, 1=no creds, 2=timeout, 4=api, 5=parse)", syncResult);
-      // Refresh screen after time/weather sync to show updated clock
-      renderer.requestNextHalfRefresh();
-      activityManager.requestUpdate();
+      const auto startResult = WeatherActivity::startSilentRefreshAsync();
+      if (startResult == SilentRefreshStartResult::ALREADY_RUNNING) {
+        LOG_INF("PWR", "Sync already running");
+      } else if (startResult == SilentRefreshStartResult::BUSY_FOREGROUND) {
+        LOG_INF("PWR", "Weather activity is active; skip background sync trigger");
+      } else if (startResult == SilentRefreshStartResult::TASK_CREATE_FAILED) {
+        LOG_ERR("PWR", "Failed to start background sync task");
+      }
       break;
     }
     default:
