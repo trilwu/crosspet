@@ -18,6 +18,7 @@ class HomeActivity final : public Activity {
   const char* syncResultMsg = nullptr;  // "OK" or "Failed" after sync
   unsigned long syncResultExpiry = 0;   // millis() when to clear message
   bool syncTriggered = false;      // Guard against re-triggering sync while held
+  uint32_t weatherSyncSeenVersion = 0;
   bool coverRendered = false;      // Track if cover has been rendered once
   bool coverBufferStored = false;  // Track if cover buffer is stored
   uint8_t* coverBuffer = nullptr;  // HomeActivity's own buffer for cover image
@@ -65,6 +66,7 @@ class HomeActivity final : public Activity {
   void renderHeaderClock();
   void doSync();
   void performSyncAfterWifi();
+  void pollWeatherSyncStatus();
 
   // Theme-specific render/loop dispatchers
   void renderCrossPet();

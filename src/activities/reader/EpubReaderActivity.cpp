@@ -8,6 +8,7 @@
 #include <I18n.h>
 #include <Logging.h>
 
+#include <cstring>
 #include <memory>
 
 #include "CrossPointSettings.h"
@@ -34,6 +35,9 @@ namespace {
 // pagesPerRefresh now comes from SETTINGS.getRefreshFrequency()
 constexpr unsigned long skipChapterMs = 700;
 constexpr unsigned long goHomeMs = 1000;
+constexpr unsigned long bookmarkToastDurationMs = 900;
+constexpr unsigned long progressSaveDebounceMs = 2000;
+constexpr uint8_t maxPageLoadRetries = 3;
 // Max pages per minute for auto-turn (setting range 1-20)
 constexpr uint8_t AUTO_TURN_MAX_PPM = 20;
 
@@ -113,6 +117,10 @@ void EpubReaderActivity::onEnter() {
 void EpubReaderActivity::onExit() {
   Activity::onExit();
 
+  if (epub && section && section->pageCount > 0) {
+    flushProgressSave(currentSpineIndex, section->currentPage, section->pageCount);
+  }
+
   // Reset text darkness to normal for UI screens
   renderer.setTextDarkness(0);
 
@@ -189,6 +197,12 @@ void EpubReaderActivity::loop() {
     requestUpdate();
   }
 
+  // Dismiss bookmark toast after timeout (non-blocking)
+  if (showBookmarkToast && millis() - bookmarkToastTime > bookmarkToastDurationMs) {
+    showBookmarkToast = false;
+    requestUpdate();
+  }
+
   if (automaticPageTurnActive) {
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) ||
         mappedInput.wasReleased(MappedInputManager::Button::Back)) {
@@ -258,9 +272,7 @@ void EpubReaderActivity::loop() {
         }
       }
       bookmarkStore.toggle(si, pg, snippet);
-      GUI.drawPopup(renderer, wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
-      renderer.displayBuffer();
-      delay(600);
+      queueBookmarkToast(wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
       requestUpdate();
     }
     return;
@@ -356,9 +368,7 @@ void EpubReaderActivity::loop() {
         }
       }
       bookmarkStore.toggle(si, pg, snippet);
-      GUI.drawPopup(renderer, wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
-      renderer.displayBuffer();
-      delay(600);
+      queueBookmarkToast(wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
       requestUpdate();
     }
     return;
@@ -650,6 +660,9 @@ void EpubReaderActivity::applyOrientation(const uint8_t orientation) {
     // Update renderer orientation to match the new logical coordinate system.
     ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
 
+    // Orientation changes invalidate glyph raster layout assumptions.
+    forceFontCacheClear = true;
+
     // Reset section to force re-layout in the new orientation.
     section.reset();
   }
@@ -932,16 +945,59 @@ void EpubReaderActivity::render(RenderLock&& lock) {
   }
 
   {
+    const int attemptedPage = section->currentPage;
     auto p = section->loadPageFromSectionFile();
     if (!p) {
-      LOG_ERR("ERS", "Failed to load page from SD - clearing section cache");
-      section->clearCache();
+      if (failedLoadSpineIndex == currentSpineIndex && failedLoadPage == attemptedPage) {
+        consecutiveLoadFailures++;
+      } else {
+        failedLoadSpineIndex = currentSpineIndex;
+        failedLoadPage = attemptedPage;
+        consecutiveLoadFailures = 1;
+      }
+
+      LOG_ERR("ERS", "Failed to load page from SD (spine=%d, page=%d, retry=%d)", currentSpineIndex,
+              attemptedPage, consecutiveLoadFailures);
+
+      const bool tooManyFailures = consecutiveLoadFailures >= maxPageLoadRetries;
+      if (!tooManyFailures) {
+        section->clearCache();
+      }
       section.reset();
-      requestUpdate();  // Try again after clearing cache
-                        // TODO: prevent infinite loop if the page keeps failing to load for some reason
+
+      if (tooManyFailures) {
+        automaticPageTurnActive = false;
+        consecutiveLoadFailures = 0;
+        failedLoadSpineIndex = -1;
+        failedLoadPage = -1;
+
+        if (currentSpineIndex < static_cast<int>(epub->getSpineItemsCount()) - 1) {
+          currentSpineIndex++;
+          nextPageNumber = 0;
+          queueBookmarkToast("Skipped bad chapter");
+          requestUpdate();
+        } else if (currentSpineIndex > 0) {
+          // Last chapter failed repeatedly: step back to previous chapter instead of looping forever.
+          currentSpineIndex--;
+          nextPageNumber = UINT16_MAX;
+          queueBookmarkToast("Skipped bad chapter");
+          requestUpdate();
+        } else {
+          // Single-chapter unrecoverable case: show once and stop auto-retrying this frame.
+          GUI.drawPopup(renderer, "Page load failed");
+          renderer.displayBuffer();
+        }
+        return;
+      }
+
+      requestUpdate();
       automaticPageTurnActive = false;
       return;
     }
+
+    consecutiveLoadFailures = 0;
+    failedLoadSpineIndex = -1;
+    failedLoadPage = -1;
 
     // Collect footnotes from the loaded page
     currentPageFootnotes = std::move(p->footnotes);
@@ -949,9 +1005,15 @@ void EpubReaderActivity::render(RenderLock&& lock) {
     const auto start = millis();
     renderContents(std::move(p), orientedMarginTop, orientedMarginRight, orientedMarginBottom, orientedMarginLeft);
     LOG_DBG("ERS", "Rendered page in %dms", millis() - start);
-    renderer.clearFontCache();
+    if (shouldClearFontCache()) {
+      renderer.clearFontCache();
+      forceFontCacheClear = false;
+      lastRenderedFontFamily = SETTINGS.fontFamily;
+      lastRenderedFontSize = SETTINGS.fontSize;
+      lastRenderedOrientation = SETTINGS.orientation;
+    }
   }
-  saveProgress(currentSpineIndex, section->currentPage, section->pageCount);
+  maybeSaveProgress(currentSpineIndex, section->currentPage, section->pageCount);
 
   if (pendingScreenshot) {
     pendingScreenshot = false;
@@ -979,6 +1041,10 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
     data[5] = (pageCount >> 8) & 0xFF;
     f.write(data, 6);
     f.close();
+    lastSavedSpineIndex = spineIndex;
+    lastSavedPage = currentPage;
+    lastSavedPageCount = pageCount;
+    lastProgressSaveMs = millis();
     LOG_DBG("ERS", "Progress saved: Chapter %d, Page %d", spineIndex, currentPage);
   } else {
     LOG_ERR("ERS", "Could not save progress!");
@@ -990,6 +1056,48 @@ void EpubReaderActivity::saveProgress(int spineIndex, int currentPage, int pageC
   const uint8_t percent = static_cast<uint8_t>(clampPercent(static_cast<int>(bookProg + 0.5f)));
   RECENT_BOOKS.updateBookProgress(epub->getPath(), percent);
 }
+
+void EpubReaderActivity::queueBookmarkToast(const char* text) {
+  if (!text) {
+    return;
+  }
+  std::strncpy(bookmarkToastText, text, sizeof(bookmarkToastText) - 1);
+  bookmarkToastText[sizeof(bookmarkToastText) - 1] = '\0';
+  showBookmarkToast = true;
+  bookmarkToastTime = millis();
+}
+
+void EpubReaderActivity::maybeSaveProgress(int spineIndex, int currentPage, int pageCount) {
+  const bool changed = spineIndex != lastSavedSpineIndex ||
+                       currentPage != lastSavedPage ||
+                       pageCount != lastSavedPageCount;
+  if (!changed) {
+    return;
+  }
+
+  if (millis() - lastProgressSaveMs < progressSaveDebounceMs) {
+    return;
+  }
+
+  saveProgress(spineIndex, currentPage, pageCount);
+}
+
+void EpubReaderActivity::flushProgressSave(int spineIndex, int currentPage, int pageCount) {
+  const bool changed = spineIndex != lastSavedSpineIndex ||
+                       currentPage != lastSavedPage ||
+                       pageCount != lastSavedPageCount;
+  if (changed) {
+    saveProgress(spineIndex, currentPage, pageCount);
+  }
+}
+
+bool EpubReaderActivity::shouldClearFontCache() const {
+  return forceFontCacheClear ||
+         lastRenderedFontFamily != SETTINGS.fontFamily ||
+         lastRenderedFontSize != SETTINGS.fontSize ||
+         lastRenderedOrientation != SETTINGS.orientation;
+}
+
 void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int orientedMarginTop,
                                         const int orientedMarginRight, const int orientedMarginBottom,
                                         const int orientedMarginLeft) {
@@ -1009,6 +1117,17 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
     renderer.fillRect(tx, ty, toastW, toastH, false);
     renderer.drawRect(tx, ty, toastW, toastH);
     renderer.drawText(SMALL_FONT_ID, tx + 8, ty + 4, milestoneText, true, EpdFontFamily::BOLD);
+  }
+
+  if (showBookmarkToast && bookmarkToastText[0]) {
+    const int screenW = renderer.getScreenWidth();
+    const int toastW = renderer.getTextWidth(SMALL_FONT_ID, bookmarkToastText) + 16;
+    const int toastH = renderer.getLineHeight(SMALL_FONT_ID) + 8;
+    const int tx = (screenW - toastW) / 2;
+    const int ty = renderer.getScreenHeight() - orientedMarginBottom - toastH - 4;
+    renderer.fillRect(tx, ty, toastW, toastH, false);
+    renderer.drawRect(tx, ty, toastW, toastH);
+    renderer.drawText(SMALL_FONT_ID, tx + 8, ty + 4, bookmarkToastText, true, EpdFontFamily::BOLD);
   }
 
   if (imagePageWithAA) {

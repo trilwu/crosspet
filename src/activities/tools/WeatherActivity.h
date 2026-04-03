@@ -26,6 +26,19 @@ struct DailyForecast {
   char dayLabel[4] = "";  // "Mon", "Tue", etc.
 };
 
+struct SilentRefreshSnapshot {
+  bool active = false;
+  int result = -1;
+  uint32_t completionVersion = 0;
+};
+
+enum class SilentRefreshStartResult : uint8_t {
+  STARTED = 0,
+  ALREADY_RUNNING = 1,
+  BUSY_FOREGROUND = 2,
+  TASK_CREATE_FAILED = 3,
+};
+
 class WeatherActivity final : public Activity {
  public:
   enum State { WIFI_CONNECTING, FETCHING, DISPLAYING, FETCH_ERROR, SELECTING_CITY };
@@ -60,6 +73,10 @@ class WeatherActivity final : public Activity {
   // Silent background refresh: WiFi connect → fetch → cache → WiFi off.
   // Returns: 0=ok, 1=no saved wifi creds, 2=wifi connect timeout, 3=geo fail, 4=api fail, 5=parse fail
   static int silentRefresh();
+
+  // Non-blocking wrapper: run silentRefresh() in background task.
+  static SilentRefreshStartResult startSilentRefreshAsync();
+  static SilentRefreshSnapshot getSilentRefreshSnapshot();
 
  private:
   static constexpr int FORECAST_DAYS = 5;

@@ -123,6 +123,9 @@ void HomeActivity::onEnter() {
   firstRenderDone = false;
   recentsLoaded = false;
   recentsLoading = false;
+  const auto snapshot = WeatherActivity::getSilentRefreshSnapshot();
+  weatherSyncSeenVersion = snapshot.completionVersion;
+  weatherRefreshing = snapshot.active;
   loadRecentBooks(4);
   requestUpdate();
 }
@@ -135,6 +138,8 @@ void HomeActivity::onExit() {
 // ── Input / Render dispatchers ────────────────────────────────────────────────
 
 void HomeActivity::loop() {
+  pollWeatherSyncStatus();
+
   if (SETTINGS.uiTheme <= CrossPointSettings::LYRA_3_COVERS)
     loopOriginal();
   else if (SETTINGS.uiTheme == CrossPointSettings::CROSSPET_CLASSIC)
@@ -251,40 +256,29 @@ void HomeActivity::renderHeaderClock() {
 
 void HomeActivity::performSyncAfterWifi() {
   static char syncBuf[24];
-  weatherRefreshing = true;
-  requestUpdateAndWait();
 
-  if (WiFi.status() != WL_CONNECTED) {
-    const auto& ssid = WIFI_STORE.getLastConnectedSsid();
-    const auto* cred = ssid.empty() ? nullptr : WIFI_STORE.findCredential(ssid);
-    if (cred) {
-      WiFi.mode(WIFI_STA);
-      WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
-      const unsigned long connectStart = millis();
-      while (WiFi.status() != WL_CONNECTED && millis() - connectStart < 8000) {
-        delay(100);
-      }
-      if (WiFi.status() != WL_CONNECTED) {
-        WiFi.disconnect(false);
-        WiFi.mode(WIFI_OFF);
-        weatherRefreshing = false;
-        snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_CONN_FAILED));
-        syncResultMsg = syncBuf;
-        syncResultExpiry = millis() + 3000;
-        requestUpdate();
-        return;
-      }
-    }
+  const auto startResult = WeatherActivity::startSilentRefreshAsync();
+  const auto snapshot = WeatherActivity::getSilentRefreshSnapshot();
+  weatherRefreshing = snapshot.active;
+
+  if (startResult == SilentRefreshStartResult::STARTED) {
+    syncResultMsg = nullptr;
+    requestUpdate();
+    return;
   }
 
-  int rc = WeatherActivity::silentRefresh();
-  weatherRefreshing = false;
-  if (rc == 0)      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
-  else if (rc == 2) snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
-  else              snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), rc);
+  if (startResult == SilentRefreshStartResult::ALREADY_RUNNING) {
+    requestUpdate();
+    return;
+  }
+
+  if (startResult == SilentRefreshStartResult::BUSY_FOREGROUND) {
+    snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_FETCHING_WEATHER));
+  } else {
+    snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), 6);
+  }
   syncResultMsg = syncBuf;
   syncResultExpiry = millis() + 3000;
-  coverRendered = false;
   requestUpdate();
 }
 
@@ -298,6 +292,30 @@ void HomeActivity::doSync() {
     return;
   }
   performSyncAfterWifi();
+}
+
+void HomeActivity::pollWeatherSyncStatus() {
+  static char syncBuf[24];
+  const auto snapshot = WeatherActivity::getSilentRefreshSnapshot();
+  weatherRefreshing = snapshot.active;
+
+  if (snapshot.completionVersion != weatherSyncSeenVersion) {
+    weatherSyncSeenVersion = snapshot.completionVersion;
+    weatherRefreshing = false;
+    if (snapshot.result == 0) {
+      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_SYNC_OK));
+    } else if (snapshot.result == 2) {
+      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_TIMEOUT));
+    } else if (snapshot.result == 1) {
+      snprintf(syncBuf, sizeof(syncBuf), "%s", tr(STR_WIFI_CONN_FAILED));
+    } else {
+      snprintf(syncBuf, sizeof(syncBuf), tr(STR_API_ERROR), snapshot.result);
+    }
+    syncResultMsg = syncBuf;
+    syncResultExpiry = millis() + 3000;
+    coverRendered = false;
+    requestUpdate();
+  }
 }
 
 // ── Actions ───────────────────────────────────────────────────────────────────
