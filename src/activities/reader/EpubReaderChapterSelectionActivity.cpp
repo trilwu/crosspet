@@ -136,13 +136,5 @@ void EpubReaderChapterSelectionActivity::render(RenderLock&&) {
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
-  // Position indicator: "3/12" at bottom-right
-  if (totalItems > 0) {
-    char pos[12];
-    snprintf(pos, sizeof(pos), "%d/%d", selectorIndex + 1, totalItems);
-    const int posW = renderer.getTextWidth(SMALL_FONT_ID, pos);
-    renderer.drawText(SMALL_FONT_ID, contentX + contentWidth - posW - 8, renderer.getScreenHeight() - 52, pos, true);
-  }
-
   renderer.displayBuffer();
 }

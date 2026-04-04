@@ -314,14 +314,6 @@ void FileBrowserActivity::render(RenderLock&&) {
                             files.empty() ? "" : tr(STR_DIR_UP), files.empty() ? "" : tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
-  // Position indicator: "3/12" at bottom-right above button hints
-  if (!files.empty()) {
-    char pos[12];
-    snprintf(pos, sizeof(pos), "%d/%d", static_cast<int>(selectorIndex) + 1, static_cast<int>(files.size()));
-    const int posW = renderer.getTextWidth(SMALL_FONT_ID, pos);
-    renderer.drawText(SMALL_FONT_ID, pageWidth - posW - 8, pageHeight - metrics.buttonHintsHeight - 14, pos, true);
-  }
-
   renderer.displayBuffer();
 }
 

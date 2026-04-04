@@ -164,13 +164,13 @@ void RecentBooksActivity::render(RenderLock&&) {
       renderCover(i, col, row, cardW, cardH, sidePad, contentTop + 4, i == selectorIndex);
     }
 
-    // Position indicator: "3/12" at bottom-right (always shown)
-    {
-      char posStr[16];
-      snprintf(posStr, sizeof(posStr), "%d/%d", selectorIndex + 1, total);
-      const int pw = renderer.getTextWidth(SMALL_FONT_ID, posStr);
+    // Page indicator if multiple pages
+    if (totalPages() > 1) {
+      char pageStr[16];
+      snprintf(pageStr, sizeof(pageStr), "%d/%d", (selectorIndex / itemsPerPage) + 1, totalPages());
+      const int pw = renderer.getTextWidth(SMALL_FONT_ID, pageStr);
       renderer.drawText(SMALL_FONT_ID, pageWidth - pw - 10,
-                        pageHeight - metrics.buttonHintsHeight - 16, posStr, true);
+                        pageHeight - metrics.buttonHintsHeight - 16, pageStr, true);
     }
   }
 
