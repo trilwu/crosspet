@@ -17,8 +17,7 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       // --- Display ---
       SettingInfo::Enum(StrId::STR_SLEEP_SCREEN, &CrossPointSettings::sleepScreen,
                         {StrId::STR_DARK, StrId::STR_LIGHT, StrId::STR_CUSTOM, StrId::STR_COVER, StrId::STR_NONE_OPT,
-                         StrId::STR_COVER_CUSTOM, StrId::STR_CLOCK, StrId::STR_READING_STATS, StrId::STR_PAGE_OVERLAY,
-                         StrId::STR_KEEP_SCREEN},
+                         StrId::STR_COVER_CUSTOM, StrId::STR_CLOCK, StrId::STR_READING_STATS, StrId::STR_PAGE_OVERLAY},
                         "sleepScreen", StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_SLEEP_COVER_MODE, &CrossPointSettings::sleepScreenCoverMode,
                         {StrId::STR_FIT, StrId::STR_CROP}, "sleepScreenCoverMode", StrId::STR_CAT_DISPLAY),
@@ -41,6 +40,8 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                         {StrId::STR_THEME_CLASSIC, StrId::STR_THEME_LYRA, StrId::STR_THEME_LYRA_EXTENDED, StrId::STR_THEME_CROSSPET, StrId::STR_THEME_CROSSPET_CLASSIC},
                         "uiTheme", StrId::STR_CAT_DISPLAY),
       SettingInfo::Toggle(StrId::STR_SUNLIGHT_FADING_FIX, &CrossPointSettings::fadingFix, "fadingFix",
+                          StrId::STR_CAT_DISPLAY),
+      SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode, "darkMode",
                           StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
                         {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CAT_DISPLAY),
@@ -92,6 +93,9 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_READER),
       SettingInfo::Toggle(StrId::STR_TEXT_AA, &CrossPointSettings::textAntiAliasing, "textAntiAliasing",
                           StrId::STR_CAT_READER),
+      SettingInfo::Enum(StrId::STR_TEXT_DARKNESS, &CrossPointSettings::textDarkness,
+                        {StrId::STR_NORMAL, StrId::STR_DARK, StrId::STR_EXTRA_DARK}, "textDarkness",
+                        StrId::STR_CAT_READER),
       SettingInfo::Enum(StrId::STR_IMAGES, &CrossPointSettings::imageRendering,
                         {StrId::STR_IMAGES_DISPLAY, StrId::STR_IMAGES_PLACEHOLDER, StrId::STR_IMAGES_SUPPRESS},
                         "imageRendering", StrId::STR_CAT_READER),
@@ -178,10 +182,6 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CUSTOMISE_STATUS_BAR),
       SettingInfo::Toggle(StrId::STR_CLOCK, &CrossPointSettings::statusBarClock, "statusBarClock",
                           StrId::STR_CUSTOMISE_STATUS_BAR),
-      SettingInfo::Toggle(StrId::STR_TIME_ESTIMATE, &CrossPointSettings::statusBarTimeEstimate,
-                          "statusBarTimeEstimate", StrId::STR_CUSTOMISE_STATUS_BAR),
-      SettingInfo::Toggle(StrId::STR_SESSION_TIMER, &CrossPointSettings::statusBarSessionTimer,
-                          "statusBarSessionTimer", StrId::STR_CUSTOMISE_STATUS_BAR),
   };
   return list;
 }

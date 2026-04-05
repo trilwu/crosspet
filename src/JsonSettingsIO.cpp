@@ -147,13 +147,6 @@ bool JsonSettingsIO::saveSettings(const CrossPointSettings& s, const char* path)
   doc["sleepImagePath"] = s.sleepImagePath;
   doc["autoPageTurnSpeed"] = s.autoPageTurnSpeed;
   doc["autoPageTurnEnabled"] = s.autoPageTurnEnabled;
-#ifdef ENABLE_BLE
-  // BLE HID remote
-  doc["bleEnabled"] = s.bleEnabled;
-  doc["bleBondedDeviceAddr"] = s.bleBondedDeviceAddr;
-  doc["bleBondedDeviceName"] = s.bleBondedDeviceName;
-  doc["bleBondedDeviceAddrType"] = s.bleBondedDeviceAddrType;
-#endif
 
   String json;
   serializeJson(doc, json);
@@ -258,32 +251,8 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
 
   s.autoPageTurnSpeed = doc["autoPageTurnSpeed"] | (uint8_t)0;
   if (s.autoPageTurnSpeed > 20) s.autoPageTurnSpeed = 0;
-  // Migration: users upgrading from pre-v1.8 had speed > 0 meaning "on".
-  // If autoPageTurnEnabled key is missing but speed is set, auto-enable.
-  if (doc.containsKey("autoPageTurnEnabled")) {
-    s.autoPageTurnEnabled = doc["autoPageTurnEnabled"] | (uint8_t)0;
-    if (s.autoPageTurnEnabled > 1) s.autoPageTurnEnabled = 0;
-  } else {
-    s.autoPageTurnEnabled = (s.autoPageTurnSpeed > 0) ? 1 : 0;
-  }
-
-#ifdef ENABLE_BLE
-  // BLE HID remote
-  s.bleEnabled = doc["bleEnabled"] | (uint8_t)0;
-  if (s.bleEnabled > 1) s.bleEnabled = 0;
-  {
-    const char* addr = doc["bleBondedDeviceAddr"] | "";
-    strncpy(s.bleBondedDeviceAddr, addr, sizeof(s.bleBondedDeviceAddr) - 1);
-    s.bleBondedDeviceAddr[sizeof(s.bleBondedDeviceAddr) - 1] = '\0';
-  }
-  {
-    const char* name = doc["bleBondedDeviceName"] | "";
-    strncpy(s.bleBondedDeviceName, name, sizeof(s.bleBondedDeviceName) - 1);
-    s.bleBondedDeviceName[sizeof(s.bleBondedDeviceName) - 1] = '\0';
-  }
-  s.bleBondedDeviceAddrType = doc["bleBondedDeviceAddrType"] | (uint8_t)0;
-  if (s.bleBondedDeviceAddrType > 1) s.bleBondedDeviceAddrType = 0;
-#endif
+  s.autoPageTurnEnabled = doc["autoPageTurnEnabled"] | (uint8_t)0;
+  if (s.autoPageTurnEnabled > 1) s.autoPageTurnEnabled = 0;
 
   LOG_DBG("CPS", "Settings loaded from file");
 
