@@ -1292,7 +1292,6 @@ void GfxRenderer::drawTextRotated90CW(const int fontId, const int x, const int y
 
   if (fontCacheManager_ && fontCacheManager_->isScanning()) return;
 
-  int32_t yPosFP = fp4::fromPixel(y);  // 12.4 fixed-point accumulator
   int lastBaseY = y;
   int lastBaseAdvanceFP = 0;  // 12.4 fixed-point
   int lastBaseTop = 0;
