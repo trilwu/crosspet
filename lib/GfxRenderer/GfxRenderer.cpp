@@ -120,42 +120,17 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
           // 0 -> black, 1 -> dark grey, 2 -> light grey, 3 -> white
           uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
 
-          if (renderMode == GfxRenderer::BW) {
-            if (bmpVal < 3) renderer.drawPixel(screenX, screenY, pixelState);
-          } else if (renderMode == GfxRenderer::GRAYSCALE_MSB) {
-            // Text darkness shifts more AA pixels into the "draw" bucket for bolder text.
-            // bmpVal: 0=black, 1=dark gray, 2=light gray, 3=white
-            // MSB controls the "heavier" gray channel.
-            // Normal: only light gray (2) → subtle fringe
-            // Dark: dark+light gray (1,2) → bolder fringe
-            // Extra Dark: all non-white (1,2) → max bold
-            const uint8_t darkness = renderer.getTextDarkness();
-            bool hit;
-            if (renderer.isDarkMode()) {
-              hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
-                    : (darkness == 1) ? (bmpVal == 1 || bmpVal == 2)
-                    : (bmpVal == 2);
-            } else {
-              hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
-                    : (darkness == 1) ? (bmpVal == 1 || bmpVal == 2)
-                    : (bmpVal == 2);
-            }
-            if (hit) renderer.drawPixel(screenX, screenY, false);
-          } else if (renderMode == GfxRenderer::GRAYSCALE_LSB) {
-            // LSB controls the "lighter" gray channel.
-            // Normal: only dark gray (1) → minimal
-            // Dark: dark gray (1) → same as normal (MSB does the heavy lifting)
-            // Extra Dark: dark+light gray (1,2) → pushes everything darker
-            const uint8_t darkness = renderer.getTextDarkness();
-            bool hit;
-            if (renderer.isDarkMode()) {
-              hit = (darkness >= 2) ? (bmpVal >= 1 && bmpVal <= 2)
-                    : (bmpVal == 1 || bmpVal == 2);
-            } else {
-              hit = (darkness >= 2) ? (bmpVal == 1 || bmpVal == 2)
-                    : (bmpVal == 1);
-            }
-            if (hit) renderer.drawPixel(screenX, screenY, false);
+          if (renderMode == GfxRenderer::BW && bmpVal < 3) {
+            // Black (also paints over the grays in BW mode)
+            renderer.drawPixel(screenX, screenY, pixelState);
+          } else if (renderMode == GfxRenderer::GRAYSCALE_MSB && (bmpVal == 1 || bmpVal == 2)) {
+            // Light gray (also mark the MSB if it's going to be a dark gray too)
+            // Dedicated X3 gray LUTs now provide proper 4-level gray on both devices
+            // We have to flag pixels in reverse for the gray buffers, as 0 leave alone, 1 update
+            renderer.drawPixel(screenX, screenY, false);
+          } else if (renderMode == GfxRenderer::GRAYSCALE_LSB && bmpVal == 1) {
+            // Dark gray
+            renderer.drawPixel(screenX, screenY, false);
           }
         }
       }

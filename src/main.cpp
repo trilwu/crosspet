@@ -39,8 +39,6 @@
 #include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
 
-HalDisplay display;
-HalGPIO gpio;
 // Global multi-click detector for power button (accessible via extern in reader activities)
 PowerButtonClickDetector pwrClickDetector;
 // Resolved power button action for the current frame (set in loop, read by reader activities)
