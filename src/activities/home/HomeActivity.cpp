@@ -31,7 +31,7 @@ bool HomeActivity::storeCoverBuffer() {
   uint8_t* fb = renderer.getFrameBuffer();
   if (!fb) return false;
   // Guard: need buffer size + 12KB overhead for heap fragmentation safety
-  const size_t bufSize = GfxRenderer::getBufferSize();
+  const size_t bufSize = renderer.getBufferSize();
   if (ESP.getFreeHeap() < bufSize + 12 * 1024) return false;
   freeCoverBuffer();
   coverBuffer = static_cast<uint8_t*>(malloc(bufSize));
@@ -44,7 +44,7 @@ bool HomeActivity::restoreCoverBuffer() {
   if (!coverBuffer) return false;
   uint8_t* fb = renderer.getFrameBuffer();
   if (!fb) return false;
-  memcpy(fb, coverBuffer, GfxRenderer::getBufferSize());
+  memcpy(fb, coverBuffer, renderer.getBufferSize());
   return true;
 }
 
