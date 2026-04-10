@@ -174,8 +174,9 @@ void SleepActivity::onEnter() {
   Activity::onEnter();
   // Persist current time to SD so it survives power cycles
   PET_MANAGER.save();
-  // For OVERLAY mode the popup is suppressed so the frame buffer (reader page) stays intact
-  if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY) {
+  // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact
+  if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY &&
+      SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::KEEP_SCREEN) {
     GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
   }
 
@@ -198,6 +199,8 @@ void SleepActivity::onEnter() {
       return renderReadingStatsSleepScreen();
     case (CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY):
       return renderOverlaySleepScreen();
+    case (CrossPointSettings::SLEEP_SCREEN_MODE::KEEP_SCREEN):
+      return renderKeepScreenSleep();
     default:
       return renderDefaultSleepScreen();
   }
@@ -978,6 +981,18 @@ void SleepActivity::renderBlankSleepScreen() const {
   renderer.setFadingFix(SETTINGS.fadingFix);
 }
 
+void SleepActivity::renderKeepScreenSleep() const {
+  // Framebuffer already contains last screen content — don't clear.
+  // Draw a small "ZZZ" sleep indicator in top-right corner.
+  const int pw = renderer.getScreenWidth();
+  renderer.fillRect(pw - 45, 5, 40, 20, true);
+  renderer.drawText(SMALL_FONT_ID, pw - 42, 6, "ZZZ", false);
+
+  renderer.setFadingFix(true);
+  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+  renderer.setFadingFix(SETTINGS.fadingFix);
+}
+
 // Format a duration in seconds into a human-readable string.
 // Results: "< 1 min", "X min", "X hr Y min", "X days Y hr"
 static void formatDuration(char* buf, size_t size, uint32_t secs) {
@@ -1269,11 +1284,25 @@ void SleepActivity::renderOverlaySleepScreen() const {
     return rc == PNG_SUCCESS;
   };
 
-  // Try /sleep/ directory first (random selection, same as renderCustomSleepScreen).
-  // Accepts both .bmp and .png files; .bmp headers are validated during the scan.
+  // Check for pinned overlay image first (set via SleepImagePickerActivity)
   bool overlayDrawn = false;
+  if (SETTINGS.sleepImagePath[0] != '\0') {
+    const std::string pinnedPath(SETTINGS.sleepImagePath);
+    if (FsHelpers::checkFileExtension(pinnedPath, ".png")) {
+      overlayDrawn = tryDrawPngOverlay(pinnedPath);
+    } else {
+      overlayDrawn = tryDrawOverlay(pinnedPath);
+    }
+    if (overlayDrawn) {
+      LOG_DBG("SLP", "Used pinned overlay: %s", SETTINGS.sleepImagePath);
+    } else {
+      LOG_ERR("SLP", "Pinned overlay not found: %s", SETTINGS.sleepImagePath);
+    }
+  }
+
+  // Fallback: random selection from /sleep/ directory
   auto dir = Storage.open("/sleep");
-  if (dir && dir.isDirectory()) {
+  if (!overlayDrawn && dir && dir.isDirectory()) {
     std::vector<std::string> files;
     char name[500];
     for (auto file = dir.openNextFile(); file; file = dir.openNextFile()) {

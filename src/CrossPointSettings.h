@@ -27,6 +27,7 @@ class CrossPointSettings {
     CLOCK = 6,
     READING_STATS = 7,
     OVERLAY = 8,
+    KEEP_SCREEN = 9,
     SLEEP_SCREEN_MODE_COUNT
   };
   enum SLEEP_SCREEN_COVER_MODE { FIT = 0, CROP = 1, SLEEP_SCREEN_COVER_MODE_COUNT };
