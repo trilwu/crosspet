@@ -5699,6 +5699,7 @@ static const EpdFontData bookerly_18_regular = {
     true,
     bookerly_18_regularGroups,
     14,
+    nullptr,
     bookerly_18_regularKernLeftClasses,
     bookerly_18_regularKernRightClasses,
     bookerly_18_regularKernMatrix,

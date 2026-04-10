@@ -5229,6 +5229,7 @@ static const EpdFontData bookerly_14_bolditalic = {
     true,
     bookerly_14_bolditalicGroups,
     14,
+    nullptr,
     bookerly_14_bolditalicKernLeftClasses,
     bookerly_14_bolditalicKernRightClasses,
     bookerly_14_bolditalicKernMatrix,
