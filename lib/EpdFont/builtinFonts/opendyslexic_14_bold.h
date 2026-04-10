@@ -3926,7 +3926,6 @@ static const EpdFontData opendyslexic_14_bold = {
     true,
     opendyslexic_14_boldGroups,
     13,
-    nullptr,
     opendyslexic_14_boldKernLeftClasses,
     opendyslexic_14_boldKernRightClasses,
     opendyslexic_14_boldKernMatrix,

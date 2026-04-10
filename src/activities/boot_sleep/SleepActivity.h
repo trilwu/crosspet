@@ -20,7 +20,6 @@ class SleepActivity final : public Activity {
   void renderClockSleepScreen() const;
   void renderReadingStatsSleepScreen() const;
   void renderOverlaySleepScreen() const;
-  void renderKeepScreenSleep() const;
   // Shared pet + attention indicator helper (scale 1 = 48px, scale 2 = 96px)
   void renderSleepPet(int scale = 2) const;
 };

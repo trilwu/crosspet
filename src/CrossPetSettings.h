@@ -17,9 +17,6 @@ class CrossPetSettings {
   // Load from /.crosspoint/crosspet.json; migrates from settings.json if absent
   bool loadFromFile();
 
-  // File browser sort mode: 0=name asc, 1=name desc, 2=size, 3=date
-  uint8_t fileSortMode = 0;
-
   // Home screen widget visibility (1=show, 0=hide)
   uint8_t homeShowClock = 1;
   uint8_t homeShowWeather = 1;

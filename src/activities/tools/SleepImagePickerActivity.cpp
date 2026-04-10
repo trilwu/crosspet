@@ -85,7 +85,7 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
 }
 
 // Sleep mode display names (matches SLEEP_SCREEN_MODE enum order)
-const char* modeNames[] = {"Dark", "Light", "Custom", "Cover", "None", "Cover+Custom", "Clock", "Reading Stats", "Page Overlay", "Keep Screen"};
+const char* modeNames[] = {"Dark", "Light", "Custom", "Cover", "None", "Cover+Custom", "Clock", "Reading Stats", "Page Overlay"};
 
 }  // namespace
 
@@ -112,12 +112,11 @@ const char* SleepImagePickerActivity::modeDescription() const {
     case CrossPointSettings::LIGHT: return "White screen";
     case CrossPointSettings::CUSTOM: return "Image from /sleep/ folder";
     case CrossPointSettings::COVER: return "Book cover art";
-    case CrossPointSettings::BLANK: return "Blank white screen";
+    case CrossPointSettings::BLANK: return "Keep last screen";
     case CrossPointSettings::COVER_CUSTOM: return "Cover + image overlay";
     case CrossPointSettings::CLOCK: return "Digital clock + calendar";
     case CrossPointSettings::READING_STATS: return "Reading statistics";
     case CrossPointSettings::OVERLAY: return "Image on book page";
-    case CrossPointSettings::KEEP_SCREEN: return "Keep last screen + sleep icon";
     default: return "";
   }
 }
@@ -259,13 +258,10 @@ void SleepImagePickerActivity::renderSlideshow() {
   }
 
   const int sw = renderer.getScreenWidth(), sh = renderer.getScreenHeight();
-  const int total = static_cast<int>(fileList.size());
   renderer.fillRect(0, sh - 32, sw, 32, true);
-  if (total > 0 && slideshowIndex >= 0 && slideshowIndex < total) {
-    char info[64];
-    snprintf(info, sizeof(info), "%d/%d  %s", slideshowIndex + 1, total, fileList[slideshowIndex].c_str());
-    renderer.drawCenteredText(SMALL_FONT_ID, sh - 28, info, false);
-  }
+  char info[64];
+  snprintf(info, sizeof(info), "%d/%d  %s", slideshowIndex + 1, (int)fileList.size(), fileList[slideshowIndex].c_str());
+  renderer.drawCenteredText(SMALL_FONT_ID, sh - 28, info, false);
 
   renderer.setOrientation(savedOr);
   renderer.displayBuffer(HalDisplay::FAST_REFRESH);
@@ -276,7 +272,6 @@ void SleepImagePickerActivity::renderSlideshow() {
 void SleepImagePickerActivity::loop() {
   if (slideshowActive) {
     const int total = static_cast<int>(fileList.size());
-    if (total == 0) { slideshowActive = false; requestUpdate(); return; }
     buttonNavigator.onNext([this, total] { slideshowIndex = (slideshowIndex + 1) % total; renderSlideshow(); });
     buttonNavigator.onPrevious([this, total] { slideshowIndex = (slideshowIndex - 1 + total) % total; renderSlideshow(); });
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
@@ -330,17 +325,6 @@ void SleepImagePickerActivity::loop() {
     return;
   }
 
-  if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
-    if (isFileItem(selectorIndex) && isCurrentImageSelection(selectorIndex)) {
-      // Clear pinned image — revert to random selection
-      SETTINGS.sleepImagePath[0] = '\0';
-      SETTINGS.saveToFile();
-      SleepScreenCache::invalidateAll();
-      requestUpdate();
-    }
-    return;
-  }
-
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) { finish(); }
 }
 
@@ -371,9 +355,7 @@ void SleepImagePickerActivity::renderList(int pageWidth, int pageHeight) {
       return "";
     });
 
-  const bool canUnpin = isFileItem(selectorIndex) && isCurrentImageSelection(selectorIndex);
-  const char* leftLabel = canUnpin ? tr(STR_UNPIN) : "";
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), leftLabel, "");
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
 

@@ -3307,7 +3307,6 @@ static const EpdFontData lexend_18_bold = {
     true,
     lexend_18_boldGroups,
     11,
-    nullptr,
     lexend_18_boldKernLeftClasses,
     lexend_18_boldKernRightClasses,
     lexend_18_boldKernMatrix,

@@ -112,7 +112,7 @@ const char* const CHARACTER_SETS[] = {
     "\xC2"
     "\xB0"
     "",  // English
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xA1"
     "\xC2"
     "\xAB"
@@ -886,8 +886,6 @@ const char* const CHARACTER_SETS[] = {
     "\xC6"
     "\xA1"
     "\xC6"
-    "\xAF"
-    "\xC6"
     "\xB0"
     "\xE1"
     "\xBA"
@@ -1354,8 +1352,6 @@ const char* const STRINGS_EN[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "UI Theme",
     "Classic",
     "Lyra",
@@ -1480,10 +1476,6 @@ const char* const STRINGS_EN[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -1777,21 +1769,6 @@ const char* const STRINGS_EN[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2279,8 +2256,6 @@ const char* const STRINGS_ES[] = {
     "Bater\xC3"
     "\xAD"
     "a",
-    "Reading Time Estimate",
-    "Session Timer",
     "Interfaz",
     "Cl\xC3"
     "\xA1"
@@ -2479,10 +2454,6 @@ const char* const STRINGS_ES[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -2776,21 +2747,6 @@ const char* const STRINGS_ES[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3404,8 +3360,6 @@ const char* const STRINGS_FR[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "Th\xC3"
     "\xA8"
     "me interface",
@@ -3609,10 +3563,6 @@ const char* const STRINGS_FR[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -3906,21 +3856,6 @@ const char* const STRINGS_FR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4344,8 +4279,6 @@ const char* const STRINGS_DE[] = {
     "Vorschau",
     "Titel",
     "Batterie",
-    "Reading Time Estimate",
-    "Session Timer",
     "System-Design",
     "Klassisch",
     "Lyra",
@@ -4508,10 +4441,6 @@ const char* const STRINGS_DE[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -4805,21 +4734,6 @@ const char* const STRINGS_DE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6093,8 +6007,6 @@ const char* const STRINGS_CS[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "\xC5"
     "\xA0"
     "ablona rozhran\xC3"
@@ -6519,10 +6431,6 @@ const char* const STRINGS_CS[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -6816,21 +6724,6 @@ const char* const STRINGS_CS[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7347,8 +7240,6 @@ const char* const STRINGS_PO[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "Tema da interface",
     "Cl\xC3"
     "\xA1"
@@ -7549,10 +7440,6 @@ const char* const STRINGS_PO[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -7846,21 +7733,6 @@ const char* const STRINGS_PO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_RU[] = {
@@ -14590,8 +14462,6 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x8F"
     "",
-    "Reading Time Estimate",
-    "Session Timer",
     "\xD0"
     "\xA2"
     "\xD0"
@@ -16674,10 +16544,6 @@ const char* const STRINGS_RU[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -16971,21 +16837,6 @@ const char* const STRINGS_RU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_SV[] = {
@@ -17687,8 +17538,6 @@ const char* const STRINGS_SV[] = {
     "rhandsgranskning",
     "Titel",
     "Batteri",
-    "Reading Time Estimate",
-    "Session Timer",
     "Anv\xC3"
     "\xA4"
     "ndargr\xC3"
@@ -17921,10 +17770,6 @@ const char* const STRINGS_SV[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -18218,21 +18063,6 @@ const char* const STRINGS_SV[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19072,8 +18902,6 @@ const char* const STRINGS_RO[] = {
     "Previzualizare",
     "Titlu",
     "Baterie",
-    "Reading Time Estimate",
-    "Session Timer",
     "Tema UI",
     "Clasic",
     "Lyra",
@@ -19332,10 +19160,6 @@ const char* const STRINGS_RO[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -19629,21 +19453,6 @@ const char* const STRINGS_RO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20163,8 +19972,6 @@ const char* const STRINGS_CA[] = {
     "\xAD"
     "tol",
     "Bateria",
-    "Reading Time Estimate",
-    "Session Timer",
     "Tema de la interf\xC3"
     "\xAD"
     "cie",
@@ -20375,10 +20182,6 @@ const char* const STRINGS_CA[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -20672,21 +20475,6 @@ const char* const STRINGS_CA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_UK[] = {
@@ -28350,8 +28138,6 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x80"
     "",
-    "Reading Time Estimate",
-    "Session Timer",
     "\xD0"
     "\xA2"
     "\xD0"
@@ -30750,10 +30536,6 @@ const char* const STRINGS_UK[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -31047,21 +30829,6 @@ const char* const STRINGS_UK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_BE[] = {
@@ -37523,8 +37290,6 @@ const char* const STRINGS_BE[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "\xD0"
     "\xA2"
     "\xD1"
@@ -39545,10 +39310,6 @@ const char* const STRINGS_BE[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -39842,21 +39603,6 @@ const char* const STRINGS_BE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_IT[] = {
@@ -40167,8 +39913,6 @@ const char* const STRINGS_IT[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "Tema UI",
     "Classico",
     "Lyra",
@@ -40307,10 +40051,6 @@ const char* const STRINGS_IT[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -40604,21 +40344,6 @@ const char* const STRINGS_IT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_PL[] = {
@@ -41466,8 +41191,6 @@ const char* const STRINGS_PL[] = {
     "\x82"
     "",
     "Bateria",
-    "Reading Time Estimate",
-    "Session Timer",
     "Sk\xC3"
     "\xB3"
     "rka UI",
@@ -41740,10 +41463,6 @@ const char* const STRINGS_PL[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -42037,21 +41756,6 @@ const char* const STRINGS_PL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_FI[] = {
@@ -42699,8 +42403,6 @@ const char* const STRINGS_FI[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "K\xC3"
     "\xA4"
     "ytt\xC3"
@@ -42939,10 +42641,6 @@ const char* const STRINGS_FI[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -43236,21 +42934,6 @@ const char* const STRINGS_FI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_DA[] = {
@@ -43738,8 +43421,6 @@ const char* const STRINGS_DA[] = {
     "Preview",
     "Title",
     "Battery",
-    "Reading Time Estimate",
-    "Session Timer",
     "Brugergr\xC3"
     "\xA6"
     "nseflade tema",
@@ -43900,10 +43581,6 @@ const char* const STRINGS_DA[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -44197,21 +43874,6 @@ const char* const STRINGS_DA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_NL[] = {
@@ -44501,8 +44163,6 @@ const char* const STRINGS_NL[] = {
     "Voorbeeld",
     "Titel",
     "Batterij",
-    "Reading Time Estimate",
-    "Session Timer",
     "UI Thema",
     "Klassiek",
     "Lyra",
@@ -44629,10 +44289,6 @@ const char* const STRINGS_NL[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -44926,21 +44582,6 @@ const char* const STRINGS_NL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_TR[] = {
@@ -46088,8 +45729,6 @@ const char* const STRINGS_TR[] = {
     "\xB1"
     "k",
     "Pil",
-    "Reading Time Estimate",
-    "Session Timer",
     "Aray\xC3"
     "\xBC"
     "z Temas\xC4"
@@ -46416,10 +46055,6 @@ const char* const STRINGS_TR[] = {
     "Paired: %s",
     "Forget Device",
     "Forget paired remote?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "Presenter Pen",
     "Waiting for connection...",
     "Pair this device as a Bluetooth keyboard",
@@ -46713,21 +46348,6 @@ const char* const STRINGS_TR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 const char* const STRINGS_VI[] = {
@@ -49067,38 +48687,6 @@ const char* const STRINGS_VI[] = {
     "\x81"
     "",
     "Pin",
-    "\xC6"
-    "\xAF"
-    "\xE1"
-    "\xBB"
-    "\x9B"
-    "c t\xC3"
-    "\xAD"
-    "nh th\xE1"
-    "\xBB"
-    "\x9D"
-    "i gian \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x8D"
-    "c",
-    "\xC4"
-    "\x90"
-    "\xE1"
-    "\xBA"
-    "\xBF"
-    "m gi\xE1"
-    "\xBB"
-    "\x9D"
-    " phi\xC3"
-    "\xAA"
-    "n \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x8D"
-    "c",
     "Giao di\xE1"
     "\xBB"
     "\x87"
@@ -50083,10 +49671,6 @@ const char* const STRINGS_VI[] = {
     " gh\xC3"
     "\xA9"
     "p?",
-    "Learn Keys",
-    "Press NEXT on remote",
-    "Press PREV on remote",
-    "Keys learned!",
     "B\xC3"
     "\xBA"
     "t tr\xC3"
@@ -51828,21 +51412,6 @@ const char* const STRINGS_VI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Updates clock during sleep. Drains ~3-4mA battery",
-    "How often sleep screen updates. Needs Keep Clock Alive",
-    "Compensates for sunlight-induced e-ink fading",
-    "Normal: light. Dark: bolder. Extra Dark: all black",
-    "Full refresh every N pages. Less = faster but more ghosting",
-    "Smoother text edges using grayscale",
-    "Inverts display colors",
-    "What to show when device sleeps",
-    "Reader text font",
-    "Reader text size",
-    "Screen rotation for reading",
-    "Break words at line ends",
-    "Use book's own CSS styling",
-    "Hide battery % in header",
-    "Idle time before entering sleep",
 };
 
 }  // namespace i18n_strings

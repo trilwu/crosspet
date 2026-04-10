@@ -28,9 +28,6 @@ class HalGPIO {
   uint8_t virtualButtonQueue = 0;
   uint8_t previousVirtualButtonEvents = 0;
 
-  bool lastUsbConnected = false;
-  bool usbStateChanged = false;
-
  public:
   HalGPIO() = default;
 
@@ -52,9 +49,6 @@ class HalGPIO {
   // Check if USB is connected
   bool isUsbConnected() const;
 
-  // Returns true once per edge (plug or unplug) since the last update()
-  bool wasUsbStateChanged() const;
-
   enum class WakeupReason { PowerButton, AfterFlash, AfterUSBPower, TimerWake, Other };
 
   WakeupReason getWakeupReason() const;
@@ -68,5 +62,3 @@ class HalGPIO {
   static constexpr uint8_t BTN_DOWN = 5;
   static constexpr uint8_t BTN_POWER = 6;
 };
-
-extern HalGPIO gpio;  // Singleton

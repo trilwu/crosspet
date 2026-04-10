@@ -26,9 +26,6 @@ class EpubReaderMenuActivity final : public Activity {
     SYNC,
     STARRED_PAGES,
     DELETE_CACHE
-#ifdef ENABLE_BLE
-    , BLUETOOTH
-#endif
   };
 
   explicit EpubReaderMenuActivity(GfxRenderer& renderer, MappedInputManager& mappedInput, const std::string& title,

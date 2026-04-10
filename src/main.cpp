@@ -37,9 +37,6 @@
 #include "activities/tools/WeatherActivity.h"
 #include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
-#ifdef ENABLE_BLE
-#include <BluetoothHIDManager.h>
-#endif
 
 HalDisplay display;
 HalGPIO gpio;
@@ -259,16 +256,6 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
-#ifdef ENABLE_BLE
-  // Disable BLE before deep sleep to save power
-  {
-    auto& btMgr = BluetoothHIDManager::getInstance();
-    if (btMgr.isEnabled()) {
-      btMgr.disable();
-    }
-  }
-#endif
-
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
   LOG_DBG("MAIN", "Entering deep sleep");
@@ -413,19 +400,6 @@ void setup() {
   PET_MANAGER.load();
   PET_MANAGER.tick();
 
-#ifdef ENABLE_BLE
-  // Configure BLE HID button injector (lazy — NimBLE not started until user enables BLE)
-  {
-    auto& btMgr = BluetoothHIDManager::getInstance();
-    btMgr.setButtonInjector([](uint8_t buttonIndex) {
-      gpio.injectButtonPress(buttonIndex);
-    });
-    if (SETTINGS.bleEnabled && SETTINGS.bleBondedDeviceAddr[0]) {
-      btMgr.setBondedDevice(SETTINGS.bleBondedDeviceAddr, SETTINGS.bleBondedDeviceName, SETTINGS.bleBondedDeviceAddrType);
-    }
-  }
-#endif
-
   switch (gpio.getWakeupReason()) {
     case HalGPIO::WakeupReason::PowerButton:
       // For normal wakeups, verify power button press duration
@@ -493,11 +467,6 @@ void loop() {
 
   gpio.update();
 
-#ifdef ENABLE_BLE
-  // Check BLE inactivity timeout (auto-disable after 5 min idle)
-  BluetoothHIDManager::getInstance().updateActivity();
-#endif
-
   renderer.setFadingFix(SETTINGS.fadingFix);
   {
     static uint8_t lastDarkMode = 0xFF;
@@ -533,12 +502,7 @@ void loop() {
 
   // Check for any user activity (button press or release) or active background work
   static unsigned long lastActivityTime = millis();
-  bool hasActivity = gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep();
-#ifdef ENABLE_BLE
-  // BLE HID reports count as user activity — prevent auto-sleep while remote is in use
-  hasActivity = hasActivity || BluetoothHIDManager::getInstance().hasRecentActivity();
-#endif
-  if (hasActivity) {
+  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep()) {
     lastActivityTime = millis();         // Reset inactivity timer
     powerManager.setPowerSaving(false);  // Restore normal CPU frequency on user activity
   }
@@ -607,12 +571,6 @@ void loop() {
       break;  // PAGE_TURN, BLOCK_FRONT, STAR_PAGE handled by reader activities
   }
 
-  // Refresh the battery icon when USB is plugged or unplugged.
-  // Placed after sleep guards so we never queue a render that won't be processed.
-  if (gpio.wasUsbStateChanged()) {
-    activityManager.requestUpdate();
-  }
-
   const unsigned long activityStartTime = millis();
   activityManager.loop();
   const unsigned long activityDuration = millis() - activityStartTime;
@@ -632,12 +590,7 @@ void loop() {
     powerManager.setPowerSaving(false);  // Make sure we're at full performance when skipLoopDelay is requested
     yield();                             // Give FreeRTOS a chance to run tasks, but return immediately
   } else {
-    bool canSavePower = (millis() - lastActivityTime >= HalPowerManager::IDLE_POWER_SAVING_MS);
-#ifdef ENABLE_BLE
-    // BLE needs >=80MHz — don't drop to 10MHz while NimBLE is active
-    if (BluetoothHIDManager::getInstance().isEnabled()) canSavePower = false;
-#endif
-    if (canSavePower) {
+    if (millis() - lastActivityTime >= HalPowerManager::IDLE_POWER_SAVING_MS) {
       // If we've been inactive for a while, increase the delay to save power
       powerManager.setPowerSaving(true);  // Lower CPU frequency after extended inactivity
       delay(50);

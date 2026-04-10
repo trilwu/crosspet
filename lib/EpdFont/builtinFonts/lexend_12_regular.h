@@ -2578,7 +2578,6 @@ static const EpdFontData lexend_12_regular = {
     true,
     lexend_12_regularGroups,
     11,
-    nullptr,
     lexend_12_regularKernLeftClasses,
     lexend_12_regularKernRightClasses,
     lexend_12_regularKernMatrix,

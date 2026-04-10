@@ -3424,7 +3424,6 @@ static const EpdFontData bokerlam_12_bold = {
     true,
     bokerlam_12_boldGroups,
     13,
-    nullptr,
     bokerlam_12_boldKernLeftClasses,
     bokerlam_12_boldKernRightClasses,
     bokerlam_12_boldKernMatrix,

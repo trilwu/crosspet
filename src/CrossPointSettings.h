@@ -27,7 +27,6 @@ class CrossPointSettings {
     CLOCK = 6,
     READING_STATS = 7,
     OVERLAY = 8,
-    KEEP_SCREEN = 9,
     SLEEP_SCREEN_MODE_COUNT
   };
   enum SLEEP_SCREEN_COVER_MODE { FIT = 0, CROP = 1, SLEEP_SCREEN_COVER_MODE_COUNT };
@@ -165,8 +164,6 @@ class CrossPointSettings {
   uint8_t statusBarTitle = CHAPTER_TITLE;
   uint8_t statusBarBattery = 1;
   uint8_t statusBarClock = 1;
-  uint8_t statusBarTimeEstimate = 0;
-  uint8_t statusBarSessionTimer = 0;
   // Text rendering settings
   uint8_t extraParagraphSpacing = 1;
   uint8_t textAntiAliasing = 1;
@@ -238,14 +235,6 @@ class CrossPointSettings {
   uint8_t autoPageTurnSpeed = 0;
   // Auto page turn master switch: 0=off, 1=on (speed controlled by autoPageTurnSpeed)
   uint8_t autoPageTurnEnabled = 0;
-
-#ifdef ENABLE_BLE
-  // BLE HID remote settings
-  uint8_t bleEnabled = 0;                    // 0=disabled, 1=auto-connect on startup
-  char bleBondedDeviceAddr[18] = "";         // BLE bonded device MAC address
-  char bleBondedDeviceName[32] = "";         // BLE bonded device display name
-  uint8_t bleBondedDeviceAddrType = 0;       // BLE address type (0=public, 1=random)
-#endif
 
   // Keep RTC alive during deep sleep (GPIO13 HIGH) for accurate clock on wake.
   // Trade-off: ~3-4mA battery drain vs accurate time. Only useful for clock/stats sleep screens.

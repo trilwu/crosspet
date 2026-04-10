@@ -3129,7 +3129,6 @@ static const EpdFontData ubuntu_12_regular = {
     false,
     nullptr,
     0,
-    nullptr,
     ubuntu_12_regularKernLeftClasses,
     ubuntu_12_regularKernRightClasses,
     ubuntu_12_regularKernMatrix,

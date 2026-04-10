@@ -117,7 +117,6 @@ void HomeActivity::loadRecentCovers(int coverHeight) {
 
 void HomeActivity::onEnter() {
   Activity::onEnter();
-  LOG_INF("HOME", "[HEAP] onEnter: %d bytes free", ESP.getFreeHeap());
   selectorIndex = 0;
   coverRendered = false;
   firstRenderDone = false;
@@ -302,12 +301,11 @@ void HomeActivity::doSync() {
 
 // ── Actions ───────────────────────────────────────────────────────────────────
 
-void HomeActivity::onSelectBook(const std::string& path) { freeCoverBuffer(); activityManager.goToReader(path); }
-// Free cover buffer before navigation — reclaims 48KB heap for child activities
-void HomeActivity::onFileBrowserOpen() { freeCoverBuffer(); activityManager.goToFileBrowser(); }
-void HomeActivity::onRecentBooksOpen() { freeCoverBuffer(); activityManager.goToRecentBooks(); }
-void HomeActivity::onVirtualPetOpen()  { freeCoverBuffer(); activityManager.goToVirtualPet(); }
-void HomeActivity::onFileTransferOpen(){ freeCoverBuffer(); activityManager.goToFileTransfer(); }
-void HomeActivity::onSettingsOpen()    { freeCoverBuffer(); LOG_INF("HOME", "[HEAP] After freeCoverBuffer: %d bytes free", ESP.getFreeHeap()); activityManager.goToSettings(); }
-void HomeActivity::onToolsOpen()       { freeCoverBuffer(); activityManager.goToTools(); }
-void HomeActivity::onOpdsBrowserOpen() { freeCoverBuffer(); activityManager.goToBrowser(); }
+void HomeActivity::onSelectBook(const std::string& path) { activityManager.goToReader(path); }
+void HomeActivity::onFileBrowserOpen() { activityManager.goToFileBrowser(); }
+void HomeActivity::onRecentBooksOpen() { activityManager.goToRecentBooks(); }
+void HomeActivity::onVirtualPetOpen()  { activityManager.goToVirtualPet(); }
+void HomeActivity::onFileTransferOpen(){ activityManager.goToFileTransfer(); }
+void HomeActivity::onSettingsOpen()    { activityManager.goToSettings(); }
+void HomeActivity::onToolsOpen()       { activityManager.goToTools(); }
+void HomeActivity::onOpdsBrowserOpen() { activityManager.goToBrowser(); }

@@ -377,7 +377,7 @@ bool PngToFramebufferConverter::decodeToFramebuffer(const std::string& imagePath
   if (ctx.caching) {
     size_t cacheSize = (size_t)((ctx.dstWidth + 3) / 4) * ctx.dstHeight;
     if (cacheSize > PNG_MAX_CACHE_BYTES) {
-      LOG_DBG("PNG", "Skipping cache: %zu bytes exceeds PNG limit (%zu)", cacheSize, PNG_MAX_CACHE_BYTES);
+      LOG_DBG("PNG", "Skipping cache: %d bytes exceeds PNG limit (%d)", cacheSize, PNG_MAX_CACHE_BYTES);
       ctx.caching = false;
     } else if (!ctx.cache.allocate(ctx.dstWidth, ctx.dstHeight, config.x, config.y)) {
       LOG_ERR("PNG", "Failed to allocate cache buffer, continuing without caching");

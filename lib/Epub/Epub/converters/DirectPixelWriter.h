@@ -67,15 +67,6 @@ struct DirectPixelWriter {
         phyXStepY = 0;
         phyYStepY = 1;
         break;
-      default:
-        // Fallback to LandscapeCounterClockwise (identity transform)
-        phyXBase = 0;
-        phyYBase = 0;
-        phyXStepX = 1;
-        phyYStepX = 0;
-        phyXStepY = 0;
-        phyYStepY = 1;
-        break;
     }
   }
 

@@ -4408,7 +4408,6 @@ static const EpdFontData notosans_14_regular = {
     true,
     notosans_14_regularGroups,
     13,
-    nullptr,
     notosans_14_regularKernLeftClasses,
     notosans_14_regularKernRightClasses,
     notosans_14_regularKernMatrix,

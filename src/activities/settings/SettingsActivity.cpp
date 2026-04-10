@@ -24,14 +24,6 @@ const StrId SettingsActivity::categoryNames[categoryCount] = {StrId::STR_CAT_DIS
                                                               StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM};
 
 void SettingsActivity::onEnter() {
-  LOG_DBG("SET", "Free heap: %d bytes", ESP.getFreeHeap());
-
-  if (ESP.getFreeHeap() < 50000) {
-    LOG_ERR("SET", "Insufficient heap for settings: %d bytes", ESP.getFreeHeap());
-    onGoHome();
-    return;
-  }
-
   Activity::onEnter();
 
   // Build per-category vectors from the shared settings list
@@ -63,7 +55,6 @@ void SettingsActivity::onEnter() {
   systemSettings.push_back(SettingInfo::Action(StrId::STR_CLEAR_READING_CACHE, SettingAction::ClearCache));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_CHECK_UPDATES, SettingAction::CheckForUpdates));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_LANGUAGE, SettingAction::Language));
-  // BLE is in Tools menu (not Settings) to reduce activity stack depth for RAM
   systemSettings.push_back(SettingInfo::Action(StrId::STR_DEVICE_INFO, SettingAction::DeviceInfo));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_REBOOT, SettingAction::Reboot));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_CUSTOMISE_STATUS_BAR, SettingAction::CustomiseStatusBar));
@@ -262,7 +253,6 @@ void SettingsActivity::toggleCurrentSetting() {
       case SettingAction::Language:
         startActivityForResult(std::make_unique<LanguageSelectActivity>(renderer, mappedInput), resultHandler);
         break;
-      // BleRemote handled in ToolsActivity (not Settings)
       case SettingAction::DeviceInfo:
         startActivityForResult(std::make_unique<DeviceInfoActivity>(renderer, mappedInput), resultHandler);
         break;
@@ -284,26 +274,6 @@ void SettingsActivity::toggleCurrentSetting() {
   }
 
   SETTINGS.saveToFile();
-}
-
-static const char* getSettingDescription(const SettingInfo& s) {
-  if (!s.key) return nullptr;
-  if (strcmp(s.key, "keepClockAlive") == 0) return tr(STR_HELP_KEEP_CLOCK_ALIVE);
-  if (strcmp(s.key, "sleepRefreshInterval") == 0) return tr(STR_HELP_SLEEP_REFRESH);
-  if (strcmp(s.key, "fadingFix") == 0) return tr(STR_HELP_FADING_FIX);
-  if (strcmp(s.key, "textDarkness") == 0) return tr(STR_HELP_TEXT_DARKNESS);
-  if (strcmp(s.key, "refreshFrequency") == 0) return tr(STR_HELP_REFRESH_FREQ);
-  if (strcmp(s.key, "textAntiAliasing") == 0) return tr(STR_HELP_TEXT_AA);
-  if (strcmp(s.key, "darkMode") == 0) return tr(STR_HELP_DARK_MODE);
-  if (strcmp(s.key, "sleepScreen") == 0) return tr(STR_HELP_SLEEP_SCREEN);
-  if (strcmp(s.key, "fontFamily") == 0) return tr(STR_HELP_FONT_FAMILY);
-  if (strcmp(s.key, "fontSize") == 0) return tr(STR_HELP_FONT_SIZE);
-  if (strcmp(s.key, "orientation") == 0) return tr(STR_HELP_ORIENTATION);
-  if (strcmp(s.key, "hyphenationEnabled") == 0) return tr(STR_HELP_HYPHENATION);
-  if (strcmp(s.key, "embeddedStyle") == 0) return tr(STR_HELP_EMBEDDED_STYLE);
-  if (strcmp(s.key, "hideBatteryPercentage") == 0) return tr(STR_HELP_HIDE_BATTERY);
-  if (strcmp(s.key, "sleepTimeout") == 0) return tr(STR_HELP_TIME_TO_SLEEP);
-  return nullptr;
 }
 
 void SettingsActivity::render(RenderLock&&) {
@@ -340,12 +310,7 @@ void SettingsActivity::render(RenderLock&&) {
         }
         return std::string(I18N.get(s.nameId));
       },
-      [&settings, this](int index) -> std::string {
-        if (index != selectedSettingIndex - 1) return "";
-        const auto* desc = getSettingDescription(settings[index]);
-        return desc ? std::string(desc) : "";
-      },
-      nullptr,
+      nullptr, nullptr,
       [&settings](int i) {
         const auto& setting = settings[i];
         // Section headers have no value
