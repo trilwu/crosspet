@@ -52,8 +52,10 @@ struct FootnoteResult {
 };
 
 struct StarredPageResult {
+  enum Action : uint8_t { NAVIGATE, DELETE };
   int spineIndex = 0;
   int pageNumber = 0;
+  Action action = NAVIGATE;
 };
 
 using ResultVariant = std::variant<std::monostate, WifiResult, KeyboardResult, MenuResult, ChapterResult, PercentResult,
