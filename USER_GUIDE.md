@@ -359,7 +359,6 @@ The Tools Menu provides access to a variety of games and interactive utilities t
 | **Photo Frame** | Display images from your SD card in a slideshow or static frame. |
 | **Maze Game** | Navigate through procedurally generated mazes. |
 | **Game of Life** | John Conway's classic cellular automaton simulation. |
-| **Snake** | Classic turn-based snake game — eat food to grow longer without hitting walls or yourself. |
 | **2048** | Slide tiles to combine matching numbers and reach the 2048 tile. |
 
 **Controls in Tools:**

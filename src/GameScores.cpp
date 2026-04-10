@@ -5,7 +5,7 @@
 #include <Serialization.h>
 
 namespace {
-constexpr uint8_t SCORES_FILE_VERSION = 1;
+constexpr uint8_t SCORES_FILE_VERSION = 2;
 constexpr char SCORES_FILE[] = "/.crosspoint/game_scores.bin";
 }  // namespace
 
@@ -20,7 +20,6 @@ bool GameScores::saveToFile() const {
   }
   const uint8_t version = SCORES_FILE_VERSION;
   serialization::writePod(file, version);
-  serialization::writePod(file, snakeHigh);
   serialization::writePod(file, best2048);
   serialization::writePod(file, mazeBest[0]);
   serialization::writePod(file, mazeBest[1]);
@@ -41,7 +40,6 @@ bool GameScores::loadFromFile() {
     file.close();
     return false;
   }
-  serialization::readPod(file, snakeHigh);
   serialization::readPod(file, best2048);
   serialization::readPod(file, mazeBest[0]);
   serialization::readPod(file, mazeBest[1]);

@@ -96,6 +96,21 @@ const char* const LANGUAGE_NAMES[] = {
     "rk\xC3"
     "\xA7"
     "e",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "",
     "Ti\xE1"
     "\xBA"
     "\xBF"
@@ -103,6 +118,10 @@ const char* const LANGUAGE_NAMES[] = {
     "\xBB"
     "\x87"
     "t",
+    "Magyar",
+    "Lietuvi\xC5"
+    "\xB3"
+    "",
 };
 
 // Character sets for each language
@@ -827,6 +846,137 @@ const char* const CHARACTER_SETS[] = {
     "\xC5"
     "\x9F"
     "",  // Türkçe
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    "\xAB"
+    "\xC2"
+    "\xB0"
+    "\xD0"
+    "\x86"
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\x99"
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\x9C"
+    "\xD0"
+    "\x9E"
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xA8"
+    "\xD0"
+    "\xAB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x84"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x86"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x8C"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x8E"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\x93"
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\x9B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\xAE"
+    "\xD2"
+    "\xAF"
+    "\xD2"
+    "\xB0"
+    "\xD2"
+    "\xB1"
+    "\xD3"
+    "\x98"
+    "\xD3"
+    "\x99"
+    "\xD3"
+    "\xA8"
+    "\xD3"
+    "\xA9"
+    "",  // Қазақша
     " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
@@ -1065,6 +1215,72 @@ const char* const CHARACTER_SETS[] = {
     "\xBB"
     "\xB7"
     "",  // Tiếng Việt
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    "\xAB"
+    "\xC2"
+    "\xB0"
+    "\xC3"
+    "\x81"
+    "\xC3"
+    "\x8D"
+    "\xC3"
+    "\x9A"
+    "\xC3"
+    "\x9C"
+    "\xC3"
+    "\xA1"
+    "\xC3"
+    "\xA9"
+    "\xC3"
+    "\xAD"
+    "\xC3"
+    "\xB3"
+    "\xC3"
+    "\xB6"
+    "\xC3"
+    "\xBA"
+    "\xC3"
+    "\xBC"
+    "\xC5"
+    "\x91"
+    "\xC5"
+    "\xB1"
+    "",  // Magyar
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    "\xAB"
+    "\xC2"
+    "\xB0"
+    "\xC4"
+    "\x85"
+    "\xC4"
+    "\x8D"
+    "\xC4"
+    "\x97"
+    "\xC4"
+    "\x99"
+    "\xC4"
+    "\xAE"
+    "\xC4"
+    "\xAF"
+    "\xC5"
+    "\xA0"
+    "\xC5"
+    "\xA1"
+    "\xC5"
+    "\xAB"
+    "\xC5"
+    "\xB3"
+    "\xC5"
+    "\xBD"
+    "\xC5"
+    "\xBE"
+    "\xE2"
+    "\x80"
+    "\x9C"
+    "\xE2"
+    "\x80"
+    "\x9E"
+    "",  // Lietuvių
 };
 
 namespace i18n_strings {
@@ -1372,6 +1588,8 @@ const char* const STRINGS_EN[] = {
     "OPDS Browser",
     "Cover + Custom",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recents",
     "Recent Books",
     "No recent books",
@@ -1581,7 +1799,6 @@ const char* const STRINGS_EN[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -1597,8 +1814,6 @@ const char* const STRINGS_EN[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -1713,10 +1928,6 @@ const char* const STRINGS_EN[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -2280,6 +2491,8 @@ const char* const STRINGS_ES[] = {
     "Navegador OPDS",
     "Portada + Pers.",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recientes",
     "Libros recientes",
     "No hay libros recientes",
@@ -2559,7 +2772,6 @@ const char* const STRINGS_ES[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -2575,8 +2787,6 @@ const char* const STRINGS_ES[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -2691,10 +2901,6 @@ const char* const STRINGS_ES[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -3386,6 +3592,8 @@ const char* const STRINGS_FR[] = {
     "Navigateur OPDS",
     "Couverture + Perso",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "R\xC3"
     "\xA9"
     "cents",
@@ -3668,7 +3876,6 @@ const char* const STRINGS_FR[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -3684,8 +3891,6 @@ const char* const STRINGS_FR[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -3800,10 +4005,6 @@ const char* const STRINGS_FR[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -4299,6 +4500,8 @@ const char* const STRINGS_DE[] = {
     "OPDS-Browser",
     "Umschlag + Eigenes",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Zuletzt",
     "Zuletzt gelesen",
     "Keine B\xC3"
@@ -4546,7 +4749,6 @@ const char* const STRINGS_DE[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -4562,8 +4764,6 @@ const char* const STRINGS_DE[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -4678,10 +4878,6 @@ const char* const STRINGS_DE[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -6055,6 +6251,8 @@ const char* const STRINGS_CS[] = {
     "\xAD"
     "",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Ned\xC3"
     "\xA1"
     "vn\xC3"
@@ -6536,7 +6734,6 @@ const char* const STRINGS_CS[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -6552,8 +6749,6 @@ const char* const STRINGS_CS[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -6668,10 +6863,6 @@ const char* const STRINGS_CS[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -7264,6 +7455,8 @@ const char* const STRINGS_PO[] = {
     "Navegador OPDS",
     "Capa + personalizado",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recentes",
     "Livros recentes",
     "Sem livros recentes",
@@ -7545,7 +7738,6 @@ const char* const STRINGS_PO[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -7561,8 +7753,6 @@ const char* const STRINGS_PO[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -7677,10 +7867,6 @@ const char* const STRINGS_PO[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -14666,6 +14852,8 @@ const char* const STRINGS_RU[] = {
     "\xB9"
     "",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -16649,7 +16837,6 @@ const char* const STRINGS_RU[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -16665,8 +16852,6 @@ const char* const STRINGS_RU[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -16781,10 +16966,6 @@ const char* const STRINGS_RU[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -17568,6 +17749,8 @@ const char* const STRINGS_SV[] = {
     "sare",
     "Omslag + Valfri",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Senaste",
     "Senaste b\xC3"
     "\xB6"
@@ -17875,7 +18058,6 @@ const char* const STRINGS_SV[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -17891,8 +18073,6 @@ const char* const STRINGS_SV[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -18007,10 +18187,6 @@ const char* const STRINGS_SV[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -18928,6 +19104,8 @@ const char* const STRINGS_RO[] = {
     "\x83"
     " + Personalizat",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recente",
     "C\xC4"
     "\x83"
@@ -19265,7 +19443,6 @@ const char* const STRINGS_RO[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -19281,8 +19458,6 @@ const char* const STRINGS_RO[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -19397,10 +19572,6 @@ const char* const STRINGS_RO[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -20000,6 +20171,8 @@ const char* const STRINGS_CA[] = {
     "Navegador OPDS",
     "Portada + Personalitzat",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recents",
     "Llibres recents",
     "No hi ha llibres recents",
@@ -20287,7 +20460,6 @@ const char* const STRINGS_CA[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -20303,8 +20475,6 @@ const char* const STRINGS_CA[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -20419,10 +20589,6 @@ const char* const STRINGS_CA[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -28366,6 +28532,8 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     "",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "\xD0"
     "\x9E"
     "\xD1"
@@ -30641,7 +30809,6 @@ const char* const STRINGS_UK[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -30657,8 +30824,6 @@ const char* const STRINGS_UK[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -30773,10 +30938,6 @@ const char* const STRINGS_UK[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -37490,6 +37651,8 @@ const char* const STRINGS_BE[] = {
     "\xB9"
     "",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "\xD0"
     "\x9D"
     "\xD1"
@@ -39415,7 +39578,6 @@ const char* const STRINGS_BE[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -39431,8 +39593,6 @@ const char* const STRINGS_BE[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -39547,10 +39707,6 @@ const char* const STRINGS_BE[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -39933,6 +40089,8 @@ const char* const STRINGS_IT[] = {
     "Browser OPDS",
     "Copertina + Personalizzato",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recenti",
     "Libri Recenti",
     "Nessun libro recente",
@@ -40156,7 +40314,6 @@ const char* const STRINGS_IT[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -40172,8 +40329,6 @@ const char* const STRINGS_IT[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -40288,10 +40443,6 @@ const char* const STRINGS_IT[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -41225,6 +41376,8 @@ const char* const STRINGS_PL[] = {
     "\x82"
     "asne",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Ostatnie",
     "Ostatnio czytane",
     "Brak ostatnio czytanych",
@@ -41568,7 +41721,6 @@ const char* const STRINGS_PL[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -41584,8 +41736,6 @@ const char* const STRINGS_PL[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -41700,10 +41850,6 @@ const char* const STRINGS_PL[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -42435,6 +42581,8 @@ const char* const STRINGS_FI[] = {
     "OPDS-selain",
     "Kansi + mukautettu",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Viimeisimm\xC3"
     "\xA4"
     "t",
@@ -42746,7 +42894,6 @@ const char* const STRINGS_FI[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -42762,8 +42909,6 @@ const char* const STRINGS_FI[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -42878,10 +43023,6 @@ const char* const STRINGS_FI[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -43443,6 +43584,8 @@ const char* const STRINGS_DA[] = {
     "OPDS Browser",
     "Omslag + Brugerdefineret",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Seneste",
     "Seneste b\xC3"
     "\xB8"
@@ -43686,7 +43829,6 @@ const char* const STRINGS_DA[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -43702,8 +43844,6 @@ const char* const STRINGS_DA[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -43818,10 +43958,6 @@ const char* const STRINGS_DA[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -44183,6 +44319,8 @@ const char* const STRINGS_NL[] = {
     "OPDS-browser",
     "Omslag + Aangepast",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Recent",
     "Recente boeken",
     "Geen recente boeken",
@@ -44394,7 +44532,6 @@ const char* const STRINGS_NL[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -44410,8 +44547,6 @@ const char* const STRINGS_NL[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -44526,10 +44661,6 @@ const char* const STRINGS_NL[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -45783,6 +45914,8 @@ const char* const STRINGS_TR[] = {
     "\x96"
     "zel",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "Son Okunanlar",
     "Son Kitaplar",
     "Son okunan kitap yok",
@@ -46160,7 +46293,6 @@ const char* const STRINGS_TR[] = {
     "Maze",
     "Game of Life",
     "New Maze",
-    "Snake",
     "2048",
     "New Game",
     "Reading Stats",
@@ -46176,8 +46308,6 @@ const char* const STRINGS_TR[] = {
     "Game Over!",
     "You Win!",
     "Score: %lu    Best: %lu",
-    "Score:%d Hi:%d",
-    "Up/Down: speed",
     "Done! %d moves",
     "Moves: %d",
     "Gen %lu",
@@ -46292,10 +46422,8117 @@ const char* const STRINGS_TR[] = {
     "Showers",
     "Thunderstorm",
     "Updated",
-    "News",
-    "Loading news...",
-    "Failed to load news",
-    "No articles found",
+    "Focus:",
+    "Short break:",
+    "Long break:",
+    "%s %2lu min",
+    "Start >",
+    "Location",
+    "Home clock",
+    "Home weather",
+    "Home pet status",
+    "Reading Stats",
+    "RECENTLY READ",
+    "Today",
+    "Total",
+    "Sessions",
+    "EST. LEFT",
+    "TIME READ",
+    "%d times",
+    "%d min",
+    "%dh %dm",
+    "Sync",
+    "Sync OK",
+    "WiFi timeout",
+    "API error %d",
+    "Sleep Image",
+    "Image selected!",
+    "No .bmp files found",
+    "Place .bmp files in /sleep/",
+    "Any (random)",
+    "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
+    "Page starred",
+    "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
+};
+
+const char* const STRINGS_KK[] = {
+    "CrossPoint",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\x95"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\x99"
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xAB"
+    " \xD0"
+    "\xA0"
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\x9C"
+    "\xD0"
+    "\x86"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB6"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "Calibre Library",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "Books",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x8F"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    " \xD1"
+    "\x84"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    "",
+    "\xD0"
+    "\xA8"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "",
+    "Failed to load XTC",
+    "Failed to load TXT",
+    "Failed to load EPUB",
+    "SD card error",
+    "WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "%zu \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x86"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "Connection timeout",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\xB1"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "?",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    " \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "?",
+    "Remove saved password?",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " OK \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "Press any button to continue",
+    "LEFT/RIGHT: Select | OK: Confirm",
+    "How would you like to connect?",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\xA5"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " URL \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    " http://",
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " QR \xD0"
+    "\xBA"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    ":",
+    "Calibre \xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "Calibre Web URL",
+    "Connect as Wireless Device",
+    "* = \xD0"
+    "\xA8"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " | + = \xD0"
+    "\xA1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "MAC \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    ":",
+    "WiFi \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "WiFi \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "Enter Text",
+    "to ",
+    "Discovering Calibre...",
+    "Connecting to ",
+    "Connected to ",
+    "Waiting for commands...",
+    "(Connection failed, retrying)",
+    "Calibre disconnected",
+    "Waiting for transfer...",
+    "If transfer fails, enable\n'Ignore free space' in Calibre's\nSmartDevice plugin settings.",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    ": ",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    ": ",
+    "Waiting for more...",
+    "Failed to create file",
+    "Password required",
+    "Transfer interrupted",
+    "1) CrossPoint Reader \xD0"
+    "\xBF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "2) \xD0"
+    "\x91"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    " WiFi \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "3) Calibre-\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    ": \"\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB6"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "\"",
+    "\"\xD0"
+    "\x96"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "\"",
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB5"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBC"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    " \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "",
+    "Status Bar",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x8F"
+    " % \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9C"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "Text Darkness",
+    "Extra Dark",
+    "\xD0"
+    "\xA1"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "",
+    "Front Button Layout",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    " (\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    ")",
+    "Front Button Layout (reader)",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "",
+    "External Reader Font",
+    "Reader Font",
+    "UI Font",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x81"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBF"
+    " \xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "ASCII Letter Spacing",
+    "ASCII Digit Spacing",
+    "CJK Spacing",
+    "Color Mode",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "Show Hidden Files",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "",
+    "Calibre Settings",
+    "KOReader \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "",
+    "Select Wallpaper",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "Calibre",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    " URL",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "",
+    "KOReader \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "KOReader \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\xA4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "WiFi \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "...",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "!",
+    "KOReader \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "KOReader \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x94"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    ".",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    ".",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD1"
+    "\x8D"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    " \xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD3"
+    "\xA8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9C"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x95"
+    "\xD1"
+    "\x88"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "",
+    "No Progress",
+    "Full",
+    "\xD0"
+    "\x95"
+    "\xD1"
+    "\x88"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD3"
+    "\x98"
+    "\xD1"
+    "\x80"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x95"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "Screen Refresh",
+    "Block Front",
+    "\xD0"
+    "\xA2"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    " (\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    ")",
+    "\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    " (\xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    ")",
+    "Bck, Cnfrm, Lft, Rght",
+    "Lft, Rght, Bck, Cnfrm",
+    "Lft, Bck, Cnfrm, Rght",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "/\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "/\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "Bookerly",
+    "Lexend",
+    "Open Dyslexic",
+    "Bokerlam",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD3"
+    "\xA8"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "",
+    "1 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "5 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "10 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "15 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "30 \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "",
+    "1 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "5 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "10 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "15 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "30 \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "!",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBD"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    ": ",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBD"
+    "\xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    ": ",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x8F"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBF"
+    " \xD2"
+    "\xB1"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "External Font",
+    "Built-in (Disabled)",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ":",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    " URL \xD0"
+    "\xBA"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    ": ",
+    "IP \xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    ": ",
+    "or scan QR code with your phone to connect to Wifi.",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ": \xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ": \xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    ": \xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x83"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "",
+    "SD \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xC2"
+    "\xAB"
+    " \xD0"
+    "\x90"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xC2"
+    "\xAB"
+    " \xD0"
+    "\xA8"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x83"
+    "",
+    "\xC2"
+    "\xAB"
+    " \xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xC2"
+    "\xAB"
+    " Save",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x98"
+    "\xD3"
+    "\x99"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD3"
+    "\xA9"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\x9E"
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\xAB"
+    "",
+    "\xD3"
+    "\xA8"
+    "\xD0"
+    "\xA8"
+    "\xD0"
+    "\x86"
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\x9B"
+    "\xD0"
+    "\x86"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "CAPS",
+    "caps",
+    "\xD0"
+    "\x9E"
+    "\xD0"
+    "\x9A"
+    "",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x8D"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBC"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    " \xD1"
+    "\x81"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "",
+    "\xD0"
+    "\x9E"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xB0"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "21-\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x8F"
+    "",
+    "\xD0"
+    "\x98"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x81"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "",
+    "Lyra",
+    "Lyra \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD2"
+    "\xA3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "CrossPet Reader",
+    "CrossPet Classic",
+    "\xD0"
+    "\x9A"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "Dark Mode",
+    "Keep Clock Alive",
+    "Off",
+    "Sleep Refresh",
+    "1 min",
+    "5 min",
+    "10 min",
+    "30 min",
+    "60 min",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "OPDS \xD1"
+    "\x88"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x9C"
+    "\xD2"
+    "\xB1"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    " + \xD3"
+    "\xA8"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "",
+    "Page overlay",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
+    "\xD0"
+    "\x96"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "Calibre \xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\xB1"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xB6"
+    "\xD3"
+    "\x99"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    " \xD2"
+    "\x9B"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8E"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "?",
+    "\xD2"
+    "\xB0"
+    "\xD0"
+    "\xBC"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "Calibre \xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD3"
+    "\x98"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD3"
+    "\x98"
+    "\xD1"
+    "\x80"
+    " \xD1"
+    "\x80"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    " \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD2"
+    "\xA3"
+    " \xD3"
+    "\xA9"
+    "\xD0"
+    "\xB7"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    ": \xD3"
+    "\x98"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    ": \xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB9"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x82"
+    "\xD2"
+    "\x9B"
+    "\xD0"
+    "\xB0"
+    " (1-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "\xD0"
+    "\xA0"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " (2-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    " (3-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    " (4-\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xB9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    ")",
+    "%-\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    " \xD3"
+    "\xA9"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD0"
+    "\xBA"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8E"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x8E"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " QR \xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xBA"
+    "\xD3"
+    "\xA9"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\xA2"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    ": ",
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "  |  ",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    ": ",
+    "shift",
+    "SHIFT",
+    "LOCK",
+    "Calibre \xD2"
+    "\xAF"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " URL-\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    " /opds \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "/\xD0"
+    "\x9E"
+    "\xD2"
+    "\xA3"
+    ": 1%  \xD0"
+    "\x96"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "/\xD0"
+    "\xA2"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    ": 10%",
+    "\xD0"
+    "\xA3"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x8B"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x85"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "...",
+    "\xD2"
+    "\x9A"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x85"
+    "\xD1"
+    "\x8D"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB5"
+    "\xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "...",
+    "\xD0"
+    "\xA2"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x84"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x86"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x8F"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "",
+    "\xD0"
+    "\x9F"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB5"
+    " KOReader \xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\xA3"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    ":",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    ":",
+    "%d-\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    ", \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    " %.2f%%",
+    "%d/%d-\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    ", \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBF"
+    "\xD1"
+    "\x8B"
+    " %.2f%%",
+    "  \xD0"
+    "\x91"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    ": %s",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x96"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB3"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD2"
+    "\x9A"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x88"
+    "\xD1"
+    "\x8B"
+    "\xD2"
+    "\x9B"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD2"
+    "\xAF"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB1"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD2"
+    "\x93"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xBE"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    " \xD0"
+    "\xBA"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBA"
+    " \xD0"
+    "\xBF"
+    "\xD0"
+    "\xB5"
+    "?",
+    "\xD2"
+    "\xAE"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " \xD0"
+    "\xB6"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x8B"
+    "!",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x85"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    " \xD1"
+    "\x81"
+    "\xD3"
+    "\x99"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xB7"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD3"
+    "\xA9"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBC"
+    " ",
+    "\xD0"
+    "\x96"
+    "\xD2"
+    "\xAF"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBF"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x96"
+    "",
+    "\xD0"
+    "\x9A"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB3"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBD"
+    " \xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8C"
+    "",
+    "OPDS \xD1"
+    "\x81"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x96"
+    " URL",
+    "\xD0"
+    "\xA2"
+    "\xD2"
+    "\xAF"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "",
+    "\xD0"
+    "\x91"
+    "\xD2"
+    "\xB1"
+    "\xD0"
+    "\xBB"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB4"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xB7"
+    "\xD0"
+    "\xB1"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    " \xD0"
+    "\xB6"
+    "\xD0"
+    "\xBE"
+    "\xD2"
+    "\x9B"
+    "",
+    "[\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB5"
+    "]",
+    "\xD0"
+    "\xA1"
+    "\xD0"
+    "\xBA"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x88"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x82"
+    "\xD2"
+    "\xAF"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x96"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    "",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xB2"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    " \xD2"
+    "\x9B"
+    "\xD0"
+    "\xBE"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xBB"
+    "\xD1"
+    "\x8B"
+    ": ",
+    "\xD0"
+    "\x90"
+    "\xD0"
+    "\xB2"
+    "\xD1"
+    "\x82"
+    "\xD0"
+    "\xBE"
+    "\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD0"
+    "\xB0"
+    "\xD1"
+    "\x83"
+    "\xD0"
+    "\xB4"
+    "\xD0"
+    "\xB0"
+    "\xD1"
+    "\x80"
+    "\xD1"
+    "\x83"
+    " (\xD0"
+    "\xBC"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x83"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
+    "\xD0"
+    "\xBD"
+    "\xD0"
+    "\xB0"
+    " \xD0"
+    "\xB1"
+    "\xD0"
+    "\xB5"
+    "\xD1"
+    "\x82"
+    " \xD1"
+    "\x81"
+    "\xD0"
+    "\xB0"
+    "\xD0"
+    "\xBD"
+    "\xD1"
+    "\x8B"
+    ")",
+    "Auto Page Turn",
+    "1 page/min",
+    "3 pages/min",
+    "6 pages/min",
+    "12 pages/min",
+    "Apps",
+    "Clock",
+    "Pomodoro",
+    "Daily Quote",
+    "Conference Badge",
+    "Connect WiFi to sync time",
+    "Place quotes.txt on SD card",
+    "Place badge.txt on SD card",
+    "Setup Badge",
+    "Name",
+    "Title / Role",
+    "QR Data (URL)",
+    "Badge saved!",
+    "Edit",
+    "(Built-in quote)",
+    "Ready",
+    "Focus",
+    "Short Break",
+    "Long Break",
+    "Paused",
+    "Start",
+    "Pause",
+    "Resume",
+    "Skip",
+    "Bluetooth Remote",
+    "Auto-connect BT",
+    "Pair Remote",
+    "Scanning...",
+    "Connecting...",
+    "Connected",
+    "Not connected",
+    "No devices found",
+    "Paired: %s",
+    "Forget Device",
+    "Forget paired remote?",
+    "Presenter Pen",
+    "Waiting for connection...",
+    "Pair this device as a Bluetooth keyboard",
+    "Right ->",
+    "Next slide",
+    "<- Left",
+    "Prev slide",
+    "OK",
+    "Start (F5)",
+    "Back",
+    "End (Esc)",
+    "Next >",
+    "< Prev",
+    "F5",
+    "Esc",
+    "My Pet",
+    "Hunger",
+    "Pet",
+    "Health",
+    "Egg",
+    "Hatchling",
+    "Youngster",
+    "Companion",
+    "Elder",
+    "Your pet has passed...",
+    "Hatch New Egg?",
+    "No pet yet",
+    "Hatch Egg?",
+    "Weight",
+    "Discipline",
+    "Mistakes",
+    "Sleeping",
+    "Sick",
+    "Dirty",
+    "Needs attention!",
+    "Scholarly Young",
+    "Wild Youngster",
+    "Scholar",
+    "Wild Companion",
+    "Nom nom! +Hunger",
+    "Yummy! +Happy",
+    "Feeling better~",
+    "Great workout!",
+    "All clean!",
+    "Good discipline!",
+    "That was mean...",
+    "Good training!",
+    "Feeling neglected...",
+    "Goodnight~",
+    "Lights on!",
+    "Your pet lived a full life. Farewell~",
+    "Your pet has passed from neglect...",
+    "Too sick to eat...",
+    "Shh... sleeping",
+    "Not ready yet...",
+    "Feed Meal",
+    "Feed Snack",
+    "Medicine",
+    "Exercise",
+    "Clean",
+    "Scold",
+    "Ignore",
+    "Lights",
+    "Pet",
+    "Rename",
+    "Change Type",
+    "Pet Name",
+    "Select Pet Type",
+    "Chicken",
+    "Cat",
+    "Dog",
+    "Dragon",
+    "Bunny",
+    "Robot",
+    "Bear",
+    "Slime",
+    "Chapter Complete!",
+    "%ud",
+    "Daily goal reached!",
+    "Streak up! %u days",
+    "%lu pages read!",
+    "%s: Feed me! Read more",
+    "%s: I miss you...",
+    "%s: I feel sick...",
+    "%s: Play with me!",
+    "%s: Zzz...",
+    "%s: %ud streak!",
+    "%s: Let's read!",
+    "%s: Read with me~",
+    "No pet!",
+    "Not sick!",
+    "Already clean!",
+    "Too sick to exercise",
+    "Nothing to ignore",
+    "Hey! That's not fair...",
+    "Read 20 pages",
+    "Pet 3 times",
+    "Keep fed (>40%)",
+    "%s (%s)  |  Day %lu  |  Streak %u",
+    "%s %s  |  Day %lu  |  Streak %u",
+    "%s  |  Day %lu  |  Streak %u",
+    "Photo Frame",
+    "Maze",
+    "Game of Life",
+    "New Maze",
+    "2048",
+    "New Game",
+    "Reading Stats",
+    "TODAY",
+    "ALL TIME",
+    "LAST BOOK",
+    "Sessions",
+    "Finished",
+    "Streak",
+    "Best",
+    "%ud",
+    "No books read yet",
+    "Game Over!",
+    "You Win!",
+    "Score: %lu    Best: %lu",
+    "Done! %d moves",
+    "Moves: %d",
+    "Gen %lu",
+    "Mistakes: %d",
+    "No photos found",
+    "Place .bmp files in /sleep/",
+    "Happy",
+    "Reading",
+    "Feed me~",
+    "Need medicine...",
+    "It's dirty...",
+    "So bored...",
+    "Hey!",
+    "Not feeling well...",
+    "Zzz...",
+    "Purr~",
+    "Sweet dreams",
+    "Dreaming...",
+    "Hungry...",
+    "Read more!",
+    "%s | %d alive",
+    "Fast",
+    "Med",
+    "Slow",
+    "Slowest",
+    "Sudoku",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Completed!",
+    "1-9",
+    "Minesweeper",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Mines: %d",
+    "Reveal",
+    "Flag",
+    "Caro",
+    "Turn: X",
+    "Turn: O",
+    "X Wins!",
+    "O Wins!",
+    "Draw!",
+    "Place",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Select Difficulty",
+    "Chess",
+    "White's Turn",
+    "Black's Turn",
+    "White Wins!",
+    "Black Wins!",
+    "Select",
+    "Move",
+    "Set Time",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "S",
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "Lunar",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Hour",
+    "Minute",
+    "Day",
+    "Month",
+    "Year",
+    "Sync time via WiFi",
+    "Weather",
+    "Fetching weather...",
+    "Temperature",
+    "\xC2"
+    "\xB0"
+    "C",
+    "\xC2"
+    "\xB0"
+    "F",
+    "Failed to load weather",
+    "Feels like",
+    "Humidity",
+    "Wind",
+    "Refresh",
+    "City",
+    "Clear sky",
+    "Partly cloudy",
+    "Fog",
+    "Drizzle",
+    "Rain",
+    "Snow",
+    "Showers",
+    "Thunderstorm",
+    "Updated",
     "Focus:",
     "Short break:",
     "Long break:",
@@ -48757,6 +56994,8 @@ const char* const STRINGS_VI[] = {
     "\x89"
     "nh",
     "Page overlay",
+    "Keep Screen",
+    "Unpin",
     "G\xE1"
     "\xBA"
     "\xA7"
@@ -50382,10 +58621,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9B"
     "i",
-    "R\xE1"
-    "\xBA"
-    "\xAF"
-    "n",
     "2048",
     "Ch\xC6"
     "\xA1"
@@ -50478,26 +58713,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x83"
     "m: %lu    Cao: %lu",
-    "\xC4"
-    "\x90"
-    "i\xE1"
-    "\xBB"
-    "\x83"
-    "m:%d Cao:%d",
-    "L\xC3"
-    "\xAA"
-    "n/Xu\xE1"
-    "\xBB"
-    "\x91"
-    "ng: t\xE1"
-    "\xBB"
-    "\x91"
-    "c \xC4"
-    "\x91"
-    "\xE1"
-    "\xBB"
-    "\x99"
-    "",
     "Xong! %d b\xC6"
     "\xB0"
     "\xE1"
@@ -51007,41 +59222,6 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xAD"
     "t",
-    "Tin t\xE1"
-    "\xBB"
-    "\xA9"
-    "c",
-    "\xC4"
-    "\x90"
-    "ang t\xE1"
-    "\xBA"
-    "\xA3"
-    "i tin t\xE1"
-    "\xBB"
-    "\xA9"
-    "c...",
-    "Kh\xC3"
-    "\xB4"
-    "ng th\xE1"
-    "\xBB"
-    "\x83"
-    " t\xE1"
-    "\xBA"
-    "\xA3"
-    "i tin t\xE1"
-    "\xBB"
-    "\xA9"
-    "c",
-    "Kh\xC3"
-    "\xB4"
-    "ng c\xC3"
-    "\xB3"
-    " b\xC3"
-    "\xA0"
-    "i vi\xE1"
-    "\xBA"
-    "\xBF"
-    "t",
     "T\xE1"
     "\xBA"
     "\xAD"
@@ -51414,6 +59594,2832 @@ const char* const STRINGS_VI[] = {
     "Apps",
 };
 
+const char* const STRINGS_HU[] = {
+    "CrossPoint",
+    "IND\xC3"
+    "\x8D"
+    "T\xC3"
+    "\x81"
+    "S",
+    "ALV\xC3"
+    "\x81"
+    "S",
+    "Alv\xC3"
+    "\xA1"
+    "s...",
+    "F\xC3"
+    "\xA1"
+    "jlok b\xC3"
+    "\xB6"
+    "ng\xC3"
+    "\xA9"
+    "sz\xC3"
+    "\xA9"
+    "se",
+    "F\xC3"
+    "\xA1"
+    "jl\xC3"
+    "\xA1"
+    "tvitel",
+    "Be\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sok",
+    "Calibre Library",
+    "Olvas\xC3"
+    "\xA1"
+    "s folytat\xC3"
+    "\xA1"
+    "sa",
+    "Nincs nyitott k\xC3"
+    "\xB6"
+    "nyv",
+    "Kezdj el olvasni lentebb",
+    "Books",
+    "Nem tal\xC3"
+    "\xA1"
+    "lhat\xC3"
+    "\xB3"
+    "k f\xC3"
+    "\xA1"
+    "jlok",
+    "Fejezet kiv\xC3"
+    "\xA1"
+    "laszt\xC3"
+    "\xA1"
+    "sa",
+    "Nincsenek fejezetek",
+    "A k\xC3"
+    "\xB6"
+    "nyv v\xC3"
+    "\xA9"
+    "ge",
+    "\xC3"
+    "\x9C"
+    "res fejezet",
+    "Indexel\xC3"
+    "\xA9"
+    "s",
+    "Mem\xC3"
+    "\xB3"
+    "riahiba",
+    "Lapbet\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "si hiba",
+    "\xC3"
+    "\x9C"
+    "res f\xC3"
+    "\xA1"
+    "jl",
+    "Hat\xC3"
+    "\xA1"
+    "ron k\xC3"
+    "\xAD"
+    "v\xC3"
+    "\xBC"
+    "l",
+    "Bet\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "s...",
+    "Bet\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "s",
+    "Failed to load XTC",
+    "Failed to load TXT",
+    "Failed to load EPUB",
+    "SD card error",
+    "WiFi h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zatok",
+    "Nem tal\xC3"
+    "\xA1"
+    "lhat\xC3"
+    "\xB3"
+    " h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat",
+    "%zu h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat tal\xC3"
+    "\xA1"
+    "lhat\xC3"
+    "\xB3"
+    "",
+    "Keres\xC3"
+    "\xA9"
+    "s...",
+    "Kapcsol\xC3"
+    "\xB3"
+    "d\xC3"
+    "\xA1"
+    "s...",
+    "Kapcsol\xC3"
+    "\xB3"
+    "dva!",
+    "A kapcsolat sikertelen",
+    "Connection timeout",
+    "H\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat elfelejt\xC3"
+    "\xA9"
+    "se?",
+    "Jelsz\xC3"
+    "\xB3"
+    " ment\xC3"
+    "\xA9"
+    "se legk\xC3"
+    "\xB6"
+    "zelebb?",
+    "Remove saved password?",
+    "Nyomj OK-t az \xC3"
+    "\xBA"
+    "jraellen\xC5"
+    "\x91"
+    "rz\xC3"
+    "\xA9"
+    "shez",
+    "Press any button to continue",
+    "LEFT/RIGHT: Select | OK: Confirm",
+    "How would you like to connect?",
+    "Csatlakoz\xC3"
+    "\xA1"
+    "s h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zathoz",
+    "Hotspot l\xC3"
+    "\xA9"
+    "trehoz\xC3"
+    "\xA1"
+    "sa",
+    "Csatlakoz\xC3"
+    "\xA1"
+    "s megl\xC3"
+    "\xA9"
+    "v\xC5"
+    "\x91"
+    " WiFi h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zathoz",
+    "WiFi h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat l\xC3"
+    "\xA9"
+    "trehoz\xC3"
+    "\xA1"
+    "sa m\xC3"
+    "\xA1"
+    "soknak",
+    "Hotspot ind\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sa...",
+    "Hotspot m\xC3"
+    "\xB3"
+    "d",
+    "Csatlakoztasd az eszk\xC3"
+    "\xB6"
+    "z\xC3"
+    "\xB6"
+    "d ehhez a WiFi h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zathoz",
+    "Nyisd meg ezt az URL-t a b\xC3"
+    "\xB6"
+    "ng\xC3"
+    "\xA9"
+    "sz\xC5"
+    "\x91"
+    "dben",
+    "vagy http://",
+    "vagy olvasd be a QR-k\xC3"
+    "\xB3"
+    "dot a telefonoddal:",
+    "Calibre Wireless",
+    "Calibre Web URL",
+    "Connect as Wireless Device",
+    "* = Titkos\xC3"
+    "\xAD"
+    "tott | + = Mentett",
+    "MAC-c\xC3"
+    "\xAD"
+    "m:",
+    "WiFi ellen\xC5"
+    "\x91"
+    "rz\xC3"
+    "\xA9"
+    "se...",
+    "Add meg a WiFi jelsz\xC3"
+    "\xB3"
+    "t",
+    "Enter Text",
+    "- ",
+    "Discovering Calibre...",
+    "Connecting to ",
+    "Connected to ",
+    "Waiting for commands...",
+    "(Connection failed, retrying)",
+    "Calibre disconnected",
+    "Waiting for transfer...",
+    "If transfer fails, enable\n'Ignore free space' in Calibre's\nSmartDevice plugin settings.",
+    "Fogad\xC3"
+    "\xA1"
+    "s: ",
+    "Fogadva: ",
+    "Waiting for more...",
+    "Failed to create file",
+    "Password required",
+    "Transfer interrupted",
+    "1) Telep\xC3"
+    "\xAD"
+    "tsd a CrossPoint Reader plugint",
+    "2) Ugyanazon a WiFi h\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zaton l\xC3"
+    "\xA9"
+    "gy",
+    "3) Calibre-ben: \"K\xC3"
+    "\xBC"
+    "ld\xC3"
+    "\xA9"
+    "s az eszk\xC3"
+    "\xB6"
+    "zre\"",
+    "\"Tartsd nyitva a k\xC3"
+    "\xA9"
+    "perny\xC5"
+    "\x91"
+    "t k\xC3"
+    "\xBC"
+    "ld\xC3"
+    "\xA9"
+    "s k\xC3"
+    "\xB6"
+    "zben\"",
+    "Megjelen\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "Olvas\xC3"
+    "\xB3"
+    "",
+    "Vez\xC3"
+    "\xA9"
+    "rl\xC5"
+    "\x91"
+    "k",
+    "Rendszer",
+    "Alv\xC3"
+    "\xA1"
+    "sk\xC3"
+    "\xA9"
+    "perny\xC5"
+    "\x91"
+    "",
+    "Alv\xC3"
+    "\xA1"
+    "sk\xC3"
+    "\xA9"
+    "perny\xC5"
+    "\x91"
+    " bor\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "m\xC3"
+    "\xB3"
+    "d",
+    "Status Bar",
+    "Akkumul\xC3"
+    "\xA1"
+    "tor % elrejt\xC3"
+    "\xA9"
+    "se",
+    "Extra bekezd\xC3"
+    "\xA9"
+    "sk\xC3"
+    "\xB6"
+    "z",
+    "Sz\xC3"
+    "\xB6"
+    "veg \xC3"
+    "\xA9"
+    "lsim\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "s",
+    "Text Darkness",
+    "Extra Dark",
+    "K\xC3"
+    "\xA9"
+    "pek",
+    "Megjelen\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "Hely\xC5"
+    "\x91"
+    "rz\xC5"
+    "\x91"
+    "",
+    "Elnyom\xC3"
+    "\xA1"
+    "s",
+    "R\xC3"
+    "\xB6"
+    "vid bekapcsol\xC3"
+    "\xB3"
+    "gomb nyom\xC3"
+    "\xA1"
+    "s",
+    "Olvas\xC3"
+    "\xA1"
+    "si ir\xC3"
+    "\xA1"
+    "ny",
+    "Front Button Layout",
+    "Oldals\xC3"
+    "\xB3"
+    " gomb elrendez\xC3"
+    "\xA9"
+    "s (olvas\xC3"
+    "\xB3"
+    ")",
+    "Front Button Layout (reader)",
+    "Hossz\xC3"
+    "\xBA"
+    " nyom\xC3"
+    "\xA1"
+    "s - fejezet ugr\xC3"
+    "\xA1"
+    "s",
+    "Olvas\xC3"
+    "\xB3"
+    " bet\xC5"
+    "\xB1"
+    "k\xC3"
+    "\xA9"
+    "szlet",
+    "External Reader Font",
+    "Reader Font",
+    "UI Font",
+    "Olvas\xC3"
+    "\xB3"
+    " bet\xC5"
+    "\xB1"
+    "m\xC3"
+    "\xA9"
+    "ret",
+    "Olvas\xC3"
+    "\xB3"
+    " sork\xC3"
+    "\xB6"
+    "z",
+    "ASCII Letter Spacing",
+    "ASCII Digit Spacing",
+    "CJK Spacing",
+    "Color Mode",
+    "Olvas\xC3"
+    "\xB3"
+    " marg\xC3"
+    "\xB3"
+    "",
+    "Olvas\xC3"
+    "\xB3"
+    " sz\xC3"
+    "\xB6"
+    "vegigaz\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "s",
+    "Elv\xC3"
+    "\xA1"
+    "laszt\xC3"
+    "\xA1"
+    "s",
+    "Alv\xC3"
+    "\xB3"
+    " m\xC3"
+    "\xB3"
+    "d aktiv\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "sa",
+    "Rejtett f\xC3"
+    "\xA1"
+    "jlok megjelen\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "se",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "si frekvencia",
+    "Calibre Settings",
+    "KOReader szinkroniz\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "s",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "sek keres\xC3"
+    "\xA9"
+    "se",
+    "Nyelv",
+    "Select Wallpaper",
+    "Olvas\xC3"
+    "\xA1"
+    "si gyors\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "t\xC3"
+    "\xA1"
+    "r t\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "se",
+    "Calibre",
+    "Felhaszn\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "n\xC3"
+    "\xA9"
+    "v",
+    "Jelsz\xC3"
+    "\xB3"
+    "",
+    "Szinkroniz\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "s szerver URL",
+    "Dokumentum egyeztet\xC3"
+    "\xA9"
+    "s",
+    "Hiteles\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "KOReader felhaszn\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "n\xC3"
+    "\xA9"
+    "v",
+    "KOReader jelsz\xC3"
+    "\xB3"
+    "",
+    "F\xC3"
+    "\xA1"
+    "jln\xC3"
+    "\xA9"
+    "v",
+    "Bin\xC3"
+    "\xA1"
+    "ris",
+    "El\xC5"
+    "\x91"
+    "sz\xC3"
+    "\xB6"
+    "r add meg az adatokat",
+    "WiFi kapcsolat sikertelen",
+    "Hiteles\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s...",
+    "Sikeres hiteles\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s!",
+    "KOReader hiteles\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "KOReader szinkroniz\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "s k\xC3"
+    "\xA9"
+    "sz",
+    "Hiteles\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s sikertelen",
+    "K\xC3"
+    "\xA9"
+    "sz",
+    "Ez t\xC3"
+    "\xB6"
+    "rli az \xC3"
+    "\xB6"
+    "sszes gyors\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "t\xC3"
+    "\xA1"
+    "razott k\xC3"
+    "\xB6"
+    "nyv adatot.",
+    "Minden olvas\xC3"
+    "\xA1"
+    "si el\xC5"
+    "\x91"
+    "rehalad\xC3"
+    "\xA1"
+    "s elv\xC3"
+    "\xA9"
+    "sz!",
+    "A k\xC3"
+    "\xB6"
+    "nyveket \xC3"
+    "\xBA"
+    "jra kell indexelni",
+    "megnyit\xC3"
+    "\xA1"
+    "skor.",
+    "Gyors\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "t\xC3"
+    "\xA1"
+    "r t\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "se...",
+    "Gyors\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "t\xC3"
+    "\xA1"
+    "r t\xC3"
+    "\xB6"
+    "r\xC3"
+    "\xB6"
+    "lve",
+    "elem elt\xC3"
+    "\xA1"
+    "vol\xC3"
+    "\xAD"
+    "tva",
+    "sikertelen",
+    "Gyors\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "t\xC3"
+    "\xA1"
+    "r t\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "se sikertelen",
+    "Ellen\xC5"
+    "\x91"
+    "rizd a soros kimenetet",
+    "S\xC3"
+    "\xB6"
+    "t\xC3"
+    "\xA9"
+    "t",
+    "Vil\xC3"
+    "\xA1"
+    "gos",
+    "Egy\xC3"
+    "\xA9"
+    "ni",
+    "Bor\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "",
+    "Egyik sem",
+    "Illeszt\xC3"
+    "\xA9"
+    "s",
+    "K\xC3"
+    "\xB6"
+    "rbev\xC3"
+    "\xA1"
+    "g\xC3"
+    "\xA1"
+    "s",
+    "No Progress",
+    "Full",
+    "Soha",
+    "Olvas\xC3"
+    "\xB3"
+    "ban",
+    "Mindig",
+    "Mell\xC5"
+    "\x91"
+    "z\xC3"
+    "\xA9"
+    "s",
+    "Alv\xC3"
+    "\xA1"
+    "s",
+    "Lapoz\xC3"
+    "\xA1"
+    "s",
+    "Screen Refresh",
+    "Block Front",
+    "\xC3"
+    "\x81"
+    "ll\xC3"
+    "\xB3"
+    "",
+    "Fekv\xC5"
+    "\x91"
+    " jobbra",
+    "Ford\xC3"
+    "\xAD"
+    "tott",
+    "Fekv\xC5"
+    "\x91"
+    " balra",
+    "Bck, Cnfrm, Lft, Rght",
+    "Lft, Rght, Bck, Cnfrm",
+    "Lft, Bck, Cnfrm, Rght",
+    "El\xC5"
+    "\x91"
+    "z\xC5"
+    "\x91"
+    "/K\xC3"
+    "\xB6"
+    "vetkez\xC5"
+    "\x91"
+    "",
+    "K\xC3"
+    "\xB6"
+    "vetkez\xC5"
+    "\x91"
+    "/El\xC5"
+    "\x91"
+    "z\xC5"
+    "\x91"
+    "",
+    "Bookerly",
+    "Lexend",
+    "Open Dyslexic",
+    "Bokerlam",
+    "Kicsi",
+    "K\xC3"
+    "\xB6"
+    "zepes",
+    "Nagy",
+    "Nagyon nagy",
+    "Szoros",
+    "Norm\xC3"
+    "\xA1"
+    "l",
+    "Sz\xC3"
+    "\xA9"
+    "les",
+    "Sorkiz\xC3"
+    "\xA1"
+    "r\xC3"
+    "\xA1"
+    "s",
+    "Bal",
+    "K\xC3"
+    "\xB6"
+    "z\xC3"
+    "\xA9"
+    "p",
+    "Jobb",
+    "1 perc",
+    "5 perc",
+    "10 perc",
+    "15 perc",
+    "30 perc",
+    "1 oldal",
+    "5 oldal",
+    "10 oldal",
+    "15 oldal",
+    "30 oldal",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s keres\xC3"
+    "\xA9"
+    "se...",
+    "\xC3"
+    "\x9A"
+    "j friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s el\xC3"
+    "\xA9"
+    "rhet\xC5"
+    "\x91"
+    "!",
+    "Jelenlegi verzi\xC3"
+    "\xB3"
+    ": ",
+    "\xC3"
+    "\x9A"
+    "j verzi\xC3"
+    "\xB3"
+    ": ",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s...",
+    "Nincs el\xC3"
+    "\xA9"
+    "rhet\xC5"
+    "\x91"
+    " friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s sikertelen",
+    "Friss\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s k\xC3"
+    "\xA9"
+    "sz",
+    "Tartsd nyomva a bekapcsol\xC3"
+    "\xB3"
+    "gombot a bekapcsol\xC3"
+    "\xA1"
+    "shoz",
+    "External Font",
+    "Built-in (Disabled)",
+    "Nem tal\xC3"
+    "\xA1"
+    "lhat\xC3"
+    "\xB3"
+    " bejegyz\xC3"
+    "\xA9"
+    "s",
+    "Let\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "s...",
+    "Let\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "s sikertelen",
+    "Hiba:",
+    "N\xC3"
+    "\xA9"
+    "vtelen",
+    "Nincs konfigur\xC3"
+    "\xA1"
+    "lt szerver URL",
+    "H\xC3"
+    "\xAD"
+    "rcsatorna bet\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "se sikertelen",
+    "H\xC3"
+    "\xAD"
+    "rcsatorna feldolgoz\xC3"
+    "\xA1"
+    "sa sikertelen",
+    "H\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat: ",
+    "IP-c\xC3"
+    "\xAD"
+    "m: ",
+    "or scan QR code with your phone to connect to Wifi.",
+    "Hiba: \xC3"
+    "\x81"
+    "ltal\xC3"
+    "\xA1"
+    "nos hiba",
+    "Hiba: H\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat nem tal\xC3"
+    "\xA1"
+    "lhat\xC3"
+    "\xB3"
+    "",
+    "Hiba: Kapcsolat id\xC5"
+    "\x91"
+    "t\xC3"
+    "\xBA"
+    "ll\xC3"
+    "\xA9"
+    "p\xC3"
+    "\xA9"
+    "s",
+    "SD k\xC3"
+    "\xA1"
+    "rtya",
+    "\xC2"
+    "\xAB"
+    " Vissza",
+    "\xC2"
+    "\xAB"
+    " Kil\xC3"
+    "\xA9"
+    "p\xC3"
+    "\xA9"
+    "s",
+    "\xC2"
+    "\xAB"
+    " F\xC5"
+    "\x91"
+    "oldal",
+    "\xC2"
+    "\xAB"
+    " Save",
+    "Kiv\xC3"
+    "\xA1"
+    "laszt\xC3"
+    "\xA1"
+    "s",
+    "Kiv\xC3"
+    "\xA1"
+    "lasztva",
+    "V\xC3"
+    "\xA1"
+    "lt\xC3"
+    "\xA1"
+    "s",
+    "Meger\xC5"
+    "\x91"
+    "s\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "M\xC3"
+    "\xA9"
+    "gse",
+    "Csatlakoz\xC3"
+    "\xA1"
+    "s",
+    "Megnyit\xC3"
+    "\xA1"
+    "s",
+    "Let\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "s",
+    "\xC3"
+    "\x9A"
+    "jra",
+    "Igen",
+    "Nem",
+    "Megjelen\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s",
+    "Elrejt\xC3"
+    "\xA9"
+    "s",
+    "BE",
+    "KI",
+    "Nincs be\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "tva",
+    "Bal",
+    "Jobb",
+    "Fel",
+    "Le",
+    "CAPS",
+    "caps",
+    "OK",
+    "Alv\xC3"
+    "\xA1"
+    "sk\xC3"
+    "\xA9"
+    "perny\xC5"
+    "\x91"
+    " bor\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "sz\xC5"
+    "\xB1"
+    "r\xC5"
+    "\x91"
+    "",
+    "Kontraszt",
+    "\xC3"
+    "\x81"
+    "llapots\xC3"
+    "\xA1"
+    "v testreszab\xC3"
+    "\xA1"
+    "sa",
+    "Fejezet oldalsz\xC3"
+    "\xA1"
+    "m",
+    "K\xC3"
+    "\xB6"
+    "nyv halad\xC3"
+    "\xA1"
+    "s sz\xC3"
+    "\xA1"
+    "zal\xC3"
+    "\xA9"
+    "ka",
+    "Halad\xC3"
+    "\xA1"
+    "ss\xC3"
+    "\xA1"
+    "v",
+    "Halad\xC3"
+    "\xA1"
+    "ss\xC3"
+    "\xA1"
+    "v vastags\xC3"
+    "\xA1"
+    "ga",
+    "V\xC3"
+    "\xA9"
+    "kony",
+    "K\xC3"
+    "\xB6"
+    "zepes",
+    "Vastag",
+    "K\xC3"
+    "\xB6"
+    "nyv",
+    "Fejezet",
+    "21. fejezet",
+    "K\xC3"
+    "\xB6"
+    "nyv c\xC3"
+    "\xAD"
+    "me",
+    "El\xC5"
+    "\x91"
+    "n\xC3"
+    "\xA9"
+    "zet",
+    "C\xC3"
+    "\xAD"
+    "m",
+    "Akkumul\xC3"
+    "\xA1"
+    "tor",
+    "Felhaszn\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "i fel\xC3"
+    "\xBC"
+    "let t\xC3"
+    "\xA9"
+    "ma",
+    "Klasszikus",
+    "Lyra",
+    "Lyra Extended",
+    "CrossPet Reader",
+    "CrossPet Classic",
+    "Napf\xC3"
+    "\xA9"
+    "ny halv\xC3"
+    "\xA1"
+    "nyul\xC3"
+    "\xA1"
+    "s jav\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "s",
+    "Dark Mode",
+    "Keep Clock Alive",
+    "Off",
+    "Sleep Refresh",
+    "1 min",
+    "5 min",
+    "10 min",
+    "30 min",
+    "60 min",
+    "El\xC3"
+    "\xBC"
+    "ls\xC5"
+    "\x91"
+    " gombok \xC3"
+    "\xA1"
+    "t\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sa",
+    "OPDS b\xC3"
+    "\xB6"
+    "ng\xC3"
+    "\xA9"
+    "sz\xC5"
+    "\x91"
+    "",
+    "Bor\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    " + Egy\xC3"
+    "\xA9"
+    "ni",
+    "Page overlay",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
+    "Legut\xC3"
+    "\xB3"
+    "bbi k\xC3"
+    "\xB6"
+    "nyvek",
+    "Nincsenek legut\xC3"
+    "\xB3"
+    "bbi k\xC3"
+    "\xB6"
+    "nyvek",
+    "Calibre wireless eszk\xC3"
+    "\xB6"
+    "z \xC3"
+    "\xA1"
+    "tvitel haszn\xC3"
+    "\xA1"
+    "lata",
+    "H\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xB3"
+    "zat elfelejt\xC3"
+    "\xA9"
+    "se \xC3"
+    "\xA9"
+    "s mentett jelsz\xC3"
+    "\xB3"
+    " t\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "se?",
+    "Elfelejt\xC3"
+    "\xA9"
+    "s",
+    "Calibre ind\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sa...",
+    "Be\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "s",
+    "\xC3"
+    "\x81"
+    "llapot",
+    "T\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "s",
+    "Alap\xC3"
+    "\xA9"
+    "rtelmezett",
+    "Nyomj meg egy el\xC3"
+    "\xBC"
+    "ls\xC5"
+    "\x91"
+    " gombot minden szerephez",
+    "Hozz\xC3"
+    "\xA1"
+    " nem rendelt",
+    "M\xC3"
+    "\xA1"
+    "r hozz\xC3"
+    "\xA1"
+    " van rendelve",
+    "Oldals\xC3"
+    "\xB3"
+    " gomb fel: Vissza\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "s alap\xC3"
+    "\xA9"
+    "rtelmezettre",
+    "Oldals\xC3"
+    "\xB3"
+    " gomb le: \xC3"
+    "\x81"
+    "t\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "s megszak\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sa",
+    "Vissza (1. gomb)",
+    "Meger\xC5"
+    "\x91"
+    "s\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "s (2. gomb)",
+    "Bal (3. gomb)",
+    "Jobb (4. gomb)",
+    "Ugr\xC3"
+    "\xA1"
+    "s %-ra",
+    "F\xC5"
+    "\x91"
+    "oldalra",
+    "Halad\xC3"
+    "\xA1"
+    "s szinkroniz\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "sa",
+    "K\xC3"
+    "\xB6"
+    "nyv gyors\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xB3"
+    "t\xC3"
+    "\xA1"
+    "r t\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "se",
+    "T\xC3"
+    "\xB6"
+    "rl\xC3"
+    "\xA9"
+    "s",
+    "Oldal megjelen\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "se QR-k\xC3"
+    "\xA9"
+    "nt",
+    "Fejezet: ",
+    " oldal  |  ",
+    "K\xC3"
+    "\xB6"
+    "nyv: ",
+    "shift",
+    "SHIFT",
+    "LOCK",
+    "Calibre eset\xC3"
+    "\xA9"
+    "n adj /opds-t az URL-hez",
+    "Bal/Jobb: 1%  Fel/Le: 10%",
+    "Id\xC5"
+    "\x91"
+    " szinkroniz\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "sa...",
+    "Dokumentum hash kisz\xC3"
+    "\xA1"
+    "m\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sa...",
+    "Dokumentum hash kisz\xC3"
+    "\xA1"
+    "m\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sa sikertelen",
+    "T\xC3"
+    "\xA1"
+    "voli halad\xC3"
+    "\xA1"
+    "s lek\xC3"
+    "\xA9"
+    "r\xC3"
+    "\xA9"
+    "se...",
+    "Halad\xC3"
+    "\xA1"
+    "s felt\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "se...",
+    "Nincsenek be\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "tva hiteles\xC3"
+    "\xAD"
+    "t\xC5"
+    "\x91"
+    " adatok",
+    "\xC3"
+    "\x81"
+    "ll\xC3"
+    "\xAD"
+    "tsd be a KOReader fi\xC3"
+    "\xB3"
+    "kot a Be\xC3"
+    "\xA1"
+    "ll\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA1"
+    "sokban",
+    "Halad\xC3"
+    "\xA1"
+    "s megtal\xC3"
+    "\xA1"
+    "lva!",
+    "T\xC3"
+    "\xA1"
+    "voli:",
+    "Helyi:",
+    "%d. oldal, %.2f%% \xC3"
+    "\xB6"
+    "sszesen",
+    "%d/%d. oldal, %.2f%% \xC3"
+    "\xB6"
+    "sszesen",
+    "  Forr\xC3"
+    "\xA1"
+    "s: %s",
+    "T\xC3"
+    "\xA1"
+    "voli halad\xC3"
+    "\xA1"
+    "s alkalmaz\xC3"
+    "\xA1"
+    "sa",
+    "Helyi halad\xC3"
+    "\xA1"
+    "s felt\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "se",
+    "Nem tal\xC3"
+    "\xA1"
+    "lhat\xC3"
+    "\xB3"
+    " t\xC3"
+    "\xA1"
+    "voli halad\xC3"
+    "\xA1"
+    "s",
+    "Jelenlegi poz\xC3"
+    "\xAD"
+    "ci\xC3"
+    "\xB3"
+    " felt\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "se?",
+    "Halad\xC3"
+    "\xA1"
+    "s felt\xC3"
+    "\xB6"
+    "ltve!",
+    "Szinkroniz\xC3"
+    "\xA1"
+    "l\xC3"
+    "\xA1"
+    "s sikertelen",
+    "Szakasz ",
+    "Felt\xC3"
+    "\xB6"
+    "lt\xC3"
+    "\xA9"
+    "s",
+    "K\xC3"
+    "\xB6"
+    "nyv st\xC3"
+    "\xAD"
+    "lusa",
+    "Be\xC3"
+    "\xA1"
+    "gyazott st\xC3"
+    "\xAD"
+    "lus",
+    "OPDS szerver URL",
+    "L\xC3"
+    "\xA1"
+    "bjegyzetek",
+    "Nincsenek l\xC3"
+    "\xA1"
+    "bjegyzetek ezen az oldalon",
+    "[link]",
+    "K\xC3"
+    "\xA9"
+    "perny\xC5"
+    "\x91"
+    "k\xC3"
+    "\xA9"
+    "p k\xC3"
+    "\xA9"
+    "sz\xC3"
+    "\xAD"
+    "t\xC3"
+    "\xA9"
+    "se",
+    "Automatikus lapoz\xC3"
+    "\xA1"
+    "s bekapcsolva: ",
+    "Automatikus lapoz\xC3"
+    "\xA1"
+    "s (oldal/perc)",
+    "Auto Page Turn",
+    "1 page/min",
+    "3 pages/min",
+    "6 pages/min",
+    "12 pages/min",
+    "Apps",
+    "Clock",
+    "Pomodoro",
+    "Daily Quote",
+    "Conference Badge",
+    "Connect WiFi to sync time",
+    "Place quotes.txt on SD card",
+    "Place badge.txt on SD card",
+    "Setup Badge",
+    "Name",
+    "Title / Role",
+    "QR Data (URL)",
+    "Badge saved!",
+    "Edit",
+    "(Built-in quote)",
+    "Ready",
+    "Focus",
+    "Short Break",
+    "Long Break",
+    "Paused",
+    "Start",
+    "Pause",
+    "Resume",
+    "Skip",
+    "Bluetooth Remote",
+    "Auto-connect BT",
+    "Pair Remote",
+    "Scanning...",
+    "Connecting...",
+    "Connected",
+    "Not connected",
+    "No devices found",
+    "Paired: %s",
+    "Forget Device",
+    "Forget paired remote?",
+    "Presenter Pen",
+    "Waiting for connection...",
+    "Pair this device as a Bluetooth keyboard",
+    "Right ->",
+    "Next slide",
+    "<- Left",
+    "Prev slide",
+    "OK",
+    "Start (F5)",
+    "Back",
+    "End (Esc)",
+    "Next >",
+    "< Prev",
+    "F5",
+    "Esc",
+    "My Pet",
+    "Hunger",
+    "Pet",
+    "Health",
+    "Egg",
+    "Hatchling",
+    "Youngster",
+    "Companion",
+    "Elder",
+    "Your pet has passed...",
+    "Hatch New Egg?",
+    "No pet yet",
+    "Hatch Egg?",
+    "Weight",
+    "Discipline",
+    "Mistakes",
+    "Sleeping",
+    "Sick",
+    "Dirty",
+    "Needs attention!",
+    "Scholarly Young",
+    "Wild Youngster",
+    "Scholar",
+    "Wild Companion",
+    "Nom nom! +Hunger",
+    "Yummy! +Happy",
+    "Feeling better~",
+    "Great workout!",
+    "All clean!",
+    "Good discipline!",
+    "That was mean...",
+    "Good training!",
+    "Feeling neglected...",
+    "Goodnight~",
+    "Lights on!",
+    "Your pet lived a full life. Farewell~",
+    "Your pet has passed from neglect...",
+    "Too sick to eat...",
+    "Shh... sleeping",
+    "Not ready yet...",
+    "Feed Meal",
+    "Feed Snack",
+    "Medicine",
+    "Exercise",
+    "Clean",
+    "Scold",
+    "Ignore",
+    "Lights",
+    "Pet",
+    "Rename",
+    "Change Type",
+    "Pet Name",
+    "Select Pet Type",
+    "Chicken",
+    "Cat",
+    "Dog",
+    "Dragon",
+    "Bunny",
+    "Robot",
+    "Bear",
+    "Slime",
+    "Chapter Complete!",
+    "%ud",
+    "Daily goal reached!",
+    "Streak up! %u days",
+    "%lu pages read!",
+    "%s: Feed me! Read more",
+    "%s: I miss you...",
+    "%s: I feel sick...",
+    "%s: Play with me!",
+    "%s: Zzz...",
+    "%s: %ud streak!",
+    "%s: Let's read!",
+    "%s: Read with me~",
+    "No pet!",
+    "Not sick!",
+    "Already clean!",
+    "Too sick to exercise",
+    "Nothing to ignore",
+    "Hey! That's not fair...",
+    "Read 20 pages",
+    "Pet 3 times",
+    "Keep fed (>40%)",
+    "%s (%s)  |  Day %lu  |  Streak %u",
+    "%s %s  |  Day %lu  |  Streak %u",
+    "%s  |  Day %lu  |  Streak %u",
+    "Photo Frame",
+    "Maze",
+    "Game of Life",
+    "New Maze",
+    "2048",
+    "New Game",
+    "Reading Stats",
+    "TODAY",
+    "ALL TIME",
+    "LAST BOOK",
+    "Sessions",
+    "Finished",
+    "Streak",
+    "Best",
+    "%ud",
+    "No books read yet",
+    "Game Over!",
+    "You Win!",
+    "Score: %lu    Best: %lu",
+    "Done! %d moves",
+    "Moves: %d",
+    "Gen %lu",
+    "Mistakes: %d",
+    "No photos found",
+    "Place .bmp files in /sleep/",
+    "Happy",
+    "Reading",
+    "Feed me~",
+    "Need medicine...",
+    "It's dirty...",
+    "So bored...",
+    "Hey!",
+    "Not feeling well...",
+    "Zzz...",
+    "Purr~",
+    "Sweet dreams",
+    "Dreaming...",
+    "Hungry...",
+    "Read more!",
+    "%s | %d alive",
+    "Fast",
+    "Med",
+    "Slow",
+    "Slowest",
+    "Sudoku",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Completed!",
+    "1-9",
+    "Minesweeper",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Mines: %d",
+    "Reveal",
+    "Flag",
+    "Caro",
+    "Turn: X",
+    "Turn: O",
+    "X Wins!",
+    "O Wins!",
+    "Draw!",
+    "Place",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Select Difficulty",
+    "Chess",
+    "White's Turn",
+    "Black's Turn",
+    "White Wins!",
+    "Black Wins!",
+    "Select",
+    "Move",
+    "Set Time",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "S",
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "Lunar",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Hour",
+    "Minute",
+    "Day",
+    "Month",
+    "Year",
+    "Sync time via WiFi",
+    "Weather",
+    "Fetching weather...",
+    "Temperature",
+    "\xC2"
+    "\xB0"
+    "C",
+    "\xC2"
+    "\xB0"
+    "F",
+    "Failed to load weather",
+    "Feels like",
+    "Humidity",
+    "Wind",
+    "Refresh",
+    "City",
+    "Clear sky",
+    "Partly cloudy",
+    "Fog",
+    "Drizzle",
+    "Rain",
+    "Snow",
+    "Showers",
+    "Thunderstorm",
+    "Updated",
+    "Focus:",
+    "Short break:",
+    "Long break:",
+    "%s %2lu min",
+    "Start >",
+    "Location",
+    "Home clock",
+    "Home weather",
+    "Home pet status",
+    "Reading Stats",
+    "RECENTLY READ",
+    "Today",
+    "Total",
+    "Sessions",
+    "EST. LEFT",
+    "TIME READ",
+    "%d times",
+    "%d min",
+    "%dh %dm",
+    "Sync",
+    "Sync OK",
+    "WiFi timeout",
+    "API error %d",
+    "Sleep Image",
+    "Image selected!",
+    "No .bmp files found",
+    "Place .bmp files in /sleep/",
+    "Any (random)",
+    "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
+    "Page starred",
+    "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
+};
+
+const char* const STRINGS_LT[] = {
+    "CrossPoint",
+    "KRAUNASI",
+    "MIEGA",
+    "U\xC5"
+    "\xBE"
+    "miegama",
+    "Failai",
+    "Si\xC5"
+    "\xB3"
+    "sti failus",
+    "Nustatymai",
+    "Calibre Library",
+    "T\xC4"
+    "\x99"
+    "sti skaitym\xC4"
+    "\x85"
+    "",
+    "N\xC4"
+    "\x97"
+    "ra atidarytos knygos",
+    "Prad\xC4"
+    "\x97"
+    "kite skaityti \xC5"
+    "\xBE"
+    "emiau",
+    "Books",
+    "Fail\xC5"
+    "\xB3"
+    " nerasta",
+    "Rinktis skyri\xC5"
+    "\xB3"
+    "",
+    "Skyri\xC5"
+    "\xB3"
+    " n\xC4"
+    "\x97"
+    "ra",
+    "Knygos pabaiga",
+    "Tu\xC5"
+    "\xA1"
+    "\xC4"
+    "\x8D"
+    "ias skyrius",
+    "Indeksuojama",
+    "Atminties klaida",
+    "Puslapio klaida",
+    "Tu\xC5"
+    "\xA1"
+    "\xC4"
+    "\x8D"
+    "ias failas",
+    "U\xC5"
+    "\xBE"
+    " rib\xC5"
+    "\xB3"
+    "",
+    "Kraunama...",
+    "Kraunama",
+    "Failed to load XTC",
+    "Failed to load TXT",
+    "Failed to load EPUB",
+    "SD card error",
+    "WiFi tinklai",
+    "Tinkl\xC5"
+    "\xB3"
+    " nerasta",
+    "Rasta: %zu",
+    "Ie\xC5"
+    "\xA1"
+    "koma...",
+    "Jungiamasi...",
+    "Prisijungta!",
+    "Klaida jungiantis",
+    "Connection timeout",
+    "Pamir\xC5"
+    "\xA1"
+    "ti tinkl\xC4"
+    "\x85"
+    "?",
+    "I\xC5"
+    "\xA1"
+    "saugoti slapta\xC5"
+    "\xBE"
+    "od\xC4"
+    "\xAF"
+    "?",
+    "Remove saved password?",
+    "Ie\xC5"
+    "\xA1"
+    "koti i\xC5"
+    "\xA1"
+    " naujo (OK)",
+    "Press any button to continue",
+    "LEFT/RIGHT: Select | OK: Confirm",
+    "How would you like to connect?",
+    "Prisijungti",
+    "Sukurti prieig\xC4"
+    "\x85"
+    "",
+    "Jungtis prie esamo WiFi",
+    "Sukurti WiFi kitiems",
+    "Kuriamas ry\xC5"
+    "\xA1"
+    "ys...",
+    "Prieigos re\xC5"
+    "\xBE"
+    "imas",
+    "Prijunkite \xC4"
+    "\xAF"
+    "rengin\xC4"
+    "\xAF"
+    " prie \xC5"
+    "\xA1"
+    "io WiFi",
+    "Atidarykite \xC5"
+    "\xA1"
+    "\xC4"
+    "\xAF"
+    " adres\xC4"
+    "\x85"
+    " nar\xC5"
+    "\xA1"
+    "ykl\xC4"
+    "\x97"
+    "je",
+    "arba http://",
+    "arba nuskaitykite QR kod\xC4"
+    "\x85"
+    ":",
+    "Calibre belaidis",
+    "Calibre Web URL",
+    "Connect as Wireless Device",
+    "* = U\xC5"
+    "\xBE"
+    "\xC5"
+    "\xA1"
+    "ifruota | + = I\xC5"
+    "\xA1"
+    "saugota",
+    "MAC adresas:",
+    "Tikrinamas WiFi...",
+    "WiFi slapta\xC5"
+    "\xBE"
+    "odis",
+    "Enter Text",
+    "\xC4"
+    "\xAF"
+    " ",
+    "Discovering Calibre...",
+    "Connecting to ",
+    "Connected to ",
+    "Waiting for commands...",
+    "(Connection failed, retrying)",
+    "Calibre disconnected",
+    "Waiting for transfer...",
+    "If transfer fails, enable\n'Ignore free space' in Calibre's\nSmartDevice plugin settings.",
+    "Gaunama: ",
+    "Gauta: ",
+    "Waiting for more...",
+    "Failed to create file",
+    "Password required",
+    "Transfer interrupted",
+    "1) \xC4"
+    "\xAE"
+    "diekite CrossPoint \xC4"
+    "\xAF"
+    "skiep\xC4"
+    "\xAF"
+    "",
+    "2) Naudokite t\xC4"
+    "\x85"
+    " pat\xC4"
+    "\xAF"
+    " WiFi",
+    "3) Calibre: \xE2"
+    "\x80"
+    "\x9E"
+    "Send to device\xE2"
+    "\x80"
+    "\x9C"
+    "",
+    "Nei\xC5"
+    "\xA1"
+    "junkite \xC5"
+    "\xA1"
+    "io ekrano",
+    "Ekranas",
+    "Skaitytuvas",
+    "Valdymas",
+    "Sistema",
+    "Miego ekranas",
+    "Vir\xC5"
+    "\xA1"
+    "elio re\xC5"
+    "\xBE"
+    "imas",
+    "Status Bar",
+    "Sl\xC4"
+    "\x97"
+    "pti baterijos %",
+    "Tarpai tarp pastraip\xC5"
+    "\xB3"
+    "",
+    "Teksto glotninimas",
+    "Text Darkness",
+    "Extra Dark",
+    "Paveiksl\xC4"
+    "\x97"
+    "liai",
+    "Rodyti",
+    "Vieta\xC5"
+    "\xBE"
+    "enklis",
+    "Sl\xC4"
+    "\x97"
+    "pti",
+    "Trumpas \xC4"
+    "\xAF"
+    "jungimo pasp.",
+    "Orientacija",
+    "Front Button Layout",
+    "\xC5"
+    "\xA0"
+    "oniniai mygtukai",
+    "Front Button Layout (reader)",
+    "Praleisti skyri\xC5"
+    "\xB3"
+    " (ilgai)",
+    "\xC5"
+    "\xA0"
+    "riftas",
+    "External Reader Font",
+    "Reader Font",
+    "UI Font",
+    "\xC5"
+    "\xA0"
+    "rifto dydis",
+    "Tarpai tarp eilu\xC4"
+    "\x8D"
+    "i\xC5"
+    "\xB3"
+    "",
+    "ASCII Letter Spacing",
+    "ASCII Digit Spacing",
+    "CJK Spacing",
+    "Color Mode",
+    "Ekrano para\xC5"
+    "\xA1"
+    "t\xC4"
+    "\x97"
+    "s",
+    "Lygiavimas",
+    "Skiemenuoti",
+    "U\xC5"
+    "\xBE"
+    "migti po",
+    "Rod. pasl\xC4"
+    "\x97"
+    "ptus failus",
+    "Atnaujinimo da\xC5"
+    "\xBE"
+    "nis",
+    "Calibre Settings",
+    "KOReader sinchr.",
+    "Atnaujinimai",
+    "Kalba",
+    "Select Wallpaper",
+    "Valyti talpykl\xC4"
+    "\x85"
+    "",
+    "Calibre",
+    "Vartotojas",
+    "Slapta\xC5"
+    "\xBE"
+    "odis",
+    "Serverio URL",
+    "Atpa\xC5"
+    "\xBE"
+    "inimas",
+    "Prisijungti",
+    "KOReader vartotojas",
+    "KOReader slapta\xC5"
+    "\xBE"
+    "odis",
+    "Failas",
+    "Dvejetainis",
+    "Nustatykite duomenis",
+    "WiFi ry\xC5"
+    "\xA1"
+    "ys nutr\xC5"
+    "\xAB"
+    "ko",
+    "Jungiamasi...",
+    "Prisijungta!",
+    "KOReader Login",
+    "Sinchronizacija paruo\xC5"
+    "\xA1"
+    "ta",
+    "Prisijungti nepavyko",
+    "Baigta",
+    "I\xC5"
+    "\xA1"
+    "trins vis\xC4"
+    "\x85"
+    " knyg\xC5"
+    "\xB3"
+    " talpykl\xC4"
+    "\x85"
+    ".",
+    "Progresas bus prarastas!",
+    "Knygas reik\xC4"
+    "\x97"
+    "s",
+    "perindeksuoti.",
+    "Valoma...",
+    "I\xC5"
+    "\xA1"
+    "valyta",
+    "pa\xC5"
+    "\xA1"
+    "alinta",
+    "nepavyko",
+    "Nepavyko i\xC5"
+    "\xA1"
+    "valyti",
+    "\xC5"
+    "\xBD"
+    "r. \xE2"
+    "\x80"
+    "\x9E"
+    "serial\xE2"
+    "\x80"
+    "\x9C"
+    " i\xC5"
+    "\xA1"
+    "vest\xC4"
+    "\xAF"
+    "",
+    "Tamsi",
+    "\xC5"
+    "\xA0"
+    "viesi",
+    "Kita",
+    "Vir\xC5"
+    "\xA1"
+    "elis",
+    "N\xC4"
+    "\x97"
+    "ra",
+    "Talpinti",
+    "Kirpti",
+    "No Progress",
+    "Full",
+    "Niekada",
+    "Skaitytuve",
+    "Visada",
+    "Nepaisyti",
+    "Miegas",
+    "Versti psl.",
+    "Screen Refresh",
+    "Block Front",
+    "Sta\xC4"
+    "\x8D"
+    "ias",
+    "Guls\xC4"
+    "\x8D"
+    "ias (P)",
+    "Apverstas",
+    "Guls\xC4"
+    "\x8D"
+    "ias (A)",
+    "Bck, Cnfrm, Lft, Rght",
+    "Lft, Rght, Bck, Cnfrm",
+    "Lft, Bck, Cnfrm, Rght",
+    "Atgal/Pirmyn",
+    "Pirmyn/Atgal",
+    "Bookerly",
+    "Lexend",
+    "O. Dyslexic",
+    "Bokerlam",
+    "Ma\xC5"
+    "\xBE"
+    "as",
+    "Vidut.",
+    "Didelis",
+    "X Didelis",
+    "Siaura",
+    "Norm.",
+    "Platu",
+    "Abipusis",
+    "Kair\xC4"
+    "\x97"
+    "",
+    "Centras",
+    "De\xC5"
+    "\xA1"
+    "in\xC4"
+    "\x97"
+    "",
+    "1 min",
+    "5 min",
+    "10 min",
+    "15 min",
+    "30 min",
+    "1 psl.",
+    "5 psl.",
+    "10 psl.",
+    "15 psl.",
+    "30 psl.",
+    "Atnaujinti",
+    "Ie\xC5"
+    "\xA1"
+    "koma...",
+    "Rastas naujinimas!",
+    "Esama: ",
+    "Nauja: ",
+    "Atnaujinama...",
+    "Naujinim\xC5"
+    "\xB3"
+    " n\xC4"
+    "\x97"
+    "ra",
+    "Klaida",
+    "Baigta",
+    "Laikykite Power mygtuk\xC4"
+    "\x85"
+    " \xC4"
+    "\xAF"
+    "jungimui",
+    "External Font",
+    "Built-in (Disabled)",
+    "\xC4"
+    "\xAE"
+    "ra\xC5"
+    "\xA1"
+    "\xC5"
+    "\xB3"
+    " n\xC4"
+    "\x97"
+    "ra",
+    "Siun\xC4"
+    "\x8D"
+    "iama...",
+    "Nepavyko",
+    "Klaida:",
+    "Bevardis",
+    "N\xC4"
+    "\x97"
+    "ra serverio URL",
+    "Nepavyko gauti duomen\xC5"
+    "\xB3"
+    "",
+    "Apdorojimo klaida",
+    "Tinklas: ",
+    "IP: ",
+    "or scan QR code with your phone to connect to Wifi.",
+    "Bendra klaida",
+    "Tinklas nerastas",
+    "Baig\xC4"
+    "\x97"
+    "si laikas",
+    "SD kortel\xC4"
+    "\x97"
+    "",
+    "\xC2"
+    "\xAB"
+    " Atgal",
+    "\xC2"
+    "\xAB"
+    " I\xC5"
+    "\xA1"
+    "eiti",
+    "\xC2"
+    "\xAB"
+    " Prad\xC5"
+    "\xBE"
+    "ia",
+    "\xC2"
+    "\xAB"
+    " Save",
+    "Rinktis",
+    "Pasirinkta",
+    "Keisti",
+    "Gerai",
+    "At\xC5"
+    "\xA1"
+    "aukti",
+    "Jungtis",
+    "Atidaryti",
+    "Si\xC5"
+    "\xB3"
+    "stis",
+    "V\xC4"
+    "\x97"
+    "l",
+    "Taip",
+    "Ne",
+    "Rodyti",
+    "Sl\xC4"
+    "\x97"
+    "pti",
+    "\xC4"
+    "\xAE"
+    "J.",
+    "I\xC5"
+    "\xA0"
+    "J.",
+    "N\xC4"
+    "\x97"
+    "ra",
+    "Kair\xC4"
+    "\x97"
+    "",
+    "De\xC5"
+    "\xA1"
+    "in\xC4"
+    "\x97"
+    "",
+    "Vir\xC5"
+    "\xA1"
+    "us",
+    "Apa\xC4"
+    "\x8D"
+    "ia",
+    "CAPS",
+    "caps",
+    "OK",
+    "Vir\xC5"
+    "\xA1"
+    "elio filtras",
+    "Kontrastas",
+    "B\xC5"
+    "\xAB"
+    "senos juosta",
+    "Skyriaus psl.",
+    "Progresas %",
+    "Progreso juosta",
+    "Juostos storis",
+    "Plona",
+    "Vidut.",
+    "Stora",
+    "Knyga",
+    "Skyrius",
+    "21 skyrius",
+    "Knygos pavadinimas",
+    "Per\xC5"
+    "\xBE"
+    "i\xC5"
+    "\xAB"
+    "ra",
+    "Pavadinimas",
+    "Baterija",
+    "UI tema",
+    "Klasikin\xC4"
+    "\x97"
+    "",
+    "Lyra",
+    "Lyra Ext.",
+    "CrossPet Reader",
+    "CrossPet Classic",
+    "Bly\xC5"
+    "\xA1"
+    "kumo pataisa",
+    "Dark Mode",
+    "Keep Clock Alive",
+    "Off",
+    "Sleep Refresh",
+    "1 min",
+    "5 min",
+    "10 min",
+    "30 min",
+    "60 min",
+    "Keisti mygtukus",
+    "OPDS nar\xC5"
+    "\xA1"
+    "ykl\xC4"
+    "\x97"
+    "",
+    "Vir\xC5"
+    "\xA1"
+    "elis + Kita",
+    "Page overlay",
+    "Keep Screen",
+    "Unpin",
+    "Recents",
+    "Paskutin\xC4"
+    "\x97"
+    "s",
+    "Paskutini\xC5"
+    "\xB3"
+    " n\xC4"
+    "\x97"
+    "ra",
+    "Calibre belaidis ry\xC5"
+    "\xA1"
+    "ys",
+    "Pamir\xC5"
+    "\xA1"
+    "ti tinkl\xC4"
+    "\x85"
+    "?",
+    "Pamir\xC5"
+    "\xA1"
+    "ti",
+    "Paleid\xC5"
+    "\xBE"
+    "iama...",
+    "S\xC4"
+    "\x85"
+    "ranka",
+    "B\xC5"
+    "\xAB"
+    "sena",
+    "Valyti",
+    "Numatytasis",
+    "Spauskite mygtuk\xC4"
+    "\x85"
+    " kiekvienai funkcijai",
+    "Nepriskirta",
+    "Jau priskirta",
+    "\xC5"
+    "\xA0"
+    "oninis Vir\xC5"
+    "\xA1"
+    "us: Atstatyti",
+    "\xC5"
+    "\xA0"
+    "oninis Apa\xC4"
+    "\x8D"
+    "ia: At\xC5"
+    "\xA1"
+    "aukti",
+    "Atgal (1 mygt.)",
+    "Gerai (2 mygt.)",
+    "Kair\xC4"
+    "\x97"
+    " (3 mygt.)",
+    "De\xC5"
+    "\xA1"
+    "in\xC4"
+    "\x97"
+    " (4 mygt.)",
+    "Eiti \xC4"
+    "\xAF"
+    " %",
+    "Prad\xC5"
+    "\xBE"
+    "ia",
+    "Sinchr. progres\xC4"
+    "\x85"
+    "",
+    "Trinti talpykl\xC4"
+    "\x85"
+    "",
+    "Trinti",
+    "QR kodas",
+    "Sk: ",
+    " psl. | ",
+    "Kn: ",
+    "shift",
+    "SHIFT",
+    "LOCK",
+    "Prid\xC4"
+    "\x97"
+    "kite /opds prie URL",
+    "K/D: 1% | V/A: 10%",
+    "Sinchr. laikas...",
+    "Skai\xC4"
+    "\x8D"
+    "iuojama mai\xC5"
+    "\xA1"
+    "a...",
+    "Mai\xC5"
+    "\xA1"
+    "os klaida",
+    "Gaunamas progresas...",
+    "\xC4"
+    "\xAE"
+    "keliamas progresas...",
+    "N\xC4"
+    "\x97"
+    "ra duomen\xC5"
+    "\xB3"
+    "",
+    "Sutvarkykite KOReader paskyr\xC4"
+    "\x85"
+    "",
+    "Rastas progresas!",
+    "Nuotol.:",
+    "Vietinis:",
+    "Psl %d, %.2f%% bendrai",
+    "Psl %d/%d, %.2f%% bendrai",
+    " I\xC5"
+    "\xA1"
+    ": %s",
+    "Taikyti nuotolin\xC4"
+    "\xAF"
+    "",
+    "\xC4"
+    "\xAE"
+    "kelti vietin\xC4"
+    "\xAF"
+    "",
+    "Progres\xC5"
+    "\xB3"
+    " nerasta",
+    "\xC4"
+    "\xAE"
+    "kelti pozicij\xC4"
+    "\x85"
+    "?",
+    "\xC4"
+    "\xAE"
+    "kelta!",
+    "Nepavyko",
+    "Dalis ",
+    "\xC4"
+    "\xAE"
+    "kelti",
+    "Knygos stilius",
+    "Integruotas stilius",
+    "OPDS URL",
+    "I\xC5"
+    "\xA1"
+    "na\xC5"
+    "\xA1"
+    "os",
+    "\xC5"
+    "\xA0"
+    "iame psl. i\xC5"
+    "\xA1"
+    "na\xC5"
+    "\xA1"
+    "\xC5"
+    "\xB3"
+    " n\xC4"
+    "\x97"
+    "ra",
+    "[nuoroda]",
+    "Ekrano nuotrauka",
+    "Auto-vertimas: ",
+    "Auto-vertimas (psl/min)",
+    "Auto Page Turn",
+    "1 page/min",
+    "3 pages/min",
+    "6 pages/min",
+    "12 pages/min",
+    "Apps",
+    "Clock",
+    "Pomodoro",
+    "Daily Quote",
+    "Conference Badge",
+    "Connect WiFi to sync time",
+    "Place quotes.txt on SD card",
+    "Place badge.txt on SD card",
+    "Setup Badge",
+    "Name",
+    "Title / Role",
+    "QR Data (URL)",
+    "Badge saved!",
+    "Edit",
+    "(Built-in quote)",
+    "Ready",
+    "Focus",
+    "Short Break",
+    "Long Break",
+    "Paused",
+    "Start",
+    "Pause",
+    "Resume",
+    "Skip",
+    "Bluetooth Remote",
+    "Auto-connect BT",
+    "Pair Remote",
+    "Scanning...",
+    "Connecting...",
+    "Connected",
+    "Not connected",
+    "No devices found",
+    "Paired: %s",
+    "Forget Device",
+    "Forget paired remote?",
+    "Presenter Pen",
+    "Waiting for connection...",
+    "Pair this device as a Bluetooth keyboard",
+    "Right ->",
+    "Next slide",
+    "<- Left",
+    "Prev slide",
+    "OK",
+    "Start (F5)",
+    "Back",
+    "End (Esc)",
+    "Next >",
+    "< Prev",
+    "F5",
+    "Esc",
+    "My Pet",
+    "Hunger",
+    "Pet",
+    "Health",
+    "Egg",
+    "Hatchling",
+    "Youngster",
+    "Companion",
+    "Elder",
+    "Your pet has passed...",
+    "Hatch New Egg?",
+    "No pet yet",
+    "Hatch Egg?",
+    "Weight",
+    "Discipline",
+    "Mistakes",
+    "Sleeping",
+    "Sick",
+    "Dirty",
+    "Needs attention!",
+    "Scholarly Young",
+    "Wild Youngster",
+    "Scholar",
+    "Wild Companion",
+    "Nom nom! +Hunger",
+    "Yummy! +Happy",
+    "Feeling better~",
+    "Great workout!",
+    "All clean!",
+    "Good discipline!",
+    "That was mean...",
+    "Good training!",
+    "Feeling neglected...",
+    "Goodnight~",
+    "Lights on!",
+    "Your pet lived a full life. Farewell~",
+    "Your pet has passed from neglect...",
+    "Too sick to eat...",
+    "Shh... sleeping",
+    "Not ready yet...",
+    "Feed Meal",
+    "Feed Snack",
+    "Medicine",
+    "Exercise",
+    "Clean",
+    "Scold",
+    "Ignore",
+    "Lights",
+    "Pet",
+    "Rename",
+    "Change Type",
+    "Pet Name",
+    "Select Pet Type",
+    "Chicken",
+    "Cat",
+    "Dog",
+    "Dragon",
+    "Bunny",
+    "Robot",
+    "Bear",
+    "Slime",
+    "Chapter Complete!",
+    "%ud",
+    "Daily goal reached!",
+    "Streak up! %u days",
+    "%lu pages read!",
+    "%s: Feed me! Read more",
+    "%s: I miss you...",
+    "%s: I feel sick...",
+    "%s: Play with me!",
+    "%s: Zzz...",
+    "%s: %ud streak!",
+    "%s: Let's read!",
+    "%s: Read with me~",
+    "No pet!",
+    "Not sick!",
+    "Already clean!",
+    "Too sick to exercise",
+    "Nothing to ignore",
+    "Hey! That's not fair...",
+    "Read 20 pages",
+    "Pet 3 times",
+    "Keep fed (>40%)",
+    "%s (%s)  |  Day %lu  |  Streak %u",
+    "%s %s  |  Day %lu  |  Streak %u",
+    "%s  |  Day %lu  |  Streak %u",
+    "Photo Frame",
+    "Maze",
+    "Game of Life",
+    "New Maze",
+    "2048",
+    "New Game",
+    "Reading Stats",
+    "TODAY",
+    "ALL TIME",
+    "LAST BOOK",
+    "Sessions",
+    "Finished",
+    "Streak",
+    "Best",
+    "%ud",
+    "No books read yet",
+    "Game Over!",
+    "You Win!",
+    "Score: %lu    Best: %lu",
+    "Done! %d moves",
+    "Moves: %d",
+    "Gen %lu",
+    "Mistakes: %d",
+    "No photos found",
+    "Place .bmp files in /sleep/",
+    "Happy",
+    "Reading",
+    "Feed me~",
+    "Need medicine...",
+    "It's dirty...",
+    "So bored...",
+    "Hey!",
+    "Not feeling well...",
+    "Zzz...",
+    "Purr~",
+    "Sweet dreams",
+    "Dreaming...",
+    "Hungry...",
+    "Read more!",
+    "%s | %d alive",
+    "Fast",
+    "Med",
+    "Slow",
+    "Slowest",
+    "Sudoku",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Completed!",
+    "1-9",
+    "Minesweeper",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Mines: %d",
+    "Reveal",
+    "Flag",
+    "Caro",
+    "Turn: X",
+    "Turn: O",
+    "X Wins!",
+    "O Wins!",
+    "Draw!",
+    "Place",
+    "Easy",
+    "Medium",
+    "Hard",
+    "Select Difficulty",
+    "Chess",
+    "White's Turn",
+    "Black's Turn",
+    "White Wins!",
+    "Black Wins!",
+    "Select",
+    "Move",
+    "Set Time",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "S",
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "Lunar",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Hour",
+    "Minute",
+    "Day",
+    "Month",
+    "Year",
+    "Sync time via WiFi",
+    "Weather",
+    "Fetching weather...",
+    "Temperature",
+    "\xC2"
+    "\xB0"
+    "C",
+    "\xC2"
+    "\xB0"
+    "F",
+    "Failed to load weather",
+    "Feels like",
+    "Humidity",
+    "Wind",
+    "Refresh",
+    "City",
+    "Clear sky",
+    "Partly cloudy",
+    "Fog",
+    "Drizzle",
+    "Rain",
+    "Snow",
+    "Showers",
+    "Thunderstorm",
+    "Updated",
+    "Focus:",
+    "Short break:",
+    "Long break:",
+    "%s %2lu min",
+    "Start >",
+    "Location",
+    "Home clock",
+    "Home weather",
+    "Home pet status",
+    "Reading Stats",
+    "RECENTLY READ",
+    "Today",
+    "Total",
+    "Sessions",
+    "EST. LEFT",
+    "TIME READ",
+    "%d times",
+    "%d min",
+    "%dh %dm",
+    "Sync",
+    "Sync OK",
+    "WiFi timeout",
+    "API error %d",
+    "Sleep Image",
+    "Image selected!",
+    "No .bmp files found",
+    "Place .bmp files in /sleep/",
+    "Any (random)",
+    "Set sleep screen to 'Custom' in Settings > Display",
+    "Starred Pages",
+    "Star Page",
+    "No starred pages",
+    "p",
+    "Page starred",
+    "Page unstarred",
+    "Reload Sleep Image",
+    "Sleep cache cleared!",
+    "Sync Weather & Time",
+    "Power Double-Click",
+    "Power Triple-Click",
+    "Show Free RAM",
+    "Device Info",
+    "Focus Mode",
+    "Free RAM",
+    "Reboot",
+    "Version",
+    "CURRENTLY READING",
+    "%d pages left",
+    "NAVIGATION",
+    "DISPLAY",
+    "FEATURES",
+    "Apps",
+};
+
 }  // namespace i18n_strings
 
 // Compile-time validation of array sizes
@@ -51471,6 +62477,15 @@ static_assert(sizeof(i18n_strings::STRINGS_NL) / sizeof(i18n_strings::STRINGS_NL
 static_assert(sizeof(i18n_strings::STRINGS_TR) / sizeof(i18n_strings::STRINGS_TR[0]) ==
                   static_cast<size_t>(StrId::_COUNT),
               "STRINGS_TR size mismatch");
+static_assert(sizeof(i18n_strings::STRINGS_KK) / sizeof(i18n_strings::STRINGS_KK[0]) ==
+                  static_cast<size_t>(StrId::_COUNT),
+              "STRINGS_KK size mismatch");
 static_assert(sizeof(i18n_strings::STRINGS_VI) / sizeof(i18n_strings::STRINGS_VI[0]) ==
                   static_cast<size_t>(StrId::_COUNT),
               "STRINGS_VI size mismatch");
+static_assert(sizeof(i18n_strings::STRINGS_HU) / sizeof(i18n_strings::STRINGS_HU[0]) ==
+                  static_cast<size_t>(StrId::_COUNT),
+              "STRINGS_HU size mismatch");
+static_assert(sizeof(i18n_strings::STRINGS_LT) / sizeof(i18n_strings::STRINGS_LT[0]) ==
+                  static_cast<size_t>(StrId::_COUNT),
+              "STRINGS_LT size mismatch");
