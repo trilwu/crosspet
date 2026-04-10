@@ -4625,6 +4625,7 @@ static const EpdFontData notosans_14_bold = {
     true,
     notosans_14_boldGroups,
     13,
+    nullptr,
     notosans_14_boldKernLeftClasses,
     notosans_14_boldKernRightClasses,
     notosans_14_boldKernMatrix,

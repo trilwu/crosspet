@@ -3716,6 +3716,7 @@ static const EpdFontData opendyslexic_12_italic = {
     true,
     opendyslexic_12_italicGroups,
     13,
+    nullptr,
     opendyslexic_12_italicKernLeftClasses,
     opendyslexic_12_italicKernRightClasses,
     opendyslexic_12_italicKernMatrix,
