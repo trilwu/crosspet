@@ -24,6 +24,14 @@ const StrId SettingsActivity::categoryNames[categoryCount] = {StrId::STR_CAT_DIS
                                                               StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM};
 
 void SettingsActivity::onEnter() {
+  LOG_DBG("SET", "Free heap: %d bytes", ESP.getFreeHeap());
+
+  if (ESP.getFreeHeap() < 50000) {
+    LOG_ERR("SET", "Insufficient heap for settings: %d bytes", ESP.getFreeHeap());
+    onGoHome();
+    return;
+  }
+
   Activity::onEnter();
 
   // Build per-category vectors from the shared settings list

@@ -6,6 +6,7 @@
 #include <I18n.h>
 #include <WiFi.h>
 #include <esp_task_wdt.h>
+#include <esp_wifi.h>
 
 #include <cstddef>
 
@@ -95,6 +96,11 @@ void CrossPointWebServerActivity::onExit() {
   LOG_DBG("WEBACT", "Setting WiFi mode OFF...");
   WiFi.mode(WIFI_OFF);
   delay(30);  // Allow WiFi hardware to power down
+
+  // Fully release WiFi driver memory — Arduino re-inits on next WiFi.begin()
+  esp_wifi_stop();
+  esp_wifi_deinit();
+  delay(50);
 
   LOG_DBG("WEBACT", "Free heap at onExit end: %d bytes", ESP.getFreeHeap());
 }
