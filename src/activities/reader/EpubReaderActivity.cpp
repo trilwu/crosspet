@@ -2,6 +2,7 @@
 
 #include <Epub/Page.h>
 #include <Epub/blocks/TextBlock.h>
+#include <FontCacheManager.h>
 #include <FsHelpers.h>
 #include <GfxRenderer.h>
 #include <HalStorage.h>
@@ -934,7 +935,7 @@ void EpubReaderActivity::render(RenderLock&& lock) {
     const auto start = millis();
     renderContents(std::move(p), orientedMarginTop, orientedMarginRight, orientedMarginBottom, orientedMarginLeft);
     LOG_DBG("ERS", "Rendered page in %dms", millis() - start);
-    renderer.clearFontCache();
+    if (auto* fcm = renderer.getFontCacheManager()) fcm->clearCache();
   }
   saveProgress(currentSpineIndex, section->currentPage, section->pageCount);
 

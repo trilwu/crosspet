@@ -1,5 +1,6 @@
 #include "TxtReaderActivity.h"
 
+#include <FontCacheManager.h>
 #include <GfxRenderer.h>
 #include <HalStorage.h>
 #include <I18n.h>
@@ -348,7 +349,7 @@ void TxtReaderActivity::render(RenderLock&&) {
 
   renderer.clearScreen();
   renderPage();
-  renderer.clearFontCache();
+  if (auto* fcm = renderer.getFontCacheManager()) fcm->clearCache();
 
   // Save progress
   saveProgress();

@@ -23,6 +23,9 @@ class PetManager {
   // Persistence (PetPersistence.cpp)
   bool load();
   bool save();
+  void saveAsync();          // Start save on background FreeRTOS task
+  bool isSaveDone() const;   // Check if background save completed
+  void waitForSave();        // Block until save completes (for deep sleep safety)
 
   // Game logic — call tick() on boot and periodically to apply time-based decay
   void tick();

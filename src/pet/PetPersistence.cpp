@@ -1,9 +1,11 @@
 #include "PetManager.h"
 
+#include <Arduino.h>
 #include <ArduinoJson.h>
 #include <HalStorage.h>
 #include <Logging.h>
 
+#include <atomic>
 #include <cstring>
 #include <ctime>
 
@@ -148,4 +150,28 @@ bool PetManager::save() {
     LOG_ERR("PET", "Failed to save state");
   }
   return ok;
+}
+
+// --- Async save (background FreeRTOS task) ---
+
+static std::atomic<bool> _asyncSaveDone{true};
+
+static void asyncSaveTask(void* param) {
+  auto* mgr = static_cast<PetManager*>(param);
+  mgr->save();
+  _asyncSaveDone = true;
+  vTaskDelete(nullptr);
+}
+
+void PetManager::saveAsync() {
+  if (!state.exists()) return;
+  if (!_asyncSaveDone) return;  // Previous save still running
+  _asyncSaveDone = false;
+  xTaskCreate(asyncSaveTask, "petSave", 4096, this, 1, nullptr);
+}
+
+bool PetManager::isSaveDone() const { return _asyncSaveDone; }
+
+void PetManager::waitForSave() {
+  while (!_asyncSaveDone) { vTaskDelay(pdMS_TO_TICKS(10)); }
 }

@@ -173,7 +173,7 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
 void SleepActivity::onEnter() {
   Activity::onEnter();
   // Persist current time to SD so it survives power cycles
-  PET_MANAGER.save();
+  PET_MANAGER.saveAsync();
   // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact
   if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY &&
       SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::KEEP_SCREEN) {
@@ -409,9 +409,6 @@ void SleepActivity::renderDefaultSleepScreen() const {
   const int pageWidth  = renderer.getScreenWidth();
   const int pageHeight = renderer.getScreenHeight();
 
-  // Pre-clear: wipe previous content ghosting
-  renderer.clearScreen();
-  renderer.displayBuffer(HalDisplay::FAST_REFRESH);
   renderer.clearScreen();
 
   // Centered logo — slightly above mid to leave room for branding below

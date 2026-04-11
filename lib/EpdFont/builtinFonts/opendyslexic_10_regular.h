@@ -2727,6 +2727,7 @@ static const EpdFontData opendyslexic_10_regular = {
     true,
     opendyslexic_10_regularGroups,
     13,
+    nullptr,
     opendyslexic_10_regularKernLeftClasses,
     opendyslexic_10_regularKernRightClasses,
     opendyslexic_10_regularKernMatrix,

@@ -17,8 +17,7 @@ void EpdFont::getTextBounds(const char* string, const int startX, const int star
 
   int32_t cursorXFP = fp4::fromPixel(startX);  // 12.4 fixed-point accumulator
   int lastBaseX = startX;
-  int lastBaseLeft = 0;
-  int lastBaseWidth = 0;
+  int lastBaseAdvanceFP = 0;  // 12.4 fixed-point
   int lastBaseTop = 0;
   uint32_t cp;
   uint32_t prevCp = 0;
@@ -35,16 +34,21 @@ void EpdFont::getTextBounds(const char* string, const int startX, const int star
       continue;
     }
 
-    const int raiseBy = isCombining ? combiningMark::raiseAboveBase(glyph->top, glyph->height, lastBaseTop) : 0;
+    int raiseBy = 0;
+    if (isCombining) {
+      const int currentGap = glyph->top - glyph->height - lastBaseTop;
+      constexpr int MIN_COMBINING_GAP_PX = 1;
+      if (currentGap < MIN_COMBINING_GAP_PX) {
+        raiseBy = MIN_COMBINING_GAP_PX - currentGap;
+      }
+    }
 
     if (!isCombining && prevCp != 0) {
       cursorXFP += getKerning(prevCp, cp);  // 4.4 fixed-point kern
     }
 
     const int cursorXPixels = fp4::toPixel(cursorXFP);  // snap 12.4 fixed-point to nearest pixel
-    const int glyphBaseX =
-        isCombining ? combiningMark::centerOver(lastBaseX, lastBaseLeft, lastBaseWidth, glyph->left, glyph->width)
-                    : cursorXPixels;
+    const int glyphBaseX = isCombining ? (lastBaseX + fp4::toPixel(lastBaseAdvanceFP / 2)) : cursorXPixels;
     const int glyphBaseY = startY - raiseBy;
 
     *minX = std::min(*minX, glyphBaseX + glyph->left);
@@ -54,8 +58,7 @@ void EpdFont::getTextBounds(const char* string, const int startX, const int star
 
     if (!isCombining) {
       lastBaseX = cursorXPixels;
-      lastBaseLeft = glyph->left;
-      lastBaseWidth = glyph->width;
+      lastBaseAdvanceFP = glyph->advanceX;  // 12.4 fixed-point
       lastBaseTop = glyph->top;
       cursorXFP += glyph->advanceX;  // 12.4 fixed-point advance
       prevCp = cp;
@@ -163,7 +166,8 @@ const EpdGlyph* EpdFont::getGlyph(const uint32_t cp) const {
     }
   }
 
-  // Missing glyph: return nullptr to skip rendering instead of showing a
-  // replacement diamond (◆). On an e-reader, invisible beats ugly.
+  if (cp != REPLACEMENT_GLYPH) {
+    return getGlyph(REPLACEMENT_GLYPH);
+  }
   return nullptr;
 }
