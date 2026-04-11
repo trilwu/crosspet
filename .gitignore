@@ -18,3 +18,8 @@ build
 /docs/
 /plans/
 blog/
+.claude/
+.opencode/
+.agents/
+repomix-output.xml
+skills-lock.json

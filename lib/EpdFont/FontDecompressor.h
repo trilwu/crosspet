@@ -2,8 +2,6 @@
 
 #include <InflateReader.h>
 
-#include <vector>
-
 #include "EpdFontData.h"
 
 class FontDecompressor {
@@ -54,7 +52,6 @@ class FontDecompressor {
   struct PageGlyphEntry {
     uint32_t glyphIndex;
     uint32_t bufferOffset;
-    uint32_t alignedOffset;  // byte-aligned offset within its decompressed group (set during prewarm pre-scan)
   };
   struct PageSlot {
     uint8_t* buffer = nullptr;
@@ -65,21 +62,24 @@ class FontDecompressor {
   PageSlot pageSlots[MAX_PAGE_SLOTS] = {};
   uint8_t pageSlotCount = 0;
 
-  // Hot group: last decompressed group (byte-aligned) for non-prewarmed fallback path.
-  // Kept in byte-aligned format; individual glyphs are compacted on demand into hotGlyphBuf.
-  const EpdFontData* hotGroupFont = nullptr;
-  uint16_t hotGroupIndex = UINT16_MAX;
-  std::vector<uint8_t> hotGroup;
-
-  // Scratch buffer for compacting a single glyph from the hot group.
-  // Valid until the next getBitmap() call.
-  std::vector<uint8_t> hotGlyphBuf;
+  // LRU cache of decompressed groups (fallback when prewarm not used)
+  static constexpr uint8_t CACHE_SLOTS = 4;
+  struct CacheEntry {
+    const EpdFontData* font = nullptr;
+    uint16_t groupIndex = UINT16_MAX;
+    uint8_t* data = nullptr;
+    uint32_t dataSize = 0;
+    uint32_t lastUsed = 0;
+    bool valid = false;
+  };
+  CacheEntry cache[CACHE_SLOTS] = {};
+  uint32_t accessCounter = 0;
 
   void freePageBuffer();
-  void freeHotGroup();
+  void freeCacheEntries();
+  CacheEntry* findInCache(const EpdFontData* fontData, uint16_t groupIndex);
+  CacheEntry* findEvictionCandidate();
   uint16_t getGroupIndex(const EpdFontData* fontData, uint32_t glyphIndex);
-  uint32_t getAlignedOffset(const EpdFontData* fontData, uint16_t groupIndex, uint32_t glyphIndex);
   bool decompressGroup(const EpdFontData* fontData, uint16_t groupIndex, uint8_t* outBuf, uint32_t outSize);
-  static void compactSingleGlyph(const uint8_t* alignedSrc, uint8_t* packedDst, uint8_t width, uint8_t height);
   static int32_t findGlyphIndex(const EpdFontData* fontData, uint32_t codepoint);
 };
