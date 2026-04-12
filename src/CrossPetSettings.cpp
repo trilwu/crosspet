@@ -15,10 +15,19 @@ bool CrossPetSettings::saveToFile() const {
   Storage.mkdir("/.crosspoint");
 
   JsonDocument doc;
-  doc["homeShowClock"] = homeShowClock;
-  doc["homeShowWeather"] = homeShowWeather;
-  doc["homeShowPetStatus"] = homeShowPetStatus;
   doc["homeFocusMode"] = homeFocusMode;
+
+  doc["appClock"] = appClock;
+  doc["appWeather"] = appWeather;
+  doc["appPomodoro"] = appPomodoro;
+  doc["appVirtualPet"] = appVirtualPet;
+  doc["appReadingStats"] = appReadingStats;
+  doc["appSleepImagePicker"] = appSleepImagePicker;
+  doc["appChess"] = appChess;
+  doc["appCaro"] = appCaro;
+  doc["appSudoku"] = appSudoku;
+  doc["appMinesweeper"] = appMinesweeper;
+  doc["app2048"] = app2048;
 
   String json;
   serializeJson(doc, json);
@@ -42,10 +51,20 @@ bool CrossPetSettings::loadFromFile() {
         LOG_ERR("CPS", "CrossPet settings JSON parse error: %s", error.c_str());
         return false;
       }
-      homeShowClock = doc["homeShowClock"] | (uint8_t)1;
-      homeShowWeather = doc["homeShowWeather"] | (uint8_t)1;
-      homeShowPetStatus = doc["homeShowPetStatus"] | (uint8_t)1;
       homeFocusMode = doc["homeFocusMode"] | (uint8_t)0;
+
+      // Migrate legacy homeShow* fields to app* toggles (if appClock not yet saved)
+      appClock = doc["appClock"] | doc["homeShowClock"] | (uint8_t)1;
+      appWeather = doc["appWeather"] | doc["homeShowWeather"] | (uint8_t)1;
+      appPomodoro = doc["appPomodoro"] | (uint8_t)1;
+      appVirtualPet = doc["appVirtualPet"] | (uint8_t)1;
+      appReadingStats = doc["appReadingStats"] | (uint8_t)1;
+      appSleepImagePicker = doc["appSleepImagePicker"] | (uint8_t)1;
+      appChess = doc["appChess"] | (uint8_t)1;
+      appCaro = doc["appCaro"] | (uint8_t)1;
+      appSudoku = doc["appSudoku"] | (uint8_t)1;
+      appMinesweeper = doc["appMinesweeper"] | (uint8_t)1;
+      app2048 = doc["app2048"] | (uint8_t)1;
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
     }
@@ -59,9 +78,9 @@ bool CrossPetSettings::loadFromFile() {
       JsonDocument doc;
       auto error = deserializeJson(doc, json);
       if (!error) {
-        homeShowClock = doc["homeShowClock"] | (uint8_t)1;
-        homeShowWeather = doc["homeShowWeather"] | (uint8_t)1;
-        homeShowPetStatus = doc["homeShowPetStatus"] | (uint8_t)1;
+        // Migrate legacy homeShow* to app* toggles
+        appClock = doc["homeShowClock"] | (uint8_t)1;
+        appWeather = doc["homeShowWeather"] | (uint8_t)1;
         LOG_DBG("CPS", "CrossPet settings migrated from settings.json");
         // Persist the migrated values to crosspet.json
         saveToFile();

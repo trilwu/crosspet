@@ -25,6 +25,7 @@
 #include "KOReaderCredentialStore.h"
 #include "GameScores.h"
 #include "ReadingStats.h"
+#include "CrossPetSettings.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
@@ -236,7 +237,7 @@ void verifyPowerButtonDuration() {
       activityManager.goToSleep();
     }
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
-    powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+    powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
                                 CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
   }
 }
@@ -271,7 +272,7 @@ void enterDeepSleep() {
   // Also save to SD as reliable fallback (RTC_DATA_ATTR can be lost on some ESP32-C3 boards)
   saveClockToSD();
 
-  powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+  powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
                                 CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
 }
 
@@ -415,14 +416,14 @@ void setup() {
         activityManager.goToSleep();
       }
       saveClockToSD();
-      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
                                   CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
       break;  // unreachable — startDeepSleep never returns
     }
     case HalGPIO::WakeupReason::AfterUSBPower:
       // If USB power caused a cold boot, go back to sleep
       LOG_DBG("MAIN", "Wakeup reason: After USB Power");
-      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0,
+      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
                                   CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
       break;
     case HalGPIO::WakeupReason::AfterFlash:

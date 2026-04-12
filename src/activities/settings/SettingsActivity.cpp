@@ -9,6 +9,7 @@
 #include "CalibreSettingsActivity.h"
 #include "ClearCacheActivity.h"
 #include "DeviceInfoActivity.h"
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "KOReaderSettingsActivity.h"
 #include "LanguageSelectActivity.h"
@@ -21,7 +22,8 @@
 #include "fontIds.h"
 
 const StrId SettingsActivity::categoryNames[categoryCount] = {StrId::STR_CAT_DISPLAY, StrId::STR_CAT_READER,
-                                                              StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM};
+                                                              StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM,
+                                                              StrId::STR_TOOLS};
 
 void SettingsActivity::onEnter() {
   LOG_DBG("SET", "Free heap: %d bytes", ESP.getFreeHeap());
@@ -67,11 +69,34 @@ void SettingsActivity::onEnter() {
   systemSettings.push_back(SettingInfo::Action(StrId::STR_REBOOT, SettingAction::Reboot));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_CUSTOMISE_STATUS_BAR, SettingAction::CustomiseStatusBar));
 
+  // Build APPS tab — per-app visibility toggles (added dynamically to avoid
+  // stack overflow from too many std::function allocations in static init).
+  appsSettings.clear();
+  struct AppToggle { StrId id; uint8_t CrossPetSettings::* field; const char* key; };
+  const AppToggle appToggles[] = {
+    {StrId::STR_CLOCK,              &CrossPetSettings::appClock,            "appClock"},
+    {StrId::STR_WEATHER,            &CrossPetSettings::appWeather,          "appWeather"},
+    {StrId::STR_POMODORO,           &CrossPetSettings::appPomodoro,         "appPomodoro"},
+    {StrId::STR_VIRTUAL_PET,        &CrossPetSettings::appVirtualPet,       "appVirtualPet"},
+    {StrId::STR_READING_STATS_APP,  &CrossPetSettings::appReadingStats,     "appReadingStats"},
+    {StrId::STR_SLEEP_IMAGE_PICKER, &CrossPetSettings::appSleepImagePicker, "appSleepImagePicker"},
+    {StrId::STR_CHESS,              &CrossPetSettings::appChess,            "appChess"},
+    {StrId::STR_CARO,               &CrossPetSettings::appCaro,             "appCaro"},
+    {StrId::STR_SUDOKU,             &CrossPetSettings::appSudoku,           "appSudoku"},
+    {StrId::STR_MINESWEEPER,        &CrossPetSettings::appMinesweeper,      "appMinesweeper"},
+    {StrId::STR_2048,               &CrossPetSettings::app2048,             "app2048"},
+  };
+  for (const auto& t : appToggles) {
+    auto field = t.field;
+    appsSettings.push_back(SettingInfo::DynamicToggle(
+        t.id,
+        [field] { return PET_SETTINGS.*field; },
+        [field](uint8_t v) { PET_SETTINGS.*field = v; PET_SETTINGS.saveToFile(); },
+        t.key, StrId::STR_TOOLS));
+  }
+
   // Insert section headers into each category (device UI only, after ACTION items are appended).
-  // Display: SCREEN (sleep/refresh settings), APPEARANCE (theme/UI), HOME (home screen widgets)
-  // Items order: Sleep Screen(0), Sleep Cover Mode(1), Sleep Cover Filter(2), Keep Clock Alive(3),
-  //              Sleep Refresh(4), Hide Battery(5), Refresh Freq(6), UI Theme(7), Sunlight Fix(8),
-  //              Dark Mode(9), Temp Unit(10), Home Clock(11), Home Weather(12), Home Pet Status(13), Home Focus Mode(14)
+  // Display: SCREEN (sleep/refresh 0-4), APPEARANCE (theme/UI 5-10), HOME (focus mode 11)
   displaySettings.insert(displaySettings.begin() + 11, SettingInfo::Section("HOME"));
   displaySettings.insert(displaySettings.begin() + 5, SettingInfo::Section("APPEARANCE"));
   displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
@@ -180,6 +205,9 @@ void SettingsActivity::loop() {
         break;
       case 3:
         currentSettings = &systemSettings;
+        break;
+      case 4:
+        currentSettings = &appsSettings;
         break;
     }
     settingsCount = static_cast<int>(currentSettings->size());

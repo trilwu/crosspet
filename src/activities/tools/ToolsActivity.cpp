@@ -11,81 +11,99 @@
 #include "CaroActivity.h"
 #include "ChessActivity.h"
 #include "VirtualPetActivity.h"
-// PresenterActivity removed — NimBLE BLE stack uses ~60KB RAM
 #include "WeatherActivity.h"
 #include "ReadingStatsActivity.h"
 #include "SleepImagePickerActivity.h"
 #include "activities/browser/OpdsBookBrowserActivity.h"
 #include "components/UITheme.h"
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "fontIds.h"
 
-static constexpr int BASE_MENU_COUNT = 12;  // File Transfer added to Apps
+void ToolsActivity::buildMenu() {
+  menuEntries.clear();
 
-int ToolsActivity::getMenuCount() const {
-  return BASE_MENU_COUNT + (SETTINGS.opdsServerUrl[0] ? 1 : 0);
+  // File Transfer is always visible
+  menuEntries.push_back({StrId::STR_FILE_TRANSFER, [this] { activityManager.goToFileTransfer(); }});
+
+  // Apps — filtered by CrossPetSettings toggles
+  if (PET_SETTINGS.appClock)
+    menuEntries.push_back({StrId::STR_CLOCK, [this] {
+      activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appWeather)
+    menuEntries.push_back({StrId::STR_WEATHER, [this] {
+      activityManager.pushActivity(std::make_unique<WeatherActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appPomodoro)
+    menuEntries.push_back({StrId::STR_POMODORO, [this] {
+      activityManager.pushActivity(std::make_unique<PomodoroActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appVirtualPet)
+    menuEntries.push_back({StrId::STR_VIRTUAL_PET, [this] {
+      activityManager.pushActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appReadingStats)
+    menuEntries.push_back({StrId::STR_READING_STATS_APP, [this] {
+      activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appSleepImagePicker)
+    menuEntries.push_back({StrId::STR_SLEEP_IMAGE_PICKER, [this] {
+      activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
+    }});
+
+  // OPDS browser (if configured)
+  if (SETTINGS.opdsServerUrl[0])
+    menuEntries.push_back({StrId::STR_OPDS_BROWSER, [this] {
+      activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
+    }});
+
+  // Games — filtered by CrossPetSettings toggles
+  if (PET_SETTINGS.appChess)
+    menuEntries.push_back({StrId::STR_CHESS, [this] {
+      activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appCaro)
+    menuEntries.push_back({StrId::STR_CARO, [this] {
+      activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appSudoku)
+    menuEntries.push_back({StrId::STR_SUDOKU, [this] {
+      activityManager.pushActivity(std::make_unique<SudokuActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.appMinesweeper)
+    menuEntries.push_back({StrId::STR_MINESWEEPER, [this] {
+      activityManager.pushActivity(std::make_unique<MinesweeperActivity>(renderer, mappedInput));
+    }});
+  if (PET_SETTINGS.app2048)
+    menuEntries.push_back({StrId::STR_2048, [this] {
+      activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
+    }});
 }
 
 void ToolsActivity::onEnter() {
   Activity::onEnter();
+  buildMenu();
   selectorIndex = 0;
   requestUpdate();
 }
 
 void ToolsActivity::loop() {
-  buttonNavigator.onNext([this] {
-    selectorIndex = ButtonNavigator::nextIndex(selectorIndex, getMenuCount());
+  const int menuCount = static_cast<int>(menuEntries.size());
+
+  buttonNavigator.onNext([this, menuCount] {
+    selectorIndex = ButtonNavigator::nextIndex(selectorIndex, menuCount);
     requestUpdate();
   });
 
-  buttonNavigator.onPrevious([this] {
-    selectorIndex = ButtonNavigator::previousIndex(selectorIndex, getMenuCount());
+  buttonNavigator.onPrevious([this, menuCount] {
+    selectorIndex = ButtonNavigator::previousIndex(selectorIndex, menuCount);
     requestUpdate();
   });
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    switch (selectorIndex) {
-      case 0:
-        activityManager.goToFileTransfer();
-        break;
-      case 1:
-        activityManager.pushActivity(std::make_unique<ClockActivity>(renderer, mappedInput));
-        break;
-      case 2:
-        activityManager.pushActivity(std::make_unique<WeatherActivity>(renderer, mappedInput));
-        break;
-      case 3:
-        activityManager.pushActivity(std::make_unique<PomodoroActivity>(renderer, mappedInput));
-        break;
-      case 4:
-        activityManager.pushActivity(std::make_unique<VirtualPetActivity>(renderer, mappedInput));
-        break;
-      case 5:
-        activityManager.pushActivity(std::make_unique<ReadingStatsActivity>(renderer, mappedInput));
-        break;
-      case 6:
-        activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
-        break;
-      default: {
-        // Dynamic items: OPDS (if configured) then games
-        int gameBase = 7;  // After 7 base items (0-6)
-        if (SETTINGS.opdsServerUrl[0]) {
-          if (selectorIndex == 7) {
-            activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
-            break;
-          }
-          gameBase = 8;
-        }
-        int gameIdx = selectorIndex - gameBase;
-        switch (gameIdx) {
-          case 0: activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput)); break;
-          case 1: activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput)); break;
-          case 2: activityManager.pushActivity(std::make_unique<SudokuActivity>(renderer, mappedInput)); break;
-          case 3: activityManager.pushActivity(std::make_unique<MinesweeperActivity>(renderer, mappedInput)); break;
-          case 4: activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput)); break;
-        }
-        break;
-      }
+    if (selectorIndex >= 0 && selectorIndex < menuCount) {
+      menuEntries[selectorIndex].launch();
     }
   }
 
@@ -98,34 +116,18 @@ void ToolsActivity::render(RenderLock&&) {
   const auto& metrics = UITheme::getInstance().getMetrics();
   const auto pageWidth = renderer.getScreenWidth();
   const auto pageHeight = renderer.getScreenHeight();
+  const int menuCount = static_cast<int>(menuEntries.size());
 
   renderer.clearScreen();
 
   GUI.drawHeader(renderer, Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight}, tr(STR_TOOLS));
 
-  // Build menu labels — OPDS inserted at index 8 when configured
-  const char* baseLabels[] = {
-      tr(STR_FILE_TRANSFER),
-      tr(STR_CLOCK), tr(STR_WEATHER), tr(STR_POMODORO), tr(STR_VIRTUAL_PET),
-      tr(STR_READING_STATS_APP), tr(STR_SLEEP_IMAGE_PICKER)};
-  const char* gameLabels[] = {
-      tr(STR_CHESS), tr(STR_CARO), tr(STR_SUDOKU), tr(STR_MINESWEEPER), tr(STR_2048)};
-  const bool hasOpds = SETTINGS.opdsServerUrl[0] != '\0';
-  const int menuCount = getMenuCount();
-
   const int menuTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
   const int menuHeight = pageHeight - menuTop - metrics.buttonHintsHeight - metrics.verticalSpacing;
 
   GUI.drawList(renderer, Rect{0, menuTop, pageWidth, menuHeight}, menuCount, selectorIndex,
-               [&](int index) -> std::string {
-                 if (index < 7) return baseLabels[index];
-                 int dynamicIdx = index - 7;
-                 if (hasOpds) {
-                   if (dynamicIdx == 0) return tr(STR_OPDS_BROWSER);
-                   dynamicIdx--;
-                 }
-                 if (dynamicIdx >= 0 && dynamicIdx < 5) return gameLabels[dynamicIdx];
-                 return "";
+               [this](int index) -> std::string {
+                 return I18N.get(menuEntries[index].labelId);
                });
 
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
