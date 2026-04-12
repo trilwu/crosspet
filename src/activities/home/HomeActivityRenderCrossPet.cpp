@@ -653,8 +653,10 @@ void HomeActivity::renderCrossPet() {
 
   // Dynamic elements (redrawn each frame — lightweight)
   GUI.drawHeader(renderer, Rect{0, 0, screenW, CP_HEADER_H}, nullptr);
-  renderHeaderClock();
-  renderPetStatusWidget(CP_HEADER_H);
+  if (!focusMode) {
+    renderHeaderClock();
+    renderPetStatusWidget(CP_HEADER_H);
+  }
 
   // Selection highlights only (not full bottom bar redraw)
   renderSelectionHighlight();
