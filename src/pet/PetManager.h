@@ -50,8 +50,6 @@ class PetManager {
   bool ignoreCry();      // ignore attention call (good if fake, bad if real)
   bool toggleLights();   // toggle sleep lights-off flag
 
-  uint16_t getEffectivePagesPerMeal() const;
-
   // State queries
   const PetState& getState() const { return state; }
   PetMood getMood() const;
