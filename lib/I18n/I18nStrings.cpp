@@ -122,11 +122,6 @@ const char* const LANGUAGE_NAMES[] = {
     "Lietuvi\xC5"
     "\xB3"
     "",
-    "Sloven\xC5"
-    "\xA1"
-    "\xC4"
-    "\x8D"
-    "ina",
 };
 
 // Character sets for each language
@@ -658,8 +653,6 @@ const char* const CHARACTER_SETS[] = {
     "\xA3"
     "\xD0"
     "\xA4"
-    "\xD0"
-    "\xA5"
     "\xD0"
     "\xA6"
     "\xD0"
@@ -1288,23 +1281,6 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x9E"
     "",  // Lietuvių
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
-    "\xAB"
-    "\xC2"
-    "\xB0"
-    "\xC4"
-    "\x8C"
-    "\xC4"
-    "\x8D"
-    "\xC5"
-    "\xA0"
-    "\xC5"
-    "\xA1"
-    "\xC5"
-    "\xBD"
-    "\xC5"
-    "\xBE"
-    "",  // Slovenščina
 };
 
 namespace i18n_strings {
@@ -1684,7 +1660,6 @@ const char* const STRINGS_EN[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -2222,7 +2197,7 @@ const char* const STRINGS_ES[] = {
     "Auto suspensi\xC3"
     "\xB3"
     "n",
-    "Mostrar archivos ocultos",
+    "Show Hidden Files",
     "Frecuencia de refresco",
     "Ajustes de Calibre",
     "Sincronizaci\xC3"
@@ -2658,7 +2633,6 @@ const char* const STRINGS_ES[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -3226,13 +3200,9 @@ const char* const STRINGS_FR[] = {
     "Text Darkness",
     "Extra Dark",
     "Images",
-    "Affichage",
-    "Espace r\xC3"
-    "\xA9"
-    "serv\xC3"
-    "\xA9"
-    "",
-    "Masquer",
+    "Display",
+    "Placeholder",
+    "Suppress",
     "Appui court alim.",
     "Orientation de lecture",
     "Boutons de fa\xC3"
@@ -3264,9 +3234,7 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "sure",
     "Mise en veille auto",
-    "Afficher les fichiers cach\xC3"
-    "\xA9"
-    "s",
+    "Show Hidden Files",
     "Fr\xC3"
     "\xA9"
     "quence rafra\xC3"
@@ -3549,11 +3517,7 @@ const char* const STRINGS_FR[] = {
     "\xAB"
     " Enregistrer",
     "OK",
-    "S\xC3"
-    "\xA9"
-    "lectionn\xC3"
-    "\xA9"
-    "",
+    "Selected",
     "Modifier",
     "Confirmer",
     "Annuler",
@@ -3569,8 +3533,8 @@ const char* const STRINGS_FR[] = {
     "essayer",
     "Oui",
     "Non",
-    "Afficher",
-    "Masquer",
+    "Show",
+    "Hide",
     "ON",
     "OFF",
     "Non d\xC3"
@@ -3587,29 +3551,21 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "cran de veille",
     "Contraste",
-    "Personnaliser la barre d'\xC3"
-    "\xA9"
-    "tat",
-    "Nombre de pages du chapitre",
-    "Pourcentage de progression",
-    "Barre de progression",
-    "\xC3"
-    "\x89"
-    "paisseur de la barre",
-    "Fine",
-    "Moyenne",
-    "\xC3"
-    "\x89"
-    "paisse",
-    "Livre",
-    "Chapitre",
-    "Chapitre 21",
-    "Titre du livre",
-    "Aper\xC3"
-    "\xA7"
-    "u",
-    "Titre",
-    "Batterie",
+    "Customise Status Bar",
+    "Chapter Page Count",
+    "Book Progress Percentage",
+    "Progress Bar",
+    "Progress Bar Thickness",
+    "Thin",
+    "Medium",
+    "Thick",
+    "Book",
+    "Chapter",
+    "Chapter 21",
+    "Book Title",
+    "Preview",
+    "Title",
+    "Battery",
     "Th\xC3"
     "\xA8"
     "me interface",
@@ -3696,7 +3652,7 @@ const char* const STRINGS_FR[] = {
     "Synchro progression",
     "Supprimer cache livre",
     "Supprimer",
-    "Afficher la page en QR",
+    "Show page as QR",
     "Chapitre : ",
     " pages  |  ",
     "Livre : ",
@@ -3767,21 +3723,20 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     "",
     "URL serveur OPDS",
-    "Notes de bas de page",
-    "Aucune note sur cette page",
-    "[lien]",
+    "Footnotes",
+    "No footnotes on this page",
+    "[link]",
     "Capture d'\xC3"
     "\xA9"
     "cran",
-    "Tourne-page auto : ",
-    "Tourne-page auto (pages par minute)",
+    "Auto Turn Enabled: ",
+    "Auto Turn (Pages Per Minute)",
     "Auto Page Turn",
     "1 page/min",
     "3 pages/min",
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -4250,12 +4205,10 @@ const char* const STRINGS_DE[] = {
     "ttung",
     "Text Darkness",
     "Extra Dark",
-    "Bilder",
-    "Darstellung",
-    "Platzhalter",
-    "Unterdr\xC3"
-    "\xBC"
-    "cken",
+    "Images",
+    "Display",
+    "Placeholder",
+    "Suppress",
     "An-Taste kurz dr\xC3"
     "\xBC"
     "cken",
@@ -4288,7 +4241,7 @@ const char* const STRINGS_DE[] = {
     "Lese-Absatzausrichtung",
     "Silbentrennung",
     "Standby nach",
-    "Versteckte Dateien anzeigen",
+    "Show Hidden Files",
     "Anti-Ghosting nach",
     "Calibre-Einstellungen",
     "KOReader-Synchr.",
@@ -4546,7 +4499,7 @@ const char* const STRINGS_DE[] = {
     "Vordere Tasten belegen",
     "OPDS-Browser",
     "Umschlag + Eigenes",
-    "Seiten-Overlay",
+    "Page overlay",
     "Keep Screen",
     "Unpin",
     "Zuletzt",
@@ -4657,7 +4610,6 @@ const char* const STRINGS_DE[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -4969,7 +4921,7 @@ const char* const STRINGS_DE[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
-    "Freier RAM",
+    "Free RAM",
     "Reboot",
     "Version",
     "CURRENTLY READING",
@@ -6643,7 +6595,6 @@ const char* const STRINGS_CS[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -7648,7 +7599,6 @@ const char* const STRINGS_PO[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -10698,76 +10648,10 @@ const char* const STRINGS_RU[] = {
     "",
     "Text Darkness",
     "Extra Dark",
-    "\xD0"
-    "\x98"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB6"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x97"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x88"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB8"
-    "",
-    "\xD0"
-    "\xA1"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    "",
+    "Images",
+    "Display",
+    "Placeholder",
+    "Suppress",
     "\xD0"
     "\x9A"
     "\xD0"
@@ -11312,47 +11196,7 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB7"
     "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB5"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8B"
-    "",
+    "Show Hidden Files",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -14719,17 +14563,7 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x93"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    " 21",
+    "Chapter 21",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -16814,99 +16648,9 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x86"
-    "\xD0"
-    "\xB5"
-    " \xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x87"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xB9"
-    "",
-    "[\xD1"
-    "\x81"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "]",
+    "Footnotes",
+    "No footnotes on this page",
+    "[link]",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -16946,101 +16690,14 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x90"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "-\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8E"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x91"
-    "\xD0"
-    "\xBD"
-    ": ",
-    "\xD0"
-    "\x90"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xBE"
-    "-\xD0"
-    "\xBF"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    " (\xD0"
-    "\xA1"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB8"
-    "\xD1"
-    "\x86"
-    " \xD0"
-    "\xB2"
-    " \xD0"
-    "\xBC"
-    "\xD0"
-    "\xB8"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x83"
-    ")",
+    "Auto Turn Enabled: ",
+    "Auto Turn (Pages Per Minute)",
     "Auto Page Turn",
     "1 page/min",
     "3 pages/min",
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -17724,14 +17381,14 @@ const char* const STRINGS_SV[] = {
     "rmmarginal",
     "Eboksl\xC3"
     "\xA4"
-    "sarens paragrafjustering",
+    "sarens paragraflinjeplacering",
     "Avstavning",
     "Tid f\xC3"
     "\xB6"
     "r att g\xC3"
     "\xA5"
     " i vila",
-    "Visa dolda filer",
+    "Show Hidden Files",
     "Uppdateringsfrekvens",
     "Calibreinst\xC3"
     "\xA4"
@@ -17890,7 +17547,11 @@ const char* const STRINGS_SV[] = {
     "Smal",
     "Normal",
     "Bred",
-    "Justerad",
+    "R\xC3"
+    "\xA4"
+    "ttf\xC3"
+    "\xA4"
+    "rdiga",
     "V\xC3"
     "\xA4"
     "nster",
@@ -18065,9 +17726,7 @@ const char* const STRINGS_SV[] = {
     "nssnittstema",
     "Klassisk",
     "Lyra",
-    "Lyra ut\xC3"
-    "\xB6"
-    "kad",
+    "Lyra Extended",
     "CrossPet Reader",
     "CrossPet Classic",
     "Fix f\xC3"
@@ -18260,7 +17919,6 @@ const char* const STRINGS_SV[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -19646,7 +19304,6 @@ const char* const STRINGS_RO[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -20200,7 +19857,7 @@ const char* const STRINGS_CA[] = {
     "Temps per entrar en rep\xC3"
     "\xB2"
     "s",
-    "Mostra fitxers ocults",
+    "Show Hidden Files",
     "Freq\xC3"
     "\xBC"
     "\xC3"
@@ -20664,7 +20321,6 @@ const char* const STRINGS_CA[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -30819,17 +30475,13 @@ const char* const STRINGS_UK[] = {
     "\xB0"
     " OPDS",
     "\xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
+    "\x97"
     "\xD0"
-    "\xB8"
+    "\xBD"
     "\xD0"
-    "\xBC"
+    "\xBE"
     "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
+    "\x81"
     "\xD0"
     "\xBA"
     "\xD0"
@@ -30872,17 +30524,13 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x94"
     " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
+    "\xB7"
     "\xD0"
-    "\xB8"
+    "\xBD"
     "\xD0"
-    "\xBC"
+    "\xBE"
     "\xD1"
-    "\x96"
-    "\xD1"
-    "\x82"
+    "\x81"
     "\xD0"
     "\xBE"
     "\xD0"
@@ -31022,7 +30670,6 @@ const char* const STRINGS_UK[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -34108,74 +33755,10 @@ const char* const STRINGS_BE[] = {
     "",
     "Text Darkness",
     "Extra Dark",
-    "\xD0"
-    "\x92"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x8B"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x97"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBA"
-    "",
-    "\xD0"
-    "\xA5"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    "",
+    "Images",
+    "Display",
+    "Placeholder",
+    "Suppress",
     "\xD0"
     "\x9A"
     "\xD0"
@@ -34744,51 +34327,7 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB7"
     "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x85"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8B"
-    "\xD1"
-    "\x8F"
-    " \xD1"
-    "\x84"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8B"
-    "",
+    "Show Hidden Files",
     "\xD0"
     "\xA7"
     "\xD0"
@@ -37645,21 +37184,7 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x8C"
     "",
-    "\xD0"
-    "\x92"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB1"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "",
+    "Selected",
     "\xD0"
     "\x92"
     "\xD1"
@@ -37771,38 +37296,8 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB5"
     "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\xA1"
-    "\xD1"
-    "\x85"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    "",
+    "Show",
+    "Hide",
     "\xD0"
     "\xA3"
     "\xD0"
@@ -37941,369 +37436,21 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x82"
     "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB7"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBA"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8C"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    " \xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x96"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\xA2"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x9E"
-    "\xD1"
-    "\x88"
-    "\xD1"
-    "\x87"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    " \xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8B"
-    " \xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x83"
-    "",
-    "\xD0"
-    "\xA2"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\xA1"
-    "\xD1"
-    "\x8F"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\xA2"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x9E"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x8F"
-    "",
-    "\xD0"
-    "\x9A"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xB0"
-    "",
-    "\xD0"
-    "\xA0"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBB"
-    "",
-    "\xD0"
-    "\xA0"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB5"
-    "\xD0"
-    "\xBB"
-    " 21",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xBA"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xB3"
-    "\xD1"
-    "\x96"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xBF"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xB4"
-    "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "",
-    "\xD0"
-    "\x91"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x8F"
-    "",
+    "Customise Status Bar",
+    "Chapter Page Count",
+    "Book Progress Percentage",
+    "Progress Bar",
+    "Progress Bar Thickness",
+    "Thin",
+    "Medium",
+    "Thick",
+    "Book",
+    "Chapter",
+    "Chapter 21",
+    "Book Title",
+    "Preview",
+    "Title",
+    "Battery",
     "\xD0"
     "\xA2"
     "\xD1"
@@ -39308,60 +38455,8 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x96"
     "",
-    "\xD0"
-    "\x92"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xB4"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    "",
-    "\xD0"
-    "\x9F"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8C"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x83"
-    " \xD1"
-    "\x8F"
-    "\xD0"
-    "\xBA"
-    " QR",
+    "Delete",
+    "Show page as QR",
     "\xD0"
     "\xA0"
     "\xD0"
@@ -39915,17 +39010,7 @@ const char* const STRINGS_BE[] = {
     "\xBA"
     "\xD0"
     "\xB0"
-    " %d/%d, %.2f%% \xD1"
-    "\x83"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xBE"
-    "",
+    " %d/%d",
     "\xD0"
     "\x90"
     "\xD0"
@@ -40304,87 +39389,9 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x97"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xBA"
-    "\xD1"
-    "\x96"
-    "",
-    "\xD0"
-    "\x9D"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xB3"
-    "\xD1"
-    "\x8D"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB9"
-    " \xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x86"
-    "\xD1"
-    "\x8B"
-    " \xD0"
-    "\xBD"
-    "\xD1"
-    "\x8F"
-    "\xD0"
-    "\xBC"
-    "\xD0"
-    "\xB0"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x81"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    "",
-    "[\xD1"
-    "\x81"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x81"
-    "\xD1"
-    "\x8B"
-    "\xD0"
-    "\xBB"
-    "\xD0"
-    "\xBA"
-    "\xD0"
-    "\xB0"
-    "]",
+    "Footnotes",
+    "No footnotes on this page",
+    "[link]",
     "\xD0"
     "\x97"
     "\xD1"
@@ -40424,117 +39431,14 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB0"
     "",
-    "\xD0"
-    "\x90"
-    "\xD1"
-    "\x9E"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    ": ",
-    "\xD0"
-    "\x90"
-    "\xD1"
-    "\x9E"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBF"
-    "\xD0"
-    "\xB5"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xB3"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB5"
-    " (\xD1"
-    "\x81"
-    "\xD1"
-    "\x82"
-    "\xD0"
-    "\xB0"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xBD"
-    "\xD0"
-    "\xB0"
-    "\xD0"
-    "\xBA"
-    " \xD0"
-    "\xB7"
-    "\xD0"
-    "\xB0"
-    " \xD1"
-    "\x85"
-    "\xD0"
-    "\xB2"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBB"
-    "\xD1"
-    "\x96"
-    "\xD0"
-    "\xBD"
-    "\xD1"
-    "\x83"
-    ")",
+    "Auto Turn Enabled: ",
+    "Auto Turn (Pages Per Minute)",
     "Auto Page Turn",
     "1 page/min",
     "3 pages/min",
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -41271,7 +40175,6 @@ const char* const STRINGS_IT[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -41989,9 +40892,7 @@ const char* const STRINGS_PL[] = {
     "Czas do u\xC5"
     "\x9B"
     "pienia",
-    "Poka\xC5"
-    "\xBC"
-    " ukryte pliki",
+    "Show Hidden Files",
     "Cz\xC4"
     "\x99"
     "stotliwo\xC5"
@@ -42681,7 +41582,6 @@ const char* const STRINGS_PL[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -43855,7 +42755,6 @@ const char* const STRINGS_FI[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -44791,7 +43690,6 @@ const char* const STRINGS_DA[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -45207,10 +44105,10 @@ const char* const STRINGS_NL[] = {
     "Tekst Anti-Aliasing",
     "Text Darkness",
     "Extra Dark",
-    "Afbeeldingen",
-    "Weergave",
+    "Images",
+    "Display",
     "Placeholder",
-    "Verbergen",
+    "Suppress",
     "Korte klik aan/uit-knop",
     "Leesstand",
     "Indeling knoppen voorzijde",
@@ -45231,7 +44129,7 @@ const char* const STRINGS_NL[] = {
     "Uitlijning alinea lezer",
     "Woordafbreking",
     "Tijd tot slaapstand",
-    "Toon verborgen bestanden",
+    "Show Hidden Files",
     "Verversingsfrequentie",
     "Calibre instellingen",
     "KOReader Sync",
@@ -45362,7 +44260,7 @@ const char* const STRINGS_NL[] = {
     "\xAB"
     " Opslaan",
     "Kies",
-    "Geselecteerd",
+    "Selected",
     "Wissel",
     "Bevestig",
     "Annuleer",
@@ -45447,7 +44345,7 @@ const char* const STRINGS_NL[] = {
     "Naar Home",
     "Voortgang synchroniseren",
     "Boekcache verwijderen",
-    "Verwijder",
+    "Delete",
     "Pagina als QR tonen",
     "Hoofdstuk: ",
     " pagina's  |  ",
@@ -45487,15 +44385,14 @@ const char* const STRINGS_NL[] = {
     "Geen voetnoten op deze pagina",
     "[link]",
     "Screenshot maken",
-    "Automatisch omslaan ingeschakeld: ",
-    "Autom. omslaan (pagina's per minuut)",
+    "Auto Turn Enabled: ",
+    "Auto Turn (Pages Per Minute)",
     "Auto Page Turn",
     "1 page/min",
     "3 pages/min",
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -46345,11 +45242,7 @@ const char* const STRINGS_TR[] = {
     "me S\xC3"
     "\xBC"
     "resi",
-    "Gizli Dosyalar\xC4"
-    "\xB1"
-    " G\xC3"
-    "\xB6"
-    "ster",
+    "Show Hidden Files",
     "Yenileme S\xC4"
     "\xB1"
     "kl\xC4"
@@ -47261,7 +46154,6 @@ const char* const STRINGS_TR[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -55373,7 +54265,6 @@ const char* const STRINGS_KK[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -58724,7 +57615,6 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xA5"
     "ng",
-    "CrossPet",
     "\xC4"
     "\x90"
     "\xE1"
@@ -62137,7 +61027,6 @@ const char* const STRINGS_HU[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -63209,889 +62098,6 @@ const char* const STRINGS_LT[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
-    "CrossPet",
-    "Clock",
-    "Pomodoro",
-    "Daily Quote",
-    "Conference Badge",
-    "Connect WiFi to sync time",
-    "Place quotes.txt on SD card",
-    "Place badge.txt on SD card",
-    "Setup Badge",
-    "Name",
-    "Title / Role",
-    "QR Data (URL)",
-    "Badge saved!",
-    "Edit",
-    "(Built-in quote)",
-    "Ready",
-    "Focus",
-    "Short Break",
-    "Long Break",
-    "Paused",
-    "Start",
-    "Pause",
-    "Resume",
-    "Skip",
-    "Bluetooth Remote",
-    "Auto-connect BT",
-    "Pair Remote",
-    "Scanning...",
-    "Connecting...",
-    "Connected",
-    "Not connected",
-    "No devices found",
-    "Paired: %s",
-    "Forget Device",
-    "Forget paired remote?",
-    "Presenter Pen",
-    "Waiting for connection...",
-    "Pair this device as a Bluetooth keyboard",
-    "Right ->",
-    "Next slide",
-    "<- Left",
-    "Prev slide",
-    "OK",
-    "Start (F5)",
-    "Back",
-    "End (Esc)",
-    "Next >",
-    "< Prev",
-    "F5",
-    "Esc",
-    "My Pet",
-    "Hunger",
-    "Pet",
-    "Health",
-    "Egg",
-    "Hatchling",
-    "Youngster",
-    "Companion",
-    "Elder",
-    "Your pet has passed...",
-    "Hatch New Egg?",
-    "No pet yet",
-    "Hatch Egg?",
-    "Weight",
-    "Discipline",
-    "Mistakes",
-    "Sleeping",
-    "Sick",
-    "Dirty",
-    "Needs attention!",
-    "Scholarly Young",
-    "Wild Youngster",
-    "Scholar",
-    "Wild Companion",
-    "Nom nom! +Hunger",
-    "Yummy! +Happy",
-    "Feeling better~",
-    "Great workout!",
-    "All clean!",
-    "Good discipline!",
-    "That was mean...",
-    "Good training!",
-    "Feeling neglected...",
-    "Goodnight~",
-    "Lights on!",
-    "Your pet lived a full life. Farewell~",
-    "Your pet has passed from neglect...",
-    "Too sick to eat...",
-    "Shh... sleeping",
-    "Not ready yet...",
-    "Feed Meal",
-    "Feed Snack",
-    "Medicine",
-    "Exercise",
-    "Clean",
-    "Scold",
-    "Ignore",
-    "Lights",
-    "Pet",
-    "Rename",
-    "Change Type",
-    "Pet Name",
-    "Select Pet Type",
-    "Chicken",
-    "Cat",
-    "Dog",
-    "Dragon",
-    "Bunny",
-    "Robot",
-    "Bear",
-    "Slime",
-    "Chapter Complete!",
-    "%ud",
-    "Daily goal reached!",
-    "Streak up! %u days",
-    "%lu pages read!",
-    "%s: Feed me! Read more",
-    "%s: I miss you...",
-    "%s: I feel sick...",
-    "%s: Play with me!",
-    "%s: Zzz...",
-    "%s: %ud streak!",
-    "%s: Let's read!",
-    "%s: Read with me~",
-    "No pet!",
-    "Not sick!",
-    "Already clean!",
-    "Too sick to exercise",
-    "Nothing to ignore",
-    "Hey! That's not fair...",
-    "Read 20 pages",
-    "Pet 3 times",
-    "Keep fed (>40%)",
-    "%s (%s)  |  Day %lu  |  Streak %u",
-    "%s %s  |  Day %lu  |  Streak %u",
-    "%s  |  Day %lu  |  Streak %u",
-    "Photo Frame",
-    "Maze",
-    "Game of Life",
-    "New Maze",
-    "2048",
-    "New Game",
-    "Reading Stats",
-    "TODAY",
-    "ALL TIME",
-    "LAST BOOK",
-    "Sessions",
-    "Finished",
-    "Streak",
-    "Best",
-    "%ud",
-    "No books read yet",
-    "Game Over!",
-    "You Win!",
-    "Score: %lu    Best: %lu",
-    "Done! %d moves",
-    "Moves: %d",
-    "Gen %lu",
-    "Mistakes: %d",
-    "No photos found",
-    "Place .bmp files in /sleep/",
-    "Happy",
-    "Reading",
-    "Feed me~",
-    "Need medicine...",
-    "It's dirty...",
-    "So bored...",
-    "Hey!",
-    "Not feeling well...",
-    "Zzz...",
-    "Purr~",
-    "Sweet dreams",
-    "Dreaming...",
-    "Hungry...",
-    "Read more!",
-    "%s | %d alive",
-    "Fast",
-    "Med",
-    "Slow",
-    "Slowest",
-    "Sudoku",
-    "Easy",
-    "Medium",
-    "Hard",
-    "Completed!",
-    "1-9",
-    "Minesweeper",
-    "Easy",
-    "Medium",
-    "Hard",
-    "Mines: %d",
-    "Reveal",
-    "Flag",
-    "Caro",
-    "Turn: X",
-    "Turn: O",
-    "X Wins!",
-    "O Wins!",
-    "Draw!",
-    "Place",
-    "Easy",
-    "Medium",
-    "Hard",
-    "Select Difficulty",
-    "Chess",
-    "White's Turn",
-    "Black's Turn",
-    "White Wins!",
-    "Black Wins!",
-    "Select",
-    "Move",
-    "Set Time",
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "S",
-    "M",
-    "T",
-    "W",
-    "T",
-    "F",
-    "S",
-    "Lunar",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-    "Hour",
-    "Minute",
-    "Day",
-    "Month",
-    "Year",
-    "Sync time via WiFi",
-    "Weather",
-    "Fetching weather...",
-    "Temperature",
-    "\xC2"
-    "\xB0"
-    "C",
-    "\xC2"
-    "\xB0"
-    "F",
-    "Failed to load weather",
-    "Feels like",
-    "Humidity",
-    "Wind",
-    "Refresh",
-    "City",
-    "Clear sky",
-    "Partly cloudy",
-    "Fog",
-    "Drizzle",
-    "Rain",
-    "Snow",
-    "Showers",
-    "Thunderstorm",
-    "Updated",
-    "Focus:",
-    "Short break:",
-    "Long break:",
-    "%s %2lu min",
-    "Start >",
-    "Location",
-    "Home clock",
-    "Home weather",
-    "Home pet status",
-    "Reading Stats",
-    "RECENTLY READ",
-    "Today",
-    "Total",
-    "Sessions",
-    "EST. LEFT",
-    "TIME READ",
-    "%d times",
-    "%d min",
-    "%dh %dm",
-    "Sync",
-    "Sync OK",
-    "WiFi timeout",
-    "API error %d",
-    "Sleep Image",
-    "Image selected!",
-    "No .bmp files found",
-    "Place .bmp files in /sleep/",
-    "Any (random)",
-    "Set sleep screen to 'Custom' in Settings > Display",
-    "Starred Pages",
-    "Star Page",
-    "No starred pages",
-    "p",
-    "Page starred",
-    "Page unstarred",
-    "Reload Sleep Image",
-    "Sleep cache cleared!",
-    "Sync Weather & Time",
-    "Power Double-Click",
-    "Power Triple-Click",
-    "Show Free RAM",
-    "Device Info",
-    "Focus Mode",
-    "Free RAM",
-    "Reboot",
-    "Version",
-    "CURRENTLY READING",
-    "%d pages left",
-    "NAVIGATION",
-    "DISPLAY",
-    "FEATURES",
-    "Apps",
-};
-
-const char* const STRINGS_SI[] = {
-    "CrossPoint",
-    "ZAGON",
-    "SPANJE",
-    "Prehajanje v spanje",
-    "Prebrskaj datoteke",
-    "Prenos datotek",
-    "Nastavitve",
-    "Calibre Library",
-    "Nadaljuj z branjem",
-    "Ni odprte knjige",
-    "Za\xC4"
-    "\x8D"
-    "ni brati spodaj",
-    "Books",
-    "Ni najdenih datotek",
-    "Izberi poglavje",
-    "Ni poglavij",
-    "Konec knjige",
-    "Prazno poglavje",
-    "Indeksiranje",
-    "Napaka pomnilnika",
-    "Napaka pri nalaganju strani",
-    "Prazna datoteka",
-    "Izven meja",
-    "Nalaganje...",
-    "Nalaganje",
-    "Failed to load XTC",
-    "Failed to load TXT",
-    "Failed to load EPUB",
-    "SD card error",
-    "WiFi omre\xC5"
-    "\xBE"
-    "ja",
-    "Ni najdenih omre\xC5"
-    "\xBE"
-    "ij",
-    "Najdenih omre\xC5"
-    "\xBE"
-    "ij: %zu",
-    "Iskanje...",
-    "Povezovanje...",
-    "Povezano!",
-    "Povezava ni uspela",
-    "Connection timeout",
-    "Pozabi omre\xC5"
-    "\xBE"
-    "je?",
-    "Shranim geslo za naslednji\xC4"
-    "\x8D"
-    "?",
-    "Remove saved password?",
-    "Pritisni OK za ponovno iskanje",
-    "Press any button to continue",
-    "LEFT/RIGHT: Select | OK: Confirm",
-    "How would you like to connect?",
-    "Pove\xC5"
-    "\xBE"
-    "i se v omre\xC5"
-    "\xBE"
-    "je",
-    "Ustvari dostopno to\xC4"
-    "\x8D"
-    "ko",
-    "Pove\xC5"
-    "\xBE"
-    "i se v obstoje\xC4"
-    "\x8D"
-    "e WiFi omre\xC5"
-    "\xBE"
-    "je",
-    "Ustvari WiFi omre\xC5"
-    "\xBE"
-    "je, v katerega se lahko pove\xC5"
-    "\xBE"
-    "ejo drugi",
-    "Zaganjanje dostopne to\xC4"
-    "\x8D"
-    "ke...",
-    "Na\xC4"
-    "\x8D"
-    "in dostopne to\xC4"
-    "\x8D"
-    "ke",
-    "Pove\xC5"
-    "\xBE"
-    "i svojo napravo v to WiFi omre\xC5"
-    "\xBE"
-    "je",
-    "Odpri ta URL v svojem brskalniku",
-    "ali http://",
-    "ali skeniraj QR kodo s telefonom:",
-    "Brez\xC5"
-    "\xBE"
-    "i\xC4"
-    "\x8D"
-    "ni Calibre",
-    "Calibre Web URL",
-    "Connect as Wireless Device",
-    "* = \xC5"
-    "\xA0"
-    "ifrirano | + = Shranjeno",
-    "MAC naslov:",
-    "Preverjanje WiFi-ja...",
-    "Vnesi WiFi geslo",
-    "Enter Text",
-    "v ",
-    "Discovering Calibre...",
-    "Connecting to ",
-    "Connected to ",
-    "Waiting for commands...",
-    "(Connection failed, retrying)",
-    "Calibre disconnected",
-    "Waiting for transfer...",
-    "If transfer fails, enable\n'Ignore free space' in Calibre's\nSmartDevice plugin settings.",
-    "Prejemanje: ",
-    "Prejeto: ",
-    "Waiting for more...",
-    "Failed to create file",
-    "Password required",
-    "Transfer interrupted",
-    "1) Namesti vti\xC4"
-    "\x8D"
-    "nik CrossPoint Reader",
-    "2) Bodi v istem WiFi omre\xC5"
-    "\xBE"
-    "ju",
-    "3) V Calibre: \"Po\xC5"
-    "\xA1"
-    "lji v napravo\"",
-    "\"Med po\xC5"
-    "\xA1"
-    "iljanjem pusti ta zaslon odprt\"",
-    "Zaslon",
-    "Bralnik",
-    "Kontrole",
-    "Sistem",
-    "Zaslon za spanje",
-    "Na\xC4"
-    "\x8D"
-    "in naslovnice v spanju",
-    "Status Bar",
-    "Skrij % baterije",
-    "Dodaten razmik med odstavki",
-    "Glajenje besedila (AA)",
-    "Text Darkness",
-    "Extra Dark",
-    "Slike",
-    "Prika\xC5"
-    "\xBE"
-    "i",
-    "Oznaka mesta",
-    "Zatdi",
-    "Kratek pritisk na gumb za vklop",
-    "Orientacija branja",
-    "Front Button Layout",
-    "Razpored stranskih gumbov",
-    "Front Button Layout (reader)",
-    "Dolgi pritisk za preskok poglavja",
-    "Pisava bralnika",
-    "External Reader Font",
-    "Reader Font",
-    "UI Font",
-    "Velikost pisave",
-    "Razmik med vrsticami",
-    "ASCII Letter Spacing",
-    "ASCII Digit Spacing",
-    "CJK Spacing",
-    "Color Mode",
-    "Robovi zaslona",
-    "Poravnava odstavkov",
-    "Deljenje besed",
-    "\xC4"
-    "\x8C"
-    "as do spanja",
-    "Prika\xC5"
-    "\xBE"
-    "i skrite datoteke",
-    "Pogostost osve\xC5"
-    "\xBE"
-    "evanja",
-    "Calibre Settings",
-    "KOReader sinhronizacija",
-    "Preveri posodobitve",
-    "Jezik",
-    "Select Wallpaper",
-    "Po\xC4"
-    "\x8D"
-    "isti predpomnilnik branja",
-    "Calibre",
-    "Uporabni\xC5"
-    "\xA1"
-    "ko ime",
-    "Geslo",
-    "URL stre\xC5"
-    "\xBE"
-    "nika za sinhronizacijo",
-    "Ujemanje dokumentov",
-    "Avtentikacija",
-    "KOReader uporabnik",
-    "KOReader geslo",
-    "Ime datoteke",
-    "Binarno",
-    "Najprej nastavi podatke za prijavo",
-    "WiFi povezava ni uspela",
-    "Preverjanje...",
-    "Uspe\xC5"
-    "\xA1"
-    "na prijava!",
-    "KOReader avtentikacija",
-    "KOReader sinhronizacija je pripravljena",
-    "Prijava ni uspela",
-    "Kon\xC4"
-    "\x8D"
-    "ano",
-    "To bo izbrisalo vse predpomnjene podatke o knjigah.",
-    "Ves napredek pri branju bo izgubljen!",
-    "Knjige bo treba ob ponovnem odpiranju",
-    "ponovno indeksirati.",
-    "\xC4"
-    "\x8C"
-    "i\xC5"
-    "\xA1"
-    "\xC4"
-    "\x8D"
-    "enje predpomnilnika...",
-    "Predpomnilnik o\xC4"
-    "\x8D"
-    "i\xC5"
-    "\xA1"
-    "\xC4"
-    "\x8D"
-    "en",
-    "elementov odstranjenih",
-    "ni uspelo",
-    "\xC4"
-    "\x8C"
-    "i\xC5"
-    "\xA1"
-    "\xC4"
-    "\x8D"
-    "enje predpomnilnika ni uspelo",
-    "Za podrobnosti preveri serijski izhod",
-    "Temno",
-    "Svetlo",
-    "Po meri",
-    "Naslovnica",
-    "Brez",
-    "Prilagodi",
-    "Obre\xC5"
-    "\xBE"
-    "i",
-    "No Progress",
-    "Full",
-    "Nikoli",
-    "V bralniku",
-    "Vedno",
-    "Prezri",
-    "Spanje",
-    "Obra\xC4"
-    "\x8D"
-    "anje strani",
-    "Screen Refresh",
-    "Block Front",
-    "Pokon\xC4"
-    "\x8D"
-    "no",
-    "Le\xC5"
-    "\xBE"
-    "e\xC4"
-    "\x8D"
-    "e (v smeri urinega kazalca)",
-    "Obrnjeno",
-    "Le\xC5"
-    "\xBE"
-    "e\xC4"
-    "\x8D"
-    "e (proti smeri urinega kazalca)",
-    "Bck, Cnfrm, Lft, Rght",
-    "Lft, Rght, Bck, Cnfrm",
-    "Lft, Bck, Cnfrm, Rght",
-    "Nazaj/Naprej",
-    "Naprej/Nazaj",
-    "Bookerly",
-    "Lexend",
-    "Open Dyslexic",
-    "Bokerlam",
-    "Majhno",
-    "Srednje",
-    "Veliko",
-    "Zelo veliko",
-    "Tesno",
-    "Normalno",
-    "\xC5"
-    "\xA0"
-    "iroko",
-    "Obojestransko",
-    "Levo",
-    "Sredinsko",
-    "Desno",
-    "1 min",
-    "5 min",
-    "10 min",
-    "15 min",
-    "30 min",
-    "1 stran",
-    "5 strani",
-    "10 strani",
-    "15 strani",
-    "30 strani",
-    "Posodobi",
-    "Preverjanje posodobitev...",
-    "Na voljo je nova posodobitev!",
-    "Trenutna razli\xC4"
-    "\x8D"
-    "ica: ",
-    "Nova razli\xC4"
-    "\x8D"
-    "ica: ",
-    "Posodabljanje...",
-    "Ni novih posodobitev",
-    "Posodobitev ni uspela",
-    "Posodobitev kon\xC4"
-    "\x8D"
-    "ana",
-    "Pridr\xC5"
-    "\xBE"
-    "i gumb za vklop, da napravo znova vklopi\xC5"
-    "\xA1"
-    "",
-    "External Font",
-    "Built-in (Disabled)",
-    "Ni najdenih vnosov",
-    "Prena\xC5"
-    "\xA1"
-    "anje...",
-    "Prenos ni uspel",
-    "Napaka:",
-    "Neimenovano",
-    "URL stre\xC5"
-    "\xBE"
-    "nika ni nastavljen",
-    "Nalaganje vira ni uspelo",
-    "Raz\xC4"
-    "\x8D"
-    "lenjevanje vira ni uspelo",
-    "Omre\xC5"
-    "\xBE"
-    "je: ",
-    "IP naslov: ",
-    "or scan QR code with your phone to connect to Wifi.",
-    "Napaka: Splo\xC5"
-    "\xA1"
-    "na napaka",
-    "Napaka: Omre\xC5"
-    "\xBE"
-    "je ni najdeno",
-    "Napaka: \xC4"
-    "\x8C"
-    "asovna omejitev povezave",
-    "SD kartica",
-    "\xC2"
-    "\xAB"
-    " Nazaj",
-    "\xC2"
-    "\xAB"
-    " Izhod",
-    "\xC2"
-    "\xAB"
-    " Domov",
-    "\xC2"
-    "\xAB"
-    " Save",
-    "Izberi",
-    "Izbrano",
-    "Preklopi",
-    "Potrdi",
-    "Prekli\xC4"
-    "\x8D"
-    "i",
-    "Pove\xC5"
-    "\xBE"
-    "i",
-    "Odpri",
-    "Prenesi",
-    "Poskusi znova",
-    "Da",
-    "Ne",
-    "Prika\xC5"
-    "\xBE"
-    "i",
-    "Skrij",
-    "VKLOP",
-    "IZKLOP",
-    "Ni nastavljeno",
-    "Levo",
-    "Desno",
-    "Gor",
-    "Dol",
-    "CAPS",
-    "caps",
-    "V redu",
-    "Filter naslovnice v spanju",
-    "Kontrast",
-    "Prilagodi vrstico stanja",
-    "\xC5"
-    "\xA0"
-    "tevilo strani v poglavju",
-    "Odstotek napredka v knjigi",
-    "Vrstica napredka",
-    "Debelina vrstice napredka",
-    "Tanko",
-    "Srednje",
-    "Debelo",
-    "Knjiga",
-    "Poglavje",
-    "Poglavje 21",
-    "Naslov knjige",
-    "Predogled",
-    "Naslov",
-    "Baterija",
-    "Tema uporabni\xC5"
-    "\xA1"
-    "kega vmesnika",
-    "Klasi\xC4"
-    "\x8D"
-    "na",
-    "Lyra",
-    "Lyra raz\xC5"
-    "\xA1"
-    "irjena",
-    "CrossPet Reader",
-    "CrossPet Classic",
-    "Popravek bledenja na soncu",
-    "Dark Mode",
-    "Keep Clock Alive",
-    "Off",
-    "Sleep Refresh",
-    "1 min",
-    "5 min",
-    "10 min",
-    "30 min",
-    "60 min",
-    "Prenastavi sprednje gumbe",
-    "OPDS brskalnik",
-    "Naslovnica + po meri",
-    "Page overlay",
-    "Keep Screen",
-    "Unpin",
-    "Recents",
-    "Zadnje knjige",
-    "Ni zadnjih knjig",
-    "Uporabi brez\xC5"
-    "\xBE"
-    "i\xC4"
-    "\x8D"
-    "ni prenos Calibre",
-    "Pozabi omre\xC5"
-    "\xBE"
-    "je in odstrani shranjeno geslo?",
-    "Pozabi",
-    "Zaganjanje Calibre...",
-    "Nastavitev",
-    "Stanje",
-    "Po\xC4"
-    "\x8D"
-    "isti",
-    "Privzeto",
-    "Pritisni sprednji gumb za vsako vlogo",
-    "Nedodeljeno",
-    "\xC5"
-    "\xBD"
-    "e dodeljeno",
-    "Stranski gumb gor: Ponastavi na privzeto",
-    "Stranski gumb dol: Prekli\xC4"
-    "\x8D"
-    "i nastavljanje",
-    "Nazaj (1. gumb)",
-    "Potrdi (2. gumb)",
-    "Levo (3. gumb)",
-    "Desno (4. gumb)",
-    "Pojdi na %",
-    "Pojdi domov",
-    "Sinhroniziraj napredek",
-    "Izbri\xC5"
-    "\xA1"
-    "i predpomnilnik knjige",
-    "Izbri\xC5"
-    "\xA1"
-    "i",
-    "Prika\xC5"
-    "\xBE"
-    "i stran kot QR",
-    "Poglavje: ",
-    " strani  |  ",
-    "Knjiga: ",
-    "shift",
-    "SHIFT",
-    "LOCK",
-    "Za Calibre dodaj /opds svojemu URL-ju",
-    "Levo/desno: 1%  Gor/dol: 10%",
-    "Sinhronizacija \xC4"
-    "\x8D"
-    "asa...",
-    "Izra\xC4"
-    "\x8D"
-    "unavanje podpisa dokumenta...",
-    "Izra\xC4"
-    "\x8D"
-    "un podpisa dokumenta ni uspel",
-    "Pridobivanje napredka iz oblaka...",
-    "Nalaganje napredka...",
-    "Podatki za prijavo niso nastavljeni",
-    "Nastavi KOReader ra\xC4"
-    "\x8D"
-    "un v nastavitvah",
-    "Najden napredek!",
-    "Oddaljeno:",
-    "Lokalno:",
-    "Stran %d, %.2f%% skupno",
-    "Stran %d/%d, %.2f%% skupno",
-    "  Iz: %s",
-    "Uporabi oddaljen napredek",
-    "Nalo\xC5"
-    "\xBE"
-    "i lokalni napredek",
-    "Oddaljen napredek ni bil najden",
-    "Nalo\xC5"
-    "\xBE"
-    "im trenutno pozicijo?",
-    "Napredek nalo\xC5"
-    "\xBE"
-    "en!",
-    "Sinhronizacija ni uspela",
-    "Razdelek ",
-    "Nalo\xC5"
-    "\xBE"
-    "i",
-    "Slog knjige",
-    "Vgrajen slog",
-    "URL OPDS stre\xC5"
-    "\xBE"
-    "nika",
-    "Opombe",
-    "Na tej strani ni opomb",
-    "[povezava]",
-    "Naredi posnetek zaslona",
-    "Samodejno obra\xC4"
-    "\x8D"
-    "anje: ",
-    "Samodejno obra\xC4"
-    "\x8D"
-    "anje (strani na minuto)",
-    "Auto Page Turn",
-    "1 page/min",
-    "3 pages/min",
-    "6 pages/min",
-    "12 pages/min",
-    "Apps",
-    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -64483,6 +62489,3 @@ static_assert(sizeof(i18n_strings::STRINGS_HU) / sizeof(i18n_strings::STRINGS_HU
 static_assert(sizeof(i18n_strings::STRINGS_LT) / sizeof(i18n_strings::STRINGS_LT[0]) ==
                   static_cast<size_t>(StrId::_COUNT),
               "STRINGS_LT size mismatch");
-static_assert(sizeof(i18n_strings::STRINGS_SI) / sizeof(i18n_strings::STRINGS_SI[0]) ==
-                  static_cast<size_t>(StrId::_COUNT),
-              "STRINGS_SI size mismatch");

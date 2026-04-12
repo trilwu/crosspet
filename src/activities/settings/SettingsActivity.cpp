@@ -23,7 +23,7 @@
 
 const StrId SettingsActivity::categoryNames[categoryCount] = {StrId::STR_CAT_DISPLAY, StrId::STR_CAT_READER,
                                                               StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM,
-                                                              StrId::STR_CROSSPET};
+                                                              StrId::STR_TOOLS};
 
 void SettingsActivity::onEnter() {
   LOG_DBG("SET", "Free heap: %d bytes", ESP.getFreeHeap());
@@ -45,10 +45,8 @@ void SettingsActivity::onEnter() {
   for (const auto& setting : getSettingsList()) {
     if (setting.category == StrId::STR_NONE_OPT) continue;
     if (setting.category == StrId::STR_CAT_DISPLAY) {
-      if (setting.nameId == StrId::STR_HOME_FOCUS_MODE) continue;  // → CrossPet tab
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
-      if (setting.nameId == StrId::STR_FONT_FAMILY || setting.nameId == StrId::STR_FONT_SIZE) continue;  // → CROSSPET section
       readerSettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_CONTROLS) {
       controlsSettings.push_back(setting);
@@ -94,43 +92,34 @@ void SettingsActivity::onEnter() {
         t.id,
         [field] { return PET_SETTINGS.*field; },
         [field](uint8_t v) { PET_SETTINGS.*field = v; PET_SETTINGS.saveToFile(); },
-        t.key, StrId::STR_CROSSPET));
-  }
-  // Home Focus Mode — CrossPet-specific display setting
-  {
-    appsSettings.push_back(SettingInfo::DynamicToggle(
-        StrId::STR_HOME_FOCUS_MODE,
-        [] { return PET_SETTINGS.homeFocusMode; },
-        [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
-        "homeFocusMode", StrId::STR_CROSSPET));
+        t.key, StrId::STR_TOOLS));
   }
 
-  // CROSSPET section in Reader — re-add Font Family & Font Size from shared list
-  readerSettings.push_back(SettingInfo::Section("CROSSPET"));
-  for (const auto& s : getSettingsList()) {
-    if (s.category == StrId::STR_CAT_READER &&
-        (s.nameId == StrId::STR_FONT_FAMILY || s.nameId == StrId::STR_FONT_SIZE)) {
-      readerSettings.push_back(s);
-    }
-  }
-
-  // Insert section headers into each category (bottom-up to keep indices stable).
-  // Display (8 items): SCREEN (sleep 0-2), APPEARANCE (UI 3-7)
-  displaySettings.insert(displaySettings.begin() + 3, SettingInfo::Section("APPEARANCE"));
+  // Insert section headers into each category (device UI only, after ACTION items are appended).
+  // Display: SCREEN (sleep/refresh 0-4), APPEARANCE (theme/UI 5-10), HOME (focus mode 11)
+  displaySettings.insert(displaySettings.begin() + 11, SettingInfo::Section("HOME"));
+  displaySettings.insert(displaySettings.begin() + 5, SettingInfo::Section("APPEARANCE"));
   displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
 
-  // Reader (10 items + 1 action + CROSSPET section already pushed):
-  // TEXT (lineSpacing..hyphenation 0-4), READING (orientation..images 5-9), ACTIONS (statusBar 10)
-  readerSettings.insert(readerSettings.begin() + 10, SettingInfo::Section("ACTIONS"));
-  readerSettings.insert(readerSettings.begin() + 5, SettingInfo::Section("READING"));
+  // Reader: TEXT (font/layout), NAVIGATION (orientation/turn), ACTIONS (status bar)
+  // Items order: Font Family(0), Font Size(1), Line Spacing(2), Screen Margin(3), Para Alignment(4),
+  //              Embedded Style(5), Hyphenation(6), Orientation(7), Extra Spacing(8), Text AA(9),
+  //              Text Darkness(10), Images(11), Auto Page Turn(12), Customise Status Bar(13)
+  readerSettings.insert(readerSettings.begin() + 13, SettingInfo::Section("ACTIONS"));
+  readerSettings.insert(readerSettings.begin() + 7, SettingInfo::Section("READING"));
   readerSettings.insert(readerSettings.begin(), SettingInfo::Section("TEXT"));
 
-  // Controls: BUTTONS (remap+layout 0-3), POWER BUTTON (pwr btn 4-6)
+  // Controls: BUTTONS (remapping action + layout toggles), POWER BUTTON (short pwr btn actions)
+  // Items order after insert: Remap Front Buttons(0), Side Btn Layout(1), Front Page Btn Layout(2),
+  //                           Long Press Skip(3), Short Pwr Btn(4), 2Click(5), 3Click(6)
   controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
   controlsSettings.insert(controlsSettings.begin(), SettingInfo::Section("BUTTONS"));
 
-  // System: GENERAL (0-2), CONNECTIVITY (3-5), DEVICE (6-10)
-  systemSettings.insert(systemSettings.begin() + 6, SettingInfo::Section("DEVICE"));
+  // System: GENERAL (sleep timeout, files), CONNECTIVITY (WiFi, KOReader, OPDS), MAINTENANCE (clear, updates, reboot)
+  // Items order: Sleep Timeout(0), Show Hidden Files(1), Show Free Heap(2),
+  //              WiFi(3), KOReader Sync(4), OPDS Browser(5),
+  //              Clear Cache(6), Check Updates(7), Language(8), Device Info(9), Reboot(10)
+  systemSettings.insert(systemSettings.begin() + 9, SettingInfo::Section("DEVICE"));
   systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
   systemSettings.insert(systemSettings.begin(), SettingInfo::Section("GENERAL"));
 

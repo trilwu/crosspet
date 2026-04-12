@@ -36,9 +36,14 @@ std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuI
   items.push_back({MenuAction::SELECT_CHAPTER, StrId::STR_SELECT_CHAPTER});
   items.push_back({MenuAction::GO_TO_PERCENT, StrId::STR_GO_TO_PERCENT});
   if (hasFootnotes) items.push_back({MenuAction::FOOTNOTES, StrId::STR_FOOTNOTES});
+  if (hasStarredPages) items.push_back({MenuAction::STARRED_PAGES, StrId::STR_STARRED_PAGES});
 
   // DISPLAY section
+  items.push_back({MenuAction::FONT_FAMILY, StrId::STR_FONT_FAMILY});
+  items.push_back({MenuAction::FONT_SIZE, StrId::STR_FONT_SIZE});
   items.push_back({MenuAction::ROTATE_SCREEN, StrId::STR_ORIENTATION});
+  items.push_back({MenuAction::AUTO_PAGE_TURN, StrId::STR_AUTO_TURN_PAGES_PER_MIN});
+  items.push_back({MenuAction::AUTO_PAGE_TURN_SPEED, StrId::STR_AUTO_PAGE_TURN});
 
   // FEATURES section
   items.push_back({MenuAction::SCREENSHOT, StrId::STR_SCREENSHOT_BUTTON});
@@ -46,13 +51,6 @@ std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuI
   items.push_back({MenuAction::SYNC, StrId::STR_SYNC_PROGRESS});
   items.push_back({MenuAction::GO_HOME, StrId::STR_GO_HOME_BUTTON});
   items.push_back({MenuAction::DELETE_CACHE, StrId::STR_DELETE_CACHE});
-
-  // CROSSPET section
-  items.push_back({MenuAction::FONT_FAMILY, StrId::STR_FONT_FAMILY});
-  items.push_back({MenuAction::FONT_SIZE, StrId::STR_FONT_SIZE});
-  items.push_back({MenuAction::AUTO_PAGE_TURN, StrId::STR_AUTO_PAGE_TURN});
-  items.push_back({MenuAction::AUTO_PAGE_TURN_SPEED, StrId::STR_AUTO_TURN_PAGES_PER_MIN});
-  if (hasStarredPages) items.push_back({MenuAction::STARRED_PAGES, StrId::STR_STARRED_PAGES});
 
   return items;
 }
@@ -62,22 +60,17 @@ std::vector<EpubReaderMenuActivity::SectionInfo> EpubReaderMenuActivity::buildSe
   std::vector<SectionInfo> sects;
   int idx = 0;
 
-  // NAVIGATION: 2 fixed + optional footnotes
-  const int navCount = 2 + (hasFootnotes ? 1 : 0);
+  // NAVIGATION: 2 fixed + optional footnotes + optional starred
+  const int navCount = 2 + (hasFootnotes ? 1 : 0) + (hasStarredPages ? 1 : 0);
   sects.push_back({"NAVIGATION", idx, navCount});
   idx += navCount;
 
-  // DISPLAY: orientation only
-  sects.push_back({"DISPLAY", idx, 1});
-  idx += 1;
+  // DISPLAY: font family, font size, orientation, auto page turn toggle, speed
+  sects.push_back({"DISPLAY", idx, 5});
+  idx += 5;
 
   // FEATURES: always 5
   sects.push_back({"FEATURES", idx, 5});
-  idx += 5;
-
-  // CROSSPET: font family, font size, auto page turn toggle, speed + optional starred
-  const int cpCount = 4 + (hasStarredPages ? 1 : 0);
-  sects.push_back({"CROSSPET", idx, cpCount});
 
   return sects;
 }

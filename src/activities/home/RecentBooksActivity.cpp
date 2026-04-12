@@ -90,13 +90,16 @@ void RecentBooksActivity::renderCover(int bookIdx, int gridCol, int gridRow,
   const int cx = startX + gridCol * (cardW + COVER_GAP);
   const int cy = startY + gridRow * (cardH + 30);  // 30 = space for title below
 
-  // Cover border — thicker when selected
-  const int borderW = selected ? 3 : 1;
-  renderer.drawRoundedRect(cx, cy, cardW, cardH, borderW, COVER_R, true);
+  // Selection highlight
+  if (selected) {
+    renderer.fillRoundedRect(cx - 3, cy - 3, cardW + 6, cardH + 6, COVER_R + 2, Color::Black);
+  }
 
-  // Cover thumbnail or default placeholder
+  // Cover border
+  renderer.drawRoundedRect(cx, cy, cardW, cardH, 1, COVER_R, true);
+
+  // Cover thumbnail
   const RecentBook& book = recentBooks[bookIdx];
-  bool coverDrawn = false;
   if (!book.coverBmpPath.empty()) {
     const std::string thumbPath = UITheme::getCoverThumbPath(book.coverBmpPath, THUMB_H);
     FsFile f;
@@ -106,15 +109,9 @@ void RecentBooksActivity::renderCover(int bookIdx, int gridCol, int gridRow,
         int bmpW = std::min((int)bmp.getWidth(), cardW - 4);
         int bmpH = std::min((int)bmp.getHeight(), cardH - 4);
         renderer.drawBitmap(bmp, cx + (cardW - bmpW) / 2, cy + 2, bmpW, bmpH);
-        coverDrawn = true;
       }
       f.close();
     }
-  }
-  if (!coverDrawn) {
-    auto placeholder = renderer.truncatedText(SMALL_FONT_ID, book.title.c_str(), cardW - 12);
-    const int phW = renderer.getTextWidth(SMALL_FONT_ID, placeholder.c_str());
-    renderer.drawText(SMALL_FONT_ID, cx + (cardW - phW) / 2, cy + cardH / 2 - 6, placeholder.c_str());
   }
 
   // Progress bar at bottom of card
@@ -125,12 +122,11 @@ void RecentBooksActivity::renderCover(int bookIdx, int gridCol, int gridRow,
   const int fillW = barW * book.progressPercent / 100;
   if (fillW > 1) renderer.fillRect(barX, barY, fillW, 4);
 
-  // Title below card (truncated, centered) — bold when selected
+  // Title below card (truncated, centered)
   const int titleY = cy + cardH + 4;
   auto title = renderer.truncatedText(SMALL_FONT_ID, book.title.c_str(), cardW - 2);
   const int titleW = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
-  const auto style = selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR;
-  renderer.drawText(SMALL_FONT_ID, cx + (cardW - titleW) / 2, titleY, title.c_str(), true, style);
+  renderer.drawText(SMALL_FONT_ID, cx + (cardW - titleW) / 2, titleY, title.c_str(), !selected);
 }
 
 void RecentBooksActivity::render(RenderLock&&) {
