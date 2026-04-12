@@ -2,7 +2,7 @@
 
 **Your pocket e-reader — with a virtual chicken.**
 
-CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader) — open-source firmware for the **Xteink X4** e-paper reader, built with **PlatformIO** on **ESP32-C3**.
+CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader) — open-source firmware for the **Xteink X3 / X4** e-paper readers, built with **PlatformIO** on **ESP32-C3**.
 
 ![](./docs/images/crosspet.png)
 
@@ -13,9 +13,9 @@ CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoi
 | MCU | ESP32-C3 RISC-V @ 160MHz |
 | RAM | ~380KB (no PSRAM) |
 | Flash | 16MB |
-| Display | 800x480 E-Ink (SSD1677) |
+| Display | 800x480 E-Ink (SSD1677) — X3 & X4 supported |
 | Storage | SD Card |
-| Wireless | WiFi 802.11 b/g/n, BLE 5.0 (hardware present, not used by firmware) |
+| Wireless | WiFi 802.11 b/g/n, BLE 5.0 |
 
 ---
 
@@ -29,7 +29,7 @@ CrossPet builds on top of [CrossPoint Reader](https://github.com/crosspoint-read
 | **Font families** | Bookerly (1 reader font) | Bookerly, **Lexend**, **Bokerlam** (3 reader fonts) |
 | **File formats** | EPUB, XTC | EPUB, XTC **(>2GB support)**, **TXT/Markdown** |
 | **Sleep screens** | Dark, Custom, Cover (3 modes) | **9 modes** including Clock, Reading Stats, **Page Overlay** |
-| **Sleep image config** | Manual file placement | **All-in-one app** with mode selector + image picker + overlay slideshow |
+| **Sleep image config** | Manual file placement | **All-in-one app** with mode selector + image picker + preview slideshow + pin/unpin |
 | **Virtual pet** | — | **Tamagotchi-style chicken** that grows with reading (5 stages, 3 variants) |
 | **Mini games** | — | **Chess, Caro, Sudoku, Minesweeper, 2048** |
 | **Auto page turn** | — | **On/off toggle + 1-20 PPM**, configurable as power button action |
@@ -39,6 +39,7 @@ CrossPet builds on top of [CrossPoint Reader](https://github.com/crosspoint-read
 | **Pomodoro timer** | — | **Work/break timer** with pet happiness bonus |
 | **Home screen** | File browser list | **Cover art cards**, recent books grid, clock/weather/pet widgets |
 | **Recent books** | Text list | **3-column cover grid** with progress bars |
+| **Page turn perf** | Standard | **Font cache** for faster page turns, silent next-chapter pre-indexing |
 | **UI themes** | Default | **5 themes**: Classic, Lyra, Lyra Extended, CrossPet, CrossPet Classic |
 | **Dark mode** | — | Invertible display |
 | **Power button** | Basic (sleep/ignore) | **9 configurable actions** per single/double/triple click |
@@ -46,9 +47,10 @@ CrossPet builds on top of [CrossPoint Reader](https://github.com/crosspoint-read
 | **OPDS browser** | Built-in | Same |
 | **KOReader Sync** | Built-in | Same |
 | **WiFi upload/OTA** | Built-in | Same |
+| **Battery/sleep** | Basic sleep | **Optimized sleep routine** from original firmware, lower battery drain |
 | **Language** | English + community translations | Same + **Vietnamese UI** |
 
-> CrossPet inherits all core reading features from CrossPoint and adds pet gameplay, tools, games, and UI enhancements on top. Both firmwares run on the same Xteink X4 hardware.
+> CrossPet inherits all core reading features from CrossPoint and adds pet gameplay, tools, games, and UI enhancements on top. Both firmwares run on the same Xteink X3/X4 hardware.
 
 ---
 
@@ -61,13 +63,15 @@ CrossPet builds on top of [CrossPoint Reader](https://github.com/crosspoint-read
 - **TXT / Markdown** with auto-wrapping and chapter detection
 - **3 font families** — Bookerly, Lexend (new), Bokerlam (Vietnamese serif)
 - **4 font sizes** — Small, Medium, Large, Extra Large
-- **Anti-aliased grayscale** text rendering with 3 darkness levels
-- **Multi-language hyphenation** support
+- **Anti-aliased grayscale** text rendering (X3 enhanced grayscale)
+- **Font cache** for faster page turns + silent next-chapter pre-indexing
+- **Multi-language hyphenation** support (ISO 639-2 language codes)
 - **4 screen orientations** with remappable buttons
 - **Auto page turn** — on/off toggle + speed 1-20 pages/min (global setting)
 - **Reading statistics & streaks** — per-session, daily, all-time tracking
 - **KOReader Sync** for cross-device reading progress
-- **Bookmarks** (starred pages) via long-press Confirm
+- **Bookmarks** (starred pages) via long-press Confirm, with delete support
+- **File browser** shows file extensions, hidden directories, directory brackets
 
 > **Note:** Bokerlam font may not have all Unicode glyphs. Missing characters are silently hidden rather than showing placeholder symbols. Test with your books before long reading sessions.
 
@@ -97,7 +101,7 @@ CrossPet builds on top of [CrossPoint Reader](https://github.com/crosspoint-read
 | **Reading Stats** | Today's reading time, all-time total, current book progress |
 | **Page Overlay** | PNG/BMP image composited on top of current book page |
 
-**Page Overlay slideshow:** Put PNG images (with transparency) in `/sleep/` on your SD card. The Sleep Image app lets you preview each overlay on your current book page and cycle through them.
+**Sleep Image app:** Put PNG/BMP images in `/sleep/` on your SD card. The app lets you preview each image in a slideshow, pin a specific image (left button), or unpin to return to random selection. Works for both Custom and Page Overlay modes.
 
 > **Battery warning:** Clock and Reading Stats modes require **Keep Clock Alive** enabled to update during sleep. This drains ~3-4mA continuously (~40 days on a full charge instead of months). Only enable if you actively use these sleep screen modes.
 
@@ -141,7 +145,7 @@ Your chicken grows with every page you read.
 | **Pomodoro** | Work/break timer with pet happiness bonus |
 | **Virtual Pet** | Pet care, feeding, evolution tracking |
 | **Reading Stats** | Today/total/sessions summary with streak info |
-| **Sleep Image** | All-in-one sleep mode selector + image picker + overlay slideshow |
+| **Sleep Image** | Sleep mode selector + image picker + preview slideshow + pin/unpin |
 | **OPDS Browser** | Browse and download from OPDS catalog servers (requires setup) |
 | **Chess** | Full chess game with AI (Easy/Medium/Hard) |
 | **Caro** | Gomoku (5-in-a-row) with AI |
@@ -156,6 +160,7 @@ Your chicken grows with every page you read.
 - **KOReader Sync** — sync reading progress across devices
 - **WiFi OTA updates** — update firmware over-the-air
 - **Weather sync** — Open-Meteo API (no account required)
+- **Battery charging indicator** — lightning bolt icon when charging
 
 > **Note:** WiFi uses 80-200mA. Charge your device before OTA updates or long sync sessions.
 
@@ -196,8 +201,7 @@ Fully customizable — each element can be shown or hidden independently:
 | **Fading Fix** | On/Off | Compensates for sunlight-induced fading |
 | **Dark Mode** | On/Off | Inverts display colors |
 | **UI Theme** | Classic, Lyra, Lyra Extended, CrossPet, CrossPet Classic | Visual theme for UI |
-| **Text Darkness** | Normal, Dark, Extra Dark | Adjusts rendered text intensity |
-| **Text Anti-Aliasing** | On/Off | 4-level grayscale smoothing |
+| **Text Anti-Aliasing** | On/Off | 4-level grayscale smoothing (X3 enhanced) |
 
 ---
 
@@ -205,6 +209,7 @@ Fully customizable — each element can be shown or hidden independently:
 
 ### Battery Life
 
+- **Optimized sleep routine** from original firmware — improved battery consumption in sleep mode.
 - **Keep Clock Alive** drains ~3-4mA continuously. Only enable for Clock or Reading Stats sleep screens. Disable otherwise.
 - **Sleep Refresh Interval** requires Keep Clock Alive to be ON. Both settings work together.
 - **WiFi** uses significant power (80-200mA). Charge before OTA updates.
@@ -233,7 +238,7 @@ Fully customizable — each element can be shown or hidden independently:
 
 ### Web (latest firmware)
 
-1. Connect your Xteink X4 to your computer via USB-C and wake/unlock the device
+1. Connect your Xteink X3/X4 to your computer via USB-C and wake/unlock the device
 2. Go to https://xteink.dve.al/ and click "Flash CrossPoint firmware"
 
 To revert back to the official firmware, you can flash the latest official firmware from https://xteink.dve.al/, or swap
@@ -250,7 +255,7 @@ See [Development](#development) below.
 * **PlatformIO Core** (`pio`) or **VS Code + PlatformIO IDE**
 * Python 3.8+
 * USB-C cable for flashing the ESP32-C3
-* Xteink X4
+* Xteink X3 or X4
 
 ### Checking out the code
 
@@ -260,7 +265,7 @@ git clone --recursive https://github.com/trilwu/crosspet
 
 ### Flashing your device
 
-Connect your Xteink X4 to your computer via USB-C and run:
+Connect your Xteink X3/X4 to your computer via USB-C and run:
 
 ```sh
 pio run --target upload
@@ -330,6 +335,6 @@ Contributions welcome! See [contributing docs](./docs/contributing/README.md).
 
 ---
 
-CrossPet Reader is **not affiliated with Xteink or any manufacturer of the X4 hardware**.
+CrossPet Reader is **not affiliated with Xteink or any manufacturer of the X3/X4 hardware**.
 
 Based on [CrossPoint Reader](https://github.com/crosspoint-reader/crosspoint-reader). Inspired by [diy-esp32-epub-reader](https://github.com/atomic14/diy-esp32-epub-reader) by atomic14.
