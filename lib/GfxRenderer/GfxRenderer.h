@@ -35,7 +35,6 @@ class GfxRenderer {
   Orientation orientation;
   bool fadingFix;
   bool darkMode;
-  uint8_t textDarkness = 0;  // 0=normal, 1=dark, 2=extra dark
   mutable bool nextRefreshFull = false;  // if true, next displayBuffer() upgrades to FULL_REFRESH
   mutable bool nextRefreshHalf = false;  // if true, next displayBuffer() upgrades to HALF_REFRESH
   uint8_t* frameBuffer = nullptr;
@@ -86,9 +85,6 @@ class GfxRenderer {
   void setDarkMode(const bool enabled) { darkMode = enabled; }
   bool isDarkMode() const { return darkMode; }
 
-  // Text darkness control (0=normal, 1=dark, 2=extra dark; only affects AA/grayscale rendering)
-  void setTextDarkness(const uint8_t d) { textDarkness = d; }
-  uint8_t getTextDarkness() const { return textDarkness; }
 
   // Request that the next displayBuffer() call uses FULL_REFRESH to clear ghosting.
   // Called by ActivityManager on activity transitions; resets automatically after use.

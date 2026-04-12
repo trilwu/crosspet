@@ -128,8 +128,7 @@ void SettingsActivity::onEnter() {
   appsSettings.push_back(SettingInfo::Section("OPTIONS"));
   appsSettings.push_back(SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode,
       "darkMode", StrId::STR_CROSSPET));
-  appsSettings.push_back(SettingInfo::Enum(StrId::STR_TEXT_DARKNESS, &CrossPointSettings::textDarkness,
-      {StrId::STR_NORMAL, StrId::STR_DARK, StrId::STR_EXTRA_DARK}, "textDarkness", StrId::STR_CROSSPET));
+  // Text darkness setting removed — was dead code (renderer never applied the value)
   appsSettings.push_back(SettingInfo::DynamicToggle(
       StrId::STR_HOME_FOCUS_MODE,
       [] { return PET_SETTINGS.homeFocusMode; },

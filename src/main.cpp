@@ -379,6 +379,23 @@ void setup() {
       if (clockValid) g_clockApproximate = true;
     }
 
+    // Strategy 3: Build-time fallback — at least gives a baseline date for reading stats
+    if (!clockValid) {
+      // __DATE__ format: "Mmm dd yyyy", __TIME__: "hh:mm:ss"
+      // Use a compile-time constant as minimum valid timestamp
+      struct tm buildTm = {};
+      const char buildDate[] = __DATE__ " " __TIME__;
+      // Parse "Mmm dd yyyy hh:mm:ss"
+      strptime(buildDate, "%b %d %Y %H:%M:%S", &buildTm);
+      time_t buildTime = mktime(&buildTm);
+      if (buildTime > 1700000000L) {
+        struct timeval tv = {buildTime, 0};
+        settimeofday(&tv, nullptr);
+        g_clockApproximate = true;
+        LOG_DBG("MAIN", "Clock set to build time: %lu", (unsigned long)buildTime);
+      }
+    }
+
     g_rtcSleepMagic = 0;  // consume — next boot treats as cold boot unless we sleep again
   }
 
@@ -473,8 +490,6 @@ void loop() {
       renderer.setDarkMode(SETTINGS.darkMode);
       lastDarkMode = SETTINGS.darkMode;
     }
-    // textDarkness is only applied in reader activities, not globally,
-    // so UI text stays at normal weight (0).
   }
 
   if (Serial && millis() - lastMemPrint >= 10000) {

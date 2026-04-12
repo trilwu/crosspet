@@ -220,9 +220,9 @@ class CrossPointSettings {
   uint8_t showHiddenFiles = 0;
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
-  // Text darkness: 0=normal, 1=dark (light gray→dark gray), 2=extra dark (all→black)
-  // Default 1 (dark) — closer to the bold BW look users expect from e-ink
-  uint8_t textDarkness = 1;
+  // Text darkness removed — was dead code (renderer never read the value).
+  // Kept as field for JSON backward compatibility (ignored on load/save).
+  uint8_t textDarkness = 0;
 
   // Developer: show free heap in header (0=off, 1=on)
   uint8_t showFreeHeap = 0;

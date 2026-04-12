@@ -113,8 +113,6 @@ void TxtReaderActivity::onEnter() {
 
   ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
 
-  // Apply text darkness setting for grayscale/AA rendering
-  renderer.setTextDarkness(SETTINGS.textDarkness);
 
   txt->setupCacheDir();
 
@@ -134,9 +132,6 @@ void TxtReaderActivity::onEnter() {
 
 void TxtReaderActivity::onExit() {
   Activity::onExit();
-
-  // Reset text darkness to normal for UI screens
-  renderer.setTextDarkness(0);
 
   // Request half refresh for the next screen to clear accumulated reader ghosting
   renderer.requestNextHalfRefresh();

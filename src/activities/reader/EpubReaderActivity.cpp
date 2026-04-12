@@ -58,8 +58,6 @@ void EpubReaderActivity::onEnter() {
   // NOTE: This affects layout math and must be applied before any render calls.
   ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
 
-  // Apply text darkness setting for grayscale/AA rendering
-  renderer.setTextDarkness(SETTINGS.textDarkness);
 
   epub->setupCacheDir();
 
@@ -110,9 +108,6 @@ void EpubReaderActivity::onEnter() {
 
 void EpubReaderActivity::onExit() {
   Activity::onExit();
-
-  // Reset text darkness to normal for UI screens
-  renderer.setTextDarkness(0);
 
   // Request half refresh for the next screen to clear accumulated reader ghosting
   renderer.requestNextHalfRefresh();
