@@ -1,6 +1,7 @@
 #include "LyraTheme.h"
 
 #include <GfxRenderer.h>
+#include <HalGPIO.h>
 #include <HalPowerManager.h>
 #include <HalStorage.h>
 #include <I18n.h>
@@ -88,83 +89,61 @@ const uint8_t* iconForName(UIIcon icon, int size) {
 }
 }  // namespace
 
-void LyraTheme::drawBatteryLeft(const GfxRenderer& renderer, Rect rect, const bool showPercentage) const {
-  // Left aligned: icon on left, percentage on right (reader mode)
-  const uint16_t percentage = powerManager.getBatteryPercentage();
-  const int y = rect.y + 6;
-  const int battWidth = LyraMetrics::values.batteryWidth;
-
-  if (showPercentage) {
-    const auto percentageText = std::to_string(percentage) + "%";
-    renderer.drawText(SMALL_FONT_ID, rect.x + batteryPercentSpacing + battWidth, rect.y, percentageText.c_str());
-  }
-
-  // Draw icon
-  const int x = rect.x;
-  // Top line
+// Shared Lyra battery icon with charging lightning bolt
+void drawLyraBatteryIcon(const GfxRenderer& renderer, int x, int y, int battWidth, int rectHeight,
+                         uint16_t percentage) {
   renderer.drawLine(x + 1, y, x + battWidth - 3, y);
-  // Bottom line
-  renderer.drawLine(x + 1, y + rect.height - 1, x + battWidth - 3, y + rect.height - 1);
-  // Left line
-  renderer.drawLine(x, y + 1, x, y + rect.height - 2);
-  // Battery end
-  renderer.drawLine(x + battWidth - 2, y + 1, x + battWidth - 2, y + rect.height - 2);
+  renderer.drawLine(x + 1, y + rectHeight - 1, x + battWidth - 3, y + rectHeight - 1);
+  renderer.drawLine(x, y + 1, x, y + rectHeight - 2);
+  renderer.drawLine(x + battWidth - 2, y + 1, x + battWidth - 2, y + rectHeight - 2);
   renderer.drawPixel(x + battWidth - 1, y + 3);
-  renderer.drawPixel(x + battWidth - 1, y + rect.height - 4);
-  renderer.drawLine(x + battWidth - 0, y + 4, x + battWidth - 0, y + rect.height - 5);
+  renderer.drawPixel(x + battWidth - 1, y + rectHeight - 4);
+  renderer.drawLine(x + battWidth - 0, y + 4, x + battWidth - 0, y + rectHeight - 5);
 
-  // Draw bars
-  if (percentage > 10) {
-    renderer.fillRect(x + 2, y + 2, 3, rect.height - 4);
-  }
-  if (percentage > 40) {
-    renderer.fillRect(x + 6, y + 2, 3, rect.height - 4);
-  }
-  if (percentage > 70) {
-    renderer.fillRect(x + 10, y + 2, 3, rect.height - 4);
+  const bool charging = gpio.isUsbConnected();
+
+  if (percentage > 10 || charging) renderer.fillRect(x + 2, y + 2, 3, rectHeight - 4);
+  if (percentage > 40 || charging) renderer.fillRect(x + 6, y + 2, 3, rectHeight - 4);
+  if (percentage > 70) renderer.fillRect(x + 10, y + 2, 3, rectHeight - 4);
+
+  if (charging) {
+    const int boltX = x + 4;
+    const int boltY = y + 2;
+    renderer.drawLine(boltX + 4, boltY + 0, boltX + 5, boltY + 0, false);
+    renderer.drawLine(boltX + 3, boltY + 1, boltX + 4, boltY + 1, false);
+    renderer.drawLine(boltX + 2, boltY + 2, boltX + 5, boltY + 2, false);
+    renderer.drawLine(boltX + 3, boltY + 3, boltX + 4, boltY + 3, false);
+    renderer.drawLine(boltX + 2, boltY + 4, boltX + 3, boltY + 4, false);
+    renderer.drawLine(boltX + 1, boltY + 5, boltX + 4, boltY + 5, false);
+    renderer.drawLine(boltX + 2, boltY + 6, boltX + 3, boltY + 6, false);
+    renderer.drawLine(boltX + 1, boltY + 7, boltX + 2, boltY + 7, false);
   }
 }
 
-void LyraTheme::drawBatteryRight(const GfxRenderer& renderer, Rect rect, const bool showPercentage) const {
-  // Right aligned: percentage on left, icon on right (UI headers)
+void LyraTheme::drawBatteryLeft(const GfxRenderer& renderer, Rect rect, const bool showPercentage) const {
   const uint16_t percentage = powerManager.getBatteryPercentage();
-  const int y = rect.y + 6;
-  const int battWidth = LyraMetrics::values.batteryWidth;
+
+  if (showPercentage) {
+    const auto percentageText = std::to_string(percentage) + "%";
+    renderer.drawText(SMALL_FONT_ID, rect.x + batteryPercentSpacing + LyraMetrics::values.batteryWidth, rect.y,
+                      percentageText.c_str());
+  }
+
+  drawLyraBatteryIcon(renderer, rect.x, rect.y + 6, LyraMetrics::values.batteryWidth, rect.height, percentage);
+}
+
+void LyraTheme::drawBatteryRight(const GfxRenderer& renderer, Rect rect, const bool showPercentage) const {
+  const uint16_t percentage = powerManager.getBatteryPercentage();
 
   if (showPercentage) {
     const auto percentageText = std::to_string(percentage) + "%";
     const int textWidth = renderer.getTextWidth(SMALL_FONT_ID, percentageText.c_str());
-    // Clear the area where we're going to draw the text to prevent ghosting
     const auto textHeight = renderer.getTextHeight(SMALL_FONT_ID);
     renderer.fillRect(rect.x - textWidth - batteryPercentSpacing, rect.y, textWidth, textHeight, false);
-    // Draw text to the left of the icon
     renderer.drawText(SMALL_FONT_ID, rect.x - textWidth - batteryPercentSpacing, rect.y, percentageText.c_str());
   }
 
-  // Draw icon at rect.x
-  const int x = rect.x;
-  // Top line
-  renderer.drawLine(x + 1, y, x + battWidth - 3, y);
-  // Bottom line
-  renderer.drawLine(x + 1, y + rect.height - 1, x + battWidth - 3, y + rect.height - 1);
-  // Left line
-  renderer.drawLine(x, y + 1, x, y + rect.height - 2);
-  // Battery end
-  renderer.drawLine(x + battWidth - 2, y + 1, x + battWidth - 2, y + rect.height - 2);
-  renderer.drawPixel(x + battWidth - 1, y + 3);
-  renderer.drawPixel(x + battWidth - 1, y + rect.height - 4);
-  renderer.drawLine(x + battWidth - 0, y + 4, x + battWidth - 0, y + rect.height - 5);
-
-  // Draw bars
-  if (percentage > 10) {
-    renderer.fillRect(x + 2, y + 2, 3, rect.height - 4);
-  }
-  if (percentage > 40) {
-    renderer.fillRect(x + 6, y + 2, 3, rect.height - 4);
-  }
-  if (percentage > 70) {
-    renderer.fillRect(x + 10, y + 2, 3, rect.height - 4);
-  }
+  drawLyraBatteryIcon(renderer, rect.x, rect.y + 6, LyraMetrics::values.batteryWidth, rect.height, percentage);
 }
 
 void LyraTheme::drawHeader(const GfxRenderer& renderer, Rect rect, const char* title, const char* subtitle) const {

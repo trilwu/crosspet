@@ -572,6 +572,11 @@ void loop() {
       break;  // PAGE_TURN, BLOCK_FRONT, STAR_PAGE handled by reader activities
   }
 
+  // Refresh battery icon when USB is plugged or unplugged
+  if (gpio.wasUsbStateChanged()) {
+    activityManager.requestUpdate();
+  }
+
   const unsigned long activityStartTime = millis();
   activityManager.loop();
   const unsigned long activityDuration = millis() - activityStartTime;
