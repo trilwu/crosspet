@@ -18,11 +18,19 @@ parser.add_argument("--2bit", dest="is2Bit", action="store_true", help="generate
 parser.add_argument("--additional-intervals", dest="additional_intervals", action="append", help="Additional code point intervals to export as min,max. This argument can be repeated.")
 parser.add_argument("--compress", dest="compress", action="store_true", help="Compress glyph bitmaps using DEFLATE with group-based compression.")
 parser.add_argument("--force-autohint", dest="force_autohint", action="store_true", help="Force FreeType auto-hinter instead of native font hinting. Improves stem width consistency for fonts with weak or no native TrueType hints.")
+parser.add_argument("--weight", dest="weight", type=float, default=None, help="Set variation axis weight for variable fonts (e.g. 350). Only works with variable .ttf files.")
 args = parser.parse_args()
 
 GlyphProps = namedtuple("GlyphProps", ["width", "height", "advance_x", "left", "top", "data_length", "data_offset", "code_point"])
 
 font_stack = [freetype.Face(f) for f in args.fontstack]
+# Apply variable font weight axis if requested
+if args.weight is not None:
+    for face in font_stack:
+        try:
+            face.set_var_design_coords([args.weight])
+        except Exception:
+            pass  # Not a variable font, ignore
 is2Bit = args.is2Bit
 size = args.size
 font_name = args.name
@@ -864,6 +872,7 @@ if compress:
 else:
     print(f"    nullptr,")
     print(f"    0,")
+print(f"    nullptr,")  # glyphToGroup (nullptr for contiguous-group fonts)
 if kern_map:
     print(f"    {font_name}KernLeftClasses,")
     print(f"    {font_name}KernRightClasses,")

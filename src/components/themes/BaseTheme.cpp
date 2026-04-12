@@ -747,9 +747,10 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
                       true);
   }
 
-  // Draw Clock (left-most element) — respects statusBarClock toggle for all themes
+  // Draw Clock (left-most element) — hidden in focus mode
+  const bool inFocusMode = PET_SETTINGS.homeFocusMode;
   int clockWidth = 0;
-  if (SETTINGS.statusBarClock && PET_SETTINGS.appClock) {
+  if (SETTINGS.statusBarClock && PET_SETTINGS.appClock && !inFocusMode) {
     time_t now;
     time(&now);
     struct tm timeinfo;
@@ -764,8 +765,8 @@ void BaseTheme::drawStatusBar(GfxRenderer& renderer, const float bookProgress, c
     renderer.drawText(SMALL_FONT_ID, metrics.statusBarHorizontalMargin + orientedMarginLeft, textY, clockBuf);
   }
 
-  // Draw Battery (after clock)
-  const bool showBatteryPercentage =
+  // Draw Battery (after clock) — icon always shown, % hidden in focus mode
+  const bool showBatteryPercentage = !inFocusMode &&
       SETTINGS.hideBatteryPercentage == CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_NEVER;
   if (SETTINGS.statusBarBattery) {
     const int batteryX = metrics.statusBarHorizontalMargin + orientedMarginLeft + 1 +

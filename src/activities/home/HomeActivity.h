@@ -51,7 +51,7 @@ class HomeActivity final : public Activity {
   void renderBottomBarSelection();  // Selection highlight only (per-frame)
   void renderButtonHints();         // Static button hint shapes (cached in buffer)
   void renderSelectionHighlight();
-  void renderFocusCard();           // Focus mode: large single-book card
+  void renderFocusCard();               // Focus mode: large single-book card
 
   // CrossPet Classic (v1.6.8 grid layout) render helpers
   void renderCoverPanel(int panelX, int panelY, int panelW, int panelH, int coverH);

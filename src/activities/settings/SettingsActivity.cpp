@@ -43,10 +43,6 @@ void SettingsActivity::onEnter() {
   readerSettings.clear();
   controlsSettings.clear();
   systemSettings.clear();
-  displaySettings.reserve(12);
-  readerSettings.reserve(20);
-  controlsSettings.reserve(12);
-  systemSettings.reserve(16);
 
   for (const auto& setting : getSettingsList()) {
     if (setting.category == StrId::STR_NONE_OPT) continue;
@@ -93,9 +89,6 @@ void SettingsActivity::onEnter() {
 
   // Build CrossPet tab — per-app toggles with their config settings, plus options.
   appsSettings.clear();
-  appsSettings.reserve(24);
-
-  // APPS section: per-app visibility toggles with related config underneath
   appsSettings.push_back(SettingInfo::Section("APPS"));
   struct AppToggle { StrId id; uint8_t CrossPetSettings::* field; const char* key; };
   const AppToggle appToggles[] = {
@@ -117,7 +110,6 @@ void SettingsActivity::onEnter() {
   }
 
   // CLOCK section: clock-related config settings (from Display)
-  // Note: device has no RTC battery backup — time is lost during deep sleep.
   appsSettings.push_back(SettingInfo::Section("CLOCK (Beta)"));
   appsSettings.push_back(SettingInfo::Enum(StrId::STR_CLOCK_MODE, &CrossPointSettings::clockMode,
       {StrId::STR_CLOCK_NTP, StrId::STR_CLOCK_MANUAL}, "clockMode", StrId::STR_CROSSPET));
@@ -127,7 +119,7 @@ void SettingsActivity::onEnter() {
       {StrId::STR_OFF, StrId::STR_1_MIN, StrId::STR_5_MIN, StrId::STR_10_MIN, StrId::STR_30_MIN, StrId::STR_60_MIN},
       "sleepRefreshInterval", StrId::STR_CROSSPET));
 
-  // WEATHER section: weather-related config settings (from Display)
+  // WEATHER section
   appsSettings.push_back(SettingInfo::Section("WEATHER"));
   appsSettings.push_back(SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
       {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CROSSPET));
@@ -144,11 +136,10 @@ void SettingsActivity::onEnter() {
       [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
       "homeFocusMode", StrId::STR_CROSSPET));
 
-  // Insert section headers into each category (device UI only, after ACTION items are appended).
+  // Insert section headers into each category
   // Display: SCREEN (sleep action + optional cover settings), APPEARANCE (remaining)
   {
-    // Find where sleep-related items end (after sleep action + any cover mode/filter)
-    int screenEnd = 1;  // At least the Sleep Screen action
+    int screenEnd = 1;
     for (int i = 1; i < static_cast<int>(displaySettings.size()); i++) {
       if (displaySettings[i].nameId == StrId::STR_SLEEP_COVER_MODE ||
           displaySettings[i].nameId == StrId::STR_SLEEP_COVER_FILTER)
@@ -161,28 +152,23 @@ void SettingsActivity::onEnter() {
   }
   displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
 
-  // Reader (12 items after redirect): TEXT (0-6), READING (7-10), ACTIONS (11)
-  if (readerSettings.size() >= 12) {
+  // Reader: TEXT (0-6), READING (7-10), ACTIONS (11)
+  if (readerSettings.size() >= 12)
     readerSettings.insert(readerSettings.begin() + 11, SettingInfo::Section("ACTIONS"));
-  }
-  if (readerSettings.size() >= 8) {
+  if (readerSettings.size() >= 8)
     readerSettings.insert(readerSettings.begin() + 7, SettingInfo::Section("READING"));
-  }
   readerSettings.insert(readerSettings.begin(), SettingInfo::Section("TEXT"));
 
   // Controls: BUTTONS (remap+layout 0-3), POWER BUTTON (pwr btn 4-6)
-  if (controlsSettings.size() >= 5) {
+  if (controlsSettings.size() >= 5)
     controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
-  }
   controlsSettings.insert(controlsSettings.begin(), SettingInfo::Section("BUTTONS"));
 
   // System: GENERAL (0-2), CONNECTIVITY (3-5), DEVICE (6-10)
-  if (systemSettings.size() >= 7) {
+  if (systemSettings.size() >= 7)
     systemSettings.insert(systemSettings.begin() + 6, SettingInfo::Section("DEVICE"));
-  }
-  if (systemSettings.size() >= 4) {
+  if (systemSettings.size() >= 4)
     systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
-  }
   systemSettings.insert(systemSettings.begin(), SettingInfo::Section("GENERAL"));
 
   // Reset selection to first category
@@ -193,7 +179,6 @@ void SettingsActivity::onEnter() {
   currentSettings = &displaySettings;
   settingsCount = static_cast<int>(displaySettings.size());
 
-  // Trigger first update
   requestUpdate();
 }
 
@@ -256,21 +241,11 @@ void SettingsActivity::loop() {
 
   if (hasChangedCategory) {
     switch (selectedCategoryIndex) {
-      case 0:
-        currentSettings = &displaySettings;
-        break;
-      case 1:
-        currentSettings = &readerSettings;
-        break;
-      case 2:
-        currentSettings = &controlsSettings;
-        break;
-      case 3:
-        currentSettings = &systemSettings;
-        break;
-      case 4:
-        currentSettings = &appsSettings;
-        break;
+      case 0: currentSettings = &displaySettings; break;
+      case 1: currentSettings = &readerSettings; break;
+      case 2: currentSettings = &controlsSettings; break;
+      case 3: currentSettings = &systemSettings; break;
+      case 4: currentSettings = &appsSettings; break;
     }
     settingsCount = static_cast<int>(currentSettings->size());
 

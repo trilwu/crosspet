@@ -1387,7 +1387,7 @@ const char* const STRINGS_EN[] = {
     "File Transfer",
     "Settings",
     "Calibre Library",
-    "Continue Reading",
+    "Continue",
     "No open book",
     "Start reading below",
     "Books",

@@ -10,6 +10,8 @@
 
 // Stores starred/bookmarked pages for a single book.
 // Persisted as a binary file on SD card within the book's cache directory.
+// Snippets are lazy-loaded: only spine+page index is read on book open.
+// Full snippets are loaded on first getAll() call (e.g. when viewing bookmark list).
 class BookmarkStore {
  public:
   struct Bookmark {
@@ -18,20 +20,23 @@ class BookmarkStore {
     std::string snippet;  // First ~60 chars of text from the bookmarked page
   };
 
-  // Load bookmarks from the cache directory (e.g. .crosspoint/epub_<hash>/).
+  // Load bookmark index from cache directory (compact: no snippets).
   void load(const std::string& cachePath) {
     basePath = cachePath;
     bookmarks.clear();
     dirty = false;
+    snippetsLoaded = false;
 
     FsFile f;
     if (!Storage.openFileForRead("BKM", getFilePath(), f)) {
+      snippetsLoaded = true;  // Nothing to load
       return;
     }
 
     uint8_t version;
     if (f.read(reinterpret_cast<uint8_t*>(&version), sizeof(version)) != sizeof(version) || version < 1 || version > FILE_VERSION) {
       f.close();
+      snippetsLoaded = true;
       return;
     }
 
@@ -39,6 +44,7 @@ class BookmarkStore {
     if (f.read(reinterpret_cast<uint8_t*>(&count), sizeof(count)) != sizeof(count) || count > MAX_BOOKMARKS) {
       LOG_ERR("BKM", "Invalid bookmark count: %u", static_cast<unsigned>(count));
       f.close();
+      snippetsLoaded = true;
       return;
     }
 
@@ -50,27 +56,21 @@ class BookmarkStore {
         LOG_ERR("BKM", "Truncated bookmarks file at entry %d", i);
         bookmarks.clear();
         f.close();
+        snippetsLoaded = true;
         return;
       }
-      // v2: read snippet string (length-prefixed)
+      // v2: skip snippet data (will be loaded on demand via loadSnippets)
       if (version >= 2) {
         uint8_t snippetLen = 0;
         if (f.read(&snippetLen, 1) == 1 && snippetLen > 0) {
-          char buf[MAX_SNIPPET_LEN + 1];
-          const uint8_t toRead = std::min(snippetLen, static_cast<uint8_t>(MAX_SNIPPET_LEN));
-          if (f.read(reinterpret_cast<uint8_t*>(buf), toRead) == toRead) {
-            buf[toRead] = '\0';
-            bm.snippet = buf;
-          }
-          // Skip remaining bytes if snippet was truncated
-          if (snippetLen > toRead) f.seekCur(snippetLen - toRead);
+          f.seekCur(snippetLen);
         }
       }
       bookmarks.push_back(bm);
     }
 
     f.close();
-    LOG_DBG("BKM", "Loaded %d bookmarks", count);
+    LOG_DBG("BKM", "Loaded %d bookmark indices (snippets deferred)", count);
   }
 
   // Save bookmarks to SD card (only if changed).
@@ -78,6 +78,9 @@ class BookmarkStore {
     if (!dirty || basePath.empty()) {
       return;
     }
+
+    // Ensure snippets are loaded before saving so we don't lose existing ones
+    loadSnippets();
 
     if (bookmarks.size() > UINT16_MAX) {
       LOG_ERR("BKM", "Too many bookmarks to save: %u", static_cast<unsigned>(bookmarks.size()));
@@ -129,14 +132,19 @@ class BookmarkStore {
     return true;
   }
 
-  // Check if a page is starred.
+  // Check if a page is starred (works on compact index, no snippet load needed).
   [[nodiscard]] bool has(uint16_t spineIndex, uint16_t pageNumber) const {
     return std::any_of(bookmarks.begin(), bookmarks.end(), [spineIndex, pageNumber](const Bookmark& bm) {
       return bm.spineIndex == spineIndex && bm.pageNumber == pageNumber;
     });
   }
 
-  [[nodiscard]] const std::vector<Bookmark>& getAll() const { return bookmarks; }
+  // Get all bookmarks with snippets (triggers lazy snippet load if needed).
+  [[nodiscard]] const std::vector<Bookmark>& getAll() {
+    loadSnippets();
+    return bookmarks;
+  }
+
   [[nodiscard]] bool isEmpty() const { return bookmarks.empty(); }
   void markDirty() { dirty = true; }
 
@@ -148,6 +156,7 @@ class BookmarkStore {
   std::vector<Bookmark> bookmarks;
   std::string basePath;
   bool dirty = false;
+  bool snippetsLoaded = false;
 
   [[nodiscard]] std::string getFilePath() const { return basePath + "/bookmarks.bin"; }
 
@@ -155,5 +164,49 @@ class BookmarkStore {
     return std::find_if(bookmarks.begin(), bookmarks.end(), [spineIndex, pageNumber](const Bookmark& bm) {
       return bm.spineIndex == spineIndex && bm.pageNumber == pageNumber;
     });
+  }
+
+  // Re-read file to populate snippet strings for all bookmarks.
+  void loadSnippets() {
+    if (snippetsLoaded) return;
+    snippetsLoaded = true;
+
+    FsFile f;
+    if (!Storage.openFileForRead("BKM", getFilePath(), f)) return;
+
+    uint8_t version;
+    if (f.read(reinterpret_cast<uint8_t*>(&version), sizeof(version)) != sizeof(version) || version < 2) {
+      f.close();
+      return;
+    }
+
+    uint16_t count;
+    if (f.read(reinterpret_cast<uint8_t*>(&count), sizeof(count)) != sizeof(count)) {
+      f.close();
+      return;
+    }
+
+    for (uint16_t i = 0; i < count && i < bookmarks.size(); i++) {
+      uint16_t si, pn;
+      f.read(reinterpret_cast<uint8_t*>(&si), sizeof(si));
+      f.read(reinterpret_cast<uint8_t*>(&pn), sizeof(pn));
+
+      uint8_t snippetLen = 0;
+      if (f.read(&snippetLen, 1) == 1 && snippetLen > 0) {
+        char buf[MAX_SNIPPET_LEN + 1];
+        const uint8_t toRead = std::min(snippetLen, static_cast<uint8_t>(MAX_SNIPPET_LEN));
+        if (f.read(reinterpret_cast<uint8_t*>(buf), toRead) == toRead) {
+          buf[toRead] = '\0';
+          // Only fill snippet if it's empty (newly toggled bookmarks already have one)
+          if (bookmarks[i].snippet.empty()) {
+            bookmarks[i].snippet = buf;
+          }
+        }
+        if (snippetLen > toRead) f.seekCur(snippetLen - toRead);
+      }
+    }
+
+    f.close();
+    LOG_DBG("BKM", "Loaded snippets for %d bookmarks", static_cast<int>(bookmarks.size()));
   }
 };

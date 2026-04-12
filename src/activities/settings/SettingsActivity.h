@@ -184,7 +184,6 @@ class SettingsActivity final : public Activity {
   static constexpr int categoryCount = 5;
   static const StrId categoryNames[categoryCount];
 
-  void enterCategory(int categoryIndex);
   void toggleCurrentSetting();
 
  public:

@@ -246,12 +246,12 @@ float CrossPointSettings::getReaderLineCompression() const {
     case LEXEND:
       switch (lineSpacing) {
         case TIGHT:
-          return 0.95f;
+          return 1.0f;
         case NORMAL:
         default:
-          return 1.0f;
-        case WIDE:
           return 1.1f;
+        case WIDE:
+          return 1.2f;
       }
     case BOKERLAM:
       switch (lineSpacing) {

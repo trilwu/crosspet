@@ -4,6 +4,7 @@
 #include <HalPowerManager.h>
 #include <I18n.h>
 
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "components/icons/book24.h"
 #include "components/icons/file24.h"
@@ -70,8 +71,9 @@ void CrossPetTheme::drawHeader(const GfxRenderer& renderer, Rect rect, const cha
   // Clear area
   renderer.fillRect(rect.x, rect.y, rect.width, rect.height, false);
 
-  // Battery icon on the right
-  const bool showPct =
+  // Battery icon on the right (hide percentage text in focus mode)
+  const bool inFocusMode = PET_SETTINGS.homeFocusMode;
+  const bool showPct = !inFocusMode &&
       SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS;
   const int battX = rect.x + rect.width - 12 - CrossPetMetrics::values.batteryWidth;
   drawBatteryRight(renderer,
@@ -89,8 +91,10 @@ void CrossPetTheme::drawHeader(const GfxRenderer& renderer, Rect rect, const cha
     renderer.drawText(UI_12_FONT_ID, titleX, titleY, truncated.c_str(), true, EpdFontFamily::BOLD);
   }
 
-  // Thin 1px divider at bottom
-  renderer.drawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width - 1, rect.y + rect.height - 1);
+  // Thin 1px divider at bottom (omit in focus mode for seamless look)
+  if (!inFocusMode) {
+    renderer.drawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width - 1, rect.y + rect.height - 1);
+  }
 }
 
 // ── Sub-header ────────────────────────────────────────────────────────────────

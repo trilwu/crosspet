@@ -40,7 +40,8 @@ constexpr int CP_BOTTOM_BAR_H   = 80;
 constexpr int CP_BOTTOM_ITEMS   = 4;
 constexpr int CP_BOTTOM_ICON_SZ = 32;
 constexpr int CP_BOTTOM_R       = 10;
-constexpr int CP_FOCUS_COVER_PCT = 45;  // % of availH used for focus mode cover thumbnail
+constexpr int CP_FOCUS_COVER_PCT = 62;  // % of availH used for focus mode cover thumbnail
+constexpr int CP_FOCUS_R         = 6;   // slight rounding for cover & CTA in focus mode
 }  // namespace
 
 // ── Continue reading card ─────────────────────────────────────────────────────
@@ -372,23 +373,21 @@ void HomeActivity::renderSelectionHighlight() {
   const int screenH = renderer.getScreenHeight();
   const bool focusMode = PET_SETTINGS.homeFocusMode;
   if (focusMode) {
-    // Fill CTA button black when selected (outlined by default in cached buffer)
-    constexpr int btnH = 44;
-    constexpr int btnR = 10;
-    constexpr int btnMargin = 20;
-    const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
-    const int cardW = screenW - 2 * CP_CARD_MARGIN;
-    const int btnW = cardW - 2 * btnMargin;
-    const int btnX = CP_CARD_MARGIN + btnMargin;
-    const int btnY = barY - 12 - btnH;
-    renderer.fillRoundedRect(btnX, btnY, btnW, btnH, btnR, Color::Black);
+    // Fill CTA button black when selected — square, matches cover width
+    constexpr int btnH = 40;
+    const int availH = screenH - CP_CARD_Y - 12;
+    const int coverH = availH * CP_FOCUS_COVER_PCT / 100;
+    const int coverW = (int)(coverH * 0.7f);
+    const int btnW = coverW + 4;
+    const int btnX = (screenW - btnW) / 2;
+    const int btnY = CP_CARD_Y + availH - 12 - btnH;
+    renderer.fillRoundedRect(btnX, btnY, btnW, btnH, CP_FOCUS_R, Color::Black);
     // Redraw CTA text in white
-    char ctaBuf[64];
-    snprintf(ctaBuf, sizeof(ctaBuf), "%s >", tr(STR_CONTINUE_READING));
+    const char* ctaText = tr(STR_CONTINUE_READING);
     const int medLineH = renderer.getLineHeight(UI_12_FONT_ID);
-    const int ctaW = renderer.getTextWidth(UI_12_FONT_ID, ctaBuf, EpdFontFamily::BOLD);
+    const int ctaW = renderer.getTextWidth(UI_12_FONT_ID, ctaText, EpdFontFamily::BOLD);
     renderer.drawText(UI_12_FONT_ID, btnX + (btnW - ctaW) / 2,
-                      btnY + (btnH - medLineH) / 2, ctaBuf, false, EpdFontFamily::BOLD);
+                      btnY + (btnH - medLineH) / 2, ctaText, false, EpdFontFamily::BOLD);
   } else {
     renderer.drawRoundedRect(CP_CARD_MARGIN, CP_CARD_Y, screenW - 2 * CP_CARD_MARGIN, CP_CARD_H, 2, CP_CARD_R, true);
   }
@@ -492,8 +491,8 @@ void HomeActivity::renderFocusCard() {
   const int screenH = renderer.getScreenHeight();
   const int cardX = CP_CARD_MARGIN;
   const int cardW = screenW - 2 * CP_CARD_MARGIN;
-  const int barY = screenH - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
-  const int availH = barY - CP_CARD_Y - 12;
+  // Focus mode hides bottom bar + button hints — use full height
+  const int availH = screenH - CP_CARD_Y - 12;
 
   if (recentBooks.empty()) {
     // Empty state: plain card with centered placeholder (keep border for empty state only)
@@ -521,30 +520,30 @@ void HomeActivity::renderFocusCard() {
   const int medLineH = renderer.getLineHeight(UI_12_FONT_ID);
   const int innerW = cardW - 2 * CP_PAD;
 
-  // CTA button dimensions (need to reserve space at bottom)
-  constexpr int btnH = 44;
-  constexpr int btnR = 10;
-  constexpr int btnMargin = 20;
-  const int btnW = cardW - 2 * btnMargin;
-  const int btnX = cardX + btnMargin;
-  const int btnY = barY - 12 - btnH;
+  // CTA button dimensions (same width as cover, reserve space at bottom)
+  constexpr int btnH = 40;
+  const int btnY = CP_CARD_Y + availH - 12 - btnH;
 
-  // Calculate content height to center vertically in available space above CTA
+  // Cover takes majority of space
   const int coverH = availH * CP_FOCUS_COVER_PCT / 100;
   const int coverW = (int)(coverH * 0.7f);
 
-  // Estimate total content height: cover + title + author + progress + info
-  const int titleH = medLineH * 2;  // assume up to 2 lines
+  // CTA button width matches cover
+  const int btnW = coverW + 4;  // same as cover border width
+  const int btnX = (screenW - btnW) / 2;
+
+  // Estimate total content height: cover + progress + title + author
+  const int titleH = medLineH * 2;
   const int authorH = book.author.empty() ? 0 : smallLineH;
-  const int progressH = 6 + 6 + smallLineH;  // bar + gap + info text
-  const int contentH = coverH + 12 + titleH + 2 + authorH + 12 + progressH;
+  constexpr int pBarH = 8;  // progress bar inside cover bottom, touching border
+  const int contentH = coverH + 10 + titleH + 2 + authorH;
   const int contentAreaH = btnY - CP_CARD_Y - 8;
   int y = CP_CARD_Y + std::max(0, (contentAreaH - contentH) / 2);
 
-  // Cover centered horizontally
+  // Cover centered horizontally — slight rounding
   const int coverX = (screenW - coverW) / 2;
   const int coverY = y;
-  renderer.drawRoundedRect(coverX - 2, coverY - 2, coverW + 4, coverH + 4, 1, CP_CARD_R, true);
+  renderer.drawRoundedRect(coverX - 2, coverY - 2, coverW + 4, coverH + 4, 1, CP_FOCUS_R, true);
 
   if (!book.coverBmpPath.empty()) {
     const std::string thumbPath = UITheme::getCoverThumbPath(book.coverBmpPath, coverH);
@@ -559,13 +558,21 @@ void HomeActivity::renderFocusCard() {
       f.close();
     }
   }
-  y = coverY + coverH + 12;
 
-  // Title (regular weight, up to 2 lines, centered)
-  auto titleLines = renderer.wrappedText(UI_12_FONT_ID, book.title.c_str(), innerW, 2);
+  // Progress bar inside cover bottom — rounded, then redraw border on top
+  const int pBarY = coverY + coverH - pBarH + 1;  // +1 to touch bottom border
+  renderer.fillRoundedRect(coverX, pBarY, coverW, pBarH, CP_FOCUS_R, Color::White);
+  const int fillW = coverW * book.progressPercent / 100;
+  if (fillW > 1) renderer.fillRoundedRect(coverX, pBarY, fillW, pBarH, CP_FOCUS_R, Color::Black);
+  // Redraw cover border so bottom edge stays visible
+  renderer.drawRoundedRect(coverX - 2, coverY - 2, coverW + 4, coverH + 4, 1, CP_FOCUS_R, true);
+  y = coverY + coverH + 10;
+
+  // Title (up to 2 lines, centered, bold)
+  auto titleLines = renderer.wrappedText(UI_12_FONT_ID, book.title.c_str(), innerW, 2, EpdFontFamily::BOLD);
   for (const auto& line : titleLines) {
-    const int tw = renderer.getTextWidth(UI_12_FONT_ID, line.c_str());
-    renderer.drawText(UI_12_FONT_ID, (screenW - tw) / 2, y, line.c_str(), true);
+    const int tw = renderer.getTextWidth(UI_12_FONT_ID, line.c_str(), EpdFontFamily::BOLD);
+    renderer.drawText(UI_12_FONT_ID, (screenW - tw) / 2, y, line.c_str(), true, EpdFontFamily::BOLD);
     y += medLineH;
   }
   y += 2;
@@ -574,56 +581,47 @@ void HomeActivity::renderFocusCard() {
     auto author = renderer.truncatedText(SMALL_FONT_ID, book.author.c_str(), innerW);
     const int aw = renderer.getTextWidth(SMALL_FONT_ID, author.c_str());
     renderer.drawText(SMALL_FONT_ID, (screenW - aw) / 2, y, author.c_str(), true);
-    y += smallLineH;
+    y += smallLineH + 4;
   }
-  y += 12;
 
-  // Progress bar
-  constexpr int barMargin = 30;
-  const int pBarW = cardW - 2 * barMargin;
-  const int pBarX = cardX + barMargin;
-  constexpr int pBarH = 6;
-  renderer.drawRect(pBarX, y, pBarW, pBarH);
-  const int fillW = pBarW * book.progressPercent / 100;
-  if (fillW > 2) renderer.fillRect(pBarX + 1, y + 1, fillW - 2, pBarH - 2);
-  y += pBarH + 6;
-
-  // Info line: "42% · 2h 30m read · ~1h left"
+  // Per-book stats: progress %, time read, estimated remaining (centered)
+  char statBuf[48];
   const auto* bs = BOOK_STATS.getBook(book.path.c_str());
-  uint32_t bookMin = bs ? bs->totalSeconds / 60 : 0;
-  char progressInfo[96];
+  const uint32_t bookMin = bs ? bs->totalSeconds / 60 : 0;
+
+  // Progress %  |  Time read  |  Est. remaining — single line
+  std::string statsLine;
+  snprintf(statBuf, sizeof(statBuf), "%d%%", book.progressPercent);
+  statsLine = statBuf;
+
   if (bookMin > 0) {
-    char readBuf[24];
+    statsLine += "  ·  ";
     if (bookMin >= 60)
-      snprintf(readBuf, sizeof(readBuf), "%dh %dm", (int)(bookMin / 60), (int)(bookMin % 60));
+      snprintf(statBuf, sizeof(statBuf), tr(STR_HOME_STAT_HOURS_MINUTES), (int)(bookMin / 60), (int)(bookMin % 60));
     else
-      snprintf(readBuf, sizeof(readBuf), "%dm", (int)bookMin);
+      snprintf(statBuf, sizeof(statBuf), tr(STR_HOME_STAT_MINUTES), (int)bookMin);
+    statsLine += statBuf;
+
     if (book.progressPercent > 0) {
       uint32_t estMin = bookMin * (100 - book.progressPercent) / book.progressPercent;
-      char estBuf[24];
+      statsLine += "  ·  ";
       if (estMin >= 60)
-        snprintf(estBuf, sizeof(estBuf), "~%dh %dm", (int)(estMin / 60), (int)(estMin % 60));
+        snprintf(statBuf, sizeof(statBuf), "~%dh %dm", (int)(estMin / 60), (int)(estMin % 60));
       else
-        snprintf(estBuf, sizeof(estBuf), "~%dm", (int)estMin);
-      snprintf(progressInfo, sizeof(progressInfo), "%d%% \xC2\xB7 %s read \xC2\xB7 %s left",
-               book.progressPercent, readBuf, estBuf);
-    } else {
-      snprintf(progressInfo, sizeof(progressInfo), "%d%% \xC2\xB7 %s read", book.progressPercent, readBuf);
+        snprintf(statBuf, sizeof(statBuf), "~%dm", (int)estMin);
+      statsLine += statBuf;
     }
-  } else {
-    snprintf(progressInfo, sizeof(progressInfo), "%d%%", book.progressPercent);
   }
-  const int piW = renderer.getTextWidth(SMALL_FONT_ID, progressInfo);
-  renderer.drawText(SMALL_FONT_ID, (screenW - piW) / 2, y, progressInfo, true);
+  const int slw = renderer.getTextWidth(SMALL_FONT_ID, statsLine.c_str());
+  renderer.drawText(SMALL_FONT_ID, (screenW - slw) / 2, y, statsLine.c_str(), true);
 
-  // CTA button — outlined by default (filled on selection via renderSelectionHighlight)
-  renderer.drawRoundedRect(btnX, btnY, btnW, btnH, 1, btnR, true);
-  char ctaBuf[64];
-  snprintf(ctaBuf, sizeof(ctaBuf), "%s >", tr(STR_CONTINUE_READING));
-  const int ctaW = renderer.getTextWidth(UI_12_FONT_ID, ctaBuf);
+  // CTA button — slight rounding, outlined by default (filled on selection)
+  renderer.drawRoundedRect(btnX, btnY, btnW, btnH, 1, CP_FOCUS_R, true);
+  const char* ctaText = tr(STR_CONTINUE_READING);
+  const int ctaW = renderer.getTextWidth(UI_12_FONT_ID, ctaText);
   const int ctaX = btnX + (btnW - ctaW) / 2;
   const int ctaY = btnY + (btnH - medLineH) / 2;
-  renderer.drawText(UI_12_FONT_ID, ctaX, ctaY, ctaBuf, true);
+  renderer.drawText(UI_12_FONT_ID, ctaX, ctaY, ctaText, true);
 }
 
 // ── CrossPet main render ──────────────────────────────────────────────────────
@@ -641,9 +639,9 @@ void HomeActivity::renderCrossPet() {
       renderContinueReadingCard();
       renderRecentCovers();
       renderReadingStatsBar();
+      renderBottomBarIcons();
+      renderButtonHints();
     }
-    renderBottomBarIcons();
-    renderButtonHints();
     coverBufferStored = storeCoverBuffer();
     coverRendered = coverBufferStored;
   } else {
@@ -660,8 +658,19 @@ void HomeActivity::renderCrossPet() {
 
   // Selection highlights only (not full bottom bar redraw)
   renderSelectionHighlight();
-  if (!focusMode) renderRecentSelection();
-  renderBottomBarSelection();
+  if (!focusMode) {
+    renderRecentSelection();
+    renderBottomBarSelection();
+  } else if (selectorIndex > 0) {
+    // Focus mode: show nav bar + hints on demand (when user navigates)
+    // Clear bottom area (CTA button lives in cached buffer underneath)
+    const int clearY = renderer.getScreenHeight() - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H;
+    renderer.fillRect(0, clearY, renderer.getScreenWidth(),
+                      BaseMetrics::values.buttonHintsHeight + CP_BOTTOM_BAR_H, false);
+    renderBottomBarIcons();
+    renderButtonHints();
+    renderBottomBarSelection();
+  }
 
   renderer.displayBuffer();
 
@@ -672,7 +681,8 @@ void HomeActivity::renderCrossPet() {
     int loadCoverH = CP_COVER_H;
     if (focusMode) {
       const int sh = renderer.getScreenHeight();
-      const int availH = sh - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H - CP_CARD_Y - 12;
+      // Focus mode uses full height (no bottom bar/hints)
+      const int availH = sh - CP_CARD_Y - 12;
       loadCoverH = availH * CP_FOCUS_COVER_PCT / 100;
     }
     bool needsLoad = false;
@@ -686,7 +696,8 @@ void HomeActivity::renderCrossPet() {
     else recentsLoaded = true;
   } else if (!recentsLoaded && !recentsLoading) {
     const int sh = renderer.getScreenHeight();
-    const int availH = sh - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H - CP_CARD_Y - 12;
+    const int availH = focusMode ? (sh - CP_CARD_Y - 12)
+                                 : (sh - BaseMetrics::values.buttonHintsHeight - CP_BOTTOM_BAR_H - CP_CARD_Y - 12);
     const int loadH = focusMode ? availH * CP_FOCUS_COVER_PCT / 100 : CP_COVER_H;
     recentsLoading = true;
     loadRecentCovers(loadH);
