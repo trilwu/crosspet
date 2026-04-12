@@ -253,6 +253,15 @@ void FileBrowserActivity::loop() {
     requestUpdate();
   });
 
+  buttonNavigator.onNextContinuous([this, listSize, pageItems] {
+    selectorIndex = ButtonNavigator::nextPageIndex(static_cast<int>(selectorIndex), listSize, pageItems);
+    requestUpdate();
+  });
+  buttonNavigator.onPreviousContinuous([this, listSize, pageItems] {
+    selectorIndex = ButtonNavigator::previousPageIndex(static_cast<int>(selectorIndex), listSize, pageItems);
+    requestUpdate();
+  });
+
   // Side Up button: file info popup
   if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
     if (!files.empty()) {

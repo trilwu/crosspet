@@ -557,6 +557,36 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
       requestUpdate();
       break;
     }
+    case EpubReaderMenuActivity::MenuAction::STAR_PAGE: {
+      if (section && section->currentPage >= 0 && section->currentPage < section->pageCount) {
+        const uint16_t si = static_cast<uint16_t>(currentSpineIndex);
+        const uint16_t pg = static_cast<uint16_t>(section->currentPage);
+        const bool wasStarred = bookmarkStore.has(si, pg);
+        std::string snippet;
+        if (!wasStarred) {
+          auto page = section->loadPageFromSectionFile();
+          if (page) {
+            for (const auto& el : page->elements) {
+              if (el->getTag() == TAG_PageLine) {
+                const auto& line = static_cast<const PageLine&>(*el);
+                for (const auto& w : line.getBlock()->getWords()) {
+                  if (!snippet.empty()) snippet += ' ';
+                  snippet += w;
+                  if (snippet.size() >= 60) break;
+                }
+              }
+              if (snippet.size() >= 60) break;
+            }
+          }
+        }
+        bookmarkStore.toggle(si, pg, snippet);
+        GUI.drawPopup(renderer, wasStarred ? tr(STR_PAGE_UNSTARRED) : tr(STR_PAGE_STARRED));
+        renderer.displayBuffer();
+        delay(600);
+      }
+      requestUpdate();
+      break;
+    }
     case EpubReaderMenuActivity::MenuAction::STARRED_PAGES: {
       openStarredPages();
       break;

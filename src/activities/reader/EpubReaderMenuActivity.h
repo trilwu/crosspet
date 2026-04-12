@@ -25,6 +25,7 @@ class EpubReaderMenuActivity final : public Activity {
     GO_HOME,
     SYNC,
     STARRED_PAGES,
+    STAR_PAGE,
     DELETE_CACHE
   };
 

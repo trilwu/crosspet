@@ -124,8 +124,8 @@ void RecentBooksActivity::renderCover(int bookIdx, int gridCol, int gridRow,
   // Title below card (truncated, centered, bold when selected)
   const int titleY = cy + cardH + 4;
   const auto titleStyle = selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR;
-  auto title = renderer.truncatedText(SMALL_FONT_ID, book.title.c_str(), cardW - 2);
-  const int titleW = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
+  auto title = renderer.truncatedText(SMALL_FONT_ID, book.title.c_str(), cardW - 2, titleStyle);
+  const int titleW = renderer.getTextWidth(SMALL_FONT_ID, title.c_str(), titleStyle);
   renderer.drawText(SMALL_FONT_ID, cx + (cardW - titleW) / 2, titleY, title.c_str(), true, titleStyle);
 }
 

@@ -46,6 +46,8 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
                         {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CAT_DISPLAY),
+      SettingInfo::Enum(StrId::STR_CLOCK_MODE, &CrossPointSettings::clockMode,
+                        {StrId::STR_CLOCK_NTP, StrId::STR_CLOCK_MANUAL}, "clockMode", StrId::STR_CAT_DISPLAY),
       // Home screen layout — stored in crosspet.json
       SettingInfo::DynamicToggle(
           StrId::STR_HOME_FOCUS_MODE,

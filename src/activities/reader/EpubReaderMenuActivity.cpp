@@ -36,6 +36,7 @@ std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuI
   items.push_back({MenuAction::SELECT_CHAPTER, StrId::STR_SELECT_CHAPTER});
   items.push_back({MenuAction::GO_TO_PERCENT, StrId::STR_GO_TO_PERCENT});
   if (hasFootnotes) items.push_back({MenuAction::FOOTNOTES, StrId::STR_FOOTNOTES});
+  items.push_back({MenuAction::STAR_PAGE, StrId::STR_STAR_PAGE});
   if (hasStarredPages) items.push_back({MenuAction::STARRED_PAGES, StrId::STR_STARRED_PAGES});
 
   // DISPLAY section
@@ -60,8 +61,8 @@ std::vector<EpubReaderMenuActivity::SectionInfo> EpubReaderMenuActivity::buildSe
   std::vector<SectionInfo> sects;
   int idx = 0;
 
-  // NAVIGATION: 2 fixed + optional footnotes + optional starred
-  const int navCount = 2 + (hasFootnotes ? 1 : 0) + (hasStarredPages ? 1 : 0);
+  // NAVIGATION: 3 fixed (chapter, go-to, star) + optional footnotes + optional starred pages
+  const int navCount = 3 + (hasFootnotes ? 1 : 0) + (hasStarredPages ? 1 : 0);
   sects.push_back({"NAVIGATION", idx, navCount});
   idx += navCount;
 
