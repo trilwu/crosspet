@@ -14,7 +14,6 @@
 
 #include "CrossPointSettings.h"
 #include "util/PowerButtonClickDetector.h"
-#include "pet/PetManager.h"
 #include "CrossPointState.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
@@ -125,14 +124,12 @@ void XtcReaderActivity::loop() {
     } else {
       currentPage = 0;
     }
-    PET_MANAGER.onPageTurn();
     requestUpdate();
   } else if (nextTriggered) {
     currentPage += skipAmount;
     if (currentPage >= xtc->getPageCount()) {
       currentPage = xtc->getPageCount();  // Allow showing "End of book"
     }
-    PET_MANAGER.onPageTurn();
     requestUpdate();
   }
 }

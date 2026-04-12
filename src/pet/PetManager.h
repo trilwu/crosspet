@@ -23,15 +23,12 @@ class PetManager {
   // Persistence (PetPersistence.cpp)
   bool load();
   bool save();
-  void saveAsync();          // Start save on background FreeRTOS task
-  bool isSaveDone() const;   // Check if background save completed
-  void waitForSave();        // Block until save completes (for deep sleep safety)
 
-  // Game logic — call tick() on boot and periodically to apply time-based decay
+  // Game logic — call tick() to apply time-based decay (lazy: on pet app open)
   void tick();
 
-  // Feeding — call when pages are read (batched: every 20 pages = 1 meal)
-  void onPageTurn();
+  // Sync pet state from ReadingStats (reading time → feeding, streak sync)
+  void syncFromReadingStats();
 
   // User interaction — petting gives happiness (with cooldown)
   bool pet();
@@ -53,15 +50,7 @@ class PetManager {
   bool ignoreCry();      // ignore attention call (good if fake, bad if real)
   bool toggleLights();   // toggle sleep lights-off flag
 
-  void onChapterComplete();
-  void onBookFinished();
-  void onPomodoroComplete();
   uint16_t getEffectivePagesPerMeal() const;
-
-  // Milestone detection — returns pending milestone message (nullptr if none)
-  enum class Milestone : uint8_t { NONE, DAILY_GOAL, STREAK_UP, PAGE_MILESTONE };
-  Milestone consumePendingMilestone();
-  uint16_t getLastMilestoneValue() const { return lastMilestoneValue; }
 
   // State queries
   const PetState& getState() const { return state; }
@@ -82,8 +71,6 @@ class PetManager {
   unsigned long lastExerciseMs = 0;     // millis() of last exercise (cooldown)
   bool loaded = false;
   const char* lastFeedback = nullptr;   // feedback string for UI display
-  Milestone pendingMilestone = Milestone::NONE;
-  uint16_t lastMilestoneValue = 0;      // context value for milestone display
 
   // Internal helpers
   void updateStreak();

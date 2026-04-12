@@ -101,6 +101,10 @@ struct PetState {
   uint8_t booksFinished = 0;    // total books completed (lifetime)
   uint8_t streakTier = 0;       // 0-3, derived from currentStreak
 
+  // Lazy-eval fields: track what ReadingStats values pet last consumed
+  uint32_t lastKnownReadSeconds = 0;  // ReadingStats.totalReadSeconds at last sync
+  uint32_t lastUpdateTimestamp = 0;   // epoch when pet state was last calculated
+
   bool isAlive() const { return stage != PetStage::DEAD; }
   bool exists() const { return initialized; }
 };

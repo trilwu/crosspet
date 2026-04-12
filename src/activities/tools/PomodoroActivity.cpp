@@ -3,8 +3,6 @@
 #include <GfxRenderer.h>
 #include <I18n.h>
 
-#include "pet/PetManager.h"
-
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -64,9 +62,6 @@ void PomodoroActivity::startTimer(State newState, uint32_t durationMs) {
 void PomodoroActivity::advanceState() {
   if (state == State::FOCUS || (state == State::PAUSED && pausedFrom == State::FOCUS)) {
     completedSessions++;
-    if (PET_MANAGER.exists() && PET_MANAGER.isAlive()) {
-      PET_MANAGER.onPomodoroComplete();
-    }
     if (completedSessions >= SESSIONS_BEFORE_LONG_BREAK) {
       completedSessions = 0;
       startTimer(State::LONG_BREAK, longBreakDurationMs);

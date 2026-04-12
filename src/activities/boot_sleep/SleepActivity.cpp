@@ -23,8 +23,6 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/Logo120.h"
-#include "pet/PetManager.h"
-#include "pet/PetSpriteRenderer.h"
 #include "activities/tools/WeatherActivity.h"
 #include "util/LunarCalendar.h"
 #include "util/StringUtils.h"
@@ -173,7 +171,6 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
 void SleepActivity::onEnter() {
   Activity::onEnter();
   // Persist current time to SD so it survives power cycles
-  PET_MANAGER.saveAsync();
   // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact
   if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY &&
       SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::KEEP_SCREEN) {
@@ -336,74 +333,8 @@ void SleepActivity::renderCustomSleepScreen() const {
 }
 
 // ── Shared pet rendering ──────────────────────────────────────────────────────
-// Draws pet in bottom-right corner + attention "!" indicator.
-// scale 1 → mini sprite (48×48), scale 2 → 96×96.
-// For clock screen the speech bubble is NOT drawn here — clock screen keeps its own quote area.
-void SleepActivity::renderSleepPet(int scale) const {
-  if (!PET_MANAGER.exists()) return;
-  const auto& petState = PET_MANAGER.getState();
-  const PetMood petMood = PET_MANAGER.isAlive()
-                              ? (petState.attentionCall ? PetMood::NEEDY
-                                 : petState.isSick      ? PetMood::SICK
-                                 : petState.hunger <= 30 ? PetMood::SAD
-                                 : PetMood::SLEEPING)
-                              : PetMood::DEAD;
-
-  const int pageWidth  = renderer.getScreenWidth();
-  const int pageHeight = renderer.getScreenHeight();
-
-  if (scale <= 1) {
-    // Mini sprite (48×48)
-    const int miniX = pageWidth  - PetSpriteRenderer::MINI_W - 10;
-    const int miniY = pageHeight - PetSpriteRenderer::MINI_H - 10;
-    PetSpriteRenderer::drawMini(renderer, miniX, miniY, petState.stage, petMood,
-                                petState.evolutionVariant, petState.petType);
-    if (petState.attentionCall) {
-      renderer.drawText(SMALL_FONT_ID, miniX + PetSpriteRenderer::MINI_W / 2 - 2,
-                        miniY - renderer.getLineHeight(SMALL_FONT_ID) - 1, "!");
-    }
-  } else {
-    // Full-scale sprite (96×96 for scale=2)
-    const int pSize = PetSpriteRenderer::displaySize(scale);
-    const int petX  = pageWidth  - pSize - 10;
-    const int petY  = pageHeight - pSize - 10;
-    PetSpriteRenderer::drawPet(renderer, petX, petY, petState.stage, petMood, scale,
-                               petState.evolutionVariant, petState.petType);
-    if (petState.attentionCall) {
-      renderer.drawText(SMALL_FONT_ID, petX + pSize / 2 - 2,
-                        petY - renderer.getLineHeight(SMALL_FONT_ID) - 2, "!");
-    }
-
-    // Speech bubble above the pet (need-specific or mood-varied message)
-    const char* msg = nullptr;
-    if (petMood == PetMood::NEEDY) {
-      switch (petState.currentNeed) {
-        case PetNeed::HUNGRY: msg = tr(STR_PET_SLEEP_FEED_ME); break;
-        case PetNeed::SICK:   msg = tr(STR_PET_SLEEP_MEDICINE); break;
-        case PetNeed::DIRTY:  msg = tr(STR_PET_SLEEP_DIRTY);    break;
-        case PetNeed::BORED:  msg = tr(STR_PET_SLEEP_BORED);    break;
-        default:              msg = tr(STR_PET_SLEEP_HEY);      break;
-      }
-    } else if (petMood == PetMood::SICK) {
-      msg = tr(STR_PET_SLEEP_SICK);
-    } else if (petMood == PetMood::SLEEPING) {
-      const char* const SLEEP_MSGS[] = {tr(STR_PET_SLEEP_ZZZ), tr(STR_PET_SLEEP_PURR),
-                                         tr(STR_PET_SLEEP_SWEET), tr(STR_PET_SLEEP_DREAMING)};
-      msg = SLEEP_MSGS[(uint32_t)time(nullptr) / 3600 % 4];
-    } else if (petMood == PetMood::SAD) {
-      const char* const SAD_MSGS[] = {tr(STR_PET_SLEEP_HUNGRY), tr(STR_PET_SLEEP_READ_MORE),
-                                       tr(STR_PET_SLEEP_FEED_ME)};
-      msg = SAD_MSGS[(uint32_t)time(nullptr) / 3600 % 3];
-    }
-    if (msg != nullptr) {
-      const int lh   = renderer.getLineHeight(SMALL_FONT_ID);
-      const int msgW = renderer.getTextWidth(SMALL_FONT_ID, msg);
-      const int msgX = petX + (pSize - msgW) / 2;
-      const int msgY = petY - lh - 4;
-      renderer.drawText(SMALL_FONT_ID, msgX, msgY, msg);
-    }
-  }
-}
+// Pet rendering removed — pet is now a standalone app
+void SleepActivity::renderSleepPet(int /*scale*/) const {}
 
 void SleepActivity::renderDefaultSleepScreen() const {
   const int pageWidth  = renderer.getScreenWidth();

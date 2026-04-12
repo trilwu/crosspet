@@ -29,7 +29,6 @@
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
-#include "pet/PetManager.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/ButtonNavigator.h"
@@ -258,8 +257,6 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
-  // Ensure async pet save completed before powering down
-  PET_MANAGER.waitForSave();
 
   display.deepSleep();
   LOG_DBG("MAIN", "Power button press calibration value: %lu ms", t2 - t1);
@@ -402,9 +399,6 @@ void setup() {
     tzset();
   }
 
-  // Load virtual pet state and apply time-based decay
-  PET_MANAGER.load();
-  PET_MANAGER.tick();
 
   switch (gpio.getWakeupReason()) {
     case HalGPIO::WakeupReason::PowerButton:

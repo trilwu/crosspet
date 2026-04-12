@@ -23,8 +23,6 @@
 #include "activities/tools/WeatherActivity.h"
 #include "WifiCredentialStore.h"
 #include <WiFi.h>
-#include "pet/PetEvolution.h"
-#include "pet/PetManager.h"
 #include "util/StringUtils.h"
 
 // ── Buffer management ─────────────────────────────────────────────────────────
@@ -153,36 +151,8 @@ void HomeActivity::render(RenderLock&&) {
 
 // ── Shared render helpers ─────────────────────────────────────────────────────
 
-void HomeActivity::renderPetStatusWidget(int headerH) {
-  if (!PET_SETTINGS.homeShowPetStatus) return;
-  if (!PET_MANAGER.exists() || !PET_MANAGER.isAlive()) return;
-
-  const auto& ps = PET_MANAGER.getState();
-  const PetMood mood = PET_MANAGER.getMood();
-  const int screenW = renderer.getScreenWidth();
-
-  const char* name = ps.petName[0] ? ps.petName : PetEvolution::variantStageName(ps.stage, ps.evolutionVariant);
-  char petBuf[64];
-
-  if (ps.hunger < 30)                 snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HUNGRY), name);
-  else if (mood == PetMood::SAD)      snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SAD), name);
-  else if (mood == PetMood::SICK)     snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SICK), name);
-  else if (mood == PetMood::NEEDY)    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_NEEDY), name);
-  else if (mood == PetMood::SLEEPING) snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_SLEEPING), name);
-  else if (ps.currentStreak > 7)      snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_STREAK), name, ps.currentStreak);
-  else if (mood == PetMood::HAPPY)    snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_HAPPY), name);
-  else                                snprintf(petBuf, sizeof(petBuf), tr(STR_PET_HOME_DEFAULT), name);
-
-  int rightMargin = 12 + BaseMetrics::values.batteryWidth + 4;
-  if (SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS) {
-    rightMargin += renderer.getTextWidth(SMALL_FONT_ID, "100%") + 4;
-  }
-  const int availW = screenW - rightMargin - 4;
-  auto truncated = renderer.truncatedText(SMALL_FONT_ID, petBuf, availW);
-  const int finalW = renderer.getTextWidth(SMALL_FONT_ID, truncated.c_str());
-  const int x = screenW - rightMargin - finalW;
-  renderer.drawText(SMALL_FONT_ID, x, 5, truncated.c_str(), true);
-}
+// Pet status widget removed — pet is now a standalone app
+void HomeActivity::renderPetStatusWidget(int /*headerH*/) {}
 
 void HomeActivity::renderHeaderClock() {
   int nextX = 10;
