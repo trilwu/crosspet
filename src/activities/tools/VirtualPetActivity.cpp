@@ -8,13 +8,17 @@
 #include "activities/util/KeyboardEntryActivity.h"
 #include "pet/PetManager.h"
 #include "pet/PetState.h"
+#include "ReadingStats.h"
 
 // ---- Lifecycle ----------------------------------------------------------
 
 void VirtualPetActivity::onEnter() {
   Activity::onEnter();
   PET_MANAGER.load();
+  READ_STATS.loadFromFile();
+  PET_MANAGER.syncFromReadingStats();
   PET_MANAGER.tick();
+  PET_MANAGER.save();
   lastAnimMs = millis();
   requestUpdate();
 }
@@ -42,6 +46,7 @@ void VirtualPetActivity::loop() {
   }
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
+    PET_MANAGER.save();
     finish();
     return;
   }

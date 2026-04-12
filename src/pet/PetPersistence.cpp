@@ -5,7 +5,6 @@
 #include <HalStorage.h>
 #include <Logging.h>
 
-#include <atomic>
 #include <cstring>
 #include <ctime>
 
@@ -75,6 +74,10 @@ bool PetManager::load() {
   state.booksFinished    = doc["booksFinished"]    | (uint8_t)0;
   state.streakTier       = doc["streakTier"]       | (uint8_t)0;
 
+  // Lazy-eval fields
+  state.lastKnownReadSeconds = doc["lastKnownReadSeconds"] | (uint32_t)0;
+  state.lastUpdateTimestamp  = doc["lastUpdateTimestamp"]   | (uint32_t)0;
+
   // Restore clock if RTC lost time (power cycle) but SD card has a saved timestamp
   uint32_t savedTime = doc["savedTime"] | (uint32_t)0;
   if (savedTime > 0) {
@@ -138,6 +141,10 @@ bool PetManager::save() {
   doc["booksFinished"]    = state.booksFinished;
   doc["streakTier"]       = state.streakTier;
 
+  // Lazy-eval fields
+  doc["lastKnownReadSeconds"] = state.lastKnownReadSeconds;
+  doc["lastUpdateTimestamp"]  = state.lastUpdateTimestamp;
+
   // Persist current timestamp for clock restoration after power cycle
   doc["savedTime"] = (uint32_t)time(nullptr);
 
@@ -152,26 +159,3 @@ bool PetManager::save() {
   return ok;
 }
 
-// --- Async save (background FreeRTOS task) ---
-
-static std::atomic<bool> _asyncSaveDone{true};
-
-static void asyncSaveTask(void* param) {
-  auto* mgr = static_cast<PetManager*>(param);
-  mgr->save();
-  _asyncSaveDone = true;
-  vTaskDelete(nullptr);
-}
-
-void PetManager::saveAsync() {
-  if (!state.exists()) return;
-  if (!_asyncSaveDone) return;  // Previous save still running
-  _asyncSaveDone = false;
-  xTaskCreate(asyncSaveTask, "petSave", 4096, this, 1, nullptr);
-}
-
-bool PetManager::isSaveDone() const { return _asyncSaveDone; }
-
-void PetManager::waitForSave() {
-  while (!_asyncSaveDone) { vTaskDelay(pdMS_TO_TICKS(10)); }
-}

@@ -8,6 +8,8 @@
 #include <I18n.h>
 #include <Logging.h>
 
+#include "ReadingStats.h"
+
 #include <cstring>
 #include <ctime>
 
@@ -88,78 +90,69 @@ static void resetMissionsIfNewDay(PetState& state, uint16_t today) {
   }
 }
 
-// --- Feeding (page-driven) ---
+// --- Sync from ReadingStats (lazy evaluation) ---
 
-void PetManager::onPageTurn() {
+void PetManager::syncFromReadingStats() {
   if (!state.exists() || !state.isAlive()) return;
 
-  state.pageAccumulator++;
-  state.totalPagesRead++;
+  auto& stats = ReadingStats::getInstance();
 
-  uint16_t today = getDayOfYear();
-  resetMissionsIfNewDay(state, today);
-  bool missionProgress = false;
-  if (state.missionPagesRead < 20) {
-    state.missionPagesRead++;
-    missionProgress = true;
+  // First-sync migration guard: don't retroactively apply all historical reading
+  if (state.lastKnownReadSeconds == 0 && state.lastTickTime > 0) {
+    state.lastKnownReadSeconds = stats.totalReadSeconds;
+    state.lastUpdateTimestamp = getCurrentTime();
+    LOG_DBG("PET", "Migration: initialized lastKnownReadSeconds=%lu", (unsigned long)stats.totalReadSeconds);
+    return;
   }
 
-  if (today > 0 && today != state.lastReadDay) {
-    state.lastReadDay = today;
-    state.currentStreak++;
-    uint8_t streakBonus = (state.currentStreak > 5) ? 5 : state.currentStreak;
-    state.happiness = clampAdd(state.happiness, streakBonus);
+  // Sync streak and books from ReadingStats
+  state.currentStreak = stats.currentStreak;
+  state.lastReadDay = getDayOfYear();  // keep in sync to prevent tick() from resetting streak
+  state.booksFinished = (stats.booksFinished > 255) ? 255 : static_cast<uint8_t>(stats.booksFinished);
 
-    // Recalculate streak tier after streak update
-    uint8_t oldTier = state.streakTier;
-    if (state.currentStreak >= 30)      state.streakTier = 3;
-    else if (state.currentStreak >= 14) state.streakTier = 2;
-    else if (state.currentStreak >= 7)  state.streakTier = 1;
-    else                                state.streakTier = 0;
+  // Derive totalPagesRead from reading time (~90 sec/page avg) for evolution thresholds
+  state.totalPagesRead = stats.totalReadSeconds / 90;
 
-    // Streak tier milestone (higher priority than page milestone)
-    if (state.streakTier > oldTier) {
-      pendingMilestone = Milestone::STREAK_UP;
-      lastMilestoneValue = state.currentStreak;
-    }
+  // Calculate meals from reading time diff (10 min reading = 1 meal)
+  uint32_t readSecsDiff = 0;
+  if (stats.totalReadSeconds > state.lastKnownReadSeconds) {
+    readSecsDiff = stats.totalReadSeconds - state.lastKnownReadSeconds;
   }
+  uint32_t meals = readSecsDiff / 600;
+  if (meals > 50) meals = 50;  // cap to prevent stat overflow
 
-  // Daily reading goal reward (fires once on the exact page that reaches the goal)
-  if (missionProgress && state.missionPagesRead == PetConfig::DAILY_GOAL_PAGES) {
-    state.health = clampAdd(state.health, PetConfig::DAILY_GOAL_HEALTH);
-    state.happiness = clampAdd(state.happiness, PetConfig::DAILY_GOAL_HAPPINESS);
-    if (pendingMilestone == Milestone::NONE) {  // don't overwrite higher-priority streak milestone
-      pendingMilestone = Milestone::DAILY_GOAL;
-      lastMilestoneValue = PetConfig::DAILY_GOAL_PAGES;
-    }
-    LOG_DBG("PET", "Daily reading goal met! health=%d happiness=%d", state.health, state.happiness);
-  }
-
-  // Page milestone every 100 pages (only if no higher-priority milestone pending)
-  if (pendingMilestone == Milestone::NONE && state.totalPagesRead > 0 && state.totalPagesRead % 100 == 0) {
-    pendingMilestone = Milestone::PAGE_MILESTONE;
-    lastMilestoneValue = static_cast<uint16_t>(state.totalPagesRead > 65535 ? 65535 : state.totalPagesRead);
-  }
-
-  if (state.pageAccumulator >= getEffectivePagesPerMeal()) {
+  for (uint32_t i = 0; i < meals; i++) {
     state.hunger = clampAdd(state.hunger, PetConfig::HUNGER_PER_MEAL);
-    state.pageAccumulator -= getEffectivePagesPerMeal();
-    if (state.health < PetConfig::MAX_STAT && state.hunger > 0)
-      state.health = clampAdd(state.health, 5);
-
-    // Weight and waste tracking per meal
     state.weight = clampAdd(state.weight, PetConfig::WEIGHT_PER_MEAL);
     state.mealsSinceClean++;
     if (state.mealsSinceClean >= PetConfig::MEALS_UNTIL_WASTE) {
       state.mealsSinceClean = 0;
       if (state.wasteCount < PetConfig::MAX_WASTE) state.wasteCount++;
     }
-
-    LOG_DBG("PET", "Fed! hunger=%d weight=%d waste=%d", state.hunger, state.weight, state.wasteCount);
-    save();
-  } else if (missionProgress) {
-    save();
   }
+  if (meals > 0) {
+    if (state.health < PetConfig::MAX_STAT && state.hunger > 0)
+      state.health = clampAdd(state.health, 5);
+    // Happiness from reading activity (replaces chapter/book/streak bonuses)
+    uint8_t happinessBonus = static_cast<uint8_t>(meals * 3 > 30 ? 30 : meals * 3);
+    state.happiness = clampAdd(state.happiness, happinessBonus);
+  }
+
+  // Approximate today's reading for daily mission (90 sec/page)
+  state.missionPagesRead = static_cast<uint8_t>(
+      stats.todayReadSeconds / 90 > 20 ? 20 : stats.todayReadSeconds / 90);
+
+  // Update streak tier
+  if (state.currentStreak >= 30)      state.streakTier = 3;
+  else if (state.currentStreak >= 14) state.streakTier = 2;
+  else if (state.currentStreak >= 7)  state.streakTier = 1;
+  else                                state.streakTier = 0;
+
+  state.lastKnownReadSeconds = stats.totalReadSeconds;
+  state.lastUpdateTimestamp = getCurrentTime();
+  LOG_DBG("PET", "Synced: meals=%lu pages=%lu streak=%d happy=%d",
+          (unsigned long)meals, (unsigned long)state.totalPagesRead,
+          state.currentStreak, state.happiness);
 }
 
 // --- User interaction ---
@@ -223,30 +216,6 @@ uint16_t PetManager::getEffectivePagesPerMeal() const {
   return PetConfig::STREAK_PAGES_PER_MEAL[tier];
 }
 
-void PetManager::onChapterComplete() {
-  if (!state.exists() || !state.isAlive()) return;
-  state.happiness = clampAdd(state.happiness, PetConfig::CHAPTER_COMPLETE_HAPPINESS);
-  LOG_DBG("PET", "Chapter complete! happiness=%d", state.happiness);
-  save();
-}
-
-void PetManager::onBookFinished() {
-  if (!state.exists() || !state.isAlive()) return;
-  state.happiness = clampAdd(state.happiness, PetConfig::BOOK_FINISH_HAPPINESS);
-  state.hunger = clampAdd(state.hunger, PetConfig::BOOK_FINISH_HUNGER);
-  if (state.booksFinished < 255) state.booksFinished++;
-  LOG_DBG("PET", "Book finished! happiness=%d hunger=%d booksFinished=%d",
-          state.happiness, state.hunger, state.booksFinished);
-  save();
-}
-
-void PetManager::onPomodoroComplete() {
-  if (!state.exists() || !state.isAlive()) return;
-  state.happiness = clampAdd(state.happiness, PetConfig::POMODORO_HAPPINESS);
-  LOG_DBG("PET", "Pomodoro complete! happiness=%d", state.happiness);
-  save();
-}
-
 // --- State queries ---
 
 PetMood PetManager::getMood() const {
@@ -272,14 +241,6 @@ void PetManager::getMissions(PetMission out[3]) const {
   out[0] = {tr(STR_PET_MISSION_READ), state.missionPagesRead, 20, state.missionPagesRead >= 20};
   out[1] = {tr(STR_PET_MISSION_PET),  state.missionPetCount,   3, state.missionPetCount  >=  3};
   out[2] = {tr(STR_PET_MISSION_FED),  state.hunger,            40, state.hunger           >= 40};
-}
-
-// --- Milestones ---
-
-PetManager::Milestone PetManager::consumePendingMilestone() {
-  Milestone m = pendingMilestone;
-  pendingMilestone = Milestone::NONE;
-  return m;
 }
 
 // --- Helpers ---

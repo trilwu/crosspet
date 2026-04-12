@@ -13,8 +13,6 @@
 
 #include "CrossPointSettings.h"
 #include "util/PowerButtonClickDetector.h"
-#include "pet/PetManager.h"
-#include "pet/PetSpriteRenderer.h"
 #include "CrossPointState.h"
 #include "EpubReaderChapterSelectionActivity.h"
 #include "EpubReaderFootnotesActivity.h"
@@ -160,24 +158,6 @@ void EpubReaderActivity::loop() {
       showChapterPopup = false;
       // Request half refresh to clear popup ghosting on next render
       renderer.requestNextHalfRefresh();
-      // Check for milestone that fired during chapter popup
-      if (!showMilestoneToast) {
-        auto milestone = PET_MANAGER.consumePendingMilestone();
-        if (milestone != PetManager::Milestone::NONE) {
-          uint16_t val = PET_MANAGER.getLastMilestoneValue();
-          switch (milestone) {
-            case PetManager::Milestone::DAILY_GOAL:
-              snprintf(milestoneText, sizeof(milestoneText), "%s", tr(STR_MILESTONE_DAILY_GOAL)); break;
-            case PetManager::Milestone::STREAK_UP:
-              snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_STREAK_UP), val); break;
-            case PetManager::Milestone::PAGE_MILESTONE:
-              snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_PAGES), (unsigned long)val); break;
-            default: break;
-          }
-          showMilestoneToast = true;
-          milestoneToastTime = millis();
-        }
-      }
       requestUpdate();
     }
     return;  // block other input while popup is shown
@@ -693,13 +673,11 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
         currentSpineIndex++;
         section.reset();
       }
-      // Chapter completion: always give +5 happiness, show popup every 3rd chapter
-      if (PET_MANAGER.exists() && PET_MANAGER.isAlive() &&
-          currentSpineIndex > lastCompletedSpineIndex &&
+      // Chapter completion popup every 3rd chapter
+      if (currentSpineIndex > lastCompletedSpineIndex &&
           currentSpineIndex < epub->getSpineItemsCount()) {
         lastCompletedSpineIndex = currentSpineIndex;
         chapterCompleteCount++;
-        PET_MANAGER.onChapterComplete();
         if (chapterCompleteCount % 3 == 0) {
           showChapterPopup = true;
           chapterPopupTime = millis();
@@ -722,29 +700,6 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
   // Clear any showing milestone toast on page turn (one page of visibility is enough)
   showMilestoneToast = false;
 
-  PET_MANAGER.onPageTurn();
-
-  // Check for milestone toast (only if no chapter popup is showing)
-  if (!showChapterPopup) {
-    auto milestone = PET_MANAGER.consumePendingMilestone();
-    if (milestone != PetManager::Milestone::NONE) {
-      uint16_t val = PET_MANAGER.getLastMilestoneValue();
-      switch (milestone) {
-        case PetManager::Milestone::DAILY_GOAL:
-          snprintf(milestoneText, sizeof(milestoneText), "%s", tr(STR_MILESTONE_DAILY_GOAL));
-          break;
-        case PetManager::Milestone::STREAK_UP:
-          snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_STREAK_UP), val);
-          break;
-        case PetManager::Milestone::PAGE_MILESTONE:
-          snprintf(milestoneText, sizeof(milestoneText), tr(STR_MILESTONE_PAGES), (unsigned long)val);
-          break;
-        default: break;
-      }
-      showMilestoneToast = true;
-      milestoneToastTime = millis();
-    }
-  }
 
   lastPageTurnTime = millis();
   requestUpdate();
@@ -767,10 +722,7 @@ void EpubReaderActivity::render(RenderLock&& lock) {
 
   // Show end of book screen
   if (currentSpineIndex == epub->getSpineItemsCount()) {
-    if (!bookCompletionNotified && PET_MANAGER.exists() && PET_MANAGER.isAlive()) {
-      PET_MANAGER.onBookFinished();
-      bookCompletionNotified = true;
-    }
+    bookCompletionNotified = true;
     renderer.clearScreen();
     renderer.drawCenteredText(UI_12_FONT_ID, 300, tr(STR_END_OF_BOOK), true, EpdFontFamily::BOLD);
     renderer.displayBuffer();
@@ -789,23 +741,10 @@ void EpubReaderActivity::render(RenderLock&& lock) {
     renderer.drawRect(px, py, popupW, popupH);
     renderer.drawRect(px + 2, py + 2, popupW - 4, popupH - 4);  // double border
 
-    // Full-size pet sprite (48x48) centered at top of popup
-    if (PET_MANAGER.exists()) {
-      const auto& ps = PET_MANAGER.getState();
-      PetSpriteRenderer::drawPet(renderer, px + (popupW - PetSpriteRenderer::SPRITE_W) / 2, py + 10,
-                                 ps.stage, PET_MANAGER.getMood(), 1, ps.evolutionVariant, ps.petType);
-    }
-
-    // "Chapter Complete!" text below pet
+    // "Chapter Complete!" text centered in popup
     const int txtW = renderer.getTextWidth(SMALL_FONT_ID, tr(STR_CHAPTER_COMPLETE), EpdFontFamily::BOLD);
-    renderer.drawText(SMALL_FONT_ID, px + (popupW - txtW) / 2, py + 68,
+    renderer.drawText(SMALL_FONT_ID, px + (popupW - txtW) / 2, py + (popupH - 12) / 2,
                       tr(STR_CHAPTER_COMPLETE), true, EpdFontFamily::BOLD);
-
-    // "+5 happy" indicator
-    char happyBuf[16];
-    snprintf(happyBuf, sizeof(happyBuf), "+%d :)", PetConfig::CHAPTER_COMPLETE_HAPPINESS);
-    const int happyW = renderer.getTextWidth(SMALL_FONT_ID, happyBuf);
-    renderer.drawText(SMALL_FONT_ID, px + (popupW - happyW) / 2, py + 90, happyBuf, true);
 
     renderer.displayBuffer();
     return;
