@@ -91,10 +91,7 @@ void CrossPetTheme::drawHeader(const GfxRenderer& renderer, Rect rect, const cha
     renderer.drawText(UI_12_FONT_ID, titleX, titleY, truncated.c_str(), true, EpdFontFamily::BOLD);
   }
 
-  // Thin 1px divider at bottom (omit in focus mode for seamless look)
-  if (!inFocusMode) {
-    renderer.drawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width - 1, rect.y + rect.height - 1);
-  }
+  // No divider line — seamless look for CrossPet theme
 }
 
 // ── Sub-header ────────────────────────────────────────────────────────────────

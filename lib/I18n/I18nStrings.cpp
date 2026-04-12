@@ -1683,6 +1683,7 @@ const char* const STRINGS_EN[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recents",
     "Recent Books",
     "No recent books",
@@ -2597,6 +2598,7 @@ const char* const STRINGS_ES[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recientes",
     "Libros recientes",
     "No hay libros recientes",
@@ -3727,6 +3729,7 @@ const char* const STRINGS_FR[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "R\xC3"
     "\xA9"
     "cents",
@@ -4648,6 +4651,7 @@ const char* const STRINGS_DE[] = {
     "Seiten-Overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Zuletzt",
     "Zuletzt gelesen",
     "Keine B\xC3"
@@ -6410,6 +6414,7 @@ const char* const STRINGS_CS[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Ned\xC3"
     "\xA1"
     "vn\xC3"
@@ -7625,6 +7630,7 @@ const char* const STRINGS_PO[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recentes",
     "Livros recentes",
     "Sem livros recentes",
@@ -15149,6 +15155,7 @@ const char* const STRINGS_RU[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "\xD0"
     "\x9D"
     "\xD0"
@@ -18229,6 +18236,7 @@ const char* const STRINGS_SV[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Senaste",
     "Senaste b\xC3"
     "\xB6"
@@ -19595,6 +19603,7 @@ const char* const STRINGS_RO[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recente",
     "C\xC4"
     "\x83"
@@ -20673,6 +20682,7 @@ const char* const STRINGS_CA[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recents",
     "Llibres recents",
     "No hi ha llibres recents",
@@ -29045,6 +29055,7 @@ const char* const STRINGS_UK[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "\xD0"
     "\x9E"
     "\xD1"
@@ -38683,6 +38694,7 @@ const char* const STRINGS_BE[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "\xD0"
     "\x9D"
     "\xD1"
@@ -41374,6 +41386,7 @@ const char* const STRINGS_IT[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recenti",
     "Libri Recenti",
     "Nessun libro recente",
@@ -42674,6 +42687,7 @@ const char* const STRINGS_PL[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Ostatnie",
     "Ostatnio czytane",
     "Brak ostatnio czytanych",
@@ -43890,6 +43904,7 @@ const char* const STRINGS_FI[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Viimeisimm\xC3"
     "\xA4"
     "t",
@@ -44904,6 +44919,7 @@ const char* const STRINGS_DA[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Seneste",
     "Seneste b\xC3"
     "\xB8"
@@ -45650,6 +45666,7 @@ const char* const STRINGS_NL[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recent",
     "Recente boeken",
     "Geen recente boeken",
@@ -47260,6 +47277,7 @@ const char* const STRINGS_TR[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Son Okunanlar",
     "Son Kitaplar",
     "Son okunan kitap yok",
@@ -53504,6 +53522,7 @@ const char* const STRINGS_KK[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recents",
     "\xD0"
     "\x96"
@@ -58386,6 +58405,7 @@ const char* const STRINGS_VI[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "G\xE1"
     "\xBA"
     "\xA7"
@@ -62152,6 +62172,7 @@ const char* const STRINGS_HU[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recents",
     "Legut\xC3"
     "\xB3"
@@ -63396,6 +63417,7 @@ const char* const STRINGS_LT[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recents",
     "Paskutin\xC4"
     "\x97"
@@ -64342,6 +64364,7 @@ const char* const STRINGS_SI[] = {
     "Page overlay",
     "Keep Screen",
     "Unpin",
+    "Pin",
     "Recents",
     "Zadnje knjige",
     "Ni zadnjih knjig",

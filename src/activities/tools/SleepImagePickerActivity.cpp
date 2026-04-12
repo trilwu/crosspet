@@ -327,42 +327,25 @@ void SleepImagePickerActivity::loop() {
     } else if (selectorIndex == cacheItemIndex()) {
       clearCache();
     } else if (isFileItem(selectorIndex)) {
-      // For overlay mode: enter slideshow preview. For custom: save + brief preview.
-      if (SETTINGS.sleepScreen == CrossPointSettings::OVERLAY) {
-        slideshowIndex = selectorIndex - firstFileIndex();
-        slideshowActive = true;
-        renderSlideshow();
-      } else {
-        saveImageSelection();
-        // Brief preview
-        const int fileIdx = selectorIndex - firstFileIndex();
-        const std::string fullPath = sleepDir + "/" + fileList[fileIdx];
-        renderer.clearScreen();
-        FsFile f;
-        if (Storage.openFileForRead("SIP", fullPath, f)) {
-          Bitmap bmp(f, false);
-          if (bmp.parseHeaders() == BmpReaderError::Ok) {
-            const int sw = renderer.getScreenWidth(), sh = renderer.getScreenHeight();
-            const int x = std::max(0, (sw - (int)bmp.getWidth()) / 2);
-            const int y = std::max(0, (sh - (int)bmp.getHeight()) / 2);
-            renderer.drawBitmap(bmp, x, y, sw, sh, 0, 0);
-          }
-          f.close();
-        }
-        renderer.displayBuffer(HalDisplay::FAST_REFRESH);
-        delay(1500);
-        requestUpdate();
-      }
+      // Preview: enter slideshow for both overlay and custom modes
+      slideshowIndex = selectorIndex - firstFileIndex();
+      slideshowActive = true;
+      renderSlideshow();
     }
     return;
   }
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
-    if (isFileItem(selectorIndex) && isCurrentImageSelection(selectorIndex)) {
-      // Clear pinned image — revert to random selection
-      SETTINGS.sleepImagePath[0] = '\0';
-      SETTINGS.saveToFile();
-      SleepScreenCache::invalidateAll();
+    if (isFileItem(selectorIndex)) {
+      if (isCurrentImageSelection(selectorIndex)) {
+        // Unpin — revert to random selection
+        SETTINGS.sleepImagePath[0] = '\0';
+        SETTINGS.saveToFile();
+        SleepScreenCache::invalidateAll();
+      } else {
+        // Pin selected image
+        saveImageSelection();
+      }
       requestUpdate();
     }
     return;
@@ -406,9 +389,12 @@ void SleepImagePickerActivity::renderList(int pageWidth, int pageHeight) {
       return "";
     });
 
-  const bool canUnpin = isFileItem(selectorIndex) && isCurrentImageSelection(selectorIndex);
-  const char* leftLabel = canUnpin ? tr(STR_UNPIN) : "";
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), leftLabel, "");
+  const char* confirmLabel = isFileItem(selectorIndex) ? tr(STR_PREVIEW) : tr(STR_SELECT);
+  const char* leftLabel = "";
+  if (isFileItem(selectorIndex)) {
+    leftLabel = isCurrentImageSelection(selectorIndex) ? tr(STR_UNPIN) : tr(STR_PIN);
+  }
+  const auto labels = mappedInput.mapLabels(tr(STR_BACK), confirmLabel, leftLabel, "");
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
 
