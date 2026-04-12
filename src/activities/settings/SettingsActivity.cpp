@@ -17,13 +17,14 @@
 #include "OtaUpdateActivity.h"
 #include "SettingsList.h"
 #include "StatusBarSettingsActivity.h"
+#include "activities/tools/SleepImagePickerActivity.h"
 #include "activities/network/WifiSelectionActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 
 const StrId SettingsActivity::categoryNames[categoryCount] = {StrId::STR_CAT_DISPLAY, StrId::STR_CAT_READER,
                                                               StrId::STR_CAT_CONTROLS, StrId::STR_CAT_SYSTEM,
-                                                              StrId::STR_TOOLS};
+                                                              StrId::STR_CROSSPET};
 
 void SettingsActivity::onEnter() {
   LOG_DBG("SET", "Free heap: %d bytes", ESP.getFreeHeap());
@@ -36,17 +37,36 @@ void SettingsActivity::onEnter() {
 
   Activity::onEnter();
 
-  // Build per-category vectors from the shared settings list
+  // Build per-category vectors from the shared settings list.
+  // Some Display settings are redirected to the CrossPet tab for better grouping.
   displaySettings.clear();
   readerSettings.clear();
   controlsSettings.clear();
   systemSettings.clear();
+  displaySettings.reserve(12);
+  readerSettings.reserve(20);
+  controlsSettings.reserve(12);
+  systemSettings.reserve(16);
 
   for (const auto& setting : getSettingsList()) {
     if (setting.category == StrId::STR_NONE_OPT) continue;
     if (setting.category == StrId::STR_CAT_DISPLAY) {
+      // Redirect CrossPet-specific settings to CrossPet tab
+      if (setting.nameId == StrId::STR_HOME_FOCUS_MODE) continue;
+      if (setting.nameId == StrId::STR_DARK_MODE) continue;
+      if (setting.nameId == StrId::STR_KEEP_CLOCK_ALIVE) continue;
+      if (setting.nameId == StrId::STR_SLEEP_REFRESH) continue;
+      if (setting.nameId == StrId::STR_TEMP_UNIT) continue;
+      // Sleep screen mode → replaced by Action that opens SleepImagePickerActivity
+      if (setting.nameId == StrId::STR_SLEEP_SCREEN) continue;
+      // Cover mode/filter → only relevant for cover-based sleep modes
+      if (setting.nameId == StrId::STR_SLEEP_COVER_MODE || setting.nameId == StrId::STR_SLEEP_COVER_FILTER) {
+        const auto m = SETTINGS.sleepScreen;
+        if (m != CrossPointSettings::COVER && m != CrossPointSettings::COVER_CUSTOM) continue;
+      }
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
+      if (setting.nameId == StrId::STR_TEXT_DARKNESS) continue;  // → CrossPet tab
       readerSettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_CONTROLS) {
       controlsSettings.push_back(setting);
@@ -57,6 +77,8 @@ void SettingsActivity::onEnter() {
   }
 
   // Append device-only ACTION items
+  displaySettings.insert(displaySettings.begin(),
+                         SettingInfo::Action(StrId::STR_SLEEP_SCREEN, SettingAction::SleepScreen));
   controlsSettings.insert(controlsSettings.begin(),
                           SettingInfo::Action(StrId::STR_REMAP_FRONT_BUTTONS, SettingAction::RemapFrontButtons));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_WIFI_NETWORKS, SettingAction::Network));
@@ -69,9 +91,12 @@ void SettingsActivity::onEnter() {
   systemSettings.push_back(SettingInfo::Action(StrId::STR_REBOOT, SettingAction::Reboot));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_CUSTOMISE_STATUS_BAR, SettingAction::CustomiseStatusBar));
 
-  // Build APPS tab — per-app visibility toggles (added dynamically to avoid
-  // stack overflow from too many std::function allocations in static init).
+  // Build CrossPet tab — per-app toggles with their config settings, plus options.
   appsSettings.clear();
+  appsSettings.reserve(24);
+
+  // APPS section: per-app visibility toggles with related config underneath
+  appsSettings.push_back(SettingInfo::Section("APPS"));
   struct AppToggle { StrId id; uint8_t CrossPetSettings::* field; const char* key; };
   const AppToggle appToggles[] = {
     {StrId::STR_CLOCK,              &CrossPetSettings::appClock,            "appClock"},
@@ -80,11 +105,7 @@ void SettingsActivity::onEnter() {
     {StrId::STR_VIRTUAL_PET,        &CrossPetSettings::appVirtualPet,       "appVirtualPet"},
     {StrId::STR_READING_STATS_APP,  &CrossPetSettings::appReadingStats,     "appReadingStats"},
     {StrId::STR_SLEEP_IMAGE_PICKER, &CrossPetSettings::appSleepImagePicker, "appSleepImagePicker"},
-    {StrId::STR_CHESS,              &CrossPetSettings::appChess,            "appChess"},
-    {StrId::STR_CARO,               &CrossPetSettings::appCaro,             "appCaro"},
-    {StrId::STR_SUDOKU,             &CrossPetSettings::appSudoku,           "appSudoku"},
-    {StrId::STR_MINESWEEPER,        &CrossPetSettings::appMinesweeper,      "appMinesweeper"},
-    {StrId::STR_2048,               &CrossPetSettings::app2048,             "app2048"},
+    {StrId::STR_GAMES,              &CrossPetSettings::appGames,            "appGames"},
   };
   for (const auto& t : appToggles) {
     auto field = t.field;
@@ -92,35 +113,76 @@ void SettingsActivity::onEnter() {
         t.id,
         [field] { return PET_SETTINGS.*field; },
         [field](uint8_t v) { PET_SETTINGS.*field = v; PET_SETTINGS.saveToFile(); },
-        t.key, StrId::STR_TOOLS));
+        t.key, StrId::STR_CROSSPET));
   }
 
+  // CLOCK section: clock-related config settings (from Display)
+  // Note: device has no RTC battery backup — time is lost during deep sleep.
+  appsSettings.push_back(SettingInfo::Section("CLOCK (Beta)"));
+  appsSettings.push_back(SettingInfo::Enum(StrId::STR_CLOCK_MODE, &CrossPointSettings::clockMode,
+      {StrId::STR_CLOCK_NTP, StrId::STR_CLOCK_MANUAL}, "clockMode", StrId::STR_CROSSPET));
+  appsSettings.push_back(SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_ALIVE, &CrossPointSettings::keepClockAlive,
+      "keepClockAlive", StrId::STR_CROSSPET));
+  appsSettings.push_back(SettingInfo::Enum(StrId::STR_SLEEP_REFRESH, &CrossPointSettings::sleepRefreshInterval,
+      {StrId::STR_OFF, StrId::STR_1_MIN, StrId::STR_5_MIN, StrId::STR_10_MIN, StrId::STR_30_MIN, StrId::STR_60_MIN},
+      "sleepRefreshInterval", StrId::STR_CROSSPET));
+
+  // WEATHER section: weather-related config settings (from Display)
+  appsSettings.push_back(SettingInfo::Section("WEATHER"));
+  appsSettings.push_back(SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
+      {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CROSSPET));
+
+  // OPTIONS section: CrossPet-specific global settings
+  appsSettings.push_back(SettingInfo::Section("OPTIONS"));
+  appsSettings.push_back(SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode,
+      "darkMode", StrId::STR_CROSSPET));
+  appsSettings.push_back(SettingInfo::Enum(StrId::STR_TEXT_DARKNESS, &CrossPointSettings::textDarkness,
+      {StrId::STR_NORMAL, StrId::STR_DARK, StrId::STR_EXTRA_DARK}, "textDarkness", StrId::STR_CROSSPET));
+  appsSettings.push_back(SettingInfo::DynamicToggle(
+      StrId::STR_HOME_FOCUS_MODE,
+      [] { return PET_SETTINGS.homeFocusMode; },
+      [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
+      "homeFocusMode", StrId::STR_CROSSPET));
+
   // Insert section headers into each category (device UI only, after ACTION items are appended).
-  // Display: SCREEN (sleep/refresh 0-4), APPEARANCE (theme/UI 5-10), HOME (focus mode 11)
-  displaySettings.insert(displaySettings.begin() + 11, SettingInfo::Section("HOME"));
-  displaySettings.insert(displaySettings.begin() + 5, SettingInfo::Section("APPEARANCE"));
+  // Display: SCREEN (sleep action + optional cover settings), APPEARANCE (remaining)
+  {
+    // Find where sleep-related items end (after sleep action + any cover mode/filter)
+    int screenEnd = 1;  // At least the Sleep Screen action
+    for (int i = 1; i < static_cast<int>(displaySettings.size()); i++) {
+      if (displaySettings[i].nameId == StrId::STR_SLEEP_COVER_MODE ||
+          displaySettings[i].nameId == StrId::STR_SLEEP_COVER_FILTER)
+        screenEnd = i + 1;
+      else
+        break;
+    }
+    if (screenEnd < static_cast<int>(displaySettings.size()))
+      displaySettings.insert(displaySettings.begin() + screenEnd, SettingInfo::Section("APPEARANCE"));
+  }
   displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
 
-  // Reader: TEXT (font/layout), NAVIGATION (orientation/turn), ACTIONS (status bar)
-  // Items order: Font Family(0), Font Size(1), Line Spacing(2), Screen Margin(3), Para Alignment(4),
-  //              Embedded Style(5), Hyphenation(6), Orientation(7), Extra Spacing(8), Text AA(9),
-  //              Text Darkness(10), Images(11), Auto Page Turn(12), Customise Status Bar(13)
-  readerSettings.insert(readerSettings.begin() + 13, SettingInfo::Section("ACTIONS"));
-  readerSettings.insert(readerSettings.begin() + 7, SettingInfo::Section("READING"));
+  // Reader (12 items after redirect): TEXT (0-6), READING (7-10), ACTIONS (11)
+  if (readerSettings.size() >= 12) {
+    readerSettings.insert(readerSettings.begin() + 11, SettingInfo::Section("ACTIONS"));
+  }
+  if (readerSettings.size() >= 8) {
+    readerSettings.insert(readerSettings.begin() + 7, SettingInfo::Section("READING"));
+  }
   readerSettings.insert(readerSettings.begin(), SettingInfo::Section("TEXT"));
 
-  // Controls: BUTTONS (remapping action + layout toggles), POWER BUTTON (short pwr btn actions)
-  // Items order after insert: Remap Front Buttons(0), Side Btn Layout(1), Front Page Btn Layout(2),
-  //                           Long Press Skip(3), Short Pwr Btn(4), 2Click(5), 3Click(6)
-  controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
+  // Controls: BUTTONS (remap+layout 0-3), POWER BUTTON (pwr btn 4-6)
+  if (controlsSettings.size() >= 5) {
+    controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
+  }
   controlsSettings.insert(controlsSettings.begin(), SettingInfo::Section("BUTTONS"));
 
-  // System: GENERAL (sleep timeout, files), CONNECTIVITY (WiFi, KOReader, OPDS), MAINTENANCE (clear, updates, reboot)
-  // Items order: Sleep Timeout(0), Show Hidden Files(1), Show Free Heap(2),
-  //              WiFi(3), KOReader Sync(4), OPDS Browser(5),
-  //              Clear Cache(6), Check Updates(7), Language(8), Device Info(9), Reboot(10)
-  systemSettings.insert(systemSettings.begin() + 9, SettingInfo::Section("DEVICE"));
-  systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
+  // System: GENERAL (0-2), CONNECTIVITY (3-5), DEVICE (6-10)
+  if (systemSettings.size() >= 7) {
+    systemSettings.insert(systemSettings.begin() + 6, SettingInfo::Section("DEVICE"));
+  }
+  if (systemSettings.size() >= 4) {
+    systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
+  }
   systemSettings.insert(systemSettings.begin(), SettingInfo::Section("GENERAL"));
 
   // Reset selection to first category
@@ -247,6 +309,11 @@ void SettingsActivity::toggleCurrentSetting() {
   } else if (setting.type == SettingType::ENUM && setting.valuePtr != nullptr) {
     const uint8_t currentValue = SETTINGS.*(setting.valuePtr);
     SETTINGS.*(setting.valuePtr) = (currentValue + 1) % static_cast<uint8_t>(setting.enumValues.size());
+  } else if (setting.type == SettingType::ENUM && setting.valueGetter && setting.valueSetter) {
+    // DynamicEnum: backed by external getter/setter
+    const uint8_t currentValue = setting.valueGetter();
+    setting.valueSetter((currentValue + 1) % static_cast<uint8_t>(setting.enumValues.size()));
+    return;  // setter is responsible for saving
   } else if (setting.type == SettingType::VALUE && setting.valuePtr != nullptr) {
     const int8_t currentValue = SETTINGS.*(setting.valuePtr);
     if (currentValue + setting.valueRange.step > setting.valueRange.max) {
@@ -291,6 +358,14 @@ void SettingsActivity::toggleCurrentSetting() {
         break;
       case SettingAction::DeviceInfo:
         startActivityForResult(std::make_unique<DeviceInfoActivity>(renderer, mappedInput), resultHandler);
+        break;
+      case SettingAction::SleepScreen:
+        startActivityForResult(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput),
+                               [this](const ActivityResult&) {
+                                 SETTINGS.saveToFile();
+                                 // Rebuild display settings — cover mode/filter visibility may have changed
+                                 onEnter();
+                               });
         break;
       case SettingAction::Reboot:
         renderer.clearScreen();
@@ -361,8 +436,16 @@ void SettingsActivity::render(RenderLock&&) {
         } else if (setting.type == SettingType::ENUM && setting.valuePtr != nullptr) {
           const uint8_t value = SETTINGS.*(setting.valuePtr);
           valueText = I18N.get(setting.enumValues[value]);
+        } else if (setting.type == SettingType::ENUM && setting.valueGetter) {
+          valueText = I18N.get(setting.enumValues[setting.valueGetter()]);
         } else if (setting.type == SettingType::VALUE && setting.valuePtr != nullptr) {
           valueText = std::to_string(SETTINGS.*(setting.valuePtr));
+        } else if (setting.type == SettingType::ACTION && setting.action == SettingAction::SleepScreen) {
+          const uint8_t m = SETTINGS.sleepScreen;
+          const StrId modes[] = {StrId::STR_DARK, StrId::STR_LIGHT, StrId::STR_CUSTOM, StrId::STR_COVER,
+                                 StrId::STR_NONE_OPT, StrId::STR_COVER_CUSTOM, StrId::STR_CLOCK,
+                                 StrId::STR_READING_STATS, StrId::STR_PAGE_OVERLAY, StrId::STR_KEEP_SCREEN};
+          if (m < CrossPointSettings::SLEEP_SCREEN_MODE_COUNT) valueText = I18N.get(modes[m]);
         }
         return valueText;
       },

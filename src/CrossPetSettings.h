@@ -27,11 +27,7 @@ class CrossPetSettings {
   uint8_t appVirtualPet = 1;
   uint8_t appReadingStats = 1;
   uint8_t appSleepImagePicker = 1;
-  uint8_t appChess = 1;
-  uint8_t appCaro = 1;
-  uint8_t appSudoku = 1;
-  uint8_t appMinesweeper = 1;
-  uint8_t app2048 = 1;
+  uint8_t appGames = 1;  // Master toggle for all games (Chess, Caro, Sudoku, Minesweeper, 2048)
 
  private:
   CrossPetSettings() = default;

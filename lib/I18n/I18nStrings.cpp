@@ -135,6 +135,9 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // English
     " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xA1"
@@ -158,6 +161,9 @@ const char* const CHARACTER_SETS[] = {
     "\xB3"
     "\xC3"
     "\xBA"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Español
     " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -179,6 +185,9 @@ const char* const CHARACTER_SETS[] = {
     "\xAA"
     "\xC3"
     "\xAE"
+    "\xE2"
+    "\x80"
+    "\x94"
     "\xE2"
     "\x80"
     "\x98"
@@ -207,6 +216,9 @@ const char* const CHARACTER_SETS[] = {
     "\xB6"
     "\xC3"
     "\xBC"
+    "\xE2"
+    "\x80"
+    "\x94"
     "\xE2"
     "\x80"
     "\xA6"
@@ -261,6 +273,9 @@ const char* const CHARACTER_SETS[] = {
     "\xBE"
     "\xE2"
     "\x80"
+    "\x94"
+    "\xE2"
+    "\x80"
     "\x9C"
     "\xE2"
     "\x80"
@@ -294,6 +309,9 @@ const char* const CHARACTER_SETS[] = {
     "\xE2"
     "\x80"
     "\x91"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Português (Brasil)
     " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -415,6 +433,9 @@ const char* const CHARACTER_SETS[] = {
     "\x8F"
     "\xD1"
     "\x91"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Русский
     " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -432,6 +453,9 @@ const char* const CHARACTER_SETS[] = {
     "\xA5"
     "\xC3"
     "\xB6"
+    "\xE2"
+    "\x80"
+    "\x94"
     "\xE2"
     "\x80"
     "\x9D"
@@ -463,6 +487,9 @@ const char* const CHARACTER_SETS[] = {
     "\x99"
     "\xC8"
     "\x9B"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Română
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -490,6 +517,9 @@ const char* const CHARACTER_SETS[] = {
     "\xB3"
     "\xC3"
     "\xBC"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Català
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -613,6 +643,9 @@ const char* const CHARACTER_SETS[] = {
     "\x96"
     "\xD1"
     "\x97"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Українська
     " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -736,6 +769,9 @@ const char* const CHARACTER_SETS[] = {
     "\x96"
     "\xD1"
     "\x9E"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Беларуская
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -751,6 +787,9 @@ const char* const CHARACTER_SETS[] = {
     "\xAC"
     "\xC3"
     "\xB9"
+    "\xE2"
+    "\x80"
+    "\x94"
     "\xE2"
     "\x86"
     "\xBA"
@@ -784,6 +823,9 @@ const char* const CHARACTER_SETS[] = {
     "\xBA"
     "\xC5"
     "\xBC"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Polski
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -795,6 +837,9 @@ const char* const CHARACTER_SETS[] = {
     "\xA4"
     "\xC3"
     "\xB6"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Suomi
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -812,6 +857,9 @@ const char* const CHARACTER_SETS[] = {
     "\xA6"
     "\xC3"
     "\xB8"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Dansk
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -823,6 +871,9 @@ const char* const CHARACTER_SETS[] = {
     "\xAF"
     "\xC3"
     "\xBC"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Nederlands
     "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -852,6 +903,9 @@ const char* const CHARACTER_SETS[] = {
     "\x9E"
     "\xC5"
     "\x9F"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Türkçe
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -983,6 +1037,9 @@ const char* const CHARACTER_SETS[] = {
     "\xA8"
     "\xD3"
     "\xA9"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Қазақша
     " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -1221,6 +1278,9 @@ const char* const CHARACTER_SETS[] = {
     "\xE1"
     "\xBB"
     "\xB7"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Tiếng Việt
     " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -1252,6 +1312,9 @@ const char* const CHARACTER_SETS[] = {
     "\x91"
     "\xC5"
     "\xB1"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Magyar
     " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
@@ -1283,6 +1346,9 @@ const char* const CHARACTER_SETS[] = {
     "\xBE"
     "\xE2"
     "\x80"
+    "\x94"
+    "\xE2"
+    "\x80"
     "\x9C"
     "\xE2"
     "\x80"
@@ -1304,6 +1370,9 @@ const char* const CHARACTER_SETS[] = {
     "\xBD"
     "\xC5"
     "\xBE"
+    "\xE2"
+    "\x80"
+    "\x94"
     "",  // Slovenščina
 };
 
@@ -1600,9 +1669,9 @@ const char* const STRINGS_EN[] = {
     "CrossPet Classic",
     "Sunlight Fading Fix",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -1639,6 +1708,8 @@ const char* const STRINGS_EN[] = {
     "Sync Progress",
     "Delete Book Cache",
     "Delete",
+    "Info",
+    "Folder",
     "Show page as QR",
     "Chapter: ",
     " pages  |  ",
@@ -1684,6 +1755,7 @@ const char* const STRINGS_EN[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -1887,6 +1959,7 @@ const char* const STRINGS_EN[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -1895,6 +1968,13 @@ const char* const STRINGS_EN[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -2503,9 +2583,9 @@ const char* const STRINGS_ES[] = {
     "\xB3"
     "n de desvanecimiento",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -2574,6 +2654,8 @@ const char* const STRINGS_ES[] = {
     "\xA9"
     " del libro",
     "Borrar",
+    "Info",
+    "Folder",
     "Mostrar p\xC3"
     "\xA1"
     "gina como QR",
@@ -2657,6 +2739,7 @@ const char* const STRINGS_ES[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -2860,6 +2943,7 @@ const char* const STRINGS_ES[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -2868,6 +2952,13 @@ const char* const STRINGS_ES[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -3620,9 +3711,9 @@ const char* const STRINGS_FR[] = {
     "\xA9"
     " au soleil",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -3694,6 +3785,8 @@ const char* const STRINGS_FR[] = {
     "Synchro progression",
     "Supprimer cache livre",
     "Supprimer",
+    "Info",
+    "Folder",
     "Afficher la page en QR",
     "Chapitre : ",
     " pages  |  ",
@@ -3779,6 +3872,7 @@ const char* const STRINGS_FR[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -3982,6 +4076,7 @@ const char* const STRINGS_FR[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -3990,6 +4085,13 @@ const char* const STRINGS_FR[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -4532,9 +4634,9 @@ const char* const STRINGS_DE[] = {
     "CrossPet Classic",
     "Anti-Verblassen",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -4588,6 +4690,8 @@ const char* const STRINGS_DE[] = {
     "L\xC3"
     "\xB6"
     "schen",
+    "Info",
+    "Folder",
     "Seite als QR anzeigen",
     "Kapitel:",
     " Seiten  |  ",
@@ -4654,6 +4758,7 @@ const char* const STRINGS_DE[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -4857,6 +4962,7 @@ const char* const STRINGS_DE[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -4865,6 +4971,13 @@ const char* const STRINGS_DE[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -6263,9 +6376,9 @@ const char* const STRINGS_CS[] = {
     "\xAD"
     " na slunci",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -6468,6 +6581,8 @@ const char* const STRINGS_CS[] = {
     "\xA5"
     " knihy",
     "Smazat",
+    "Info",
+    "Folder",
     "Show page as QR",
     "Kapitola:",
     "str\xC3"
@@ -6639,6 +6754,7 @@ const char* const STRINGS_CS[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -6842,6 +6958,7 @@ const char* const STRINGS_CS[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -6850,6 +6967,13 @@ const char* const STRINGS_CS[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -7485,9 +7609,9 @@ const char* const STRINGS_PO[] = {
     "CrossPet Classic",
     "Ajuste desbotamento ao sol",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -7576,6 +7700,8 @@ const char* const STRINGS_PO[] = {
     "Sincronizar progresso",
     "Excluir cache do livro",
     "Excluir",
+    "Info",
+    "Folder",
     "Show page as QR",
     "Cap\xC3"
     "\xAD"
@@ -7643,6 +7769,7 @@ const char* const STRINGS_PO[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -7846,6 +7973,7 @@ const char* const STRINGS_PO[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -7854,6 +7982,13 @@ const char* const STRINGS_PO[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -13863,7 +13998,7 @@ const char* const STRINGS_RU[] = {
     "\x82"
     "\xD1"
     "\x8C"
-    ":",
+    ": ",
     "IP-\xD0"
     "\xB0"
     "\xD0"
@@ -13874,7 +14009,7 @@ const char* const STRINGS_RU[] = {
     "\xB5"
     "\xD1"
     "\x81"
-    ":",
+    ": ",
     "\xD0"
     "\xB8"
     "\xD0"
@@ -14910,9 +15045,9 @@ const char* const STRINGS_RU[] = {
     "\x8F"
     "",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -15827,6 +15962,8 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x8C"
     "",
+    "Info",
+    "Folder",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -15888,14 +16025,14 @@ const char* const STRINGS_RU[] = {
     "\xB2"
     "\xD0"
     "\xB0"
-    ":",
-    "\xD1"
+    ": ",
+    " \xD1"
     "\x81"
     "\xD1"
     "\x82"
     "\xD1"
     "\x80"
-    ".  |",
+    ". | ",
     "\xD0"
     "\x9A"
     "\xD0"
@@ -15906,7 +16043,7 @@ const char* const STRINGS_RU[] = {
     "\xB3"
     "\xD0"
     "\xB0"
-    ":",
+    ": ",
     "shift",
     "SHIFT",
     "LOCK",
@@ -16721,7 +16858,7 @@ const char* const STRINGS_RU[] = {
     "\xB5"
     "\xD0"
     "\xBB"
-    "",
+    " ",
     "\xD0"
     "\x9E"
     "\xD1"
@@ -16948,34 +17085,34 @@ const char* const STRINGS_RU[] = {
     "\x82"
     "\xD0"
     "\xBE"
-    "-\xD0"
+    "\xD0"
     "\xBF"
     "\xD0"
-    "\xBE"
-    "\xD0"
-    "\xB2"
-    "\xD0"
-    "\xBE"
+    "\xB5"
     "\xD1"
     "\x80"
     "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    " \xD0"
-    "\xB2"
-    "\xD0"
-    "\xBA"
+    "\xB5"
     "\xD0"
     "\xBB"
+    "\xD0"
+    "\xB8"
     "\xD1"
-    "\x8E"
+    "\x81"
     "\xD1"
-    "\x87"
+    "\x82"
     "\xD1"
-    "\x91"
+    "\x8B"
+    "\xD0"
+    "\xB2"
+    "\xD0"
+    "\xB0"
     "\xD0"
     "\xBD"
+    "\xD0"
+    "\xB8"
+    "\xD0"
+    "\xB5"
     ": ",
     "\xD0"
     "\x90"
@@ -16985,48 +17122,46 @@ const char* const STRINGS_RU[] = {
     "\x82"
     "\xD0"
     "\xBE"
-    "-\xD0"
+    "\xD0"
     "\xBF"
     "\xD0"
-    "\xBE"
+    "\xB5"
+    "\xD1"
+    "\x80"
+    "\xD0"
+    "\xB5"
+    "\xD0"
+    "\xBB"
+    "\xD0"
+    "\xB8"
+    "\xD1"
+    "\x81"
+    "\xD1"
+    "\x82"
+    "\xD1"
+    "\x8B"
     "\xD0"
     "\xB2"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x80"
-    "\xD0"
-    "\xBE"
-    "\xD1"
-    "\x82"
-    " (\xD0"
-    "\xA1"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x80"
     "\xD0"
     "\xB0"
     "\xD0"
     "\xBD"
     "\xD0"
     "\xB8"
+    "\xD0"
+    "\xB5"
+    " (\xD1"
+    "\x81"
     "\xD1"
-    "\x86"
-    " \xD0"
-    "\xB2"
-    " \xD0"
+    "\x82"
+    "\xD1"
+    "\x80"
+    "./\xD0"
     "\xBC"
     "\xD0"
     "\xB8"
     "\xD0"
     "\xBD"
-    "\xD1"
-    "\x83"
-    "\xD1"
-    "\x82"
-    "\xD1"
-    "\x83"
     ")",
     "Auto Page Turn",
     "1 page/min",
@@ -17034,6 +17169,7 @@ const char* const STRINGS_RU[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -17237,6 +17373,7 @@ const char* const STRINGS_RU[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -17245,6 +17382,13 @@ const char* const STRINGS_RU[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -18067,9 +18211,9 @@ const char* const STRINGS_SV[] = {
     "\xB6"
     "r solskensmattning",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -18159,6 +18303,8 @@ const char* const STRINGS_SV[] = {
     "Synkroniseringsframsteg",
     "Radera bokcache",
     "Radera",
+    "Info",
+    "Folder",
     "Visa sida som QR-kod",
     "Kapitel:",
     " sidor  |  ",
@@ -18253,6 +18399,7 @@ const char* const STRINGS_SV[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -18456,6 +18603,7 @@ const char* const STRINGS_SV[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -18464,6 +18612,13 @@ const char* const STRINGS_SV[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -19424,9 +19579,9 @@ const char* const STRINGS_RO[] = {
     "\x83"
     "",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -19515,6 +19670,8 @@ const char* const STRINGS_RO[] = {
     "terge\xC8"
     "\x9B"
     "i",
+    "Info",
+    "Folder",
     "Afi\xC8"
     "\x99"
     "a\xC8"
@@ -19638,6 +19795,7 @@ const char* const STRINGS_RO[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -19841,6 +19999,7 @@ const char* const STRINGS_RO[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -19849,6 +20008,13 @@ const char* const STRINGS_RO[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -20493,9 +20659,9 @@ const char* const STRINGS_CA[] = {
     "\xAF"
     "ment pel sol",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -20560,6 +20726,8 @@ const char* const STRINGS_CA[] = {
     "\xB2"
     "ria cau del llibre",
     "Esborra",
+    "Info",
+    "Folder",
     "Mostra la p\xC3"
     "\xA0"
     "gina com a QR",
@@ -20655,6 +20823,7 @@ const char* const STRINGS_CA[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -20858,6 +21027,7 @@ const char* const STRINGS_CA[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -20866,6 +21036,13 @@ const char* const STRINGS_CA[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -28746,9 +28923,9 @@ const char* const STRINGS_UK[] = {
     "\x96"
     "",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -29733,6 +29910,8 @@ const char* const STRINGS_UK[] = {
     "\xD0"
     "\xB8"
     "",
+    "Info",
+    "Folder",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -31012,6 +31191,7 @@ const char* const STRINGS_UK[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -31215,6 +31395,7 @@ const char* const STRINGS_UK[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -31223,6 +31404,13 @@ const char* const STRINGS_UK[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -38389,9 +38577,9 @@ const char* const STRINGS_BE[] = {
     "\x8F"
     "",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -39314,6 +39502,8 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x8C"
     "",
+    "Info",
+    "Folder",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -40523,6 +40713,7 @@ const char* const STRINGS_BE[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -40726,6 +40917,7 @@ const char* const STRINGS_BE[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -40734,6 +40926,13 @@ const char* const STRINGS_BE[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -41161,9 +41360,9 @@ const char* const STRINGS_IT[] = {
     "CrossPet Classic",
     "Fix Sbiadimento da Luce Solare",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -41212,6 +41411,8 @@ const char* const STRINGS_IT[] = {
     "Sincronizza Progressi",
     "Elimina Cache Libro",
     "Delete",
+    "Info",
+    "Folder",
     "Show page as QR",
     "Capitolo: ",
     " pagine  |  ",
@@ -41259,6 +41460,7 @@ const char* const STRINGS_IT[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -41462,6 +41664,7 @@ const char* const STRINGS_IT[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -41470,6 +41673,13 @@ const char* const STRINGS_IT[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -42446,9 +42656,9 @@ const char* const STRINGS_PL[] = {
     "\x84"
     "ca",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -42553,6 +42763,8 @@ const char* const STRINGS_PL[] = {
     "Usu\xC5"
     "\x84"
     "",
+    "Info",
+    "Folder",
     "Poka\xC5"
     "\xBC"
     " stron\xC4"
@@ -42668,6 +42880,7 @@ const char* const STRINGS_PL[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -42871,6 +43084,7 @@ const char* const STRINGS_PL[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -42879,6 +43093,13 @@ const char* const STRINGS_PL[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -43649,9 +43870,9 @@ const char* const STRINGS_FI[] = {
     "CrossPet Classic",
     "Auringonvalon haalistumiskorjaus",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -43730,6 +43951,8 @@ const char* const STRINGS_FI[] = {
     "\xA4"
     "limuisti",
     "Delete",
+    "Info",
+    "Folder",
     "Show page as QR",
     "Luku: ",
     " sivua  |  ",
@@ -43841,6 +44064,7 @@ const char* const STRINGS_FI[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -44044,6 +44268,7 @@ const char* const STRINGS_FI[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -44052,6 +44277,13 @@ const char* const STRINGS_FI[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -44658,9 +44890,9 @@ const char* const STRINGS_DA[] = {
     "CrossPet Classic",
     "Sollysfading-rettelse",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -44721,6 +44953,8 @@ const char* const STRINGS_DA[] = {
     "Synkroniser fremskridt",
     "Slet bogcache",
     "Delete",
+    "Info",
+    "Folder",
     "Show page as QR",
     "Kapitel: ",
     " sider  |  ",
@@ -44776,6 +45010,7 @@ const char* const STRINGS_DA[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -44979,6 +45214,7 @@ const char* const STRINGS_DA[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -44987,6 +45223,13 @@ const char* const STRINGS_DA[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -45393,9 +45636,9 @@ const char* const STRINGS_NL[] = {
     "CrossPet Classic",
     "Zonlicht vervaging fix",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -45432,6 +45675,8 @@ const char* const STRINGS_NL[] = {
     "Voortgang synchroniseren",
     "Boekcache verwijderen",
     "Verwijder",
+    "Info",
+    "Folder",
     "Pagina als QR tonen",
     "Hoofdstuk: ",
     " pagina's  |  ",
@@ -45479,6 +45724,7 @@ const char* const STRINGS_NL[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -45682,6 +45928,7 @@ const char* const STRINGS_NL[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -45690,6 +45937,13 @@ const char* const STRINGS_NL[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -46980,9 +47234,9 @@ const char* const STRINGS_TR[] = {
     "\xBC"
     "zeltmesi",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -47099,6 +47353,8 @@ const char* const STRINGS_TR[] = {
     "\x9F"
     "ini Sil",
     "Sil",
+    "Info",
+    "Folder",
     "Sayfay\xC4"
     "\xB1"
     " QR olarak g\xC3"
@@ -47244,6 +47500,7 @@ const char* const STRINGS_TR[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -47447,6 +47704,7 @@ const char* const STRINGS_TR[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -47455,6 +47713,13 @@ const char* const STRINGS_TR[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -53121,9 +53386,9 @@ const char* const STRINGS_KK[] = {
     "\x83"
     "",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -54090,6 +54355,8 @@ const char* const STRINGS_KK[] = {
     "\xD1"
     "\x8E"
     "",
+    "Info",
+    "Folder",
     "\xD0"
     "\x91"
     "\xD0"
@@ -55355,6 +55622,7 @@ const char* const STRINGS_KK[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -55558,6 +55826,7 @@ const char* const STRINGS_KK[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -55566,6 +55835,13 @@ const char* const STRINGS_KK[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -58048,9 +58324,33 @@ const char* const STRINGS_VI[] = {
     "\xAF"
     "ng",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Gi\xE1"
+    "\xBB"
+    "\xAF"
+    " \xC4"
+    "\x90"
+    "\xE1"
+    "\xBB"
+    "\x93"
+    "ng H\xE1"
+    "\xBB"
+    "\x93"
+    " (Beta)",
     "Off",
-    "Sleep Refresh",
+    "L\xC3"
+    "\xA0"
+    "m M\xE1"
+    "\xBB"
+    "\x9B"
+    "i \xC4"
+    "\x90"
+    "\xE1"
+    "\xBB"
+    "\x93"
+    "ng H\xE1"
+    "\xBB"
+    "\x93"
+    " (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -58330,6 +58630,15 @@ const char* const STRINGS_VI[] = {
     "X\xC3"
     "\xB3"
     "a",
+    "Th\xC3"
+    "\xB4"
+    "ng tin",
+    "Th\xC6"
+    "\xB0"
+    " m\xE1"
+    "\xBB"
+    "\xA5"
+    "c",
     "Hi\xE1"
     "\xBB"
     "\x87"
@@ -58705,6 +59014,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\xA5"
     "ng",
+    "CrossPet",
     "\xC4"
     "\x90"
     "\xE1"
@@ -60029,6 +60339,11 @@ const char* const STRINGS_VI[] = {
     " kh\xC3"
     "\xB3"
     "",
+    "Tr\xC3"
+    "\xB2"
+    " ch\xC6"
+    "\xA1"
+    "i",
     "C\xE1"
     "\xBB"
     "\x9D"
@@ -60079,6 +60394,52 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9D"
     "",
+    "Ch\xE1"
+    "\xBA"
+    "\xBF"
+    " \xC4"
+    "\x90"
+    "\xE1"
+    "\xBB"
+    "\x99"
+    " \xC4"
+    "\x90"
+    "\xE1"
+    "\xBB"
+    "\x93"
+    "ng H\xE1"
+    "\xBB"
+    "\x93"
+    "",
+    "NTP (T\xE1"
+    "\xBB"
+    "\xB1"
+    " \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\x99"
+    "ng)",
+    "Th\xE1"
+    "\xBB"
+    "\xA7"
+    " c\xC3"
+    "\xB4"
+    "ng",
+    "Kh\xC3"
+    "\xB4"
+    "ng c\xC3"
+    "\xB3"
+    " pin RTC \xE2"
+    "\x80"
+    "\x94"
+    " m\xE1"
+    "\xBA"
+    "\xA5"
+    "t gi\xE1"
+    "\xBB"
+    "\x9D"
+    " khi sleep",
     "Ch\xE1"
     "\xBB"
     "\xA7"
@@ -61753,9 +62114,9 @@ const char* const STRINGS_HU[] = {
     "\xA1"
     "s",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -61930,6 +62291,8 @@ const char* const STRINGS_HU[] = {
     "rl\xC3"
     "\xA9"
     "s",
+    "Info",
+    "Folder",
     "Oldal megjelen\xC3"
     "\xAD"
     "t\xC3"
@@ -62117,6 +62480,7 @@ const char* const STRINGS_HU[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -62320,6 +62684,7 @@ const char* const STRINGS_HU[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -62328,6 +62693,13 @@ const char* const STRINGS_HU[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -63004,9 +63376,9 @@ const char* const STRINGS_LT[] = {
     "\xA1"
     "kumo pataisa",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -63095,6 +63467,8 @@ const char* const STRINGS_LT[] = {
     "\x85"
     "",
     "Trinti",
+    "Info",
+    "Folder",
     "QR kodas",
     "Sk: ",
     " psl. | ",
@@ -63188,6 +63562,7 @@ const char* const STRINGS_LT[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -63391,6 +63766,7 @@ const char* const STRINGS_LT[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -63399,6 +63775,13 @@ const char* const STRINGS_LT[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -63945,9 +64328,9 @@ const char* const STRINGS_SI[] = {
     "CrossPet Classic",
     "Popravek bledenja na soncu",
     "Dark Mode",
-    "Keep Clock Alive",
+    "Keep Clock On (Beta)",
     "Off",
-    "Sleep Refresh",
+    "Clock Refresh (Sleep)",
     "1 min",
     "5 min",
     "10 min",
@@ -64000,6 +64383,8 @@ const char* const STRINGS_SI[] = {
     "Izbri\xC5"
     "\xA1"
     "i",
+    "Info",
+    "Folder",
     "Prika\xC5"
     "\xBE"
     "i stran kot QR",
@@ -64069,6 +64454,7 @@ const char* const STRINGS_SI[] = {
     "6 pages/min",
     "12 pages/min",
     "Apps",
+    "CrossPet",
     "Clock",
     "Pomodoro",
     "Daily Quote",
@@ -64272,6 +64658,7 @@ const char* const STRINGS_SI[] = {
     "Medium",
     "Hard",
     "Select Difficulty",
+    "Games",
     "Chess",
     "White's Turn",
     "Black's Turn",
@@ -64280,6 +64667,13 @@ const char* const STRINGS_SI[] = {
     "Select",
     "Move",
     "Set Time",
+    "Clock Mode",
+    "NTP (Auto)",
+    "Manual",
+    "No RTC backup \xE2"
+    "\x80"
+    "\x94"
+    " time lost on sleep",
     "Sunday",
     "Monday",
     "Tuesday",

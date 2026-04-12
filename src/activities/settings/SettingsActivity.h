@@ -23,6 +23,7 @@ enum class SettingAction {
   Language,
   DeviceInfo,
   Reboot,
+  SleepScreen,
 };
 
 struct SettingInfo {

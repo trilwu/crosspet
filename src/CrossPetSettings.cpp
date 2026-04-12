@@ -23,11 +23,7 @@ bool CrossPetSettings::saveToFile() const {
   doc["appVirtualPet"] = appVirtualPet;
   doc["appReadingStats"] = appReadingStats;
   doc["appSleepImagePicker"] = appSleepImagePicker;
-  doc["appChess"] = appChess;
-  doc["appCaro"] = appCaro;
-  doc["appSudoku"] = appSudoku;
-  doc["appMinesweeper"] = appMinesweeper;
-  doc["app2048"] = app2048;
+  doc["appGames"] = appGames;
 
   String json;
   serializeJson(doc, json);
@@ -60,11 +56,13 @@ bool CrossPetSettings::loadFromFile() {
       appVirtualPet = doc["appVirtualPet"] | (uint8_t)1;
       appReadingStats = doc["appReadingStats"] | (uint8_t)1;
       appSleepImagePicker = doc["appSleepImagePicker"] | (uint8_t)1;
-      appChess = doc["appChess"] | (uint8_t)1;
-      appCaro = doc["appCaro"] | (uint8_t)1;
-      appSudoku = doc["appSudoku"] | (uint8_t)1;
-      appMinesweeper = doc["appMinesweeper"] | (uint8_t)1;
-      app2048 = doc["app2048"] | (uint8_t)1;
+      // Migrate: if any legacy per-game toggle was off, set master toggle off
+      if (doc.containsKey("appGames")) {
+        appGames = doc["appGames"] | (uint8_t)1;
+      } else {
+        // Legacy migration: all games were on by default, keep on unless explicitly saved off
+        appGames = 1;
+      }
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
     }

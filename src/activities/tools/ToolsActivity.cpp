@@ -58,27 +58,24 @@ void ToolsActivity::buildMenu() {
       activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
     }});
 
-  // Games — filtered by CrossPetSettings toggles
-  if (PET_SETTINGS.appChess)
+  // Games — single master toggle for all games
+  if (PET_SETTINGS.appGames) {
     menuEntries.push_back({StrId::STR_CHESS, [this] {
       activityManager.pushActivity(std::make_unique<ChessActivity>(renderer, mappedInput));
     }});
-  if (PET_SETTINGS.appCaro)
     menuEntries.push_back({StrId::STR_CARO, [this] {
       activityManager.pushActivity(std::make_unique<CaroActivity>(renderer, mappedInput));
     }});
-  if (PET_SETTINGS.appSudoku)
     menuEntries.push_back({StrId::STR_SUDOKU, [this] {
       activityManager.pushActivity(std::make_unique<SudokuActivity>(renderer, mappedInput));
     }});
-  if (PET_SETTINGS.appMinesweeper)
     menuEntries.push_back({StrId::STR_MINESWEEPER, [this] {
       activityManager.pushActivity(std::make_unique<MinesweeperActivity>(renderer, mappedInput));
     }});
-  if (PET_SETTINGS.app2048)
     menuEntries.push_back({StrId::STR_2048, [this] {
       activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
     }});
+  }
 }
 
 void ToolsActivity::onEnter() {

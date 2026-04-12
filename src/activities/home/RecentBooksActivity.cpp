@@ -90,13 +90,12 @@ void RecentBooksActivity::renderCover(int bookIdx, int gridCol, int gridRow,
   const int cx = startX + gridCol * (cardW + COVER_GAP);
   const int cy = startY + gridRow * (cardH + 30);  // 30 = space for title below
 
-  // Selection highlight
+  // Cover border — thicker when selected
   if (selected) {
-    renderer.fillRoundedRect(cx - 3, cy - 3, cardW + 6, cardH + 6, COVER_R + 2, Color::Black);
+    renderer.drawRoundedRect(cx - 1, cy - 1, cardW + 2, cardH + 2, 3, COVER_R + 1, true);
+  } else {
+    renderer.drawRoundedRect(cx, cy, cardW, cardH, 1, COVER_R, true);
   }
-
-  // Cover border
-  renderer.drawRoundedRect(cx, cy, cardW, cardH, 1, COVER_R, true);
 
   // Cover thumbnail
   const RecentBook& book = recentBooks[bookIdx];
@@ -122,11 +121,12 @@ void RecentBooksActivity::renderCover(int bookIdx, int gridCol, int gridRow,
   const int fillW = barW * book.progressPercent / 100;
   if (fillW > 1) renderer.fillRect(barX, barY, fillW, 4);
 
-  // Title below card (truncated, centered)
+  // Title below card (truncated, centered, bold when selected)
   const int titleY = cy + cardH + 4;
+  const auto titleStyle = selected ? EpdFontFamily::BOLD : EpdFontFamily::REGULAR;
   auto title = renderer.truncatedText(SMALL_FONT_ID, book.title.c_str(), cardW - 2);
   const int titleW = renderer.getTextWidth(SMALL_FONT_ID, title.c_str());
-  renderer.drawText(SMALL_FONT_ID, cx + (cardW - titleW) / 2, titleY, title.c_str(), !selected);
+  renderer.drawText(SMALL_FONT_ID, cx + (cardW - titleW) / 2, titleY, title.c_str(), true, titleStyle);
 }
 
 void RecentBooksActivity::render(RenderLock&&) {
