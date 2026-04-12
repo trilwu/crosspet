@@ -17,11 +17,21 @@ class CrossPetSettings {
   // Load from /.crosspoint/crosspet.json; migrates from settings.json if absent
   bool loadFromFile();
 
-  // Home screen widget visibility (1=show, 0=hide)
-  uint8_t homeShowClock = 1;
-  uint8_t homeShowWeather = 1;
-  uint8_t homeShowPetStatus = 1;
+  // Home screen layout
   uint8_t homeFocusMode = 0;  // 1=show only current book (no recent covers/stats)
+
+  // Per-app visibility — controls both Tools menu and home screen widgets (1=show, 0=hide)
+  uint8_t appClock = 1;
+  uint8_t appWeather = 1;
+  uint8_t appPomodoro = 1;
+  uint8_t appVirtualPet = 1;
+  uint8_t appReadingStats = 1;
+  uint8_t appSleepImagePicker = 1;
+  uint8_t appChess = 1;
+  uint8_t appCaro = 1;
+  uint8_t appSudoku = 1;
+  uint8_t appMinesweeper = 1;
+  uint8_t app2048 = 1;
 
  private:
   CrossPetSettings() = default;

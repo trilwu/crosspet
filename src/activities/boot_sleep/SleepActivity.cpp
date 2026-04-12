@@ -16,6 +16,7 @@
 #include "../reader/EpubReaderActivity.h"
 #include "../reader/TxtReaderActivity.h"
 #include "../reader/XtcReaderActivity.h"
+#include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "BookStats.h"
@@ -191,8 +192,10 @@ void SleepActivity::onEnter() {
         return renderCustomSleepScreen();
       }
     case (CrossPointSettings::SLEEP_SCREEN_MODE::CLOCK):
+      if (!PET_SETTINGS.appClock) return renderDefaultSleepScreen();
       return renderClockSleepScreen();
     case (CrossPointSettings::SLEEP_SCREEN_MODE::READING_STATS):
+      if (!PET_SETTINGS.appReadingStats) return renderDefaultSleepScreen();
       return renderReadingStatsSleepScreen();
     case (CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY):
       return renderOverlaySleepScreen();

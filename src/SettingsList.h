@@ -25,11 +25,7 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Enum(StrId::STR_SLEEP_COVER_FILTER, &CrossPointSettings::sleepScreenCoverFilter,
                         {StrId::STR_NONE_OPT, StrId::STR_FILTER_CONTRAST, StrId::STR_INVERTED},
                         "sleepScreenCoverFilter", StrId::STR_CAT_DISPLAY),
-      SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_ALIVE, &CrossPointSettings::keepClockAlive, "keepClockAlive",
-                          StrId::STR_CAT_DISPLAY),
-      SettingInfo::Enum(StrId::STR_SLEEP_REFRESH, &CrossPointSettings::sleepRefreshInterval,
-                        {StrId::STR_OFF, StrId::STR_1_MIN, StrId::STR_5_MIN, StrId::STR_10_MIN, StrId::STR_30_MIN, StrId::STR_60_MIN},
-                        "sleepRefreshInterval", StrId::STR_CAT_DISPLAY),
+      // keepClockAlive and sleepRefreshInterval moved to Apps > Clock section
       SettingInfo::Enum(StrId::STR_HIDE_BATTERY, &CrossPointSettings::hideBatteryPercentage,
                         {StrId::STR_NEVER, StrId::STR_IN_READER, StrId::STR_ALWAYS}, "hideBatteryPercentage",
                         StrId::STR_CAT_DISPLAY),
@@ -44,29 +40,15 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_DISPLAY),
       SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode, "darkMode",
                           StrId::STR_CAT_DISPLAY),
-      SettingInfo::Enum(StrId::STR_TEMP_UNIT, &CrossPointSettings::temperatureUnit,
-                        {StrId::STR_CELSIUS, StrId::STR_FAHRENHEIT}, "temperatureUnit", StrId::STR_CAT_DISPLAY),
-      // CrossPet home screen widgets — stored in crosspet.json
-      SettingInfo::DynamicToggle(
-          StrId::STR_HOME_CLOCK,
-          [] { return PET_SETTINGS.homeShowClock; },
-          [](uint8_t v) { PET_SETTINGS.homeShowClock = v; PET_SETTINGS.saveToFile(); },
-          "homeShowClock", StrId::STR_CAT_DISPLAY),
-      SettingInfo::DynamicToggle(
-          StrId::STR_HOME_WEATHER,
-          [] { return PET_SETTINGS.homeShowWeather; },
-          [](uint8_t v) { PET_SETTINGS.homeShowWeather = v; PET_SETTINGS.saveToFile(); },
-          "homeShowWeather", StrId::STR_CAT_DISPLAY),
-      SettingInfo::DynamicToggle(
-          StrId::STR_HOME_PET_STATUS,
-          [] { return PET_SETTINGS.homeShowPetStatus; },
-          [](uint8_t v) { PET_SETTINGS.homeShowPetStatus = v; PET_SETTINGS.saveToFile(); },
-          "homeShowPetStatus", StrId::STR_CAT_DISPLAY),
+      // temperatureUnit moved to Apps > Weather section
+      // Home screen layout — stored in crosspet.json
       SettingInfo::DynamicToggle(
           StrId::STR_HOME_FOCUS_MODE,
           [] { return PET_SETTINGS.homeFocusMode; },
           [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
           "homeFocusMode", StrId::STR_CAT_DISPLAY),
+      // Per-app visibility toggles are added dynamically in SettingsActivity::onEnter()
+      // to avoid stack overflow from too many std::function allocations in static init.
 
       // --- Reader ---
       SettingInfo::Enum(StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,

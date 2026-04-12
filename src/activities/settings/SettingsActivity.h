@@ -177,9 +177,10 @@ class SettingsActivity final : public Activity {
   std::vector<SettingInfo> readerSettings;
   std::vector<SettingInfo> controlsSettings;
   std::vector<SettingInfo> systemSettings;
+  std::vector<SettingInfo> appsSettings;
   const std::vector<SettingInfo>* currentSettings = nullptr;
 
-  static constexpr int categoryCount = 4;
+  static constexpr int categoryCount = 5;
   static const StrId categoryNames[categoryCount];
 
   void enterCategory(int categoryIndex);
