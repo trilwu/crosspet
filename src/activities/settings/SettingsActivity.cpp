@@ -41,11 +41,16 @@ void SettingsActivity::onEnter() {
   readerSettings.clear();
   controlsSettings.clear();
   systemSettings.clear();
+  displaySettings.reserve(12);
+  readerSettings.reserve(20);
+  controlsSettings.reserve(12);
+  systemSettings.reserve(16);
 
   for (const auto& setting : getSettingsList()) {
     if (setting.category == StrId::STR_NONE_OPT) continue;
     if (setting.category == StrId::STR_CAT_DISPLAY) {
       if (setting.nameId == StrId::STR_HOME_FOCUS_MODE) continue;  // → CrossPet tab
+      if (setting.nameId == StrId::STR_DARK_MODE) continue;        // → CrossPet tab
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
       if (setting.nameId == StrId::STR_FONT_FAMILY || setting.nameId == StrId::STR_FONT_SIZE) continue;  // → CROSSPET section
@@ -74,6 +79,8 @@ void SettingsActivity::onEnter() {
   // Build APPS tab — per-app visibility toggles (added dynamically to avoid
   // stack overflow from too many std::function allocations in static init).
   appsSettings.clear();
+  appsSettings.reserve(16);
+  appsSettings.push_back(SettingInfo::Section("APPS"));
   struct AppToggle { StrId id; uint8_t CrossPetSettings::* field; const char* key; };
   const AppToggle appToggles[] = {
     {StrId::STR_CLOCK,              &CrossPetSettings::appClock,            "appClock"},
@@ -96,42 +103,57 @@ void SettingsActivity::onEnter() {
         [field](uint8_t v) { PET_SETTINGS.*field = v; PET_SETTINGS.saveToFile(); },
         t.key, StrId::STR_CROSSPET));
   }
-  // Home Focus Mode — CrossPet-specific display setting
-  {
-    appsSettings.push_back(SettingInfo::DynamicToggle(
-        StrId::STR_HOME_FOCUS_MODE,
-        [] { return PET_SETTINGS.homeFocusMode; },
-        [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
-        "homeFocusMode", StrId::STR_CROSSPET));
-  }
+  // CrossPet options — separated from app toggles
+  appsSettings.push_back(SettingInfo::Section("OPTIONS"));
+  appsSettings.push_back(SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode,
+      "darkMode", StrId::STR_CROSSPET));
+  appsSettings.push_back(SettingInfo::DynamicToggle(
+      StrId::STR_HOME_FOCUS_MODE,
+      [] { return PET_SETTINGS.homeFocusMode; },
+      [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
+      "homeFocusMode", StrId::STR_CROSSPET));
 
-  // CROSSPET section in Reader — re-add Font Family & Font Size from shared list
+  // CROSSPET section in Reader — Font Family & Font Size (skipped from TEXT above)
   readerSettings.push_back(SettingInfo::Section("CROSSPET"));
-  for (const auto& s : getSettingsList()) {
-    if (s.category == StrId::STR_CAT_READER &&
-        (s.nameId == StrId::STR_FONT_FAMILY || s.nameId == StrId::STR_FONT_SIZE)) {
-      readerSettings.push_back(s);
-    }
-  }
+  readerSettings.push_back(SettingInfo::Enum(StrId::STR_FONT_FAMILY, &CrossPointSettings::fontFamily,
+      {StrId::STR_BOOKERLY, StrId::STR_LEXEND, StrId::STR_BOKERLAM}, "fontFamily", StrId::STR_CAT_READER));
+  readerSettings.push_back(SettingInfo::Enum(StrId::STR_FONT_SIZE, &CrossPointSettings::fontSize,
+      {StrId::STR_SMALL, StrId::STR_MEDIUM, StrId::STR_LARGE, StrId::STR_X_LARGE}, "fontSize", StrId::STR_CAT_READER));
 
-  // Insert section headers into each category (bottom-up to keep indices stable).
+  // Insert section headers (bottom-up to keep indices stable). Log sizes for debugging.
+  LOG_DBG("SET", "display=%d reader=%d controls=%d system=%d apps=%d heap=%d",
+          (int)displaySettings.size(), (int)readerSettings.size(),
+          (int)controlsSettings.size(), (int)systemSettings.size(),
+          (int)appsSettings.size(), ESP.getFreeHeap());
+
   // Display (8 items): SCREEN (sleep 0-2), APPEARANCE (UI 3-7)
-  displaySettings.insert(displaySettings.begin() + 3, SettingInfo::Section("APPEARANCE"));
+  if (displaySettings.size() >= 4) {
+    displaySettings.insert(displaySettings.begin() + 3, SettingInfo::Section("APPEARANCE"));
+  }
   displaySettings.insert(displaySettings.begin(), SettingInfo::Section("SCREEN"));
 
-  // Reader (10 items + 1 action + CROSSPET section already pushed):
-  // TEXT (lineSpacing..hyphenation 0-4), READING (orientation..images 5-9), ACTIONS (statusBar 10)
-  readerSettings.insert(readerSettings.begin() + 10, SettingInfo::Section("ACTIONS"));
-  readerSettings.insert(readerSettings.begin() + 5, SettingInfo::Section("READING"));
+  // Reader (14 items): TEXT (0-4), READING (5-9), ACTIONS (10), CROSSPET section+items (11-13)
+  if (readerSettings.size() >= 11) {
+    readerSettings.insert(readerSettings.begin() + 10, SettingInfo::Section("ACTIONS"));
+  }
+  if (readerSettings.size() >= 6) {
+    readerSettings.insert(readerSettings.begin() + 5, SettingInfo::Section("READING"));
+  }
   readerSettings.insert(readerSettings.begin(), SettingInfo::Section("TEXT"));
 
   // Controls: BUTTONS (remap+layout 0-3), POWER BUTTON (pwr btn 4-6)
-  controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
+  if (controlsSettings.size() >= 5) {
+    controlsSettings.insert(controlsSettings.begin() + 4, SettingInfo::Section("POWER BUTTON"));
+  }
   controlsSettings.insert(controlsSettings.begin(), SettingInfo::Section("BUTTONS"));
 
   // System: GENERAL (0-2), CONNECTIVITY (3-5), DEVICE (6-10)
-  systemSettings.insert(systemSettings.begin() + 6, SettingInfo::Section("DEVICE"));
-  systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
+  if (systemSettings.size() >= 7) {
+    systemSettings.insert(systemSettings.begin() + 6, SettingInfo::Section("DEVICE"));
+  }
+  if (systemSettings.size() >= 4) {
+    systemSettings.insert(systemSettings.begin() + 3, SettingInfo::Section("CONNECTIVITY"));
+  }
   systemSettings.insert(systemSettings.begin(), SettingInfo::Section("GENERAL"));
 
   // Reset selection to first category
