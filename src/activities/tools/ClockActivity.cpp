@@ -6,6 +6,7 @@
 
 #include <ctime>
 
+#include "CrossPointSettings.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/LunarCalendar.h"
@@ -44,11 +45,26 @@ void ClockActivity::applyEditedTime() {
 
 void ClockActivity::onEnter() {
   Activity::onEnter();
-  editing = false;
   editField = 0;
   monthOffset = 0;
   timeAvailable = isTimeValid();
   lastUpdateMs = millis();
+
+  // Manual mode: auto-enter time editing
+  if (SETTINGS.clockMode == CrossPointSettings::CLOCK_MANUAL) {
+    if (timeAvailable) {
+      getLocalTime(&editTime, 0);
+    } else {
+      editTime = {};
+      editTime.tm_year = 125;  // 2025
+      editTime.tm_mon  = 0;
+      editTime.tm_mday = 1;
+    }
+    editing = true;
+  } else {
+    editing = false;
+  }
+
   requestUpdate();
 }
 

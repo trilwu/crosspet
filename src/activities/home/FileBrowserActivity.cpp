@@ -253,15 +253,73 @@ void FileBrowserActivity::loop() {
     requestUpdate();
   });
 
-  buttonNavigator.onNextContinuous([this, listSize, pageItems] {
-    selectorIndex = ButtonNavigator::nextPageIndex(static_cast<int>(selectorIndex), listSize, pageItems);
-    requestUpdate();
-  });
+  // Side Up button: file info popup
+  if (mappedInput.wasReleased(MappedInputManager::Button::Up)) {
+    if (!files.empty()) {
+      const std::string& entry = files[selectorIndex];
+      std::string cleanBasePath = basepath;
+      if (cleanBasePath.back() != '/') cleanBasePath += "/";
+      const std::string fullPath = cleanBasePath + entry;
 
-  buttonNavigator.onPreviousContinuous([this, listSize, pageItems] {
-    selectorIndex = ButtonNavigator::previousPageIndex(static_cast<int>(selectorIndex), listSize, pageItems);
-    requestUpdate();
-  });
+      // Get file size
+      char sizeBuf[32];
+      if (entry.back() == '/') {
+        snprintf(sizeBuf, sizeof(sizeBuf), "%s", tr(STR_FOLDER));
+      } else {
+        FsFile f;
+        if (Storage.openFileForRead("FBR", fullPath, f)) {
+          const size_t sz = f.size();
+          f.close();
+          if (sz >= 1024 * 1024)
+            snprintf(sizeBuf, sizeof(sizeBuf), "%.1f MB", sz / (1024.0 * 1024.0));
+          else if (sz >= 1024)
+            snprintf(sizeBuf, sizeof(sizeBuf), "%.1f KB", sz / 1024.0);
+          else
+            snprintf(sizeBuf, sizeof(sizeBuf), "%u B", static_cast<unsigned>(sz));
+        } else {
+          snprintf(sizeBuf, sizeof(sizeBuf), "?");
+        }
+      }
+
+      char infoBuf[128];
+      snprintf(infoBuf, sizeof(infoBuf), "%s\n%s", entry.c_str(), sizeBuf);
+      startActivityForResult(
+          std::make_unique<ConfirmationActivity>(renderer, mappedInput, tr(STR_INFO), infoBuf),
+          [](const ActivityResult&) {});
+    }
+    return;
+  }
+
+  // Side Down button: delete file (same as long-press Confirm)
+  if (mappedInput.wasReleased(MappedInputManager::Button::Down)) {
+    if (!files.empty()) {
+      const std::string& entry = files[selectorIndex];
+      if (entry.back() != '/') {  // Can't delete directories
+        std::string cleanBasePath = basepath;
+        if (cleanBasePath.back() != '/') cleanBasePath += "/";
+        const std::string fullPath = cleanBasePath + entry;
+
+        auto handler = [this, fullPath](const ActivityResult& res) {
+          if (!res.isCancelled) {
+            clearFileMetadata(fullPath);
+            if (Storage.remove(fullPath.c_str())) {
+              loadFiles();
+              if (files.empty()) {
+                selectorIndex = 0;
+              } else if (selectorIndex >= files.size()) {
+                selectorIndex = files.size() - 1;
+              }
+              requestUpdate(true);
+            }
+          }
+        };
+
+        std::string heading = tr(STR_DELETE) + std::string("? ");
+        startActivityForResult(std::make_unique<ConfirmationActivity>(renderer, mappedInput, heading, entry), handler);
+      }
+    }
+    return;
+  }
 }
 
 std::string getFileName(std::string filename) {
@@ -311,6 +369,9 @@ void FileBrowserActivity::render(RenderLock&&) {
       mappedInput.mapLabels(basepath == "/" ? tr(STR_HOME) : tr(STR_BACK), files.empty() ? "" : tr(STR_OPEN),
                             files.empty() ? "" : tr(STR_DIR_UP), files.empty() ? "" : tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
+  if (!files.empty()) {
+    GUI.drawSideButtonHints(renderer, tr(STR_INFO), tr(STR_DELETE));
+  }
 
   renderer.displayBuffer();
 }

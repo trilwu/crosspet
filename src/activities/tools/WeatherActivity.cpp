@@ -589,6 +589,19 @@ void WeatherActivity::renderCityList() {
   renderer.displayBuffer();
 }
 
+// Draw a 32x32 icon at 1x using drawPixel (orientation-aware, unlike drawIcon)
+static void drawIcon1x(GfxRenderer& r, const uint8_t* icon, int x, int y) {
+  for (int row = 0; row < 32; row++) {
+    for (int col = 0; col < 32; col++) {
+      const int byteIdx = row * 4 + col / 8;
+      const int bitIdx = 7 - (col % 8);
+      if (!((icon[byteIdx] >> bitIdx) & 1)) {
+        r.drawPixel(x + col, y + row);
+      }
+    }
+  }
+}
+
 // Draw a 32x32 icon scaled 2x (64x64) using pixel doubling
 static void drawIconScaled2x(GfxRenderer& r, const uint8_t* icon, int x, int y) {
   for (int row = 0; row < 32; row++) {
@@ -695,7 +708,7 @@ void WeatherActivity::render(RenderLock&&) {
 
         // Small icon centered (32x32)
         const uint8_t* fIcon = getWeatherIcon(f.weatherCode);
-        renderer.drawIcon(fIcon, cx - WEATHER_ICON_SIZE / 2, y + 20, WEATHER_ICON_SIZE, WEATHER_ICON_SIZE);
+        drawIcon1x(renderer, fIcon, cx - WEATHER_ICON_SIZE / 2, y + 20);
 
         // High/Low temp
         snprintf(buf, sizeof(buf), "%.0f%s", convertTemp(f.tempMax), tempUnitSuffix());
