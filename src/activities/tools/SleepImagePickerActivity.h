@@ -18,19 +18,27 @@ class SleepImagePickerActivity final : public Activity {
 
   // Menu structure:
   // [0] Sleep mode selector (cycles on confirm)
-  // [1..N] Image files (only when mode uses images)
+  // [1] Cover mode: Fit/Crop (only when mode uses covers)
+  // [2] Cover filter: None/Contrast/Inverted (only when mode uses covers)
+  // [3..N] Image files (only when mode uses images)
   // [N+1] Clear cache (always last)
   static constexpr int MODE_ITEM = 0;
 
   void loadFiles();
   bool modeUsesImages() const;
+  bool modeUsesCovers() const;
+  int coverOptionCount() const;
   int totalItems() const;
-  int firstFileIndex() const { return 1; }
+  int firstFileIndex() const { return 1 + coverOptionCount(); }
   int cacheItemIndex() const { return totalItems() - 1; }
   bool isFileItem(int idx) const { return modeUsesImages() && idx >= firstFileIndex() && idx < cacheItemIndex(); }
+  bool isCoverModeItem(int idx) const { return modeUsesCovers() && idx == 1; }
+  bool isCoverFilterItem(int idx) const { return modeUsesCovers() && idx == 2; }
 
   bool isCurrentImageSelection(int idx) const;
   void cycleSleepMode();
+  void cycleCoverMode();
+  void cycleCoverFilter();
   void saveImageSelection();
   void clearCache();
 

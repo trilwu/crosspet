@@ -96,9 +96,18 @@ bool SleepImagePickerActivity::modeUsesImages() const {
   return m == CrossPointSettings::CUSTOM || m == CrossPointSettings::COVER_CUSTOM || m == CrossPointSettings::OVERLAY;
 }
 
+bool SleepImagePickerActivity::modeUsesCovers() const {
+  const auto m = SETTINGS.sleepScreen;
+  return m == CrossPointSettings::COVER || m == CrossPointSettings::COVER_CUSTOM;
+}
+
+int SleepImagePickerActivity::coverOptionCount() const {
+  return modeUsesCovers() ? 2 : 0;  // cover mode + cover filter
+}
+
 int SleepImagePickerActivity::totalItems() const {
-  // Mode selector + (images if applicable) + clear cache
-  return 1 + (modeUsesImages() ? static_cast<int>(fileList.size()) : 0) + 1;
+  // Mode selector + cover options (if applicable) + images (if applicable) + clear cache
+  return 1 + coverOptionCount() + (modeUsesImages() ? static_cast<int>(fileList.size()) : 0) + 1;
 }
 
 const char* SleepImagePickerActivity::currentModeName() const {
@@ -174,12 +183,30 @@ void SleepImagePickerActivity::onExit() {
 
 // ── Actions ─────────────────────────────────────────────────────────────────
 
+// Cover mode/filter label arrays (match enum order)
+static const char* coverModeNames[] = {"Fit", "Crop"};
+static const char* coverFilterNames[] = {"None", "Contrast", "Inverted"};
+
 void SleepImagePickerActivity::cycleSleepMode() {
   SETTINGS.sleepScreen = (SETTINGS.sleepScreen + 1) % CrossPointSettings::SLEEP_SCREEN_MODE_COUNT;
   SETTINGS.saveToFile();
   SleepScreenCache::invalidateAll();
   // Reset selector to mode item when mode changes (file list may appear/disappear)
   selectorIndex = 0;
+  requestUpdate();
+}
+
+void SleepImagePickerActivity::cycleCoverMode() {
+  SETTINGS.sleepScreenCoverMode = (SETTINGS.sleepScreenCoverMode + 1) % CrossPointSettings::SLEEP_SCREEN_COVER_MODE_COUNT;
+  SETTINGS.saveToFile();
+  SleepScreenCache::invalidateAll();
+  requestUpdate();
+}
+
+void SleepImagePickerActivity::cycleCoverFilter() {
+  SETTINGS.sleepScreenCoverFilter = (SETTINGS.sleepScreenCoverFilter + 1) % CrossPointSettings::SLEEP_SCREEN_COVER_FILTER_COUNT;
+  SETTINGS.saveToFile();
+  SleepScreenCache::invalidateAll();
   requestUpdate();
 }
 
@@ -293,6 +320,10 @@ void SleepImagePickerActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     if (selectorIndex == MODE_ITEM) {
       cycleSleepMode();
+    } else if (isCoverModeItem(selectorIndex)) {
+      cycleCoverMode();
+    } else if (isCoverFilterItem(selectorIndex)) {
+      cycleCoverFilter();
     } else if (selectorIndex == cacheItemIndex()) {
       clearCache();
     } else if (isFileItem(selectorIndex)) {
@@ -353,6 +384,14 @@ void SleepImagePickerActivity::renderList(int pageWidth, int pageHeight) {
   GUI.drawList(renderer, Rect{0, menuTop, pageWidth, menuH}, items, selectorIndex,
     [this](int idx) -> std::string {
       if (idx == MODE_ITEM) return std::string(tr(STR_SLEEP_SCREEN)) + ": " + currentModeName();
+      if (isCoverModeItem(idx)) {
+        const uint8_t m = SETTINGS.sleepScreenCoverMode;
+        return std::string(tr(STR_SLEEP_COVER_MODE)) + ": " + (m < CrossPointSettings::SLEEP_SCREEN_COVER_MODE_COUNT ? coverModeNames[m] : "?");
+      }
+      if (isCoverFilterItem(idx)) {
+        const uint8_t f = SETTINGS.sleepScreenCoverFilter;
+        return std::string(tr(STR_SLEEP_COVER_FILTER)) + ": " + (f < CrossPointSettings::SLEEP_SCREEN_COVER_FILTER_COUNT ? coverFilterNames[f] : "?");
+      }
       if (idx == cacheItemIndex()) return std::string(tr(STR_RELOAD_SLEEP_IMAGE));
       if (isFileItem(idx)) {
         const int fi = idx - firstFileIndex();
