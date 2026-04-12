@@ -175,13 +175,6 @@ namespace PetConfig {
     {14, 1500, 60},  // Companion → Elder
   };
 
-  // Streak tier thresholds: pages-per-meal reduction
-  constexpr uint16_t STREAK_PAGES_PER_MEAL[] = {20, 16, 13, 10};
-
-  // Chapter & book completion rewards
-  constexpr uint8_t CHAPTER_COMPLETE_HAPPINESS = 5;
-  constexpr uint8_t BOOK_FINISH_HAPPINESS = 40;
-  constexpr uint8_t BOOK_FINISH_HUNGER = 20;
 
   // Pomodoro reward
   constexpr uint8_t POMODORO_HAPPINESS = 15;

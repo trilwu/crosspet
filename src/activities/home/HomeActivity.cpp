@@ -30,10 +30,13 @@
 bool HomeActivity::storeCoverBuffer() {
   uint8_t* fb = renderer.getFrameBuffer();
   if (!fb) return false;
+  // Guard: need buffer size + 12KB overhead for heap fragmentation safety
+  const size_t bufSize = GfxRenderer::getBufferSize();
+  if (ESP.getFreeHeap() < bufSize + 12 * 1024) return false;
   freeCoverBuffer();
-  coverBuffer = static_cast<uint8_t*>(malloc(GfxRenderer::getBufferSize()));
+  coverBuffer = static_cast<uint8_t*>(malloc(bufSize));
   if (!coverBuffer) return false;
-  memcpy(coverBuffer, fb, GfxRenderer::getBufferSize());
+  memcpy(coverBuffer, fb, bufSize);
   return true;
 }
 
@@ -157,7 +160,7 @@ void HomeActivity::renderPetStatusWidget(int /*headerH*/) {}
 void HomeActivity::renderHeaderClock() {
   int nextX = 10;
 
-  if (!PET_SETTINGS.homeShowClock) {
+  if (!PET_SETTINGS.appClock) {
     // Show heap even without clock
     if (SETTINGS.showFreeHeap) {
       char heapBuf[12];
@@ -189,7 +192,7 @@ void HomeActivity::renderHeaderClock() {
     nextX += renderer.getTextWidth(SMALL_FONT_ID, heapBuf) + 6;
   }
 
-  if (!PET_SETTINGS.homeShowWeather) return;
+  if (!PET_SETTINGS.appWeather) return;
 
   // Weather temp or sync status next to clock
   const int weatherX = nextX;

@@ -209,13 +209,6 @@ bool PetManager::changeType(uint8_t type) {
   return save();
 }
 
-// --- Reading rewards ---
-
-uint16_t PetManager::getEffectivePagesPerMeal() const {
-  uint8_t tier = (state.streakTier < 4) ? state.streakTier : 3;
-  return PetConfig::STREAK_PAGES_PER_MEAL[tier];
-}
-
 // --- State queries ---
 
 PetMood PetManager::getMood() const {

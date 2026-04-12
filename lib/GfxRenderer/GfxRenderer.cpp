@@ -1,5 +1,6 @@
 #include "GfxRenderer.h"
 
+#include <Arduino.h>
 #include <FontDecompressor.h>
 #include <Logging.h>
 #include <Utf8.h>
@@ -1183,6 +1184,12 @@ void GfxRenderer::freeBwBufferChunks() {
  * Returns true if buffer was stored successfully, false if allocation failed.
  */
 bool GfxRenderer::storeBwBuffer() {
+  // Pre-check: need ~48KB total across chunks + overhead
+  if (ESP.getFreeHeap() < HalDisplay::BUFFER_SIZE + 12 * 1024) {
+    LOG_ERR("GFX", "Not enough heap for BW buffer (%lu free, need %lu)",
+            (unsigned long)ESP.getFreeHeap(), (unsigned long)(HalDisplay::BUFFER_SIZE + 12 * 1024));
+    return false;
+  }
   // Allocate and copy each chunk
   for (size_t i = 0; i < BW_BUFFER_NUM_CHUNKS; i++) {
     // Check if any chunks are already allocated
