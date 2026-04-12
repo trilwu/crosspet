@@ -53,13 +53,11 @@ void SettingsActivity::onEnter() {
       if (setting.nameId == StrId::STR_KEEP_CLOCK_ALIVE) continue;
       if (setting.nameId == StrId::STR_SLEEP_REFRESH) continue;
       if (setting.nameId == StrId::STR_TEMP_UNIT) continue;
+      if (setting.nameId == StrId::STR_CLOCK_MODE) continue;  // already in CrossPet CLOCK section
       // Sleep screen mode → replaced by Action that opens SleepImagePickerActivity
       if (setting.nameId == StrId::STR_SLEEP_SCREEN) continue;
-      // Cover mode/filter → only relevant for cover-based sleep modes
-      if (setting.nameId == StrId::STR_SLEEP_COVER_MODE || setting.nameId == StrId::STR_SLEEP_COVER_FILTER) {
-        const auto m = SETTINGS.sleepScreen;
-        if (m != CrossPointSettings::COVER && m != CrossPointSettings::COVER_CUSTOM) continue;
-      }
+      // Cover mode/filter → managed in SleepImagePickerActivity
+      if (setting.nameId == StrId::STR_SLEEP_COVER_MODE || setting.nameId == StrId::STR_SLEEP_COVER_FILTER) continue;
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
       if (setting.nameId == StrId::STR_TEXT_DARKNESS) continue;  // → CrossPet tab
@@ -128,7 +126,6 @@ void SettingsActivity::onEnter() {
   appsSettings.push_back(SettingInfo::Section("OPTIONS"));
   appsSettings.push_back(SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode,
       "darkMode", StrId::STR_CROSSPET));
-  // Text darkness setting removed — was dead code (renderer never applied the value)
   appsSettings.push_back(SettingInfo::DynamicToggle(
       StrId::STR_HOME_FOCUS_MODE,
       [] { return PET_SETTINGS.homeFocusMode; },
