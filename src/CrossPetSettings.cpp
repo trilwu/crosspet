@@ -49,9 +49,20 @@ bool CrossPetSettings::loadFromFile() {
       }
       homeFocusMode = doc["homeFocusMode"] | (uint8_t)0;
 
-      // Migrate legacy homeShow* fields to app* toggles (if appClock not yet saved)
-      appClock = doc["appClock"] | doc["homeShowClock"] | (uint8_t)1;
-      appWeather = doc["appWeather"] | doc["homeShowWeather"] | (uint8_t)1;
+      // Migrate legacy homeShow* fields to app* toggles.
+      // ArduinoJson's | operator treats 0/false as "absent", so we must use containsKey
+      // to distinguish "user saved 0 (off)" from "key missing (default on)".
+      if (doc.containsKey("appClock"))
+        appClock = doc["appClock"].as<uint8_t>();
+      else if (doc.containsKey("homeShowClock"))
+        appClock = doc["homeShowClock"].as<uint8_t>();
+      // else: keep struct default (1)
+
+      if (doc.containsKey("appWeather"))
+        appWeather = doc["appWeather"].as<uint8_t>();
+      else if (doc.containsKey("homeShowWeather"))
+        appWeather = doc["homeShowWeather"].as<uint8_t>();
+      // else: keep struct default (1)
       appPomodoro = doc["appPomodoro"] | (uint8_t)1;
       appVirtualPet = doc["appVirtualPet"] | (uint8_t)1;
       appReadingStats = doc["appReadingStats"] | (uint8_t)1;

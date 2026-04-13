@@ -135,6 +135,7 @@ class CrossPointSettings {
     REFRESH_10 = 2,
     REFRESH_15 = 3,
     REFRESH_30 = 4,
+    REFRESH_MANUAL = 5,  // No auto full-refresh; user presses power button manually
     REFRESH_FREQUENCY_COUNT
   };
 
@@ -220,8 +221,8 @@ class CrossPointSettings {
   uint8_t showHiddenFiles = 0;
   // Image rendering mode in EPUB reader
   uint8_t imageRendering = IMAGES_DISPLAY;
-  // Text darkness removed — was dead code (renderer never read the value).
-  // Kept as field for JSON backward compatibility (ignored on load/save).
+  // Text darkness: 0=Normal, 1=Dark, 2=Extra Dark — shifts AA gray pixels darker
+  enum TEXT_DARKNESS { DARKNESS_NORMAL = 0, DARKNESS_DARK = 1, DARKNESS_EXTRA_DARK = 2, TEXT_DARKNESS_COUNT };
   uint8_t textDarkness = 0;
 
   // Developer: show free heap in header (0=off, 1=on)
@@ -237,8 +238,7 @@ class CrossPointSettings {
   // Auto page turn master switch: 0=off, 1=on (speed controlled by autoPageTurnSpeed)
   uint8_t autoPageTurnEnabled = 0;
 
-  // Keep RTC alive during deep sleep (GPIO13 HIGH) for accurate clock on wake.
-  // Trade-off: ~3-4mA battery drain vs accurate time. Only useful for clock/stats sleep screens.
+  // keepClockAlive removed from UI — always 0. Kept for JSON backward compat (ignored on load).
   uint8_t keepClockAlive = 0;
 
   // Periodic sleep screen refresh interval (requires keepClockAlive=1).

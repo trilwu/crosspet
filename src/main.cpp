@@ -235,8 +235,8 @@ void verifyPowerButtonDuration() {
       activityManager.goToSleep();
     }
     // IMPORTANT: Re-arm the wakeup trigger before sleeping again
-    powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
-                                CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+    // keepClockAlive disabled — always pass false to avoid battery drain
+    powerManager.startDeepSleep(gpio, false, 0);
   }
 }
 void waitForPowerRelease() {
@@ -268,8 +268,8 @@ void enterDeepSleep() {
   // Also save to SD as reliable fallback (RTC_DATA_ATTR can be lost on some ESP32-C3 boards)
   saveClockToSD();
 
-  powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
-                                CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+  // keepClockAlive disabled — always pass false to avoid battery drain
+  powerManager.startDeepSleep(gpio, false, 0);
 }
 
 void setupDisplayAndFonts() {
@@ -431,15 +431,13 @@ void setup() {
         activityManager.goToSleep();
       }
       saveClockToSD();
-      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
-                                  CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+      powerManager.startDeepSleep(gpio, false, 0);
       break;  // unreachable — startDeepSleep never returns
     }
     case HalGPIO::WakeupReason::AfterUSBPower:
       // If USB power caused a cold boot, go back to sleep
       LOG_DBG("MAIN", "Wakeup reason: After USB Power");
-      powerManager.startDeepSleep(gpio, SETTINGS.keepClockAlive != 0 && PET_SETTINGS.appClock,
-                                  CrossPointSettings::getSleepRefreshMinutes(SETTINGS.sleepRefreshInterval));
+      powerManager.startDeepSleep(gpio, false, 0);
       break;
     case HalGPIO::WakeupReason::AfterFlash:
       // After flashing, just proceed to boot
@@ -484,6 +482,7 @@ void loop() {
   gpio.update();
 
   renderer.setFadingFix(SETTINGS.fadingFix);
+  renderer.setTextDarkness(SETTINGS.textDarkness);
   {
     static uint8_t lastDarkMode = 0xFF;
     if (SETTINGS.darkMode != lastDarkMode) {

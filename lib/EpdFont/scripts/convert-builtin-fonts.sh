@@ -8,8 +8,8 @@ READER_FONT_STYLES=("Regular" "Italic" "Bold" "BoldItalic")
 BOOKERLY_FONT_SIZES=(12 14 16 18)
 LEXEND_FONT_SIZES=(12 14 16 18)
 LEXEND_FONT_STYLES=("Regular" "Bold")
-# Lexend uses variable font: Regular=350 (balanced between Light/Regular), Bold=700
-LEXEND_STYLE_WEIGHTS=(350 700)
+# Lexend uses variable font: Regular=400, Bold=700
+LEXEND_STYLE_WEIGHTS=(400 700)
 for size in ${BOOKERLY_FONT_SIZES[@]}; do
   for style in ${READER_FONT_STYLES[@]}; do
     font_name="bookerly_${size}_$(echo $style | tr '[:upper:]' '[:lower:]')"

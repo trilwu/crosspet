@@ -243,12 +243,17 @@ static bool renderPage2bitStrip(GfxRenderer& renderer, Xtc* xtc, uint32_t curren
   if (!passOk) { free(stripBuf); return false; }
 
   // Display BW
-  if (pagesUntilFullRefresh <= 1) {
-    renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-    pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
-  } else {
-    renderer.displayBuffer();
-    pagesUntilFullRefresh--;
+  {
+    const int freq = SETTINGS.getRefreshFrequency();
+    if (freq == 0) {
+      renderer.displayBuffer();
+    } else if (pagesUntilFullRefresh <= 1) {
+      renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+      pagesUntilFullRefresh = freq;
+    } else {
+      renderer.displayBuffer();
+      pagesUntilFullRefresh--;
+    }
   }
 
   // Pass 2: LSB buffer - dark grey only
@@ -350,12 +355,17 @@ void XtcReaderActivity::renderPage() {
   // XTC pages already have status bar pre-rendered, no need to add our own
 
   // Display with appropriate refresh
-  if (pagesUntilFullRefresh <= 1) {
-    renderer.displayBuffer(HalDisplay::HALF_REFRESH);
-    pagesUntilFullRefresh = SETTINGS.getRefreshFrequency();
-  } else {
-    renderer.displayBuffer();
-    pagesUntilFullRefresh--;
+  {
+    const int freq = SETTINGS.getRefreshFrequency();
+    if (freq == 0) {
+      renderer.displayBuffer();
+    } else if (pagesUntilFullRefresh <= 1) {
+      renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+      pagesUntilFullRefresh = freq;
+    } else {
+      renderer.displayBuffer();
+      pagesUntilFullRefresh--;
+    }
   }
 
   LOG_DBG("XTR", "Rendered page %lu/%lu (1-bit)", currentPage + 1, xtc->getPageCount());
