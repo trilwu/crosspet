@@ -60,7 +60,6 @@ void SettingsActivity::onEnter() {
       if (setting.nameId == StrId::STR_SLEEP_COVER_MODE || setting.nameId == StrId::STR_SLEEP_COVER_FILTER) continue;
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
-      if (setting.nameId == StrId::STR_TEXT_DARKNESS) continue;  // → CrossPet tab
       readerSettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_CONTROLS) {
       controlsSettings.push_back(setting);
@@ -111,11 +110,7 @@ void SettingsActivity::onEnter() {
   appsSettings.push_back(SettingInfo::Section("CLOCK (Beta)"));
   appsSettings.push_back(SettingInfo::Enum(StrId::STR_CLOCK_MODE, &CrossPointSettings::clockMode,
       {StrId::STR_CLOCK_NTP, StrId::STR_CLOCK_MANUAL}, "clockMode", StrId::STR_CROSSPET));
-  appsSettings.push_back(SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_ALIVE, &CrossPointSettings::keepClockAlive,
-      "keepClockAlive", StrId::STR_CROSSPET));
-  appsSettings.push_back(SettingInfo::Enum(StrId::STR_SLEEP_REFRESH, &CrossPointSettings::sleepRefreshInterval,
-      {StrId::STR_OFF, StrId::STR_1_MIN, StrId::STR_5_MIN, StrId::STR_10_MIN, StrId::STR_30_MIN, StrId::STR_60_MIN},
-      "sleepRefreshInterval", StrId::STR_CROSSPET));
+  // keepClockAlive and sleepRefreshInterval removed — drain ~3-4mA in deep sleep
 
   // WEATHER section
   appsSettings.push_back(SettingInfo::Section("WEATHER"));

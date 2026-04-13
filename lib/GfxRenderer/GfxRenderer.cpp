@@ -124,19 +124,30 @@ static void renderCharImpl(const GfxRenderer& renderer, GfxRenderer::RenderMode 
           // the direct bit from the font is 0 -> white, 1 -> light gray, 2 -> dark gray, 3 -> black
           // we swap this to better match the way images and screen think about colors:
           // 0 -> black, 1 -> dark grey, 2 -> light grey, 3 -> white
-          const uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
+          uint8_t bmpVal = 3 - ((byte >> bit_index) & 0x3);
 
-          if (renderMode == GfxRenderer::BW && bmpVal < 3) {
-            // Black (also paints over the grays in BW mode)
-            renderer.drawPixel(screenX, screenY, pixelState);
-          } else if (renderMode == GfxRenderer::GRAYSCALE_MSB && (bmpVal == 1 || bmpVal == 2)) {
-            // Light gray (also mark the MSB if it's going to be a dark gray too)
-            // Dedicated X3 gray LUTs now provide proper 4-level gray on both devices
-            // We have to flag pixels in reverse for the gray buffers, as 0 leave alone, 1 update
-            renderer.drawPixel(screenX, screenY, false);
-          } else if (renderMode == GfxRenderer::GRAYSCALE_LSB && bmpVal == 1) {
-            // Dark gray
-            renderer.drawPixel(screenX, screenY, false);
+          // Text darkness controls which gray pixels get rendered.
+          // darkness 0 (Normal):     BW renders bmpVal==0 only;  grayscale unchanged
+          // darkness 1 (Dark):       BW renders bmpVal<2;        grayscale shifts grays darker
+          // darkness 2 (Extra Dark): BW renders bmpVal<3 (all);  grayscale shifts all gray→black
+          const uint8_t darkness = renderer.getTextDarkness();
+
+          if (renderMode == GfxRenderer::BW) {
+            // BW threshold: Normal=1 (black only), Dark=2 (+dark gray), Extra Dark=3 (all non-white)
+            if (bmpVal < (1 + darkness)) {
+              renderer.drawPixel(screenX, screenY, pixelState);
+            }
+          } else {
+            // Grayscale: shift gray pixels darker for AA rendering.
+            // Clamp to 1 (dark gray) instead of 0 to preserve anti-aliasing edges.
+            if (darkness > 0 && bmpVal > 0 && bmpVal < 3) {
+              bmpVal = (bmpVal > darkness) ? bmpVal - darkness : 1;
+            }
+            if (renderMode == GfxRenderer::GRAYSCALE_MSB && (bmpVal == 1 || bmpVal == 2)) {
+              renderer.drawPixel(screenX, screenY, false);
+            } else if (renderMode == GfxRenderer::GRAYSCALE_LSB && bmpVal == 1) {
+              renderer.drawPixel(screenX, screenY, false);
+            }
           }
         }
       }

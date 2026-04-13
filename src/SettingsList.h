@@ -25,17 +25,14 @@ inline const std::vector<SettingInfo>& getSettingsList() {
       SettingInfo::Enum(StrId::STR_SLEEP_COVER_FILTER, &CrossPointSettings::sleepScreenCoverFilter,
                         {StrId::STR_NONE_OPT, StrId::STR_FILTER_CONTRAST, StrId::STR_INVERTED},
                         "sleepScreenCoverFilter", StrId::STR_CAT_DISPLAY),
-      SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_ALIVE, &CrossPointSettings::keepClockAlive, "keepClockAlive",
-                          StrId::STR_CAT_DISPLAY),
-      SettingInfo::Enum(StrId::STR_SLEEP_REFRESH, &CrossPointSettings::sleepRefreshInterval,
-                        {StrId::STR_OFF, StrId::STR_1_MIN, StrId::STR_5_MIN, StrId::STR_10_MIN, StrId::STR_30_MIN, StrId::STR_60_MIN},
-                        "sleepRefreshInterval", StrId::STR_CAT_DISPLAY),
+      // keepClockAlive removed — drains ~3-4mA in deep sleep, users enable accidentally.
+      // sleepRefreshInterval removed — only useful with keepClockAlive.
       SettingInfo::Enum(StrId::STR_HIDE_BATTERY, &CrossPointSettings::hideBatteryPercentage,
                         {StrId::STR_NEVER, StrId::STR_IN_READER, StrId::STR_ALWAYS}, "hideBatteryPercentage",
                         StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(
           StrId::STR_REFRESH_FREQ, &CrossPointSettings::refreshFrequency,
-          {StrId::STR_PAGES_1, StrId::STR_PAGES_5, StrId::STR_PAGES_10, StrId::STR_PAGES_15, StrId::STR_PAGES_30},
+          {StrId::STR_PAGES_1, StrId::STR_PAGES_5, StrId::STR_PAGES_10, StrId::STR_PAGES_15, StrId::STR_PAGES_30, StrId::STR_OFF},
           "refreshFrequency", StrId::STR_CAT_DISPLAY),
       SettingInfo::Enum(StrId::STR_UI_THEME, &CrossPointSettings::uiTheme,
                         {StrId::STR_THEME_CLASSIC, StrId::STR_THEME_LYRA, StrId::STR_THEME_LYRA_EXTENDED, StrId::STR_THEME_CROSSPET, StrId::STR_THEME_CROSSPET_CLASSIC},
@@ -83,7 +80,9 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_READER),
       SettingInfo::Toggle(StrId::STR_TEXT_AA, &CrossPointSettings::textAntiAliasing, "textAntiAliasing",
                           StrId::STR_CAT_READER),
-      // Text darkness setting removed — was dead code (renderer never applied the value)
+      SettingInfo::Enum(StrId::STR_TEXT_DARKNESS, &CrossPointSettings::textDarkness,
+                        {StrId::STR_NORMAL, StrId::STR_DARK, StrId::STR_EXTRA_DARK}, "textDarkness",
+                        StrId::STR_CAT_READER),
       SettingInfo::Enum(StrId::STR_IMAGES, &CrossPointSettings::imageRendering,
                         {StrId::STR_IMAGES_DISPLAY, StrId::STR_IMAGES_PLACEHOLDER, StrId::STR_IMAGES_SUPPRESS},
                         "imageRendering", StrId::STR_CAT_READER),

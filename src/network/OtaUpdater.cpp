@@ -27,33 +27,36 @@ esp_err_t http_client_set_header_cb(esp_http_client_handle_t http_client) {
   return esp_http_client_set_header(http_client, "User-Agent", "CrossPoint-ESP32-" CROSSPOINT_VERSION);
 }
 
+// Max expected size of GitHub releases/latest JSON (filtered to tag + assets).
+constexpr int MAX_RELEASE_JSON = 16384;
+
 esp_err_t event_handler(esp_http_client_event_t* event) {
-  /* We do interested in only HTTP_EVENT_ON_DATA event only */
   if (event->event_id != HTTP_EVENT_ON_DATA) return ESP_OK;
 
-  if (!esp_http_client_is_chunked_response(event->client)) {
-    int content_len = esp_http_client_get_content_length(event->client);
-    int copy_len = 0;
-
+  // Handle both chunked and content-length responses uniformly.
+  if (local_buf == NULL) {
+    int alloc_size;
+    if (!esp_http_client_is_chunked_response(event->client)) {
+      alloc_size = esp_http_client_get_content_length(event->client);
+    } else {
+      alloc_size = MAX_RELEASE_JSON;
+    }
+    local_buf = static_cast<char*>(calloc(alloc_size + 1, sizeof(char)));
+    output_len = 0;
     if (local_buf == NULL) {
-      /* local_buf life span is tracked by caller checkForUpdate */
-      local_buf = static_cast<char*>(calloc(content_len + 1, sizeof(char)));
-      output_len = 0;
-      if (local_buf == NULL) {
-        LOG_ERR("OTA", "HTTP Client Out of Memory Failed, Allocation %d", content_len);
-        return ESP_ERR_NO_MEM;
-      }
+      LOG_ERR("OTA", "HTTP Client Out of Memory, Allocation %d", alloc_size);
+      return ESP_ERR_NO_MEM;
     }
-    copy_len = min(event->data_len, (content_len - output_len));
-    if (copy_len) {
-      memcpy(local_buf + output_len, event->data, copy_len);
-    }
+  }
+
+  int copy_len = event->data_len;
+  if (output_len + copy_len > MAX_RELEASE_JSON) {
+    copy_len = MAX_RELEASE_JSON - output_len;
+  }
+  if (copy_len > 0) {
+    memcpy(local_buf + output_len, event->data, copy_len);
     output_len += copy_len;
-  } else {
-    /* Code might be hits here, It happened once (for version checking) but I need more logs to handle that */
-    int chunked_len;
-    esp_http_client_get_chunk_length(event->client, &chunked_len);
-    LOG_DBG("OTA", "esp_http_client_is_chunked_response failed, chunked_len: %d", chunked_len);
+    local_buf[output_len] = '\0';
   }
 
   return ESP_OK;
