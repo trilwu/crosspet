@@ -60,6 +60,7 @@ void SettingsActivity::onEnter() {
       if (setting.nameId == StrId::STR_SLEEP_COVER_MODE || setting.nameId == StrId::STR_SLEEP_COVER_FILTER) continue;
       displaySettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_READER) {
+      if (setting.nameId == StrId::STR_TEXT_DARKNESS) continue;  // → CrossPet OPTIONS section
       readerSettings.push_back(setting);
     } else if (setting.category == StrId::STR_CAT_CONTROLS) {
       controlsSettings.push_back(setting);
@@ -119,6 +120,8 @@ void SettingsActivity::onEnter() {
 
   // OPTIONS section: CrossPet-specific global settings
   appsSettings.push_back(SettingInfo::Section("OPTIONS"));
+  appsSettings.push_back(SettingInfo::Enum(StrId::STR_TEXT_DARKNESS, &CrossPointSettings::textDarkness,
+      {StrId::STR_NORMAL, StrId::STR_DARK, StrId::STR_EXTRA_DARK}, "textDarkness", StrId::STR_CROSSPET));
   appsSettings.push_back(SettingInfo::Toggle(StrId::STR_DARK_MODE, &CrossPointSettings::darkMode,
       "darkMode", StrId::STR_CROSSPET));
   appsSettings.push_back(SettingInfo::DynamicToggle(
