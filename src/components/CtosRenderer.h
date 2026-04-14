@@ -27,7 +27,7 @@ class CtosRenderer {
 
   // Screen templates
   void drawCtosFrame(const char* title, const char* rightText = nullptr) const;
-  void drawToolGrid(const char** labels, int count, int selectedIdx) const;
+  void drawToolGrid(const char* const* labels, int count, int selectedIdx) const;
 
   GfxRenderer& getGfx() { return gfx; }
 

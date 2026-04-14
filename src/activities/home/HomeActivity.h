@@ -18,6 +18,7 @@ class HomeActivity final : public Activity {
   const char* syncResultMsg = nullptr;  // "OK" or "Failed" after sync
   unsigned long syncResultExpiry = 0;   // millis() when to clear message
   bool syncTriggered = false;      // Guard against re-triggering sync while held
+  bool ghostLaunched = false;       // Guard against re-launching GhostHome each loop
   bool coverRendered = false;      // Track if cover has been rendered once
   bool coverBufferStored = false;  // Track if cover buffer is stored
   uint8_t* coverBuffer = nullptr;  // HomeActivity's own buffer for cover image

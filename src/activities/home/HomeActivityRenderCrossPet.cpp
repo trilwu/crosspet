@@ -22,6 +22,7 @@
 #include "components/icons/settings2.h"
 #include "components/icons/tools.h"
 #include "components/icons/transfer.h"
+#include "activities/ghost/GhostHomeActivity.h"
 #include "fontIds.h"
 
 // ── CrossPet layout constants ────────────────────────────────────────────────
@@ -396,6 +397,15 @@ void HomeActivity::renderSelectionHighlight() {
 // ── CrossPet loop (card layout navigation) ────────────────────────────────────
 
 void HomeActivity::loopCrossPet() {
+  // Ghost Mode: redirect to ctOS security toolkit home screen
+  if (PET_SETTINGS.ghostMode && !ghostLaunched) {
+    ghostLaunched = true;
+    startActivityForResult(
+        std::make_unique<GhostHomeActivity>(renderer, mappedInput),
+        [this](const ActivityResult&) { ghostLaunched = false; });
+    return;
+  }
+
   const bool focusMode = PET_SETTINGS.homeFocusMode;
   const int recentCount = focusMode ? 0 : std::max(0, std::min(CP_MAX_RECENT, static_cast<int>(recentBooks.size()) - 1));
   const int barStart = 1 + recentCount;

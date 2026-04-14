@@ -121,7 +121,7 @@ void CtosRenderer::drawCtosFrame(const char* title, const char* rightText) const
   drawHeader(MARGIN + 4, title, rightText);
 }
 
-void CtosRenderer::drawToolGrid(const char** labels, int count, int selectedIdx) const {
+void CtosRenderer::drawToolGrid(const char* const* labels, int count, int selectedIdx) const {
   int sw = gfx.getScreenWidth();
   int sh = gfx.getScreenHeight();
   int cols = 2;
