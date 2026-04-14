@@ -129,6 +129,11 @@ void SettingsActivity::onEnter() {
       [] { return PET_SETTINGS.homeFocusMode; },
       [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
       "homeFocusMode", StrId::STR_CROSSPET));
+  appsSettings.push_back(SettingInfo::DynamicToggle(
+      StrId::STR_GHOST_MODE,
+      [] { return PET_SETTINGS.ghostMode; },
+      [](uint8_t v) { PET_SETTINGS.ghostMode = v; PET_SETTINGS.saveToFile(); },
+      "ghostMode", StrId::STR_CROSSPET));
 
   // Insert section headers into each category
   // Display: SCREEN (sleep action + optional cover settings), APPEARANCE (remaining)

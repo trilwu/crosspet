@@ -24,6 +24,7 @@ bool CrossPetSettings::saveToFile() const {
   doc["appReadingStats"] = appReadingStats;
   doc["appSleepImagePicker"] = appSleepImagePicker;
   doc["appGames"] = appGames;
+  doc["ghostMode"] = ghostMode;
 
   String json;
   serializeJson(doc, json);
@@ -74,6 +75,7 @@ bool CrossPetSettings::loadFromFile() {
         // Legacy migration: all games were on by default, keep on unless explicitly saved off
         appGames = 1;
       }
+      ghostMode = doc["ghostMode"] | (uint8_t)0;
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
     }

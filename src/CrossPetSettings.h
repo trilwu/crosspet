@@ -29,6 +29,9 @@ class CrossPetSettings {
   uint8_t appSleepImagePicker = 1;
   uint8_t appGames = 1;  // Master toggle for all games (Chess, Caro, Sudoku, Minesweeper, 2048)
 
+  // Ghost Mode — ctOS-style security toolkit home screen
+  uint8_t ghostMode = 0;
+
  private:
   CrossPetSettings() = default;
   static CrossPetSettings instance;

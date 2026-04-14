@@ -1,0 +1,141 @@
+#include "CtosRenderer.h"
+
+#include <cstdio>
+#include <cstring>
+
+#include "fontIds.h"
+
+void CtosRenderer::drawCornerBrackets(int x, int y, int w, int h, int size) const {
+  // Top-left
+  gfx.drawLine(x, y, x + size, y);
+  gfx.drawLine(x, y, x, y + size);
+  // Top-right
+  gfx.drawLine(x + w - size, y, x + w, y);
+  gfx.drawLine(x + w, y, x + w, y + size);
+  // Bottom-left
+  gfx.drawLine(x, y + h - size, x, y + h);
+  gfx.drawLine(x, y + h, x + size, y + h);
+  // Bottom-right
+  gfx.drawLine(x + w, y + h - size, x + w, y + h);
+  gfx.drawLine(x + w - size, y + h, x + w, y + h);
+}
+
+void CtosRenderer::drawHeader(int y, const char* title, const char* rightText) const {
+  int sw = gfx.getScreenWidth();
+  // Draw header text with chevron prefix
+  char buf[64];
+  snprintf(buf, sizeof(buf), "[CTOS] >> %s", title);
+  gfx.drawText(FONT, MARGIN, y, buf);
+
+  if (rightText) {
+    int tw = gfx.getTextWidth(FONT, rightText);
+    gfx.drawText(FONT, sw - MARGIN - tw, y, rightText);
+  }
+
+  // Separator line below header
+  int lineY = y + gfx.getLineHeight(FONT) + 2;
+  gfx.drawLine(MARGIN, lineY, sw - MARGIN, lineY);
+}
+
+void CtosRenderer::drawStatusBar(int y, const char* text) const {
+  int sw = gfx.getScreenWidth();
+  gfx.drawLine(MARGIN, y, sw - MARGIN, y);
+  char buf[128];
+  snprintf(buf, sizeof(buf), ">> %s", text);
+  gfx.drawText(FONT, MARGIN, y + 4, buf);
+}
+
+void CtosRenderer::drawSeparator(int y, const char* label) const {
+  int sw = gfx.getScreenWidth();
+  if (label) {
+    int tw = gfx.getTextWidth(FONT, label);
+    int mid = sw / 2;
+    int half = tw / 2 + 8;
+    gfx.drawLine(MARGIN, y, mid - half, y);
+    gfx.drawText(FONT, mid - tw / 2, y - gfx.getLineHeight(FONT) / 2, label);
+    gfx.drawLine(mid + half, y, sw - MARGIN, y);
+  } else {
+    gfx.drawLine(MARGIN, y, sw - MARGIN, y);
+  }
+}
+
+void CtosRenderer::drawMenuItem(int x, int y, int w, int h, const char* label, bool selected) const {
+  if (selected) {
+    gfx.fillRect(x, y, w, h, true);  // black fill
+    gfx.drawText(FONT, x + 8, y + 8, label, false);  // white text
+  } else {
+    drawCornerBrackets(x, y, w, h, 6);
+    gfx.drawText(FONT, x + 8, y + 8, label);
+  }
+}
+
+void CtosRenderer::drawSignalBar(int x, int y, int rssi) const {
+  // Map RSSI to 0-4 bars: >-50=4, >-60=3, >-70=2, >-80=1, else 0
+  int bars = 0;
+  if (rssi > -50) bars = 4;
+  else if (rssi > -60) bars = 3;
+  else if (rssi > -70) bars = 2;
+  else if (rssi > -80) bars = 1;
+
+  int barW = 4, barGap = 2, barMaxH = 12;
+  for (int i = 0; i < 4; i++) {
+    int bh = (i + 1) * 3;  // 3, 6, 9, 12
+    int bx = x + i * (barW + barGap);
+    int by = y + barMaxH - bh;
+    if (i < bars) {
+      gfx.fillRect(bx, by, barW, bh);
+    } else {
+      gfx.drawRect(bx, by, barW, bh);
+    }
+  }
+}
+
+void CtosRenderer::drawKeyValue(int x, int y, const char* key, const char* value) const {
+  char buf[96];
+  snprintf(buf, sizeof(buf), "%s: %s", key, value);
+  gfx.drawText(FONT, x, y, buf);
+}
+
+void CtosRenderer::drawMonoText(int x, int y, const char* text, bool inverted) const {
+  if (inverted) {
+    int tw = gfx.getTextWidth(FONT, text);
+    int th = gfx.getLineHeight(FONT);
+    gfx.fillRect(x - 2, y - 1, tw + 4, th + 2);
+    gfx.drawText(FONT, x, y, text, false);
+  } else {
+    gfx.drawText(FONT, x, y, text);
+  }
+}
+
+void CtosRenderer::drawChevronLabel(int x, int y, const char* label) const {
+  char buf[64];
+  snprintf(buf, sizeof(buf), ">> %s", label);
+  gfx.drawText(FONT, x, y, buf);
+}
+
+void CtosRenderer::drawCtosFrame(const char* title, const char* rightText) const {
+  int sw = gfx.getScreenWidth();
+  int sh = gfx.getScreenHeight();
+  gfx.clearScreen();
+  drawCornerBrackets(4, 4, sw - 8, sh - 8, 12);
+  drawHeader(MARGIN + 4, title, rightText);
+}
+
+void CtosRenderer::drawToolGrid(const char** labels, int count, int selectedIdx) const {
+  int sw = gfx.getScreenWidth();
+  int sh = gfx.getScreenHeight();
+  int cols = 2;
+  int rows = (count + cols - 1) / cols;
+  int cellW = (sw - MARGIN * 3) / cols;
+  int cellH = (sh - 80) / rows;  // leave room for header + status bar
+  if (cellH > 120) cellH = 120;
+
+  int startY = 50;  // below header
+  for (int i = 0; i < count; i++) {
+    int col = i % cols;
+    int row = i / cols;
+    int x = MARGIN + col * (cellW + MARGIN);
+    int y = startY + row * (cellH + MARGIN);
+    drawMenuItem(x, y, cellW, cellH, labels[i], i == selectedIdx);
+  }
+}
