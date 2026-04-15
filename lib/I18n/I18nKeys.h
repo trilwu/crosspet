@@ -760,6 +760,11 @@ enum class StrId : uint16_t {
   STR_MENU_DISPLAY,
   STR_MENU_FEATURES,
   STR_APPS,
+  STR_SHOW_FILE_EXTENSIONS,
+  STR_SHOW_PASSWORD,
+  STR_DITHER_NONE,
+  STR_DITHER_BAYER,
+  STR_DITHER_CYCLE,
   // Sentinel - must be last
   _COUNT
 };

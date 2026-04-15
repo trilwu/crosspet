@@ -225,6 +225,10 @@ class CrossPointSettings {
   enum TEXT_DARKNESS { DARKNESS_NORMAL = 0, DARKNESS_DARK = 1, DARKNESS_EXTRA_DARK = 2, TEXT_DARKNESS_COUNT };
   uint8_t textDarkness = 0;
 
+  // Image viewer dither mode
+  enum DITHER_MODE : uint8_t { DITHER_NONE = 0, DITHER_BAYER = 1, DITHER_MODE_COUNT };
+  uint8_t ditherMode = DITHER_BAYER;
+
   // Developer: show free heap in header (0=off, 1=on)
   uint8_t showFreeHeap = 0;
 
@@ -240,6 +244,9 @@ class CrossPointSettings {
 
   // keepClockAlive removed from UI — always 0. Kept for JSON backward compat (ignored on load).
   uint8_t keepClockAlive = 0;
+
+  // Show file extensions in file browser (1 = show, 0 = hide)
+  uint8_t showFileExtensions = 1;
 
   // Periodic sleep screen refresh interval (requires keepClockAlive=1).
   // 0=OFF, 1=1min, 2=5min, 3=10min, 4=30min, 5=60min

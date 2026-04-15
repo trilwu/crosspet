@@ -2088,6 +2088,11 @@ const char* const STRINGS_EN[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_ES[] = {
@@ -3076,6 +3081,11 @@ const char* const STRINGS_ES[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_FR[] = {
@@ -4213,6 +4223,11 @@ const char* const STRINGS_FR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_DE[] = {
@@ -5103,6 +5118,11 @@ const char* const STRINGS_DE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_CS[] = {
@@ -7103,6 +7123,11 @@ const char* const STRINGS_CS[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_PO[] = {
@@ -8122,6 +8147,11 @@ const char* const STRINGS_PO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_RU[] = {
@@ -17526,6 +17556,11 @@ const char* const STRINGS_RU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18760,6 +18795,11 @@ const char* const STRINGS_SV[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_RO[] = {
@@ -20160,6 +20200,11 @@ const char* const STRINGS_RO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_CA[] = {
@@ -21192,6 +21237,11 @@ const char* const STRINGS_CA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_UK[] = {
@@ -31564,6 +31614,11 @@ const char* const STRINGS_UK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_BE[] = {
@@ -41090,6 +41145,11 @@ const char* const STRINGS_BE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_IT[] = {
@@ -41841,6 +41901,11 @@ const char* const STRINGS_IT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_PL[] = {
@@ -43265,6 +43330,11 @@ const char* const STRINGS_PL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44453,6 +44523,11 @@ const char* const STRINGS_FI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45403,6 +45478,11 @@ const char* const STRINGS_DA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46121,6 +46201,11 @@ const char* const STRINGS_NL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_TR[] = {
@@ -47901,6 +47986,11 @@ const char* const STRINGS_TR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_KK[] = {
@@ -56027,6 +56117,11 @@ const char* const STRINGS_KK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_VI[] = {
@@ -61133,6 +61228,46 @@ const char* const STRINGS_VI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Hi\xE1"
+    "\xBB"
+    "\x83"
+    "n th\xE1"
+    "\xBB"
+    "\x8B"
+    " ph\xE1"
+    "\xBA"
+    "\xA7"
+    "n m\xE1"
+    "\xBB"
+    "\x9F"
+    " r\xE1"
+    "\xBB"
+    "\x99"
+    "ng t\xE1"
+    "\xBA"
+    "\xAD"
+    "p tin",
+    "Hi\xE1"
+    "\xBB"
+    "\x87"
+    "n",
+    "Kh\xC3"
+    "\xB4"
+    "ng l\xE1"
+    "\xBB"
+    "\x8D"
+    "c",
+    "L\xE1"
+    "\xBB"
+    "\x8D"
+    "c Bayer",
+    "L\xE1"
+    "\xBB"
+    "\x8D"
+    "c \xE1"
+    "\xBA"
+    "\xA3"
+    "nh",
 };
 
 const char* const STRINGS_HU[] = {
@@ -62903,6 +63038,11 @@ const char* const STRINGS_HU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_LT[] = {
@@ -63989,6 +64129,11 @@ const char* const STRINGS_LT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 const char* const STRINGS_SI[] = {
@@ -64885,6 +65030,11 @@ const char* const STRINGS_SI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "Show file extensions",
+    "Show",
+    "No Dither",
+    "Bayer Dither",
+    "Dither",
 };
 
 }  // namespace i18n_strings

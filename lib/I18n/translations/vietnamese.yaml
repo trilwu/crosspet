@@ -701,3 +701,10 @@ STR_HOME_FOCUS_MODE: "Chế độ tập trung"
 STR_FREE_RAM: "RAM trống"
 STR_REBOOT: "Khởi động lại"
 STR_VERSION: "Phiên bản"
+STR_SHOW_FILE_EXTENSIONS: "Hiển thị phần mở rộng tập tin"
+
+STR_SHOW_PASSWORD: "Hiện"
+
+STR_DITHER_NONE: "Không lọc"
+STR_DITHER_BAYER: "Lọc Bayer"
+STR_DITHER_CYCLE: "Lọc ảnh"

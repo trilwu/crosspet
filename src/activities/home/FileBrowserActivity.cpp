@@ -8,6 +8,7 @@
 
 #include <algorithm>
 
+#include "../browser/ImageViewerActivity.h"
 #include "../util/ConfirmationActivity.h"
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
@@ -95,7 +96,8 @@ void FileBrowserActivity::loadFiles() {
       std::string_view filename{name};
       if (FsHelpers::hasEpubExtension(filename) || FsHelpers::hasXtcExtension(filename) ||
           FsHelpers::hasTxtExtension(filename) || FsHelpers::hasMarkdownExtension(filename) ||
-          FsHelpers::hasBmpExtension(filename)) {
+          FsHelpers::hasBmpExtension(filename) || FsHelpers::hasJpgExtension(filename) ||
+          FsHelpers::hasPngExtension(filename)) {
         files.emplace_back(filename);
       }
     }
@@ -215,7 +217,15 @@ void FileBrowserActivity::loop() {
         selectorIndex = 0;
         requestUpdate();
       } else {
-        onSelectBook(basepath + entry);
+        const std::string fullPath = basepath + entry;
+        if (FsHelpers::hasJpgExtension(fullPath) || FsHelpers::hasPngExtension(fullPath) ||
+            FsHelpers::hasBmpExtension(fullPath)) {
+          startActivityForResult(
+              std::make_unique<ImageViewerActivity>(renderer, mappedInput, fullPath),
+              [](const ActivityResult&) {});
+        } else {
+          onSelectBook(fullPath);
+        }
       }
     }
     return;
@@ -370,7 +380,7 @@ void FileBrowserActivity::render(RenderLock&&) {
         renderer, Rect{0, contentTop, pageWidth, contentHeight}, files.size(), selectorIndex,
         [this](int index) { return getFileName(files[index]); }, nullptr,
         [this](int index) { return UITheme::getFileIcon(files[index]); },
-        [this](int index) { return getFileExtension(files[index]); }, false);
+        [this](int index) { return SETTINGS.showFileExtensions ? getFileExtension(files[index]) : std::string(""); }, false);
   }
 
   // Help text

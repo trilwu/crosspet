@@ -11,6 +11,12 @@
 /**
  * Reusable keyboard entry activity for text input.
  * Can be started from any activity that needs text entry via startActivityForResult()
+ *
+ * Features:
+ * - Dynamic layout: key sizes computed from screen dimensions
+ * - Long-press (>500ms on Confirm) inserts secondary/diacritic character
+ * - Password mode: shows bullets unless showPassword_ is toggled (Right on OK btn)
+ * - Caps lock: double-tap shift cycles lower→upper→lock
  */
 class KeyboardEntryActivity : public Activity {
  public:
@@ -21,7 +27,7 @@ class KeyboardEntryActivity : public Activity {
    * @param title Title to display above the keyboard
    * @param initialText Initial text to show in the input field
    * @param maxLength Maximum length of input text (0 for unlimited)
-   * @param isPassword If true, display asterisks instead of actual characters
+   * @param isPassword If true, display bullets instead of actual characters
    */
   explicit KeyboardEntryActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,
                                  std::string title = "Enter Text", std::string initialText = "",
@@ -43,17 +49,26 @@ class KeyboardEntryActivity : public Activity {
   std::string text;
   size_t maxLength;
   bool isPassword;
+  bool showPassword_ = false;  // toggle to reveal password chars
 
   ButtonNavigator buttonNavigator;
 
   // Keyboard state
   int selectedRow = 0;
   int selectedCol = 0;
-  int shiftState = 0;  // 0 = lower case, 1 = upper case, 2 = shift lock)
+  int shiftState = 0;  // 0 = lower case, 1 = upper case, 2 = caps lock
+
+  // Long-press detection
+  bool confirmHeld_ = false;         // true while Confirm is physically held
+  bool longPressHandled_ = false;    // prevents double-insert on same hold
+  static constexpr unsigned long LONG_PRESS_MS = 500;
 
   // Handlers
   void onComplete(std::string text);
   void onCancel();
+
+  // Insert secondary (diacritic) char for current key; returns false if none
+  bool insertSecondaryChar();
 
   // Keyboard layout
   static constexpr int NUM_ROWS = 5;
@@ -70,6 +85,18 @@ class KeyboardEntryActivity : public Activity {
   static constexpr int DONE_COL = 9;
 
   char getSelectedChar() const;
+  std::string getSelectedSecondaryChar() const;
+  static std::string getSecondaryCharFor(char primary);
   bool handleKeyPress();  // false if onComplete was triggered
   int getRowLength(int row) const;
+
+  // Dynamic layout helpers — computed each render from screen size
+  struct KeyboardLayout {
+    int keyWidth;
+    int keyHeight;
+    int keySpacing;
+    int leftMargin;
+    int startY;
+  };
+  KeyboardLayout computeLayout() const;
 };
