@@ -758,6 +758,9 @@ enum class StrId : uint16_t {
   STR_MENU_DISPLAY,
   STR_MENU_FEATURES,
   STR_APPS,
+  STR_ON_MARKER,
+  STR_NOTO_SANS,
+  STR_EXT_FONT_FULL_MODE,
   // Sentinel - must be last
   _COUNT
 };
