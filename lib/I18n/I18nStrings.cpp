@@ -1484,7 +1484,7 @@ const char* const STRINGS_EN[] = {
     "Reader Font Family",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "Reader Font Size",
     "Reader Line Spacing",
     "ASCII Letter Spacing",
@@ -2076,6 +2076,7 @@ const char* const STRINGS_EN[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -2085,23 +2086,9 @@ const char* const STRINGS_EN[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_ES[] = {
@@ -3078,6 +3065,7 @@ const char* const STRINGS_ES[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -3087,23 +3075,9 @@ const char* const STRINGS_ES[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_FR[] = {
@@ -4229,6 +4203,7 @@ const char* const STRINGS_FR[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -4238,23 +4213,9 @@ const char* const STRINGS_FR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_DE[] = {
@@ -5133,6 +5094,7 @@ const char* const STRINGS_DE[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Freier RAM",
     "Reboot",
     "Version",
@@ -5142,23 +5104,9 @@ const char* const STRINGS_DE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_CS[] = {
@@ -7147,6 +7095,7 @@ const char* const STRINGS_CS[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -7156,23 +7105,9 @@ const char* const STRINGS_CS[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_PO[] = {
@@ -8180,6 +8115,7 @@ const char* const STRINGS_PO[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -8189,23 +8125,9 @@ const char* const STRINGS_PO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_RU[] = {
@@ -17598,6 +17520,7 @@ const char* const STRINGS_RU[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -17607,23 +17530,9 @@ const char* const STRINGS_RU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18846,6 +18755,7 @@ const char* const STRINGS_SV[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -18855,23 +18765,9 @@ const char* const STRINGS_SV[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_RO[] = {
@@ -20260,6 +20156,7 @@ const char* const STRINGS_RO[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -20269,23 +20166,9 @@ const char* const STRINGS_RO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_CA[] = {
@@ -21306,6 +21189,7 @@ const char* const STRINGS_CA[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -21315,23 +21199,9 @@ const char* const STRINGS_CA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_UK[] = {
@@ -31692,6 +31562,7 @@ const char* const STRINGS_UK[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -31701,23 +31572,9 @@ const char* const STRINGS_UK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_BE[] = {
@@ -41232,6 +41089,7 @@ const char* const STRINGS_BE[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -41241,23 +41099,9 @@ const char* const STRINGS_BE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_IT[] = {
@@ -41997,6 +41841,7 @@ const char* const STRINGS_IT[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -42006,23 +41851,9 @@ const char* const STRINGS_IT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_PL[] = {
@@ -43435,6 +43266,7 @@ const char* const STRINGS_PL[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -43444,23 +43276,9 @@ const char* const STRINGS_PL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44637,6 +44455,7 @@ const char* const STRINGS_FI[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -44646,23 +44465,15 @@ const char* const STRINGS_FI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[P\xC3"
+    "\x84"
+    "\xC3"
+    "\x84"
+    "LL\xC3"
+    "\x84"
+    "]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45601,6 +45412,7 @@ const char* const STRINGS_DA[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -45610,23 +45422,9 @@ const char* const STRINGS_DA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46333,6 +46131,7 @@ const char* const STRINGS_NL[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -46342,23 +46141,9 @@ const char* const STRINGS_NL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[AAN]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_TR[] = {
@@ -48127,6 +47912,7 @@ const char* const STRINGS_TR[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -48136,23 +47922,9 @@ const char* const STRINGS_TR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_KK[] = {
@@ -50237,7 +50009,7 @@ const char* const STRINGS_KK[] = {
     "",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "\xD0"
     "\x98"
     "\xD0"
@@ -56267,6 +56039,7 @@ const char* const STRINGS_KK[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -56276,23 +56049,9 @@ const char* const STRINGS_KK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_VI[] = {
@@ -61358,6 +61117,7 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xAD"
     "p trung",
+    "Ghost Mode",
     "RAM tr\xE1"
     "\xBB"
     "\x91"
@@ -61386,126 +61146,12 @@ const char* const STRINGS_VI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "L\xE1"
-    "\xBB"
-    "\xB1"
-    "a ch\xE1"
-    "\xBB"
-    "\x8D"
-    "n Deck",
-    "M\xE1"
-    "\xBB"
-    "\x9B"
-    "i",
-    "\xC4"
-    "\x90"
-    "\xE1"
+    "[B\xE1"
     "\xBA"
-    "\xBF"
-    "n h\xE1"
-    "\xBA"
-    "\xA1"
-    "n",
-    "T\xE1"
-    "\xBB"
-    "\x95"
-    "ng c\xE1"
-    "\xBB"
-    "\x99"
-    "ng",
-    "Import Deck m\xE1"
-    "\xBB"
-    "\x9B"
-    "i",
-    "C\xC3"
-    "\xA0"
-    "i \xC4"
-    "\x91"
-    "\xE1"
-    "\xBA"
-    "\xB7"
-    "t Flashcard",
-    "Th\xE1"
-    "\xBB"
-    "\xAD"
-    " l\xE1"
-    "\xBA"
-    "\xA1"
-    "i",
-    "Kh\xC3"
-    "\xB3"
-    "",
-    "TB",
-    "D\xE1"
-    "\xBB"
-    "\x85"
-    "",
-    "Hi\xE1"
-    "\xBB"
-    "\x87"
-    "n",
-    "Tuy\xE1"
-    "\xBB"
-    "\x87"
-    "t v\xE1"
-    "\xBB"
-    "\x9D"
-    "i! B\xE1"
-    "\xBA"
-    "\xA1"
-    "n \xC4"
-    "\x91"
-    "\xC3"
-    "\xA3"
-    " review h\xE1"
-    "\xBA"
-    "\xBF"
-    "t th\xE1"
-    "\xBA"
-    "\xBB"
-    " ng\xC3"
-    "\xA0"
-    "y h\xC3"
-    "\xB4"
-    "m nay",
-    "Th\xE1"
-    "\xBA"
-    "\xBB"
-    " m\xE1"
-    "\xBB"
-    "\x9B"
-    "i / Ng\xC3"
-    "\xA0"
-    "y",
-    "L\xC6"
-    "\xB0"
-    "\xE1"
-    "\xBB"
-    "\xA3"
-    "t review t\xE1"
-    "\xBB"
-    "\x91"
-    "i \xC4"
-    "\x91"
-    "a / Ng\xC3"
-    "\xA0"
-    "y",
-    "Ch\xC6"
-    "\xB0"
-    "a c\xC3"
-    "\xB3"
-    " deck n\xC3"
-    "\xA0"
-    "o",
-    "\xC4"
-    "\x90"
-    "\xE1"
-    "\xBA"
-    "\xB7"
-    "t file .csv v\xC3"
-    "\xA0"
-    "o /.crosspoint/flashcard/",
+    "\xAC"
+    "T]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_HU[] = {
@@ -61906,7 +61552,7 @@ const char* const STRINGS_HU[] = {
     "szlet",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "Olvas\xC3"
     "\xB3"
     " bet\xC5"
@@ -63264,6 +62910,7 @@ const char* const STRINGS_HU[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -63273,23 +62920,9 @@ const char* const STRINGS_HU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_LT[] = {
@@ -63526,7 +63159,7 @@ const char* const STRINGS_LT[] = {
     "riftas",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "\xC5"
     "\xA0"
     "rifto dydis",
@@ -64364,6 +63997,7 @@ const char* const STRINGS_LT[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -64373,23 +64007,9 @@ const char* const STRINGS_LT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_SI[] = {
@@ -64554,7 +64174,7 @@ const char* const STRINGS_SI[] = {
     "Pisava bralnika",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "Velikost pisave",
     "Razmik med vrsticami",
     "ASCII Letter Spacing",
@@ -65274,6 +64894,7 @@ const char* const STRINGS_SI[] = {
     "Show Free RAM",
     "Device Info",
     "Focus Mode",
+    "Ghost Mode",
     "Free RAM",
     "Reboot",
     "Version",
@@ -65283,23 +64904,9 @@ const char* const STRINGS_SI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
-    "Flashcard",
-    "Select Deck",
-    "New",
-    "Due",
-    "Total",
-    "Import new Deck",
-    "Flashcard Settings",
-    "Again",
-    "Hard",
-    "Good",
-    "Easy",
-    "Show",
-    "Great! You reviewed all cards for today",
-    "New cards / Day",
-    "Max reviews / Day",
-    "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 }  // namespace i18n_strings

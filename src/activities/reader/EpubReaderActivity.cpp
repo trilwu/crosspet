@@ -3,6 +3,7 @@
 #include <Epub/Page.h>
 #include <Epub/blocks/TextBlock.h>
 #include <FontCacheManager.h>
+#include <FontManager.h>
 #include <FsHelpers.h>
 #include <GfxRenderer.h>
 #include <HalStorage.h>
@@ -986,7 +987,10 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
                                         const int orientedMarginRight, const int orientedMarginBottom,
                                         const int orientedMarginLeft) {
   // Force special handling for pages with images when anti-aliasing is on
-  bool imagePageWithAA = page->hasImages() && SETTINGS.textAntiAliasing;
+  // Disable AA when external CJK font is active — the font cache uses too much
+  // heap for the grayscale buffer copies, and CJK bitmap glyphs are 1-bit anyway.
+  const bool effectiveAA = SETTINGS.textAntiAliasing && !FontMgr.isExternalFontEnabled();
+  bool imagePageWithAA = page->hasImages() && effectiveAA;
 
   page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);
   renderStatusBar();
@@ -1020,17 +1024,17 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
       renderer.displayBuffer(HalDisplay::FAST_REFRESH);
     } else {
       // Fallback when bounding box unavailable: AA needs FAST_REFRESH to avoid ghosting
-      if (SETTINGS.textAntiAliasing) {
+      if (effectiveAA) {
         renderer.displayBuffer(HalDisplay::FAST_REFRESH);
       } else {
         renderer.displayBuffer(HalDisplay::HALF_REFRESH);
       }
     }
     // Double FAST_REFRESH handles ghosting for image pages; don't count toward full refresh cadence
-  } else if (SETTINGS.textAntiAliasing) {
+  } else if (effectiveAA) {
     // Anti-aliasing on: always use FAST_REFRESH for BW pass.
     // HALF_REFRESH sets e-ink particles too firmly, preventing the subsequent
-    // grayscale LUT from adjusting them — causing ghost artifacts on next page.
+    // grayscale LUT from adjusting them — causing worse artifacts.
     // Periodic full clear: flash blank screen to reset accumulated ghosting,
     // then render the page with FAST_REFRESH so grayscale LUT works correctly.
     const int freq = SETTINGS.getRefreshFrequency();
@@ -1054,9 +1058,8 @@ void EpubReaderActivity::renderContents(std::unique_ptr<Page> page, const int or
   // Save bw buffer to reset buffer state after grayscale data sync
   renderer.storeBwBuffer();
 
-  // grayscale rendering
-  // TODO: Only do this if font supports it
-  if (SETTINGS.textAntiAliasing) {
+  // grayscale rendering — skipped when external CJK font is active
+  if (effectiveAA) {
     renderer.clearScreen(0x00);
     renderer.setRenderMode(GfxRenderer::GRAYSCALE_LSB);
     page->render(renderer, SETTINGS.getReaderFontId(), orientedMarginLeft, orientedMarginTop);

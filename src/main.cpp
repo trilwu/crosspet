@@ -2,6 +2,7 @@
 #include <Epub.h>
 #include <FontCacheManager.h>
 #include <FontDecompressor.h>
+#include <FontManager.h>
 #include <GfxRenderer.h>
 #include <HalDisplay.h>
 #include <HalGPIO.h>
@@ -339,6 +340,8 @@ void setup() {
   SETTINGS.loadFromFile();
   PET_SETTINGS.loadFromFile();
   I18N.loadSettings();
+  FontMgr.scanFonts();
+  FontMgr.loadSettings();
   KOREADER_STORE.loadFromFile();
   READ_STATS.loadFromFile();   // loaded early so abort-to-sleep paths show correct stats
   GAME_SCORES.loadFromFile();
