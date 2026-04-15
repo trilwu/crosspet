@@ -1484,7 +1484,7 @@ const char* const STRINGS_EN[] = {
     "Reader Font Family",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "Reader Font Size",
     "Reader Line Spacing",
     "ASCII Letter Spacing",
@@ -2086,6 +2086,9 @@ const char* const STRINGS_EN[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_ES[] = {
@@ -3072,6 +3075,9 @@ const char* const STRINGS_ES[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_FR[] = {
@@ -4207,6 +4213,9 @@ const char* const STRINGS_FR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_DE[] = {
@@ -5095,6 +5104,9 @@ const char* const STRINGS_DE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_CS[] = {
@@ -7093,6 +7105,9 @@ const char* const STRINGS_CS[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_PO[] = {
@@ -8110,6 +8125,9 @@ const char* const STRINGS_PO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_RU[] = {
@@ -17512,6 +17530,9 @@ const char* const STRINGS_RU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18744,6 +18765,9 @@ const char* const STRINGS_SV[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_RO[] = {
@@ -20142,6 +20166,9 @@ const char* const STRINGS_RO[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_CA[] = {
@@ -21172,6 +21199,9 @@ const char* const STRINGS_CA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_UK[] = {
@@ -31542,6 +31572,9 @@ const char* const STRINGS_UK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_BE[] = {
@@ -41066,6 +41099,9 @@ const char* const STRINGS_BE[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_IT[] = {
@@ -41815,6 +41851,9 @@ const char* const STRINGS_IT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_PL[] = {
@@ -43237,6 +43276,9 @@ const char* const STRINGS_PL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44423,6 +44465,15 @@ const char* const STRINGS_FI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[P\xC3"
+    "\x84"
+    "\xC3"
+    "\x84"
+    "LL\xC3"
+    "\x84"
+    "]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45371,6 +45422,9 @@ const char* const STRINGS_DA[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46087,6 +46141,9 @@ const char* const STRINGS_NL[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[AAN]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_TR[] = {
@@ -47865,6 +47922,9 @@ const char* const STRINGS_TR[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_KK[] = {
@@ -49949,7 +50009,7 @@ const char* const STRINGS_KK[] = {
     "",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "\xD0"
     "\x98"
     "\xD0"
@@ -55989,6 +56049,9 @@ const char* const STRINGS_KK[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_VI[] = {
@@ -61083,6 +61146,12 @@ const char* const STRINGS_VI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[B\xE1"
+    "\xBA"
+    "\xAC"
+    "T]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_HU[] = {
@@ -61483,7 +61552,7 @@ const char* const STRINGS_HU[] = {
     "szlet",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "Olvas\xC3"
     "\xB3"
     " bet\xC5"
@@ -62851,6 +62920,9 @@ const char* const STRINGS_HU[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_LT[] = {
@@ -63087,7 +63159,7 @@ const char* const STRINGS_LT[] = {
     "riftas",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "\xC5"
     "\xA0"
     "rifto dydis",
@@ -63935,6 +64007,9 @@ const char* const STRINGS_LT[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 const char* const STRINGS_SI[] = {
@@ -64099,7 +64174,7 @@ const char* const STRINGS_SI[] = {
     "Pisava bralnika",
     "External Reader Font",
     "Reader Font",
-    "UI Font",
+    "External UI Font",
     "Velikost pisave",
     "Razmik med vrsticami",
     "ASCII Letter Spacing",
@@ -64829,6 +64904,9 @@ const char* const STRINGS_SI[] = {
     "DISPLAY",
     "FEATURES",
     "Apps",
+    "[ON]",
+    "Noto Sans",
+    "Ext Font: Full Mode",
 };
 
 }  // namespace i18n_strings

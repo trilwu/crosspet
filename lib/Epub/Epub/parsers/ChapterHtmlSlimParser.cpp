@@ -772,6 +772,49 @@ void XMLCALL ChapterHtmlSlimParser::characterData(void* userData, const XML_Char
       continue;
     }
 
+    // CJK characters: treat each character as its own word so the line-break
+    // algorithm can wrap freely without needing hyphenation.
+    // 3-byte UTF-8: U+3000-U+9FFF, U+2E80-U+2FDF, U+F900-U+FAFF, U+FF00-U+FFBF
+    // 4-byte UTF-8: U+20000-U+2B81F (CJK Extension B/C/D)
+    {
+      const auto b0 = static_cast<uint8_t>(s[i]);
+      const auto b1 = (i + 1 < len) ? static_cast<uint8_t>(s[i + 1]) : 0;
+
+      // 4-byte CJK: U+20000-U+2B81F → 0xF0 0xA0-0xAA
+      const bool isCjk4 = (i + 3 < len) && (b0 == 0xF0) && (b1 >= 0xA0 && b1 <= 0xAA);
+      if (isCjk4) {
+        if (self->partWordBufferIndex > 0) {
+          self->flushPartWordBuffer();
+        }
+        self->partWordBuffer[0] = s[i];
+        self->partWordBuffer[1] = s[i + 1];
+        self->partWordBuffer[2] = s[i + 2];
+        self->partWordBuffer[3] = s[i + 3];
+        self->partWordBufferIndex = 4;
+        self->flushPartWordBuffer();
+        i += 3;
+        continue;
+      }
+
+      // 3-byte CJK
+      const bool isCjk3 = (i + 2 < len) &&
+                          ((b0 >= 0xE2 && b0 <= 0xE9) ||
+                           (b0 == 0xEF && b1 >= 0xA4 && b1 <= 0xAB) ||
+                           (b0 == 0xEF && b1 >= 0xBC && b1 <= 0xBE));
+      if (isCjk3) {
+        if (self->partWordBufferIndex > 0) {
+          self->flushPartWordBuffer();
+        }
+        self->partWordBuffer[0] = s[i];
+        self->partWordBuffer[1] = s[i + 1];
+        self->partWordBuffer[2] = s[i + 2];
+        self->partWordBufferIndex = 3;
+        self->flushPartWordBuffer();
+        i += 2;
+        continue;
+      }
+    }
+
     // Skip Zero Width No-Break Space / BOM (U+FEFF) = 0xEF 0xBB 0xBF
     const XML_Char FEFF_BYTE_1 = static_cast<XML_Char>(0xEF);
     const XML_Char FEFF_BYTE_2 = static_cast<XML_Char>(0xBB);
