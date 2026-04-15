@@ -28,6 +28,9 @@ class CrossPetSettings {
   uint8_t appReadingStats = 1;
   uint8_t appSleepImagePicker = 1;
   uint8_t appGames = 1;  // Master toggle for all games (Chess, Caro, Sudoku, Minesweeper, 2048)
+  uint8_t appFlashcard = 1;  // Per-app visibility toggle (1=show, 0=hide)
+  uint8_t flashcardNewPerDay = 10;      // New cards per day limit
+  uint8_t flashcardMaxReviewPerDay = 250; // Max reviews per day (capped at 255 for uint8_t)
 
  private:
   CrossPetSettings() = default;
