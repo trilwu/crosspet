@@ -10,6 +10,7 @@
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
 #include "activities/network/WifiSelectionActivity.h"
+#include "activities/util/KeyboardEntryActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "network/HttpDownloader.h"
@@ -30,6 +31,9 @@ void OpdsBookBrowserActivity::onEnter() {
   selectorIndex = 0;
   errorMessage.clear();
   statusMessage = tr(STR_CHECKING_WIFI);
+  searchUrl_.clear();
+  nextPageUrl_.clear();
+  prevPageUrl_.clear();
   requestUpdate();
 
   // Check WiFi and connect if needed, then fetch feed
@@ -44,6 +48,9 @@ void OpdsBookBrowserActivity::onExit() {
 
   entries.clear();
   navigationHistory.clear();
+  searchUrl_.clear();
+  nextPageUrl_.clear();
+  prevPageUrl_.clear();
 }
 
 void OpdsBookBrowserActivity::loop() {
@@ -101,7 +108,9 @@ void OpdsBookBrowserActivity::loop() {
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
       if (!entries.empty()) {
         const auto& entry = entries[selectorIndex];
-        if (entry.type == OpdsEntryType::BOOK) {
+        if (entry.id == "__opds_search__") {
+          launchSearch();
+        } else if (entry.type == OpdsEntryType::BOOK) {
           downloadBook(entry);
         } else {
           navigateToEntry(entry);
@@ -189,8 +198,13 @@ void OpdsBookBrowserActivity::render(RenderLock&&) {
   // Browsing state
   // Show appropriate button hint based on selected entry type
   const char* confirmLabel = tr(STR_OPEN);
-  if (!entries.empty() && entries[selectorIndex].type == OpdsEntryType::BOOK) {
-    confirmLabel = tr(STR_DOWNLOAD);
+  if (!entries.empty()) {
+    const auto& sel = entries[selectorIndex];
+    if (sel.type == OpdsEntryType::BOOK) {
+      confirmLabel = tr(STR_DOWNLOAD);
+    } else if (sel.id == "__opds_search__") {
+      confirmLabel = tr(STR_OPDS_SEARCH);
+    }
   }
   const auto labels = mappedInput.mapLabels(tr(STR_BACK), confirmLabel, tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
@@ -240,6 +254,7 @@ void OpdsBookBrowserActivity::fetchFeed(const std::string& path) {
   LOG_DBG("OPDS", "Fetching: %s", url.c_str());
 
   OpdsParser parser;
+  parser.setBaseUrl(url);
 
   {
     OpdsParserStream stream{parser};
@@ -258,8 +273,46 @@ void OpdsBookBrowserActivity::fetchFeed(const std::string& path) {
     return;
   }
 
+  // Store feed-level navigation URLs
+  searchUrl_ = parser.getSearchUrl();
+  nextPageUrl_ = parser.getNextPageUrl();
+  prevPageUrl_ = parser.getPrevPageUrl();
+
   entries = std::move(parser).getEntries();
-  LOG_DBG("OPDS", "Found %d entries", entries.size());
+  LOG_DBG("OPDS", "Found %d entries (search=%s next=%s prev=%s)", entries.size(),
+          searchUrl_.empty() ? "no" : "yes", nextPageUrl_.empty() ? "no" : "yes",
+          prevPageUrl_.empty() ? "no" : "yes");
+
+  // Inject virtual "Previous page" entry at the top of the list
+  if (!prevPageUrl_.empty()) {
+    OpdsEntry prevEntry;
+    prevEntry.type = OpdsEntryType::NAVIGATION;
+    prevEntry.title = tr(STR_OPDS_PREV_PAGE);
+    prevEntry.href = prevPageUrl_;
+    prevEntry.id = "__opds_prev__";
+    entries.insert(entries.begin(), prevEntry);
+  }
+
+  // Inject virtual "Search" entry at the top of the list
+  if (!searchUrl_.empty()) {
+    OpdsEntry searchEntry;
+    searchEntry.type = OpdsEntryType::NAVIGATION;
+    searchEntry.title = tr(STR_OPDS_SEARCH);
+    searchEntry.href = searchUrl_;
+    searchEntry.id = "__opds_search__";
+    entries.insert(entries.begin(), searchEntry);
+  }
+
+  // Inject virtual "Next page" entry at the bottom of the list
+  if (!nextPageUrl_.empty()) {
+    OpdsEntry nextEntry;
+    nextEntry.type = OpdsEntryType::NAVIGATION;
+    nextEntry.title = tr(STR_OPDS_NEXT_PAGE);
+    nextEntry.href = nextPageUrl_;
+    nextEntry.id = "__opds_next__";
+    entries.push_back(nextEntry);
+  }
+
   selectorIndex = 0;
 
   if (entries.empty()) {
@@ -347,6 +400,60 @@ void OpdsBookBrowserActivity::downloadBook(const OpdsEntry& book) {
     errorMessage = tr(STR_DOWNLOAD_FAILED);
     requestUpdate();
   }
+}
+
+void OpdsBookBrowserActivity::launchSearch() {
+  startActivityForResult(
+      std::make_unique<KeyboardEntryActivity>(renderer, mappedInput, tr(STR_OPDS_SEARCH), "", 0, false),
+      [this](const ActivityResult& result) {
+        if (!result.isCancelled) {
+          const auto& text = std::get<KeyboardResult>(result.data).text;
+          if (!text.empty()) {
+            onSearchComplete(text);
+          }
+        }
+      });
+}
+
+void OpdsBookBrowserActivity::onSearchComplete(const std::string& query) {
+  // Replace {searchTerms} in the OpenSearch template URL
+  std::string searchFeedUrl = searchUrl_;
+  const std::string placeholder = "{searchTerms}";
+  // URL-encode the query: replace spaces with +, encode special chars per RFC 3986
+  std::string encoded;
+  for (const char c : query) {
+    if (c == ' ') {
+      encoded += '+';
+    } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
+               c == '-' || c == '_' || c == '.' || c == '~') {
+      encoded += c;
+    } else {
+      char buf[4];
+      snprintf(buf, sizeof(buf), "%%%02X", static_cast<unsigned char>(c));
+      encoded += buf;
+    }
+  }
+
+  // Replace all occurrences of {searchTerms} in the template URL
+  size_t pos = 0;
+  while ((pos = searchFeedUrl.find(placeholder, pos)) != std::string::npos) {
+    searchFeedUrl.replace(pos, placeholder.size(), encoded);
+    pos += encoded.size();
+  }
+
+  LOG_DBG("OPDS", "Search URL: %s", searchFeedUrl.c_str());
+
+  // Navigate to search results — push current path to history
+  navigationHistory.push_back(currentPath);
+  currentPath = searchFeedUrl;
+
+  state = BrowserState::LOADING;
+  statusMessage = tr(STR_LOADING);
+  entries.clear();
+  selectorIndex = 0;
+  requestUpdate(true);
+
+  fetchFeed(currentPath);
 }
 
 void OpdsBookBrowserActivity::checkAndConnectWifi() {

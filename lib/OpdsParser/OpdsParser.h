@@ -33,6 +33,7 @@ using OpdsBook = OpdsEntry;
  *
  * Usage:
  *   OpdsParser parser;
+ *   parser.setBaseUrl("http://example.com/opds");
  *   if (parser.parse(xmlData, xmlLength)) {
  *     for (const auto& entry : parser.getEntries()) {
  *       if (entry.type == OpdsEntryType::BOOK) {
@@ -41,6 +42,9 @@ using OpdsBook = OpdsEntry;
  *         // Navigation link to another catalog
  *       }
  *     }
+ *     // Optional: search and pagination URLs
+ *     auto searchUrl = parser.getSearchUrl();
+ *     auto nextUrl = parser.getNextPageUrl();
  *   }
  */
 class OpdsParser final : public Print {
@@ -62,6 +66,11 @@ class OpdsParser final : public Print {
   operator bool() { return !error(); }
 
   /**
+   * Set the base URL of the feed being parsed (used to resolve relative hrefs).
+   */
+  void setBaseUrl(const std::string& url) { baseUrl_ = url; }
+
+  /**
    * Get the parsed entries (both navigation and book entries).
    * @return Vector of OpdsEntry entries
    */
@@ -75,7 +84,22 @@ class OpdsParser final : public Print {
   std::vector<OpdsEntry> getBooks() const;
 
   /**
-   * Clear all parsed entries.
+   * Get OpenSearch description URL (empty string if not present).
+   */
+  const std::string& getSearchUrl() const { return searchUrl_; }
+
+  /**
+   * Get the "next page" URL from the feed (empty string if not present).
+   */
+  const std::string& getNextPageUrl() const { return nextPageUrl_; }
+
+  /**
+   * Get the "previous page" URL from the feed (empty string if not present).
+   */
+  const std::string& getPrevPageUrl() const { return prevPageUrl_; }
+
+  /**
+   * Clear all parsed entries and feed-level metadata.
    */
   void clear();
 
@@ -88,10 +112,19 @@ class OpdsParser final : public Print {
   // Helper to find attribute value
   static const char* findAttribute(const XML_Char** atts, const char* name);
 
+  // Resolve href against baseUrl_ if it is relative
+  std::string resolveHref(const char* href) const;
+
   XML_Parser parser = nullptr;
   std::vector<OpdsEntry> entries;
   OpdsEntry currentEntry;
   std::string currentText;
+  std::string baseUrl_;
+
+  // Feed-level navigation URLs
+  std::string searchUrl_;
+  std::string nextPageUrl_;
+  std::string prevPageUrl_;
 
   // Parser state
   bool inEntry = false;

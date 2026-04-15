@@ -96,7 +96,8 @@ void ParsedText::addWord(std::string word, const EpdFontFamily::Style fontStyle,
 // Consumes data to minimize memory usage
 void ParsedText::layoutAndExtractLines(const GfxRenderer& renderer, const int fontId, const uint16_t viewportWidth,
                                        const std::function<void(std::shared_ptr<TextBlock>)>& processLine,
-                                       const bool includeLastLine) {
+                                       const bool includeLastLine, const int firstPageAvailableLines,
+                                       const int fullPageLines) {
   if (words.empty()) {
     return;
   }
@@ -110,7 +111,14 @@ void ParsedText::layoutAndExtractLines(const GfxRenderer& renderer, const int fo
   std::vector<size_t> lineBreakIndices;
   if (hyphenationEnabled) {
     // Use greedy layout that can split words mid-loop when a hyphenated prefix fits.
-    lineBreakIndices = computeHyphenatedLineBreaks(renderer, fontId, pageWidth, wordWidths, wordContinues);
+    std::vector<bool> lineEndedWithHyphen;
+    lineBreakIndices =
+        computeHyphenatedLineBreaks(renderer, fontId, pageWidth, wordWidths, wordContinues, lineEndedWithHyphen);
+    // Post-pass: suppress hyphenation at page boundaries when the full word fits on the line.
+    if (firstPageAvailableLines > 0 && fullPageLines > 0) {
+      resolveHyphenatedPageBreaks(renderer, fontId, pageWidth, lineBreakIndices, wordWidths, lineEndedWithHyphen,
+                                  firstPageAvailableLines, fullPageLines);
+    }
   } else {
     lineBreakIndices = computeLineBreaks(renderer, fontId, pageWidth, wordWidths, wordContinues);
   }
@@ -275,9 +283,11 @@ void ParsedText::applyParagraphIndent() {
 }
 
 // Builds break indices while opportunistically splitting the word that would overflow the current line.
+// lineEndedWithHyphenOut[i] is true when line i ends with an inserted hyphen (split by hyphenateWordAtIndex).
 std::vector<size_t> ParsedText::computeHyphenatedLineBreaks(const GfxRenderer& renderer, const int fontId,
                                                             const int pageWidth, std::vector<uint16_t>& wordWidths,
-                                                            std::vector<bool>& continuesVec) {
+                                                            std::vector<bool>& continuesVec,
+                                                            std::vector<bool>& lineEndedWithHyphenOut) {
   // Calculate first line indent (only for left/justified text).
   // Positive text-indent (paragraph indent) is suppressed when extraParagraphSpacing is on.
   // Negative text-indent (hanging indent, e.g. margin-left:3em; text-indent:-1em) always applies —
@@ -295,6 +305,7 @@ std::vector<size_t> ParsedText::computeHyphenatedLineBreaks(const GfxRenderer& r
   while (currentIndex < wordWidths.size()) {
     const size_t lineStart = currentIndex;
     int lineWidth = 0;
+    bool lineUsedHyphen = false;
 
     // First line has reduced width due to text-indent
     const int effectivePageWidth = isFirstLine ? pageWidth - firstLineIndent : pageWidth;
@@ -317,6 +328,7 @@ std::vector<size_t> ParsedText::computeHyphenatedLineBreaks(const GfxRenderer& r
       if (lineWidth + candidateWidth <= effectivePageWidth) {
         lineWidth += candidateWidth;
         ++currentIndex;
+        lineUsedHyphen = false;  // A full word fit, so no hyphen ends this line yet
         continue;
       }
 
@@ -329,6 +341,7 @@ std::vector<size_t> ParsedText::computeHyphenatedLineBreaks(const GfxRenderer& r
         // Prefix now fits; append it to this line and move to next line
         lineWidth += spacing + wordWidths[currentIndex];
         ++currentIndex;
+        lineUsedHyphen = true;
         break;
       }
 
@@ -344,13 +357,134 @@ std::vector<size_t> ParsedText::computeHyphenatedLineBreaks(const GfxRenderer& r
     // Backtrack to the start of the continuation group so the whole group moves to the next line.
     while (currentIndex > lineStart + 1 && currentIndex < wordWidths.size() && continuesVec[currentIndex]) {
       --currentIndex;
+      lineUsedHyphen = false;  // Backtracked past the hyphenated word
     }
 
     lineBreakIndices.push_back(currentIndex);
+    lineEndedWithHyphenOut.push_back(lineUsedHyphen);
     isFirstLine = false;
   }
 
   return lineBreakIndices;
+}
+
+// Post-pass: for each line that is the last line before a page break AND ended with an inserted hyphen,
+// attempt to replace the hyphenated prefix with the full (un-hyphenated) word.
+// If the full word fits on the line, the split is undone; otherwise the hyphenated version is kept.
+void ParsedText::resolveHyphenatedPageBreaks(const GfxRenderer& renderer, const int fontId, const int pageWidth,
+                                             std::vector<size_t>& lineBreakIndices,
+                                             std::vector<uint16_t>& wordWidths,
+                                             const std::vector<bool>& lineEndedWithHyphen, const int firstPageLines,
+                                             const int fullPageLines) {
+  if (lineBreakIndices.empty() || fullPageLines <= 0) return;
+
+  // Determine the first-line indent for width calculations (mirrors computeHyphenatedLineBreaks logic).
+  const int firstLineIndent =
+      blockStyle.textIndentDefined && (blockStyle.textIndent < 0 || !extraParagraphSpacing) &&
+              (blockStyle.alignment == CssTextAlign::Justify || blockStyle.alignment == CssTextAlign::Left)
+          ? blockStyle.textIndent
+          : 0;
+
+  // Compute which line indices are page-boundary lines (i.e., the last line on a page).
+  // linesConsumed tracks how many lines have been placed starting from line 0.
+  int nextPageBoundary = firstPageLines;  // 1-based: line index nextPageBoundary-1 is the last on first page
+  const size_t lineCount = lineBreakIndices.size();
+
+  for (size_t lineIdx = 0; lineIdx < lineCount; ++lineIdx) {
+    // Check if this line is the last line on a page (1-based line number == nextPageBoundary)
+    const int lineNumber = static_cast<int>(lineIdx) + 1;  // 1-based
+    const bool isPageBoundary = (lineNumber == nextPageBoundary);
+
+    if (isPageBoundary) {
+      // Advance to next page boundary
+      nextPageBoundary += fullPageLines;
+
+      // Only process if this line ended with an inserted hyphen
+      if (lineIdx < lineEndedWithHyphen.size() && lineEndedWithHyphen[lineIdx]) {
+        // The prefix word is at words[lineBreakIndices[lineIdx] - 1] (ends with '-').
+        // The remainder word is at words[lineBreakIndices[lineIdx]] (first word of next line).
+        if (lineBreakIndices[lineIdx] == 0) continue;  // no prefix word can exist at index 0
+        const size_t prefixIdx = lineBreakIndices[lineIdx] - 1;
+        const size_t remainderIdx = lineBreakIndices[lineIdx];
+
+        if (prefixIdx >= words.size() || remainderIdx >= words.size()) continue;
+        if (words[prefixIdx].empty() || words[prefixIdx].back() != '-') continue;
+
+        // Build merged word: prefix without the trailing '-' + remainder.
+        const std::string prefix = words[prefixIdx].substr(0, words[prefixIdx].size() - 1);
+        const std::string& remainder = words[remainderIdx];
+        const std::string merged = prefix + remainder;
+
+        // Measure merged word width (use same style as prefix).
+        const auto style = wordStyles[prefixIdx];
+        const uint16_t mergedWidth = static_cast<uint16_t>(renderer.getTextAdvanceX(fontId, merged.c_str(), style));
+
+        // Compute current line width WITHOUT the prefix word to see how much room is available.
+        const size_t lineStart = (lineIdx > 0) ? lineBreakIndices[lineIdx - 1] : 0;
+        const bool isFirstLine = (lineIdx == 0);
+        const int effectivePageWidth = isFirstLine ? pageWidth - firstLineIndent : pageWidth;
+
+        int lineWidthWithoutPrefix = 0;
+        for (size_t wi = lineStart; wi < prefixIdx; ++wi) {
+          if (wi == lineStart) {
+            lineWidthWithoutPrefix += wordWidths[wi];
+          } else if (!wordContinues[wi]) {
+            lineWidthWithoutPrefix += renderer.getSpaceAdvance(fontId, lastCodepoint(words[wi - 1]),
+                                                               firstCodepoint(words[wi]), wordStyles[wi - 1]);
+            lineWidthWithoutPrefix += wordWidths[wi];
+          } else {
+            lineWidthWithoutPrefix +=
+                renderer.getKerning(fontId, lastCodepoint(words[wi - 1]), firstCodepoint(words[wi]), wordStyles[wi - 1]);
+            lineWidthWithoutPrefix += wordWidths[wi];
+          }
+        }
+
+        // Add spacing before the (would-be) merged word.
+        int spacingBeforeMerged = 0;
+        if (prefixIdx > lineStart) {
+          if (!wordContinues[prefixIdx]) {
+            spacingBeforeMerged = renderer.getSpaceAdvance(fontId, lastCodepoint(words[prefixIdx - 1]),
+                                                           firstCodepoint(words[prefixIdx]), wordStyles[prefixIdx - 1]);
+          } else {
+            spacingBeforeMerged = renderer.getKerning(fontId, lastCodepoint(words[prefixIdx - 1]),
+                                                      firstCodepoint(words[prefixIdx]), wordStyles[prefixIdx - 1]);
+          }
+        }
+
+        // Check if merged word fits on this line.
+        if (lineWidthWithoutPrefix + spacingBeforeMerged + mergedWidth <= effectivePageWidth) {
+          // Merged word fits: replace prefix with merged and remove remainder entry.
+          words[prefixIdx] = merged;
+          wordWidths[prefixIdx] = mergedWidth;
+          words.erase(words.begin() + remainderIdx);
+          wordStyles.erase(wordStyles.begin() + remainderIdx);
+          wordContinues.erase(wordContinues.begin() + remainderIdx);
+          wordWidths.erase(wordWidths.begin() + remainderIdx);
+
+          // Update all line break indices that refer to positions > remainderIdx.
+          // lineBreakIndices[lineIdx] == remainderIdx and should STAY at remainderIdx:
+          // after erasing words[remainderIdx], the word previously at remainderIdx+1 is now at
+          // remainderIdx, which is exactly where we want the next line to start.
+          // All subsequent break indices that pointed above remainderIdx must shift down by 1.
+          for (size_t li = lineIdx + 1; li < lineBreakIndices.size(); ++li) {
+            if (lineBreakIndices[li] > remainderIdx) {
+              lineBreakIndices[li]--;
+            }
+          }
+
+          // Edge case: if the next line break equals lineBreakIndices[lineIdx] (i.e., the
+          // remainder was the only word on line lineIdx+1), that line is now empty. Remove it.
+          if (lineIdx + 1 < lineBreakIndices.size() &&
+              lineBreakIndices[lineIdx + 1] == lineBreakIndices[lineIdx]) {
+            lineBreakIndices.erase(lineBreakIndices.begin() + lineIdx + 1);
+            // lineEndedWithHyphen is not used further; skip parallel erase.
+          }
+          // The lineEndedWithHyphen vector is no longer used after this pass; no need to update it.
+        }
+        // If merged word doesn't fit: leave hyphenated version as-is.
+      }
+    }
+  }
 }
 
 // Splits words[wordIndex] into prefix (adding a hyphen only when needed) and remainder when a legal breakpoint fits the

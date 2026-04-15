@@ -804,9 +804,15 @@ void XMLCALL ChapterHtmlSlimParser::characterData(void* userData, const XML_Char
     const uint16_t effectiveWidth = (horizontalInset < self->viewportWidth)
                                         ? static_cast<uint16_t>(self->viewportWidth - horizontalInset)
                                         : self->viewportWidth;
+    const int lh = static_cast<int>(self->renderer.getLineHeight(self->fontId) * self->lineCompression);
+    const int firstAvail =
+        (lh > 0 && self->currentPageNextY < self->viewportHeight) ? (self->viewportHeight - self->currentPageNextY) / lh
+                                                                   : 0;
+    const int fullLines = (lh > 0) ? self->viewportHeight / lh : 0;
     self->currentTextBlock->layoutAndExtractLines(
         self->renderer, self->fontId, effectiveWidth,
-        [self](const std::shared_ptr<TextBlock>& textBlock) { self->addLineToPage(textBlock); }, false);
+        [self](const std::shared_ptr<TextBlock>& textBlock) { self->addLineToPage(textBlock); }, false, firstAvail,
+        fullLines);
   }
 }
 
@@ -1106,9 +1112,26 @@ void ChapterHtmlSlimParser::makePages() {
   const uint16_t effectiveWidth =
       (horizontalInset < viewportWidth) ? static_cast<uint16_t>(viewportWidth - horizontalInset) : viewportWidth;
 
+  // Compute page-line counts for hyphen-at-page-break suppression.
+  // firstPageAvailableLines: how many lines fit on the current (partially filled) page.
+  //   If 0, the current page is full and the text block will start on a fresh page.
+  // fullPageLines: how many lines fit on a completely empty page.
+  // A lineHeight of 0 is guarded against to avoid division by zero.
+  const int fullPageLines = (lineHeight > 0) ? viewportHeight / lineHeight : 0;
+  int firstPageAvailableLines = 0;
+  if (lineHeight > 0) {
+    if (currentPageNextY < viewportHeight) {
+      firstPageAvailableLines = (viewportHeight - currentPageNextY) / lineHeight;
+    } else {
+      // Page is already full; text will start on a new full page.
+      firstPageAvailableLines = fullPageLines;
+    }
+  }
+
   currentTextBlock->layoutAndExtractLines(
       renderer, fontId, effectiveWidth,
-      [this](const std::shared_ptr<TextBlock>& textBlock) { addLineToPage(textBlock); });
+      [this](const std::shared_ptr<TextBlock>& textBlock) { addLineToPage(textBlock); }, true,
+      firstPageAvailableLines, fullPageLines);
 
   // Fallback: transfer any remaining pending footnotes to current page.
   // Normally addLineToPage handles this via word-index tracking, but this catches

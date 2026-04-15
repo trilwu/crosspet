@@ -85,6 +85,10 @@ void ActivityManager::loop() {
         currentActivity = std::move(stackActivities.back());
         stackActivities.pop_back();
         LOG_DBG("ACT", "Popped from activity stack, new size = %zu", stackActivities.size());
+
+        // Drain stale button events before the restored activity sees them.
+        mappedInput.update();
+
         // Handle result if necessary
         if (currentActivity->resultHandler) {
           LOG_DBG("ACT", "Handling result for popped activity");
@@ -126,6 +130,11 @@ void ActivityManager::loop() {
       currentActivity = std::move(pendingActivity);
 
       lock.unlock();  // onEnter may acquire its own lock
+
+      // Drain stale button events before the new activity sees them.
+      // Without this, presses queued during the transition leak into the new activity.
+      mappedInput.update();
+
       currentActivity->onEnter();
 
       // onEnter may request another pending action, we will handle it in the next loop iteration

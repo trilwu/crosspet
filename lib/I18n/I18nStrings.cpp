@@ -1679,6 +1679,9 @@ const char* const STRINGS_EN[] = {
     "60 min",
     "Remap Front Buttons",
     "OPDS Browser",
+    "Search",
+    "Next page",
+    "Previous page",
     "Cover + Custom",
     "Page overlay",
     "Keep Screen",
@@ -2594,6 +2597,9 @@ const char* const STRINGS_ES[] = {
     "60 min",
     "Reconfigurar botones frontales",
     "Navegador OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Portada + Pers.",
     "Page overlay",
     "Keep Screen",
@@ -3725,6 +3731,9 @@ const char* const STRINGS_FR[] = {
     "\xA7"
     "ade",
     "Navigateur OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Couverture + Perso",
     "Page overlay",
     "Keep Screen",
@@ -4647,6 +4656,9 @@ const char* const STRINGS_DE[] = {
     "60 min",
     "Vordere Tasten belegen",
     "OPDS-Browser",
+    "Search",
+    "Next page",
+    "Previous page",
     "Umschlag + Eigenes",
     "Seiten-Overlay",
     "Keep Screen",
@@ -6406,6 +6418,9 @@ const char* const STRINGS_CS[] = {
     "e\xC4"
     "\x8D"
     " OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Ob\xC3"
     "\xA1"
     "lka + Vlastn\xC3"
@@ -7626,6 +7641,9 @@ const char* const STRINGS_PO[] = {
     "\xB5"
     "es frontais",
     "Navegador OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Capa + personalizado",
     "Page overlay",
     "Keep Screen",
@@ -15129,6 +15147,9 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x80"
     "",
+    "Search",
+    "Next page",
+    "Previous page",
     "\xD0"
     "\x9E"
     "\xD0"
@@ -18232,6 +18253,9 @@ const char* const STRINGS_SV[] = {
     "OPDS-webbl\xC3"
     "\xA4"
     "sare",
+    "Search",
+    "Next page",
+    "Previous page",
     "Omslag + Valfri",
     "Page overlay",
     "Keep Screen",
@@ -19597,6 +19621,9 @@ const char* const STRINGS_RO[] = {
     "60 min",
     "Remapare butoane frontale",
     "Browser OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Copert\xC4"
     "\x83"
     " + Personalizat",
@@ -20678,6 +20705,9 @@ const char* const STRINGS_CA[] = {
     "60 min",
     "Reassigna els botons frontals",
     "Navegador OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Portada + Personalitzat",
     "Page overlay",
     "Keep Screen",
@@ -29005,6 +29035,9 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x80"
     " OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "\xD0"
     "\x9E"
     "\xD0"
@@ -38666,6 +38699,9 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x80"
     "",
+    "Search",
+    "Next page",
+    "Previous page",
     "\xD0"
     "\x92"
     "\xD0"
@@ -41382,6 +41418,9 @@ const char* const STRINGS_IT[] = {
     "60 min",
     "Rimappa Pulsanti Frontali",
     "Browser OPDS",
+    "Search",
+    "Next page",
+    "Previous page",
     "Copertina + Personalizzato",
     "Page overlay",
     "Keep Screen",
@@ -42679,6 +42718,9 @@ const char* const STRINGS_PL[] = {
     "60 min",
     "Skonfiguruj przednie przyciski",
     "OPDS Browser",
+    "Search",
+    "Next page",
+    "Previous page",
     "Ok\xC5"
     "\x82"
     "adka + W\xC5"
@@ -43900,6 +43942,9 @@ const char* const STRINGS_FI[] = {
     "\xA4"
     " etupainikkeet",
     "OPDS-selain",
+    "Search",
+    "Next page",
+    "Previous page",
     "Kansi + mukautettu",
     "Page overlay",
     "Keep Screen",
@@ -44915,6 +44960,9 @@ const char* const STRINGS_DA[] = {
     "60 min",
     "Omtildel frontknapper",
     "OPDS Browser",
+    "Search",
+    "Next page",
+    "Previous page",
     "Omslag + Brugerdefineret",
     "Page overlay",
     "Keep Screen",
@@ -45662,6 +45710,9 @@ const char* const STRINGS_NL[] = {
     "60 min",
     "Knoppen voorzijde wijzigen",
     "OPDS-browser",
+    "Search",
+    "Next page",
+    "Previous page",
     "Omslag + Aangepast",
     "Page overlay",
     "Keep Screen",
@@ -47271,6 +47322,9 @@ const char* const STRINGS_TR[] = {
     "c\xC4"
     "\xB1"
     "",
+    "Search",
+    "Next page",
+    "Previous page",
     "Kapak + \xC3"
     "\x96"
     "zel",
@@ -53484,6 +53538,9 @@ const char* const STRINGS_KK[] = {
     "\xD1"
     "\x8B"
     "",
+    "Search",
+    "Next page",
+    "Previous page",
     "\xD0"
     "\x9C"
     "\xD2"
@@ -58394,6 +58451,19 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x87"
     "t OPDS",
+    "T\xC3"
+    "\xAC"
+    "m ki\xE1"
+    "\xBA"
+    "\xBF"
+    "m",
+    "Trang sau",
+    "Trang tr\xC6"
+    "\xB0"
+    "\xE1"
+    "\xBB"
+    "\x9B"
+    "c",
     "B\xC3"
     "\xAC"
     "a + T\xC3"
@@ -62162,6 +62232,9 @@ const char* const STRINGS_HU[] = {
     "sz\xC5"
     "\x91"
     "",
+    "Search",
+    "Next page",
+    "Previous page",
     "Bor\xC3"
     "\xAD"
     "t\xC3"
@@ -63411,6 +63484,9 @@ const char* const STRINGS_LT[] = {
     "ykl\xC4"
     "\x97"
     "",
+    "Search",
+    "Next page",
+    "Previous page",
     "Vir\xC5"
     "\xA1"
     "elis + Kita",
@@ -64360,6 +64436,9 @@ const char* const STRINGS_SI[] = {
     "60 min",
     "Prenastavi sprednje gumbe",
     "OPDS brskalnik",
+    "Search",
+    "Next page",
+    "Previous page",
     "Naslovnica + po meri",
     "Page overlay",
     "Keep Screen",

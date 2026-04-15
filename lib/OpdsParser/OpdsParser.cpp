@@ -80,11 +80,36 @@ void OpdsParser::clear() {
   entries.clear();
   currentEntry = OpdsEntry{};
   currentText.clear();
+  searchUrl_.clear();
+  nextPageUrl_.clear();
+  prevPageUrl_.clear();
   inEntry = false;
   inTitle = false;
   inAuthor = false;
   inAuthorName = false;
   inId = false;
+}
+
+std::string OpdsParser::resolveHref(const char* href) const {
+  if (!href) return {};
+  const std::string h{href};
+  // Already absolute URL
+  if (h.find("://") != std::string::npos) return h;
+  if (baseUrl_.empty()) return h;
+
+  // Absolute path — keep host from baseUrl_
+  if (!h.empty() && h[0] == '/') {
+    const size_t protocolEnd = baseUrl_.find("://");
+    if (protocolEnd == std::string::npos) return h;
+    const size_t hostEnd = baseUrl_.find('/', protocolEnd + 3);
+    const std::string host = hostEnd == std::string::npos ? baseUrl_ : baseUrl_.substr(0, hostEnd);
+    return host + h;
+  }
+
+  // Relative path — resolve against directory of baseUrl_
+  const size_t lastSlash = baseUrl_.rfind('/');
+  if (lastSlash == std::string::npos) return h;
+  return baseUrl_.substr(0, lastSlash + 1) + h;
 }
 
 std::vector<OpdsEntry> OpdsParser::getBooks() const {
@@ -116,6 +141,51 @@ void XMLCALL OpdsParser::startElement(void* userData, const XML_Char* name, cons
     return;
   }
 
+  // Check for link element — handled at both feed level and entry level
+  if (strcmp(name, "link") == 0 || strstr(name, ":link") != nullptr) {
+    const char* rel = findAttribute(atts, "rel");
+    const char* type = findAttribute(atts, "type");
+    const char* href = findAttribute(atts, "href");
+
+    if (self->inEntry) {
+      // Entry-level link handling
+      if (href) {
+        // Check for acquisition link with epub type (this is a downloadable book)
+        if (rel && type && strstr(rel, "opds-spec.org/acquisition") != nullptr &&
+            strcmp(type, "application/epub+zip") == 0) {
+          self->currentEntry.type = OpdsEntryType::BOOK;
+          self->currentEntry.href = href;
+        }
+        // Check for navigation link (subsection or no rel specified with atom+xml type)
+        else if (type && strstr(type, "application/atom+xml") != nullptr) {
+          // Only set navigation link if we don't already have an epub link
+          if (self->currentEntry.type != OpdsEntryType::BOOK) {
+            self->currentEntry.type = OpdsEntryType::NAVIGATION;
+            self->currentEntry.href = href;
+          }
+        }
+      }
+    } else {
+      // Feed-level link handling (outside <entry>)
+      if (href) {
+        // OpenSearch description URL
+        if (rel && strcmp(rel, "search") == 0 && type &&
+            strcmp(type, "application/opensearchdescription+xml") == 0) {
+          self->searchUrl_ = self->resolveHref(href);
+        }
+        // Next page
+        else if (rel && strcmp(rel, "next") == 0) {
+          self->nextPageUrl_ = self->resolveHref(href);
+        }
+        // Previous page
+        else if (rel && (strcmp(rel, "previous") == 0 || strcmp(rel, "prev") == 0)) {
+          self->prevPageUrl_ = self->resolveHref(href);
+        }
+      }
+    }
+    return;
+  }
+
   if (!self->inEntry) return;
 
   // Check for title element
@@ -143,30 +213,6 @@ void XMLCALL OpdsParser::startElement(void* userData, const XML_Char* name, cons
     self->inId = true;
     self->currentText.clear();
     return;
-  }
-
-  // Check for link element
-  if (strcmp(name, "link") == 0 || strstr(name, ":link") != nullptr) {
-    const char* rel = findAttribute(atts, "rel");
-    const char* type = findAttribute(atts, "type");
-    const char* href = findAttribute(atts, "href");
-
-    if (href) {
-      // Check for acquisition link with epub type (this is a downloadable book)
-      if (rel && type && strstr(rel, "opds-spec.org/acquisition") != nullptr &&
-          strcmp(type, "application/epub+zip") == 0) {
-        self->currentEntry.type = OpdsEntryType::BOOK;
-        self->currentEntry.href = href;
-      }
-      // Check for navigation link (subsection or no rel specified with atom+xml type)
-      else if (type && strstr(type, "application/atom+xml") != nullptr) {
-        // Only set navigation link if we don't already have an epub link
-        if (self->currentEntry.type != OpdsEntryType::BOOK) {
-          self->currentEntry.type = OpdsEntryType::NAVIGATION;
-          self->currentEntry.href = href;
-        }
-      }
-    }
   }
 }
 

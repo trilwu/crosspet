@@ -1,0 +1,17 @@
+{
+  "name": "QRCode",
+  "version": "1.0.0",
+  "description": "Nayuki QR Code generator (C99) - supports UTF-8 byte mode encoding",
+  "license": "MIT",
+  "authors": {
+    "name": "Project Nayuki",
+    "url": "https://www.nayuki.io/page/qr-code-generator-library"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nayuki/QR-Code-generator"
+  },
+  "build": {
+    "srcDir": "src"
+  }
+}

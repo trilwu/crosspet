@@ -44,6 +44,11 @@ class OpdsBookBrowserActivity final : public Activity {
   size_t downloadProgress = 0;
   size_t downloadTotal = 0;
 
+  // Feed-level navigation URLs from OPDS parser
+  std::string searchUrl_;   // OpenSearch template URL (contains {searchTerms})
+  std::string nextPageUrl_; // URL for the next page of results
+  std::string prevPageUrl_; // URL for the previous page of results
+
   void checkAndConnectWifi();
   void launchWifiSelection();
   void onWifiSelectionComplete(bool connected);
@@ -51,5 +56,7 @@ class OpdsBookBrowserActivity final : public Activity {
   void navigateToEntry(const OpdsEntry& entry);
   void navigateBack();
   void downloadBook(const OpdsEntry& book);
+  void launchSearch();
+  void onSearchComplete(const std::string& query);
   bool preventAutoSleep() override { return true; }
 };

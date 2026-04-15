@@ -5,6 +5,7 @@
 
 class FontCacheManager;
 
+#include <atomic>
 #include <map>
 #include <string>
 #include <vector>
@@ -31,11 +32,11 @@ class GfxRenderer {
   static constexpr size_t BW_BUFFER_CHUNK_SIZE = 8000;  // 8KB chunks to allow for non-contiguous memory
 
   HalDisplay& display;
-  RenderMode renderMode;
-  Orientation orientation;
-  bool fadingFix;
-  bool darkMode;
-  uint8_t textDarkness = 0;  // 0=normal, 1=dark, 2=extra dark — shifts gray AA pixels darker
+  std::atomic<RenderMode> renderMode;
+  std::atomic<Orientation> orientation;
+  std::atomic<bool> fadingFix;
+  std::atomic<bool> darkMode;
+  std::atomic<uint8_t> textDarkness{0};  // 0=normal, 1=dark, 2=extra dark — shifts gray AA pixels darker
   mutable bool nextRefreshFull = false;  // if true, next displayBuffer() upgrades to FULL_REFRESH
   mutable bool nextRefreshHalf = false;  // if true, next displayBuffer() upgrades to HALF_REFRESH
   uint8_t* frameBuffer = nullptr;
@@ -60,7 +61,7 @@ class GfxRenderer {
 
  public:
   explicit GfxRenderer(HalDisplay& halDisplay)
-      : display(halDisplay), renderMode(BW), orientation(Portrait), fadingFix(false), darkMode(false) {}
+      : display(halDisplay), renderMode(BW), orientation(Portrait), fadingFix(false), darkMode(false), textDarkness(0) {}
   ~GfxRenderer() { freeBwBufferChunks(); }
 
   static constexpr int VIEWABLE_MARGIN_TOP = 9;
@@ -76,19 +77,19 @@ class GfxRenderer {
   const std::map<int, EpdFontFamily>& getFontMap() const { return fontMap; }
 
   // Orientation control (affects logical width/height and coordinate transforms)
-  void setOrientation(const Orientation o) { orientation = o; }
-  Orientation getOrientation() const { return orientation; }
+  void setOrientation(const Orientation o) { orientation.store(o, std::memory_order_relaxed); }
+  Orientation getOrientation() const { return orientation.load(std::memory_order_relaxed); }
 
   // Fading fix control
-  void setFadingFix(const bool enabled) { fadingFix = enabled; }
+  void setFadingFix(const bool enabled) { fadingFix.store(enabled, std::memory_order_relaxed); }
 
   // Dark mode: invert framebuffer on display (white text on black)
-  void setDarkMode(const bool enabled) { darkMode = enabled; }
-  bool isDarkMode() const { return darkMode; }
+  void setDarkMode(const bool enabled) { darkMode.store(enabled, std::memory_order_relaxed); }
+  bool isDarkMode() const { return darkMode.load(std::memory_order_relaxed); }
 
   // Text darkness: shift gray AA pixels darker (0=normal, 1=dark, 2=extra dark)
-  void setTextDarkness(const uint8_t d) { textDarkness = d; }
-  uint8_t getTextDarkness() const { return textDarkness; }
+  void setTextDarkness(const uint8_t d) { textDarkness.store(d, std::memory_order_relaxed); }
+  uint8_t getTextDarkness() const { return textDarkness.load(std::memory_order_relaxed); }
 
   // Request that the next displayBuffer() call uses FULL_REFRESH to clear ghosting.
   // Called by ActivityManager on activity transitions; resets automatically after use.
@@ -158,8 +159,8 @@ class GfxRenderer {
   int getTextHeight(int fontId) const;
 
   // Grayscale functions
-  void setRenderMode(const RenderMode mode) { this->renderMode = mode; }
-  RenderMode getRenderMode() const { return renderMode; }
+  void setRenderMode(const RenderMode mode) { renderMode.store(mode, std::memory_order_relaxed); }
+  RenderMode getRenderMode() const { return renderMode.load(std::memory_order_relaxed); }
   void copyGrayscaleLsbBuffers() const;
   void copyGrayscaleMsbBuffers() const;
   void displayGrayBuffer() const;

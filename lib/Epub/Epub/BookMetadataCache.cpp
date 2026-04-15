@@ -51,7 +51,6 @@ bool BookMetadataCache::beginTocPass() {
 
   if (spineCount >= LARGE_SPINE_THRESHOLD) {
     spineHrefIndex.clear();
-    spineHrefIndex.reserve(spineCount);
     spineFile.seek(0);
     for (int i = 0; i < spineCount; i++) {
       auto entry = readSpineEntry(spineFile);
