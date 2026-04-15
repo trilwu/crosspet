@@ -62,10 +62,35 @@ void CtosRenderer::drawSeparator(int y, const char* label) const {
 void CtosRenderer::drawMenuItem(int x, int y, int w, int h, const char* label, bool selected) const {
   if (selected) {
     gfx.fillRect(x, y, w, h, true);  // black fill
-    gfx.drawText(FONT, x + 8, y + 8, label, false);  // white text
   } else {
     drawCornerBrackets(x, y, w, h, 6);
-    gfx.drawText(FONT, x + 8, y + 8, label);
+  }
+
+  // Draw label with \n support — center vertically in cell
+  int lineH = gfx.getLineHeight(FONT);
+  // Count lines
+  int lineCount = 1;
+  for (const char* p = label; *p; p++) if (*p == '\n') lineCount++;
+  int totalTextH = lineCount * lineH;
+  int ty = y + (h - totalTextH) / 2;
+
+  const char* start = label;
+  for (int line = 0; line < lineCount; line++) {
+    const char* end = start;
+    while (*end && *end != '\n') end++;
+    char lineBuf[32];
+    int len = static_cast<int>(end - start);
+    if (len >= static_cast<int>(sizeof(lineBuf))) len = sizeof(lineBuf) - 1;
+    memcpy(lineBuf, start, len);
+    lineBuf[len] = '\0';
+    // Center horizontally with chevron prefix
+    char prefixed[40];
+    snprintf(prefixed, sizeof(prefixed), ">> %s", lineBuf);
+    int tw = gfx.getTextWidth(FONT, prefixed);
+    int tx = x + (w - tw) / 2;
+    gfx.drawText(FONT, tx, ty, prefixed, !selected);
+    ty += lineH;
+    start = (*end == '\n') ? end + 1 : end;
   }
 }
 
@@ -124,18 +149,24 @@ void CtosRenderer::drawCtosFrame(const char* title, const char* rightText) const
 void CtosRenderer::drawToolGrid(const char* const* labels, int count, int selectedIdx) const {
   int sw = gfx.getScreenWidth();
   int sh = gfx.getScreenHeight();
+  int headerH = gfx.getLineHeight(FONT) + MARGIN + 8;  // header + separator
+  int statusH = 40;  // status bar at bottom
+  int availH = sh - headerH - statusH;
+
   int cols = 2;
   int rows = (count + cols - 1) / cols;
-  int cellW = (sw - MARGIN * 3) / cols;
-  int cellH = (sh - 80) / rows;  // leave room for header + status bar
-  if (cellH > 120) cellH = 120;
+  int gap = MARGIN;
+  int cellW = (sw - gap * (cols + 1)) / cols;
+  int cellH = (availH - gap * (rows + 1)) / rows;
 
-  int startY = 50;  // below header
+  int gridH = rows * cellH + (rows - 1) * gap;
+  int startY = headerH + (availH - gridH) / 2;
+
   for (int i = 0; i < count; i++) {
     int col = i % cols;
     int row = i / cols;
-    int x = MARGIN + col * (cellW + MARGIN);
-    int y = startY + row * (cellH + MARGIN);
+    int x = gap + col * (cellW + gap);
+    int y = startY + row * (cellH + gap);
     drawMenuItem(x, y, cellW, cellH, labels[i], i == selectedIdx);
   }
 }

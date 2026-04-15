@@ -397,12 +397,10 @@ void HomeActivity::renderSelectionHighlight() {
 // ── CrossPet loop (card layout navigation) ────────────────────────────────────
 
 void HomeActivity::loopCrossPet() {
-  // Ghost Mode: redirect to ctOS security toolkit home screen
+  // Ghost Mode: redirect to ctOS security toolkit home screen (once per home enter)
   if (PET_SETTINGS.ghostMode && !ghostLaunched) {
     ghostLaunched = true;
-    startActivityForResult(
-        std::make_unique<GhostHomeActivity>(renderer, mappedInput),
-        [this](const ActivityResult&) { ghostLaunched = false; });
+    activityManager.pushActivity(std::make_unique<GhostHomeActivity>(renderer, mappedInput));
     return;
   }
 

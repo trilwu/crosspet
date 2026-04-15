@@ -119,6 +119,7 @@ void HomeActivity::loadRecentCovers(int coverHeight) {
 void HomeActivity::onEnter() {
   Activity::onEnter();
   selectorIndex = 0;
+  ghostLaunched = false;
   coverRendered = false;
   firstRenderDone = false;
   recentsLoaded = false;
