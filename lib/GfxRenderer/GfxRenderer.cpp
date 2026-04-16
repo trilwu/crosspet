@@ -19,23 +19,7 @@ static constexpr int UI_FONT_IDS[] = {
 static constexpr int UI_FONT_COUNT = sizeof(UI_FONT_IDS) / sizeof(UI_FONT_IDS[0]);
 
 // Check if a Unicode codepoint is CJK or related
-static bool isCjkCodepoint(const uint32_t cp) {
-  if (cp >= 0x4E00 && cp <= 0x9FFF) return true;   // CJK Unified Ideographs
-  if (cp >= 0x3400 && cp <= 0x4DBF) return true;   // CJK Extension A
-  if (cp >= 0x3000 && cp <= 0x303F) return true;   // CJK Punctuation
-  if (cp >= 0x3040 && cp <= 0x309F) return true;   // Hiragana
-  if (cp >= 0x30A0 && cp <= 0x30FF) return true;   // Katakana
-  if (cp >= 0xF900 && cp <= 0xFAFF) return true;   // CJK Compatibility Ideographs
-  if (cp >= 0xFF00 && cp <= 0xFFEF) return true;   // Fullwidth forms
-  if (cp >= 0x3200 && cp <= 0x32FF) return true;   // Enclosed CJK Letters
-  if (cp >= 0x3300 && cp <= 0x33FF) return true;   // CJK Compatibility
-  if (cp >= 0x2E80 && cp <= 0x2EFF) return true;   // CJK Radicals Supplement
-  if (cp >= 0x2F00 && cp <= 0x2FDF) return true;   // Kangxi Radicals
-  if (cp >= 0x20000 && cp <= 0x2A6DF) return true;  // CJK Extension B
-  if (cp >= 0x2A700 && cp <= 0x2B73F) return true;  // CJK Extension C
-  if (cp >= 0x2B740 && cp <= 0x2B81F) return true;  // CJK Extension D
-  return false;
-}
+// isCjkCodepoint removed — replaced by hasNativeGlyph-based primary/supplement model
 
 static bool isReaderFont(const int fontId) {
   for (int i = 0; i < UI_FONT_COUNT; i++) {
@@ -280,18 +264,21 @@ static void renderExternalGlyph(const GfxRenderer& renderer, const uint8_t* bitm
   *x += std::max(1, advance);
 }
 
-// Try rendering a glyph via ExternalFont.
-// Full font mode: all characters routed through external font, built-in is fallback.
-// CJK-only mode: only CJK codepoints use external font.
+// Try rendering a glyph via ExternalFont (primary+supplement dual font model).
+// Primary mode: external tried first for every codepoint; built-in is fallback.
+// Supplement mode: external tried only when built-in has no native glyph.
 // Only applies to reader fonts — UI fonts always use built-in glyphs.
-static bool tryRenderExternalGlyph(const GfxRenderer& renderer, int fontId, uint32_t cp, int* x, int y, bool pixelState) {
+static bool tryRenderExternalGlyph(const GfxRenderer& renderer, int fontId,
+                                   const EpdFontFamily& builtinFont, uint32_t cp,
+                                   int* x, int y, bool pixelState,
+                                   EpdFontFamily::Style style) {
   if (!isReaderFont(fontId)) return false;
 
   FontManager& fm = FontManager::getInstance();
   if (!fm.isExternalFontEnabled()) return false;
 
-  // In CJK-only mode, skip non-CJK codepoints
-  if (!fm.isFullFontMode() && !isCjkCodepoint(cp)) return false;
+  // Supplement mode: skip if built-in natively has this glyph
+  if (!fm.isExternalPrimary() && builtinFont.hasNativeGlyph(cp, style)) return false;
 
   ExternalFont* extFont = fm.getActiveFont();
   if (!extFont) return false;
@@ -366,8 +353,8 @@ void GfxRenderer::drawText(const int fontId, const int x, const int y, const cha
       lastBaseX += fp4::toPixel(prevAdvanceFP + kernFP);       // snap 12.4 fixed-point to nearest pixel
     }
 
-    // CJK external font rendering — bypass built-in glyph if external font handles it
-    if (tryRenderExternalGlyph(*this, fontId, cp, &lastBaseX, yPos, black)) {
+    // External font rendering — bypass built-in glyph if external font handles it
+    if (tryRenderExternalGlyph(*this, fontId, font, cp, &lastBaseX, yPos, black, style)) {
       // tryRenderExternalGlyph already advanced lastBaseX by the glyph advance
       lastBaseAdvanceFP = 0;  // advance already applied to lastBaseX
       prevAdvanceFP = 0;
@@ -1154,6 +1141,9 @@ int GfxRenderer::getTextAdvanceX(const int fontId, const char* text, EpdFontFami
   int widthPx = 0;
   int32_t prevAdvanceFP = 0;  // 12.4 fixed-point: prev glyph's advance + next kern for snap
   const auto& font = fontIt->second;
+  FontManager& fm = FontManager::getInstance();
+  const bool extEnabled = isReaderFont(fontId) && fm.isExternalFontEnabled();
+  const bool extPrimary = extEnabled && fm.isExternalPrimary();
   while ((cp = utf8NextCodepoint(reinterpret_cast<const uint8_t**>(&text)))) {
     if (utf8IsCombiningMark(cp)) {
       continue;
@@ -1167,20 +1157,22 @@ int GfxRenderer::getTextAdvanceX(const int fontId, const char* text, EpdFontFami
       widthPx += fp4::toPixel(prevAdvanceFP + kernFP);         // snap 12.4 fixed-point to nearest pixel
     }
 
-    // External font: use external glyph advance width (reader fonts only)
-    // Note: prevAdvanceFP was already flushed by the differential rounding step above
-    if (isReaderFont(fontId) && FontManager::getInstance().isExternalFontEnabled() &&
-        (FontManager::getInstance().isFullFontMode() || isCjkCodepoint(cp))) {
-      ExternalFont* extFont = FontManager::getInstance().getActiveFont();
-      if (extFont) {
-        const uint8_t* bitmap = extFont->getGlyph(cp);
-        if (bitmap) {
-          uint8_t minX = 0, advanceX = extFont->getCharWidth();
-          extFont->getGlyphMetrics(cp, &minX, &advanceX);
-          widthPx += std::max(1, static_cast<int>(advanceX));
-          prevAdvanceFP = 0;
-          prevCp = cp;
-          continue;
+    // External font width: primary mode tries ext first, supplement mode only
+    // uses ext when built-in lacks a native glyph for this codepoint.
+    if (extEnabled) {
+      const bool useExternal = extPrimary || !font.hasNativeGlyph(cp, style);
+      if (useExternal) {
+        ExternalFont* extFont = fm.getActiveFont();
+        if (extFont) {
+          const uint8_t* bitmap = extFont->getGlyph(cp);
+          if (bitmap) {
+            uint8_t minX = 0, advanceX = extFont->getCharWidth();
+            extFont->getGlyphMetrics(cp, &minX, &advanceX);
+            widthPx += std::max(1, static_cast<int>(advanceX));
+            prevAdvanceFP = 0;
+            prevCp = cp;
+            continue;
+          }
         }
       }
     }

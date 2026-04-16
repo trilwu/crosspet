@@ -25,7 +25,6 @@ enum class SettingAction {
   Reboot,
   SleepScreen,
   FontSelectReader,
-  ToggleFullFontMode,
 };
 
 struct SettingInfo {

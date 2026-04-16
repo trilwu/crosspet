@@ -15,6 +15,7 @@
 #include "CrossPointSettings.h"
 #include "util/PowerButtonClickDetector.h"
 #include "CrossPointState.h"
+#include "../settings/FontSelectActivity.h"
 #include "EpubReaderChapterSelectionActivity.h"
 #include "EpubReaderFootnotesActivity.h"
 #include "EpubReaderPercentSelectionActivity.h"
@@ -478,6 +479,26 @@ void EpubReaderActivity::openStarredPages() {
 
 void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction action) {
   switch (action) {
+    case EpubReaderMenuActivity::MenuAction::FONT_FAMILY: {
+      const uint8_t prevFamily = SETTINGS.fontFamily;
+      const int prevExternal = FontMgr.getSelectedIndex();
+      const bool prevPrimary = FontMgr.isExternalPrimary();
+      startActivityForResult(
+          std::make_unique<FontSelectActivity>(renderer, mappedInput, FontSelectActivity::SelectMode::Reader),
+          [this, prevFamily, prevExternal, prevPrimary](const ActivityResult& result) {
+            if (SETTINGS.fontFamily != prevFamily || FontMgr.getSelectedIndex() != prevExternal
+                || FontMgr.isExternalPrimary() != prevPrimary) {
+              RenderLock lock(*this);
+              if (section) {
+                cachedSpineIndex = currentSpineIndex;
+                cachedChapterTotalPageCount = section->pageCount;
+                nextPageNumber = section->currentPage;
+              }
+              section.reset();
+            }
+          });
+      break;
+    }
     case EpubReaderMenuActivity::MenuAction::SELECT_CHAPTER: {
       const int spineIdx = currentSpineIndex;
       const std::string path = epub->getPath();

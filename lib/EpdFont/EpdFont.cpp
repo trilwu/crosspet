@@ -147,6 +147,19 @@ uint32_t EpdFont::applyLigatures(uint32_t cp, const char*& text) const {
   return cp;
 }
 
+bool EpdFont::hasNativeGlyph(const uint32_t cp) const {
+  const int count = data->intervalCount;
+  if (count == 0) return false;
+  const EpdUnicodeInterval* intervals = data->intervals;
+  const auto* end = intervals + count;
+  const auto it = std::upper_bound(
+      intervals, end, cp, [](uint32_t value, const EpdUnicodeInterval& interval) { return value < interval.first; });
+  if (it != intervals) {
+    return cp <= (it - 1)->last;
+  }
+  return false;
+}
+
 const EpdGlyph* EpdFont::getGlyph(const uint32_t cp) const {
   const int count = data->intervalCount;
   if (count == 0) return nullptr;

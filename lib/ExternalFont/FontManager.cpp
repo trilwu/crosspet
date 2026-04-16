@@ -175,9 +175,9 @@ void FontManager::selectUiFont(int index) {
   saveSettings();
 }
 
-void FontManager::setFullFontMode(bool enabled) {
-  if (_fullFontMode == enabled) return;
-  _fullFontMode = enabled;
+void FontManager::setExternalPrimary(bool enabled) {
+  if (_externalIsPrimary == enabled) return;
+  _externalIsPrimary = enabled;
   saveSettings();
 }
 
@@ -228,9 +228,9 @@ void FontManager::saveSettings() {
     serialization::writeString(file, std::string(""));
   }
 
-  // Save full font mode (version 3+)
-  uint8_t fullMode = _fullFontMode ? 1 : 0;
-  serialization::writePod(file, fullMode);
+  // Save render priority (version 3+, reinterpreted in v4 as externalIsPrimary)
+  uint8_t extPrimary = _externalIsPrimary ? 1 : 0;
+  serialization::writePod(file, extPrimary);
 
   file.close();
   Serial.printf("[FONT_MGR] Settings saved\n");
@@ -296,12 +296,12 @@ void FontManager::loadSettings() {
     }
   }
 
-  // Load full font mode (version 3+)
+  // Load render priority (version 3+: was fullFontMode, v4+: externalIsPrimary — same semantics)
   if (version >= 3) {
-    uint8_t fullMode = 0;
-    serialization::readPod(file, fullMode);
-    _fullFontMode = (fullMode != 0);
-    Serial.printf("[FONT_MGR] Full font mode: %s\n", _fullFontMode ? "ON" : "OFF");
+    uint8_t modeVal = 0;
+    serialization::readPod(file, modeVal);
+    _externalIsPrimary = (modeVal != 0);
+    Serial.printf("[FONT_MGR] External primary: %s\n", _externalIsPrimary ? "YES" : "NO");
   }
 
   file.close();

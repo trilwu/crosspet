@@ -1,5 +1,6 @@
 #include "EpubReaderMenuActivity.h"
 
+#include <FontManager.h>
 #include <GfxRenderer.h>
 #include <I18n.h>
 
@@ -98,9 +99,8 @@ void EpubReaderMenuActivity::loop() {
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     const auto selectedAction = menuItems[selectedIndex].action;
     if (selectedAction == MenuAction::FONT_FAMILY) {
-      SETTINGS.fontFamily = (SETTINGS.fontFamily + 1) % CrossPointSettings::FONT_FAMILY_COUNT;
-      SETTINGS.saveToFile();
-      requestUpdate();
+      setResult(MenuResult{static_cast<int>(selectedAction), pendingOrientation, selectedPageTurnOption});
+      finish();
       return;
     }
     if (selectedAction == MenuAction::FONT_SIZE) {
@@ -208,9 +208,23 @@ void EpubReaderMenuActivity::render(RenderLock&&) {
       // Item label (inverted text when selected for contrast)
       renderer.drawText(UI_10_FONT_ID, contentX + 20, y + 4, I18N.get(menuItems[itemIdx].labelId), !isSelected);
 
-      // Right-aligned value for font family
+      // Right-aligned value for font family (show external font name if active)
       if (menuItems[itemIdx].action == MenuAction::FONT_FAMILY) {
-        const char* value = I18N.get(fontFamilyLabels[SETTINGS.fontFamily]);
+        const int extIdx = FontMgr.getSelectedIndex();
+        const char* value;
+        char extLabel[48];
+        if (extIdx >= 0) {
+          const FontInfo* info = FontMgr.getFontInfo(extIdx);
+          if (info) {
+            const char* modeSuffix = FontMgr.isExternalPrimary() ? " [P]" : " [S]";
+            snprintf(extLabel, sizeof(extLabel), "%s (%dpt)%s", info->name, info->size, modeSuffix);
+            value = extLabel;
+          } else {
+            value = I18N.get(fontFamilyLabels[SETTINGS.fontFamily]);
+          }
+        } else {
+          value = I18N.get(fontFamilyLabels[SETTINGS.fontFamily]);
+        }
         const auto width = renderer.getTextWidth(UI_10_FONT_ID, value);
         renderer.drawText(UI_10_FONT_ID, contentX + contentWidth - 20 - width, y + 4, value, !isSelected);
       }

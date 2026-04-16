@@ -88,7 +88,6 @@ void SettingsActivity::onEnter() {
   systemSettings.push_back(SettingInfo::Action(StrId::STR_REBOOT, SettingAction::Reboot));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_CUSTOMISE_STATUS_BAR, SettingAction::CustomiseStatusBar));
   readerSettings.push_back(SettingInfo::Action(StrId::STR_EXT_READER_FONT, SettingAction::FontSelectReader));
-  readerSettings.push_back(SettingInfo::Action(StrId::STR_EXT_FONT_FULL_MODE, SettingAction::ToggleFullFontMode));
 
   // Build CrossPet tab — per-app toggles with their config settings, plus options.
   appsSettings.clear();
@@ -352,10 +351,6 @@ void SettingsActivity::toggleCurrentSetting() {
             std::make_unique<FontSelectActivity>(renderer, mappedInput, FontSelectActivity::SelectMode::Reader),
             resultHandler);
         break;
-      case SettingAction::ToggleFullFontMode:
-        FontMgr.setFullFontMode(!FontMgr.isFullFontMode());
-        onEnter();
-        break;
       case SettingAction::Reboot:
         renderer.clearScreen();
         renderer.drawCenteredText(UI_12_FONT_ID, renderer.getScreenHeight() / 2 - 10,
@@ -429,8 +424,6 @@ void SettingsActivity::render(RenderLock&&) {
           valueText = I18N.get(setting.enumValues[setting.valueGetter()]);
         } else if (setting.type == SettingType::VALUE && setting.valuePtr != nullptr) {
           valueText = std::to_string(SETTINGS.*(setting.valuePtr));
-        } else if (setting.type == SettingType::ACTION && setting.action == SettingAction::ToggleFullFontMode) {
-          valueText = FontMgr.isFullFontMode() ? tr(STR_STATE_ON) : tr(STR_STATE_OFF);
         } else if (setting.type == SettingType::ACTION && setting.action == SettingAction::SleepScreen) {
           const uint8_t m = SETTINGS.sleepScreen;
           const StrId modes[] = {StrId::STR_DARK, StrId::STR_LIGHT, StrId::STR_CUSTOM, StrId::STR_COVER,

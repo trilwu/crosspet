@@ -88,11 +88,12 @@ class FontManager {
   bool isExternalFontEnabled() const { return _selectedIndex >= 0 && _activeFont.isLoaded(); }
 
   /**
-   * Full font mode: external font renders ALL characters (Latin, CJK, etc.)
-   * When off, external font only renders CJK codepoints.
+   * External font priority: when true, external font is tried first for all
+   * codepoints (primary mode). When false, external font only fills gaps
+   * where built-in has no native glyph (supplement mode).
    */
-  bool isFullFontMode() const { return _fullFontMode; }
-  void setFullFontMode(bool enabled);
+  bool isExternalPrimary() const { return _externalIsPrimary; }
+  void setExternalPrimary(bool enabled);
 
   /**
    * Check if external UI font is enabled
@@ -131,13 +132,13 @@ class FontManager {
   static constexpr int MAX_FONTS = 16;
   static constexpr const char* FONTS_DIR = "/fonts";
   static constexpr const char* SETTINGS_FILE = "/.crosspoint/font_settings.bin";
-  static constexpr uint8_t SETTINGS_VERSION = 3;
+  static constexpr uint8_t SETTINGS_VERSION = 4;
 
   FontInfo _fonts[MAX_FONTS];
   int _fontCount = 0;
   int _selectedIndex = -1;    // -1 = built-in font (reader)
   int _selectedUiIndex = -1;  // -1 = fallback to reader font
-  bool _fullFontMode = false; // true = render all chars, false = CJK only
+  bool _externalIsPrimary = false; // true = external first, false = supplement (built-in first)
 
   ExternalFont _activeFont;    // Reader font
   ExternalFont _activeUiFont;  // UI font
