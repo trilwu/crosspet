@@ -16,29 +16,6 @@ CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoi
 
 ---
 
-## CrossPet vs CrossPoint
-
-| Feature | CrossPoint | CrossPet |
-|---------|-----------|----------|
-| **Fonts** | Bookerly only | Bookerly, Lexend, Bokerlam + **custom fonts from SD** |
-| **Flashcards** | — | **SM-2 spaced repetition** |
-| **Bluetooth** | — | **BLE keyboard/remote** (beta) |
-| **File formats** | EPUB, XTC | EPUB, XTC (>2GB), **TXT/Markdown** |
-| **Sleep screens** | 3 modes | **9 modes** — Clock, Reading Stats, Page Overlay, etc. |
-| **Virtual pet** | — | **Tamagotchi chicken** that grows with reading |
-| **Mini games** | — | **Chess, Caro, Sudoku, Minesweeper, 2048** |
-| **Auto page turn** | — | **1-20 PPM**, configurable as power button action |
-| **Reading stats** | — | **Daily/lifetime tracking** with streaks |
-| **Home screen** | File browser | **Cover art cards**, recent books grid, widgets |
-| **UI themes** | 1 | **5 themes** |
-| **Dark mode** | — | Yes |
-| **Power button** | Sleep/ignore | **9 actions** per single/double/triple click |
-| **Status bar** | Basic | **Fully customizable** (6 elements) |
-| **Focus mode** | — | **Hides all extras** — just books |
-| **Language** | English | English + **Vietnamese** |
-
----
-
 ## Features
 
 ### Reading
