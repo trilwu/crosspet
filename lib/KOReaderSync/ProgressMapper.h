@@ -28,8 +28,9 @@ struct KOReaderPosition {
  * KOReader uses XPath-like strings + percentage.
  *
  * Since CrossPoint discards HTML structure during parsing, we generate
- * synthetic XPath strings based on spine index, using percentage as the
- * primary sync mechanism.
+ * synthetic XPath at chapter (DocFragment) granularity with 1-based indexing.
+ * Percentage is used for intra-chapter positioning; XPath provides the
+ * chapter hint when parsing incoming KOReader positions.
  */
 class ProgressMapper {
  public:

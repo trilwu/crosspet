@@ -3,6 +3,7 @@
 #include <Logging.h>
 
 #include <cmath>
+#include <cstdlib>
 
 KOReaderPosition ProgressMapper::toKOReader(const std::shared_ptr<Epub>& epub, const CrossPointPosition& pos) {
   KOReaderPosition result;
@@ -41,26 +42,38 @@ CrossPointPosition ProgressMapper::toCrossPoint(const std::shared_ptr<Epub>& epu
     return result;
   }
 
-  // Use percentage-based lookup for both spine and page positioning
-  // XPath parsing is unreliable since CrossPoint doesn't preserve detailed HTML structure
-  const size_t targetBytes = static_cast<size_t>(bookSize * koPos.percentage);
-
-  // Find the spine item that contains this byte position
   const int spineCount = epub->getSpineItemsCount();
-  bool spineFound = false;
-  for (int i = 0; i < spineCount; i++) {
-    const size_t cumulativeSize = epub->getCumulativeSpineItemSize(i);
-    if (cumulativeSize >= targetBytes) {
-      result.spineIndex = i;
-      spineFound = true;
-      break;
+
+  // Try to extract spine index from XPath (1-based DocFragment index)
+  int xpathSpineIndex = -1;
+  const char* dfTag = "DocFragment[";
+  auto dfPos = koPos.xpath.find(dfTag);
+  if (dfPos != std::string::npos) {
+    int oneBasedIdx = std::atoi(koPos.xpath.c_str() + dfPos + strlen(dfTag));
+    if (oneBasedIdx >= 1 && oneBasedIdx <= spineCount) {
+      xpathSpineIndex = oneBasedIdx - 1;  // convert to 0-based
     }
   }
 
-  // If no spine item was found (e.g., targetBytes beyond last cumulative size),
-  // default to the last spine item so we map to the end of the book instead of the beginning.
-  if (!spineFound && spineCount > 0) {
-    result.spineIndex = spineCount - 1;
+  // Use percentage to find spine item by byte position
+  const size_t targetBytes = static_cast<size_t>(bookSize * koPos.percentage);
+  int percentageSpineIndex = -1;
+  for (int i = 0; i < spineCount; i++) {
+    if (epub->getCumulativeSpineItemSize(i) >= targetBytes) {
+      percentageSpineIndex = i;
+      break;
+    }
+  }
+  if (percentageSpineIndex < 0 && spineCount > 0) {
+    percentageSpineIndex = spineCount - 1;
+  }
+
+  // Prefer XPath hint when available; fall back to percentage-based lookup.
+  // XPath gives exact chapter, percentage gives position within chapter.
+  if (xpathSpineIndex >= 0) {
+    result.spineIndex = xpathSpineIndex;
+  } else {
+    result.spineIndex = (percentageSpineIndex >= 0) ? percentageSpineIndex : 0;
   }
 
   // Estimate page number within the spine item using percentage
@@ -107,8 +120,6 @@ CrossPointPosition ProgressMapper::toCrossPoint(const std::shared_ptr<Epub>& epu
 }
 
 std::string ProgressMapper::generateXPath(int spineIndex, int pageNumber, int totalPages) {
-  // Use 0-based DocFragment indices for KOReader
-  // Use a simple xpath pointing to the DocFragment - KOReader will use the percentage for fine positioning within it
-  // Avoid specifying paragraph numbers as they may not exist in the target document
-  return "/body/DocFragment[" + std::to_string(spineIndex) + "]/body";
+  // KOReader uses 1-based DocFragment indices in XPath
+  return "/body/DocFragment[" + std::to_string(spineIndex + 1) + "]/body";
 }
