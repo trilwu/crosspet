@@ -58,8 +58,13 @@ struct StarredPageResult {
   Action action = NAVIGATE;
 };
 
+struct FilePathResult {
+  std::string path;
+};
+
 using ResultVariant = std::variant<std::monostate, WifiResult, KeyboardResult, MenuResult, ChapterResult, PercentResult,
-                                   PageResult, SyncResult, NetworkModeResult, FootnoteResult, StarredPageResult>;
+                                   PageResult, SyncResult, NetworkModeResult, FootnoteResult, StarredPageResult,
+                                   FilePathResult>;
 
 struct ActivityResult {
   bool isCancelled = false;

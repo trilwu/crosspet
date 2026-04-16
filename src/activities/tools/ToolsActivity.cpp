@@ -15,6 +15,7 @@
 #include "ReadingStatsActivity.h"
 #include "SleepImagePickerActivity.h"
 #include "activities/browser/OpdsBookBrowserActivity.h"
+#include "../flashcard/FlashcardDeckListActivity.h"
 #include "components/UITheme.h"
 #include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
@@ -50,6 +51,11 @@ void ToolsActivity::buildMenu() {
   if (PET_SETTINGS.appSleepImagePicker)
     menuEntries.push_back({StrId::STR_SLEEP_IMAGE_PICKER, [this] {
       activityManager.pushActivity(std::make_unique<SleepImagePickerActivity>(renderer, mappedInput));
+    }});
+
+  if (PET_SETTINGS.appFlashcard)
+    menuEntries.push_back({StrId::STR_FLASHCARD, [this] {
+      activityManager.pushActivity(std::make_unique<FlashcardDeckListActivity>(renderer, mappedInput));
     }});
 
   // OPDS browser (if configured)

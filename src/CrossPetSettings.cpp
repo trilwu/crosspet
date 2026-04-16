@@ -25,6 +25,9 @@ bool CrossPetSettings::saveToFile() const {
   doc["appSleepImagePicker"] = appSleepImagePicker;
   doc["appGames"] = appGames;
   doc["ghostMode"] = ghostMode;
+  doc["appFlashcard"] = appFlashcard;
+  doc["flashcardNewPerDay"] = flashcardNewPerDay;
+  doc["flashcardMaxReviewPerDay"] = flashcardMaxReviewPerDay;
 
   String json;
   serializeJson(doc, json);
@@ -76,6 +79,9 @@ bool CrossPetSettings::loadFromFile() {
         appGames = 1;
       }
       ghostMode = doc["ghostMode"] | (uint8_t)0;
+      appFlashcard = doc["appFlashcard"] | (uint8_t)1;
+      flashcardNewPerDay = doc["flashcardNewPerDay"] | (uint8_t)10;
+      flashcardMaxReviewPerDay = doc["flashcardMaxReviewPerDay"] | (uint8_t)250;
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
     }
