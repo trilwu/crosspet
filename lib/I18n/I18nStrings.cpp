@@ -2101,7 +2101,8 @@ const char* const STRINGS_EN[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_ES[] = {
@@ -3103,7 +3104,8 @@ const char* const STRINGS_ES[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_FR[] = {
@@ -4254,7 +4256,8 @@ const char* const STRINGS_FR[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_DE[] = {
@@ -5158,7 +5161,8 @@ const char* const STRINGS_DE[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_CS[] = {
@@ -7172,7 +7176,8 @@ const char* const STRINGS_CS[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_PO[] = {
@@ -8205,7 +8210,8 @@ const char* const STRINGS_PO[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_RU[] = {
@@ -17623,7 +17629,8 @@ const char* const STRINGS_RU[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18871,7 +18878,8 @@ const char* const STRINGS_SV[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_RO[] = {
@@ -20285,7 +20293,8 @@ const char* const STRINGS_RO[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_CA[] = {
@@ -21331,7 +21340,8 @@ const char* const STRINGS_CA[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_UK[] = {
@@ -31717,7 +31727,8 @@ const char* const STRINGS_UK[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_BE[] = {
@@ -41257,7 +41268,8 @@ const char* const STRINGS_BE[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_IT[] = {
@@ -42022,7 +42034,8 @@ const char* const STRINGS_IT[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_PL[] = {
@@ -43460,7 +43473,8 @@ const char* const STRINGS_PL[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44662,7 +44676,8 @@ const char* const STRINGS_FI[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45626,7 +45641,8 @@ const char* const STRINGS_DA[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46358,7 +46374,8 @@ const char* const STRINGS_NL[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_TR[] = {
@@ -48152,7 +48169,8 @@ const char* const STRINGS_TR[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_KK[] = {
@@ -56292,7 +56310,8 @@ const char* const STRINGS_KK[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_VI[] = {
@@ -61505,7 +61524,21 @@ const char* const STRINGS_VI[] = {
     "\xB7"
     "t file .csv v\xC3"
     "\xA0"
-    "o /.crosspoint/flashcard/",
+    "o /flashcard/",
+    "S\xE1"
+    "\xBB"
+    "\x91"
+    " l\xC6"
+    "\xB0"
+    "\xE1"
+    "\xBB"
+    "\xA3"
+    "ng th\xE1"
+    "\xBA"
+    "\xBB"
+    " review h\xC3"
+    "\xB4"
+    "m nay:",
 };
 
 const char* const STRINGS_HU[] = {
@@ -63289,7 +63322,8 @@ const char* const STRINGS_HU[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_LT[] = {
@@ -64389,7 +64423,8 @@ const char* const STRINGS_LT[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 const char* const STRINGS_SI[] = {
@@ -65299,7 +65334,8 @@ const char* const STRINGS_SI[] = {
     "New cards / Day",
     "Max reviews / Day",
     "No decks found",
-    "Place .csv files in /.crosspoint/flashcard/",
+    "Place .csv files in /flashcard/",
+    "Reviews today:",
 };
 
 }  // namespace i18n_strings

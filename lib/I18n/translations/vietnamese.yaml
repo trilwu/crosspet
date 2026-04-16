@@ -714,4 +714,5 @@ STR_FLASHCARD_DONE_MSG: "Tuyệt vời! Bạn đã review hết thẻ ngày hôm
 STR_FLASHCARD_NEW_PER_DAY: "Thẻ mới / Ngày"
 STR_FLASHCARD_MAX_REVIEW: "Lượt review tối đa / Ngày"
 STR_FLASHCARD_NO_DECKS: "Chưa có deck nào"
-STR_FLASHCARD_IMPORT_HINT: "Đặt file .csv vào /.crosspoint/flashcard/"
+STR_FLASHCARD_IMPORT_HINT: "Đặt file .csv vào /flashcard/"
+STR_FLASHCARD_REVIEW_TODAY: "Số lượng thẻ review hôm nay:"

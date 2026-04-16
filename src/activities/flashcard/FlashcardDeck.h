@@ -5,7 +5,7 @@
 #include <vector>
 
 static constexpr size_t MAX_CARDS_PER_DECK = 500;
-static constexpr const char* FLASHCARD_DIR = "/.crosspoint/flashcard";
+static constexpr const char* FLASHCARD_DIR = "/flashcard";
 
 // Represents a single flashcard with optional hint syntax in frontContent.
 // Front format: "main text \ hint text \" — backslash-delimited hint section.

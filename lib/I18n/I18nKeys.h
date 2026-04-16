@@ -774,6 +774,7 @@ enum class StrId : uint16_t {
   STR_FLASHCARD_MAX_REVIEW,
   STR_FLASHCARD_NO_DECKS,
   STR_FLASHCARD_IMPORT_HINT,
+  STR_FLASHCARD_REVIEW_TODAY,
   // Sentinel - must be last
   _COUNT
 };

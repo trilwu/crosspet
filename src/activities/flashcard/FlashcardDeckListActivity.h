@@ -24,7 +24,6 @@ class FlashcardDeckListActivity final : public Activity {
 
     // Two extra items appended after deck list: Import + Settings
     static constexpr int EXTRA_ITEMS = 2;
-    bool showingImportMessage = false;
 
 public:
     explicit FlashcardDeckListActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)

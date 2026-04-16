@@ -4,6 +4,7 @@
 #include <HalStorage.h>
 #include <I18n.h>
 
+#include "FlashcardFilePickerActivity.h"
 #include "FlashcardReviewActivity.h"
 #include "FlashcardSettingsActivity.h"
 #include "FlashcardSrs.h"
@@ -41,17 +42,6 @@ void FlashcardDeckListActivity::loadDeckList() {
 }
 
 void FlashcardDeckListActivity::loop() {
-    // Dismiss import message on any button press
-    if (showingImportMessage) {
-        if (mappedInput.wasReleased(MappedInputManager::Button::Back) ||
-            mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-            showingImportMessage = false;
-            loadDeckList();
-            requestUpdate();
-        }
-        return;
-    }
-
     const int total = static_cast<int>(decks.size()) + EXTRA_ITEMS;
 
     buttonNavigator.onNext([this, total] {
@@ -73,7 +63,6 @@ void FlashcardDeckListActivity::loop() {
         const int deckCount = static_cast<int>(decks.size());
 
         if (selectedIndex < deckCount) {
-            // Launch review for the selected deck
             const std::string deckPath = decks[selectedIndex].path;
             startActivityForResult(
                 std::make_unique<FlashcardReviewActivity>(renderer, mappedInput, deckPath),
@@ -83,11 +72,22 @@ void FlashcardDeckListActivity::loop() {
                     requestUpdate();
                 });
         } else if (selectedIndex == deckCount) {
-            // Import: show message about placing CSV files
-            showingImportMessage = true;
-            requestUpdate();
+            // Import: launch file picker to select a CSV
+            startActivityForResult(
+                std::make_unique<FlashcardFilePickerActivity>(renderer, mappedInput),
+                [this](const ActivityResult& result) {
+                    if (!result.isCancelled) {
+                        auto* fp = std::get_if<FilePathResult>(&result.data);
+                        if (fp) {
+                            FlashcardDeck deck;
+                            deck.importCsv(fp->path.c_str());
+                        }
+                    }
+                    today = FlashcardSrs::getToday();
+                    loadDeckList();
+                    requestUpdate();
+                });
         } else {
-            // Settings
             startActivityForResult(
                 std::make_unique<FlashcardSettingsActivity>(renderer, mappedInput),
                 [this](const ActivityResult&) {
@@ -103,69 +103,90 @@ void FlashcardDeckListActivity::render(RenderLock&&) {
     const auto& metrics = UITheme::getInstance().getMetrics();
     const int pageWidth = renderer.getScreenWidth();
     const int pageHeight = renderer.getScreenHeight();
+    const int sidePad = metrics.contentSidePadding;
 
     renderer.clearScreen();
 
-    // Import message overlay
-    if (showingImportMessage) {
-        GUI.drawHeader(renderer,
-                       Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight},
-                       tr(STR_FLASHCARD_IMPORT));
-        const int lineH = renderer.getLineHeight(UI_10_FONT_ID);
-        const int y = (pageHeight - lineH * 2) / 2;
-        renderer.drawCenteredText(UI_10_FONT_ID, y, tr(STR_FLASHCARD_IMPORT_HINT));
-        renderer.drawCenteredText(SMALL_FONT_ID, y + lineH + 4, FLASHCARD_DIR);
-        const auto labels = mappedInput.mapLabels(tr(STR_BACK), "", "", "");
-        GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
-        renderer.displayBuffer();
-        return;
-    }
-
-    // Build subtitle: "Reviews: X/Y"
-    char subtitle[32];
-    snprintf(subtitle, sizeof(subtitle), "Reviews: %d/%d",
-             static_cast<int>(totalDueToday),
-             static_cast<int>(PET_SETTINGS.flashcardMaxReviewPerDay));
-
+    // Header
     GUI.drawHeader(renderer,
                    Rect{0, metrics.topPadding, pageWidth, metrics.headerHeight},
-                   tr(STR_FLASHCARD_DECK_SELECT), subtitle);
+                   tr(STR_FLASHCARD_DECK_SELECT));
 
-    const int menuTop = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
-    const int menuHeight = pageHeight - menuTop - metrics.buttonHintsHeight - metrics.verticalSpacing;
+    int y = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
+
+    // Subtitle: "Số lượng thẻ review hôm nay: 25/250"
+    char subtitle[64];
+    snprintf(subtitle, sizeof(subtitle), "%s %d/%d",
+             tr(STR_FLASHCARD_REVIEW_TODAY),
+             static_cast<int>(totalDueToday),
+             static_cast<int>(PET_SETTINGS.flashcardMaxReviewPerDay));
+    renderer.drawText(SMALL_FONT_ID, sidePad, y, subtitle);
+    y += renderer.getLineHeight(SMALL_FONT_ID) + metrics.verticalSpacing;
 
     const int deckCount = static_cast<int>(decks.size());
     const int total = deckCount + EXTRA_ITEMS;
+    const int cardWidth = pageWidth - sidePad * 2;
 
     if (deckCount == 0) {
-        // No decks yet — draw centered hint text
-        const int lineH = renderer.getLineHeight(UI_10_FONT_ID);
-        const int y = menuTop + (menuHeight - lineH) / 2;
-        renderer.drawCenteredText(UI_10_FONT_ID, y, tr(STR_FLASHCARD_NO_DECKS), true);
+        renderer.drawCenteredText(UI_10_FONT_ID, y + 30, tr(STR_FLASHCARD_NO_DECKS));
+        y += 60;
     }
 
-    // Always draw the list (includes Import + Settings even when no decks)
-    GUI.drawList(
-        renderer,
-        Rect{0, menuTop, pageWidth, menuHeight},
-        total,
-        selectedIndex,
-        [this, deckCount](int i) -> std::string {
-            if (i < deckCount) return decks[i].name;
-            if (i == deckCount) return tr(STR_FLASHCARD_IMPORT);
-            return tr(STR_FLASHCARD_SETTINGS);
-        },
-        [this, deckCount](int i) -> std::string {
-            if (i >= deckCount) return "";
-            char buf[48];
-            snprintf(buf, sizeof(buf), "New: %d  Due: %d  Total: %d",
-                     static_cast<int>(decks[i].stats.newCards),
-                     static_cast<int>(decks[i].stats.dueCards),
-                     static_cast<int>(decks[i].stats.totalCards));
-            return buf;
-        },
-        nullptr,
-        nullptr);
+    // Deck cards
+    for (int i = 0; i < deckCount; i++) {
+        const auto& d = decks[i];
+        constexpr int cardHeight = 65;
+        const int cardX = sidePad;
+
+        // Selected highlight: filled background
+        if (i == selectedIndex) {
+            renderer.fillRect(cardX, y, cardWidth, cardHeight, true);
+        }
+        renderer.drawRect(cardX, y, cardWidth, cardHeight);
+
+        bool inv = (i == selectedIndex);
+        // Deck name (bold)
+        renderer.drawText(UI_12_FONT_ID, cardX + 8, y + 5, d.name.c_str(), !inv, EpdFontFamily::BOLD);
+
+        // Stats row: "Mới   Đến hạn   Tổng cộng" with values
+        int statsY = y + 30;
+        int colX = cardX + 8;
+        int colSpacing = (cardWidth - 16) / 3;
+
+        // Column headers
+        renderer.drawText(SMALL_FONT_ID, colX, statsY, tr(STR_FLASHCARD_NEW), !inv);
+        renderer.drawText(SMALL_FONT_ID, colX + colSpacing, statsY, tr(STR_FLASHCARD_DUE), !inv);
+        renderer.drawText(SMALL_FONT_ID, colX + colSpacing * 2, statsY, tr(STR_FLASHCARD_TOTAL), !inv);
+
+        // Column values (below headers)
+        char val[8];
+        int valY = statsY + renderer.getLineHeight(SMALL_FONT_ID) + 2;
+        snprintf(val, sizeof(val), "%d", static_cast<int>(d.stats.newCards));
+        renderer.drawText(UI_10_FONT_ID, colX, valY, val, !inv);
+        snprintf(val, sizeof(val), "%d", static_cast<int>(d.stats.dueCards));
+        renderer.drawText(UI_10_FONT_ID, colX + colSpacing, valY, val, !inv);
+        snprintf(val, sizeof(val), "%d", static_cast<int>(d.stats.totalCards));
+        renderer.drawText(UI_10_FONT_ID, colX + colSpacing * 2, valY, val, !inv);
+
+        y += cardHeight + metrics.verticalSpacing;
+    }
+
+    // Import item
+    int importIdx = deckCount;
+    if (selectedIndex == importIdx) {
+        renderer.fillRect(sidePad, y, cardWidth, 30, true);
+    }
+    renderer.drawText(UI_10_FONT_ID, sidePad + 8, y + 5, tr(STR_FLASHCARD_IMPORT),
+                      selectedIndex != importIdx);
+    y += 30 + 4;
+
+    // Settings item
+    int settingsIdx = deckCount + 1;
+    if (selectedIndex == settingsIdx) {
+        renderer.fillRect(sidePad, y, cardWidth, 30, true);
+    }
+    renderer.drawText(UI_10_FONT_ID, sidePad + 8, y + 5, tr(STR_FLASHCARD_SETTINGS),
+                      selectedIndex != settingsIdx);
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT),
                                               tr(STR_DIR_UP), tr(STR_DIR_DOWN));
