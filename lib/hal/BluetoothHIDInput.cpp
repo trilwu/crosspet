@@ -505,25 +505,22 @@ uint8_t BluetoothHIDManager::mapKeycodeToButton(uint8_t keycode, const Connected
   }
 
   // Navigation keys → map to actual device buttons
+  // In reader context, left/right arrows map to page back/forward (side buttons UP/DOWN)
+  // because the reader's PageBack/PageForward use side buttons, not front left/right.
+  const bool inReader = g_instance->_readerContextCallback && g_instance->_readerContextCallback();
   switch (keycode) {
     case 0x28:  // Enter → Confirm
-      LOG_INF("BT", "Mapped Enter -> Confirm");
       return HalGPIO::BTN_CONFIRM;
     case 0x29:  // Escape → Back
-      LOG_INF("BT", "Mapped Escape -> Back");
       return HalGPIO::BTN_BACK;
     case 0x52:  // Up arrow
-      LOG_INF("BT", "Mapped Up -> Up");
       return HalGPIO::BTN_UP;
     case 0x51:  // Down arrow
-      LOG_INF("BT", "Mapped Down -> Down");
       return HalGPIO::BTN_DOWN;
     case 0x50:  // Left arrow → page back in reader, left in menus
-      LOG_INF("BT", "Mapped Left -> Left");
-      return HalGPIO::BTN_LEFT;
+      return inReader ? HalGPIO::BTN_UP : HalGPIO::BTN_LEFT;
     case 0x4F:  // Right arrow → page forward in reader, right in menus
-      LOG_INF("BT", "Mapped Right -> Right");
-      return HalGPIO::BTN_RIGHT;
+      return inReader ? HalGPIO::BTN_DOWN : HalGPIO::BTN_RIGHT;
   }
 
   // Generic page-turn codes (consumer control, volume, Free2 rolling codes, etc.)
