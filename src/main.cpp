@@ -359,6 +359,10 @@ void setup() {
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 
 #ifdef ENABLE_BLE
+  // BLE build: force expensive rendering off to save heap
+  SETTINGS.textAntiAliasing = 0;  // saves ~10-15KB (grayscale glyph buffers)
+  SETTINGS.imageRendering = 2;    // suppress images — saves ~15-30KB (PNG decoder buffers)
+  SETTINGS.embeddedStyle = 0;     // disable embedded CSS — saves ~2-5KB
   {
     auto& btMgr = BluetoothHIDManager::getInstance();
     btMgr.setButtonInjector([](uint8_t btn) { gpio.injectButtonPress(btn); });
