@@ -38,6 +38,38 @@ struct ConnectedDevice {
   bool hasSeenRelease = false;         // Ignore startup noise until a release frame is seen
   bool lastButtonState = false;        // Track button pressed state (from byte[0])
   const DeviceProfiles::DeviceProfile* profile = nullptr;  // Device-specific HID profile
+
+  // Normalized event tracking
+  unsigned long lastNormalizedEventMs = 0;
+  uint8_t lastNormalizedKeycode = 0x00;
+  bool lastNormalizedPressed = false;
+  uint8_t lastNormalizedDirection = 0xFF;  // 0x00=back, 0x01=forward, 0xFF=unknown
+
+  // Game Brick V2 state
+  uint16_t lastGameBrickCounter = 0xFFFF;
+  uint8_t lastGameBrickActiveKey = 0x00;
+  uint8_t gameBrickCenterPressFrames = 0;
+  bool pendingGameBrickRelease = false;
+  unsigned long pendingGameBrickReleaseMs = 0;
+  uint8_t pendingGameBrickKeycode = 0x00;
+  uint8_t pendingGameBrickButton = 0xFF;
+
+  // Report descriptor hints (populated during connect)
+  bool descriptorHasConsumerPage = false;
+  bool descriptorHasKeyboardPage = false;
+  uint8_t descriptorSuggestedIndex = 0xFF;
+
+  // Simple fallback for unknown devices
+  bool simpleFallbackEnabled = false;
+  uint8_t simpleForwardKeycode = 0x00;
+  uint8_t simpleBackKeycode = 0x00;
+
+  // Active injected virtual button (0xFF = none)
+  uint8_t activeInjectedButton = 0xFF;
+
+  // By-value storage for per-device custom profile (avoids dangling pointer from static slot)
+  DeviceProfiles::DeviceProfile perDevProfileStorage = {};
+  bool hasPerDevProfile = false;
 };
 
 class BluetoothHIDManager {
@@ -66,6 +98,12 @@ public:
   void processInputEvents();
   void setInputCallback(std::function<void(uint16_t keycode)> callback);
   void setButtonInjector(std::function<void(uint8_t buttonIndex)> injector);
+  void setButtonActivityNotifier(std::function<void(uint8_t)> notifier);
+  void setReaderContextCallback(std::function<bool()> callback);
+  bool hadRecentFree2Input(unsigned long windowMs = 1500) const;
+  void setLearnInputCallback(std::function<void(uint8_t keycode, uint8_t reportIndex)> callback);
+  void setDebugCaptureEnabled(bool enabled) { _debugCaptureEnabled = enabled; }
+  bool isDebugCaptureEnabled() const { return _debugCaptureEnabled; }
   void setBondedDevice(const std::string& address, const std::string& name = "", uint8_t addrType = 0xFF);
   void updateActivity();  // Call periodically to check inactivity timeout
   void checkAutoReconnect(bool userInputDetected = false);  // Reconnect bonded device when disconnected
@@ -93,7 +131,14 @@ private:
   void cleanup();
   uint16_t parseHIDReport(uint8_t* data, size_t length);
   ConnectedDevice* findConnectedDevice(const std::string& address);
-  uint8_t mapKeycodeToButton(uint8_t keycode, const DeviceProfiles::DeviceProfile* profile);
+  uint8_t mapKeycodeToButton(uint8_t keycode, const ConnectedDevice* device);
+
+  // Input dispatch helpers (defined in BluetoothHIDInput.cpp)
+  static void injectWithCooldown(ConnectedDevice* device, uint8_t keycode, uint8_t btn);
+  static void handleGameBrickV1(ConnectedDevice* device, uint8_t* pData, size_t length);
+  static void handleGameBrickV2(ConnectedDevice* device, uint8_t* pData, size_t length);
+  static void handleFree2(ConnectedDevice* device, uint8_t* pData, size_t length);
+  static void handleGeneric(ConnectedDevice* device, uint8_t* pData, size_t length);
 
   bool _enabled = false;
   bool _scanning = false;
@@ -102,6 +147,10 @@ private:
   std::vector<ConnectedDevice> _connectedDevices;
   std::function<void(uint16_t)> _inputCallback;
   std::function<void(uint8_t)> _buttonInjector;
+  std::function<void(uint8_t)> _buttonActivityNotifier;
+  std::function<bool()> _readerContextCallback;
+  std::function<void(uint8_t, uint8_t)> _learnInputCallback;
+  bool _debugCaptureEnabled = false;
   std::string _bondedDeviceAddress;
   std::string _bondedDeviceName;
   uint8_t _bondedDeviceAddrType = 0xFF;  // BLE address type for reconnect

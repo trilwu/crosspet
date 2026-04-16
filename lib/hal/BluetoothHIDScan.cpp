@@ -47,53 +47,47 @@ void BluetoothHIDManager::startScan(uint32_t durationMs) {
   _scanning = true;
   _discoveredDevices.clear();
 
-  try {
-    NimBLEScan* pScan = NimBLEDevice::getScan();
-    if (!pScan) {
-      LOG_ERR("BT", "Failed to get scan object");
-      _scanning = false;
-      return;
-    }
-
-    pScan->setScanCallbacks(&scanCallbacks, false);
-    pScan->setActiveScan(false);  // Passive scan — saves ~4KB heap vs active
-    pScan->setMaxResults(8);      // Limit discovered devices to conserve heap
-    pScan->setInterval(100);
-    pScan->setWindow(99);
-
-    bool started = pScan->start(0, false);
-    if (!started) {
-      LOG_ERR("BT", "Failed to start scan!");
-      _scanning = false;
-      return;
-    }
-
-    // Blocking wait — yields to FreeRTOS to prevent watchdog timeout
-    const unsigned long scanEnd = millis() + durationMs;
-    while (millis() < scanEnd) {
-      delay(100);
-    }
-
-    pScan->stop();
+  NimBLEScan* pScan = NimBLEDevice::getScan();
+  if (!pScan) {
+    LOG_ERR("BT", "Failed to get scan object");
     _scanning = false;
-
-    // Sort by: HID first, then by signal strength (strongest first)
-    std::sort(_discoveredDevices.begin(), _discoveredDevices.end(),
-      [](const BluetoothDevice& a, const BluetoothDevice& b) {
-        if (a.isHID != b.isHID) return a.isHID > b.isHID;  // HID first
-        // Named devices before "Unknown"
-        bool aName = !a.name.empty() && a.name != "Unknown";
-        bool bName = !b.name.empty() && b.name != "Unknown";
-        if (aName != bName) return aName > bName;
-        return a.rssi > b.rssi;  // Strongest signal first
-    });
-
-    LOG_INF("BT", "Scan complete, found %d devices", _discoveredDevices.size());
-  } catch (const std::exception& e) {
-    LOG_ERR("BT", "Scan failed: %s", e.what());
-    _scanning = false;
-    lastError = std::string("Scan failed: ") + e.what();
+    return;
   }
+
+  pScan->setScanCallbacks(&scanCallbacks, false);
+  pScan->setActiveScan(false);  // Passive scan — saves ~4KB heap vs active
+  pScan->setMaxResults(8);      // Limit discovered devices to conserve heap
+  pScan->setInterval(100);
+  pScan->setWindow(99);
+
+  bool started = pScan->start(0, false);
+  if (!started) {
+    LOG_ERR("BT", "Failed to start scan!");
+    _scanning = false;
+    return;
+  }
+
+  // Blocking wait — yields to FreeRTOS to prevent watchdog timeout
+  const unsigned long scanEnd = millis() + durationMs;
+  while (millis() < scanEnd) {
+    delay(100);
+  }
+
+  pScan->stop();
+  _scanning = false;
+
+  // Sort by: HID first, then by signal strength (strongest first)
+  std::sort(_discoveredDevices.begin(), _discoveredDevices.end(),
+    [](const BluetoothDevice& a, const BluetoothDevice& b) {
+      if (a.isHID != b.isHID) return a.isHID > b.isHID;  // HID first
+      // Named devices before "Unknown"
+      bool aName = !a.name.empty() && a.name != "Unknown";
+      bool bName = !b.name.empty() && b.name != "Unknown";
+      if (aName != bName) return aName > bName;
+      return a.rssi > b.rssi;  // Strongest signal first
+  });
+
+  LOG_INF("BT", "Scan complete, found %d devices", _discoveredDevices.size());
 }
 
 void BluetoothHIDManager::stopScan() {
@@ -101,13 +95,9 @@ void BluetoothHIDManager::stopScan() {
 
   LOG_INF("BT", "Stopping scan");
 
-  try {
-    NimBLEScan* pScan = NimBLEDevice::getScan();
-    if (pScan) {
-      pScan->stop();
-    }
-  } catch (...) {
-    LOG_ERR("BT", "Error stopping scan");
+  NimBLEScan* pScan = NimBLEDevice::getScan();
+  if (pScan) {
+    pScan->stop();
   }
 
   _scanning = false;

@@ -19,6 +19,9 @@
 #include "StatusBarSettingsActivity.h"
 #include "activities/tools/SleepImagePickerActivity.h"
 #include "activities/network/WifiSelectionActivity.h"
+#ifdef ENABLE_BLE
+#include "BluetoothSettingsActivity.h"
+#endif
 #include "components/UITheme.h"
 #include "fontIds.h"
 
@@ -75,6 +78,9 @@ void SettingsActivity::onEnter() {
                          SettingInfo::Action(StrId::STR_SLEEP_SCREEN, SettingAction::SleepScreen));
   controlsSettings.insert(controlsSettings.begin(),
                           SettingInfo::Action(StrId::STR_REMAP_FRONT_BUTTONS, SettingAction::RemapFrontButtons));
+#ifdef ENABLE_BLE
+  systemSettings.push_back(SettingInfo::Action(StrId::STR_BLE_REMOTE, SettingAction::BluetoothRemote));
+#endif
   systemSettings.push_back(SettingInfo::Action(StrId::STR_WIFI_NETWORKS, SettingAction::Network));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_KOREADER_SYNC, SettingAction::KOReaderSync));
   systemSettings.push_back(SettingInfo::Action(StrId::STR_OPDS_BROWSER, SettingAction::OPDSBrowser));
@@ -336,6 +342,11 @@ void SettingsActivity::toggleCurrentSetting() {
                                  onEnter();
                                });
         break;
+#ifdef ENABLE_BLE
+      case SettingAction::BluetoothRemote:
+        startActivityForResult(std::make_unique<BluetoothSettingsActivity>(renderer, mappedInput), resultHandler);
+        break;
+#endif
       case SettingAction::Reboot:
         renderer.clearScreen();
         renderer.drawCenteredText(UI_12_FONT_ID, renderer.getScreenHeight() / 2 - 10,

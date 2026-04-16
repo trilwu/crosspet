@@ -34,14 +34,52 @@ void BluetoothSettingsActivity::handleLearnInput() {
         return;
       }
       learnedNextKey = capturedKey;
-      DeviceProfiles::setCustomProfile(learnedPrevKey, learnedNextKey, 2);
-      learnStep = LearnStep::DONE;
-      char buf[96];
-      snprintf(buf, sizeof(buf), "Saved Prev=0x%02X Next=0x%02X", learnedPrevKey, learnedNextKey);
-      lastError = buf;
+      // Transition to WAIT_TEST instead of saving immediately
+      learnStep = LearnStep::WAIT_TEST;
+      learnTestDeadlineMs = millis() + 10000;  // 10s deadline
+      learnTestPrevPressed = false;
+      learnTestNextPressed = false;
+      learnedReportIndex = 2;  // Default byte index (limitation: callback doesn't report this)
+      lastError = "Press both buttons to confirm (10s)";
       requestUpdate();
       return;
     }
+
+    if (learnStep == LearnStep::WAIT_TEST) {
+      if (capturedKey == learnedPrevKey) learnTestPrevPressed = true;
+      else if (capturedKey == learnedNextKey) learnTestNextPressed = true;
+
+      if (learnTestPrevPressed && learnTestNextPressed) {
+        // Both confirmed — save per-device profile
+        auto connDevs = btMgr->getConnectedDevices();
+        if (!connDevs.empty()) {
+          DeviceProfiles::setCustomProfileForDevice(
+            connDevs[0], learnedPrevKey, learnedNextKey, learnedReportIndex);
+        } else {
+          DeviceProfiles::setCustomProfile(learnedPrevKey, learnedNextKey, learnedReportIndex);
+        }
+        learnStep = LearnStep::DONE;
+        char buf[96];
+        snprintf(buf, sizeof(buf), "Saved Prev=0x%02X Next=0x%02X", learnedPrevKey, learnedNextKey);
+        lastError = buf;
+      } else {
+        char buf[64];
+        snprintf(buf, sizeof(buf), "Prev:%s Next:%s",
+                 learnTestPrevPressed ? "OK" : "?", learnTestNextPressed ? "OK" : "?");
+        lastError = buf;
+      }
+      requestUpdate();
+      return;
+    }
+  }
+
+  // WAIT_TEST timeout check (no key needed)
+  if (learnStep == LearnStep::WAIT_TEST && millis() >= learnTestDeadlineMs) {
+    viewMode = ViewMode::MAIN_MENU;
+    selectedIndex = 0;
+    lastError = "Timed out — keys not saved";
+    requestUpdate();
+    return;
   }
 
   // Confirm exits learn mode once done
@@ -64,6 +102,8 @@ void BluetoothSettingsActivity::renderLearnKeys() {
   const char* stepText = "Press PREVIOUS PAGE button";
   if (learnStep == LearnStep::WAIT_NEXT) {
     stepText = "Press NEXT PAGE button";
+  } else if (learnStep == LearnStep::WAIT_TEST) {
+    stepText = "Press both buttons to confirm";
   } else if (learnStep == LearnStep::DONE) {
     stepText = "Learning complete";
   }
@@ -79,6 +119,14 @@ void BluetoothSettingsActivity::renderLearnKeys() {
   const int bodyY = metrics.topPadding + metrics.headerHeight + metrics.tabBarHeight;
   renderer.drawCenteredText(UI_12_FONT_ID, bodyY + 32, line1);
   renderer.drawCenteredText(UI_12_FONT_ID, bodyY + 56, line2);
+
+  if (learnStep == LearnStep::WAIT_TEST) {
+    char testLine[64];
+    unsigned long remaining = (learnTestDeadlineMs > millis()) ? (learnTestDeadlineMs - millis()) / 1000 : 0;
+    snprintf(testLine, sizeof(testLine), "Prev:%s  Next:%s  (%lus left)",
+             learnTestPrevPressed ? "OK" : "?", learnTestNextPressed ? "OK" : "?", remaining);
+    renderer.drawCenteredText(UI_10_FONT_ID, bodyY + 80, testLine);
+  }
 
   if (!lastError.empty()) {
     renderer.drawCenteredText(UI_10_FONT_ID, pageHeight - metrics.buttonHintsHeight - 16, lastError.c_str());

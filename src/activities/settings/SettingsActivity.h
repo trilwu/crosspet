@@ -24,6 +24,9 @@ enum class SettingAction {
   DeviceInfo,
   Reboot,
   SleepScreen,
+#ifdef ENABLE_BLE
+  BluetoothRemote,
+#endif
 };
 
 struct SettingInfo {

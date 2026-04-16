@@ -68,38 +68,26 @@ bool BluetoothHIDManager::enable() {
     delay(100);
   }
 
-  try {
-    if (!_nimbleOwnedByUs) {
-      // First-time init
-      LOG_INF("BT", "Heap before NimBLE init: %d bytes free", ESP.getFreeHeap());
-      NimBLEDevice::init("CrossPoint");
-      LOG_INF("BT", "Heap after NimBLE init: %d bytes free (delta: %dKB)",
-              ESP.getFreeHeap(), (int)(ESP.getFreeHeap()) / 1024);
-      NimBLEDevice::setPower(ESP_PWR_LVL_P9);
-      // No bonding/MITM/SC — most BLE HID remotes use "Just Works" pairing
-      NimBLEDevice::setSecurityAuth(false, false, false);
-      _nimbleOwnedByUs = true;
-    } else {
-      LOG_INF("BT", "Re-enabling with existing NimBLE stack. Free heap: %d bytes", ESP.getFreeHeap());
-    }
-
-    _enabled = true;
-    lastError = "";
-
-    LOG_INF("BT", "Bluetooth enabled. Free heap: %d bytes", ESP.getFreeHeap());
-    loadState();
-    return true;
-  } catch (const std::exception& e) {
-    LOG_ERR("BT", "Failed to enable Bluetooth: %s", e.what());
-    lastError = std::string("Init failed: ") + e.what();
-    _enabled = false;
-    return false;
-  } catch (...) {
-    LOG_ERR("BT", "Failed to enable Bluetooth: unknown error");
-    lastError = "Init failed: unknown error";
-    _enabled = false;
-    return false;
+  if (!_nimbleOwnedByUs) {
+    // First-time init
+    LOG_INF("BT", "Heap before NimBLE init: %d bytes free", ESP.getFreeHeap());
+    NimBLEDevice::init("CrossPoint");
+    LOG_INF("BT", "Heap after NimBLE init: %d bytes free (delta: %dKB)",
+            ESP.getFreeHeap(), (int)(ESP.getFreeHeap()) / 1024);
+    NimBLEDevice::setPower(ESP_PWR_LVL_P9);
+    // No bonding/MITM/SC — most BLE HID remotes use "Just Works" pairing
+    NimBLEDevice::setSecurityAuth(false, false, false);
+    _nimbleOwnedByUs = true;
+  } else {
+    LOG_INF("BT", "Re-enabling with existing NimBLE stack. Free heap: %d bytes", ESP.getFreeHeap());
   }
+
+  _enabled = true;
+  lastError = "";
+
+  LOG_INF("BT", "Bluetooth enabled. Free heap: %d bytes", ESP.getFreeHeap());
+  loadState();
+  return true;
 }
 
 bool BluetoothHIDManager::disable() {
@@ -130,6 +118,34 @@ bool BluetoothHIDManager::disable() {
 
   LOG_INF("BT", "Bluetooth disabled (NimBLE kept alive to avoid heap leak)");
   return true;
+}
+
+// ---- Extended API ----
+
+void BluetoothHIDManager::setButtonActivityNotifier(std::function<void(uint8_t)> notifier) {
+  _buttonActivityNotifier = notifier;
+  LOG_DBG("BT", "Button activity notifier registered");
+}
+
+void BluetoothHIDManager::setReaderContextCallback(std::function<bool()> callback) {
+  _readerContextCallback = callback;
+  LOG_DBG("BT", "Reader context callback registered");
+}
+
+void BluetoothHIDManager::setLearnInputCallback(std::function<void(uint8_t, uint8_t)> callback) {
+  _learnInputCallback = callback;
+  LOG_DBG("BT", "Learn input callback registered");
+}
+
+bool BluetoothHIDManager::hadRecentFree2Input(unsigned long windowMs) const {
+  const unsigned long now = millis();
+  for (const auto& device : _connectedDevices) {
+    if (device.lastNormalizedEventMs > 0 &&
+        (now - device.lastNormalizedEventMs) < windowMs) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // ---- State Persistence (stubs) ----

@@ -111,6 +111,10 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CAT_SYSTEM),
       SettingInfo::Toggle(StrId::STR_SHOW_FREE_HEAP, &CrossPointSettings::showFreeHeap, "showFreeHeap",
                           StrId::STR_CAT_SYSTEM),
+#ifdef ENABLE_BLE
+      SettingInfo::Toggle(StrId::STR_BLE_ENABLED, &CrossPointSettings::bleEnabled, "bleEnabled",
+                          StrId::STR_CAT_SYSTEM),
+#endif
 
       // --- KOReader Sync (web-only, uses KOReaderCredentialStore) ---
       SettingInfo::DynamicString(

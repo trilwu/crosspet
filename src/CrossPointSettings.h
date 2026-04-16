@@ -238,6 +238,14 @@ class CrossPointSettings {
   // Auto page turn master switch: 0=off, 1=on (speed controlled by autoPageTurnSpeed)
   uint8_t autoPageTurnEnabled = 0;
 
+#ifdef ENABLE_BLE
+  // Bluetooth HID remote settings
+  uint8_t bleEnabled = 0;                    // 1 = auto-connect on boot
+  char bleBondedDeviceAddr[18] = "";         // MAC address "xx:xx:xx:xx:xx:xx"
+  char bleBondedDeviceName[32] = "";         // Display name of bonded device
+  uint8_t bleBondedDeviceAddrType = 0;       // BLE address type (0=public, 1=random)
+#endif
+
   // keepClockAlive removed from UI — always 0. Kept for JSON backward compat (ignored on load).
   uint8_t keepClockAlive = 0;
 

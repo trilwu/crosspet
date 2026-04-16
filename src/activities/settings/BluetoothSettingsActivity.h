@@ -13,12 +13,14 @@ class BluetoothSettingsActivity : public Activity {
   enum class ViewMode {
     MAIN_MENU,
     DEVICE_LIST,
-    LEARN_KEYS
+    LEARN_KEYS,
+    DEBUG_MONITOR,   // Raw HID byte monitor
   };
 
   enum class LearnStep {
     WAIT_PREV,
     WAIT_NEXT,
+    WAIT_TEST,       // Press both to confirm
     DONE
   };
 
@@ -31,6 +33,13 @@ class BluetoothSettingsActivity : public Activity {
   uint8_t pendingLearnKey = 0;
   uint8_t learnedPrevKey = 0;
   uint8_t learnedNextKey = 0;
+  uint8_t learnedReportIndex = 0;
+  uint8_t debugRawBytes[8] = {};
+  size_t debugRawLength = 0;
+  unsigned long debugLastEventMs = 0;
+  unsigned long learnTestDeadlineMs = 0;
+  bool learnTestPrevPressed = false;
+  bool learnTestNextPressed = false;
 
  public:
   explicit BluetoothSettingsActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
@@ -48,6 +57,8 @@ class BluetoothSettingsActivity : public Activity {
   void renderDeviceList();
   void handleLearnInput();
   void renderLearnKeys();
+  void handleDebugMonitorInput();
+  void renderDebugMonitor();
   std::string getSignalStrengthIndicator(const int32_t rssi) const;
 };
 #endif // ENABLE_BLE

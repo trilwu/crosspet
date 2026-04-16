@@ -38,6 +38,9 @@
 #include "activities/tools/WeatherActivity.h"
 #include "util/PowerButtonClickDetector.h"
 #include <ArduinoJson.h>
+#ifdef ENABLE_BLE
+#include <BluetoothHIDManager.h>
+#endif
 
 // Global multi-click detector for power button (accessible via extern in reader activities)
 PowerButtonClickDetector pwrClickDetector;
@@ -253,6 +256,16 @@ void enterDeepSleep() {
   APP_STATE.lastSleepFromReader = activityManager.isReaderActivity();
   APP_STATE.saveToFile();
 
+#ifdef ENABLE_BLE
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    if (btMgr.isEnabled()) {
+      LOG_INF("SLP", "Disabling Bluetooth before deep sleep");
+      btMgr.disable();
+    }
+  }
+#endif
+
   activityManager.goToSleep();
 
 
@@ -344,6 +357,25 @@ void setup() {
   GAME_SCORES.loadFromFile();
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
+
+#ifdef ENABLE_BLE
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    btMgr.setButtonInjector([](uint8_t btn) { gpio.injectButtonPress(btn); });
+    btMgr.setReaderContextCallback([]() -> bool { return activityManager.isReaderActivity(); });
+    if (SETTINGS.bleEnabled) {
+      if (strlen(SETTINGS.bleBondedDeviceAddr) > 0) {
+        btMgr.setBondedDevice(
+          std::string(SETTINGS.bleBondedDeviceAddr),
+          std::string(SETTINGS.bleBondedDeviceName));
+      }
+      btMgr.enable();
+      LOG_INF("MAIN", "Bluetooth HID initialized (enabled)");
+    } else {
+      LOG_INF("MAIN", "Bluetooth HID initialized (disabled)");
+    }
+  }
+#endif
 
   // Register NTP sync callback to clear approximate clock flag
   sntp_set_time_sync_notification_cb(onNtpSyncComplete);
@@ -481,6 +513,18 @@ void loop() {
 
   gpio.update();
 
+#ifdef ENABLE_BLE
+  bool bleRecentActivity = false;
+  {
+    auto& btMgr = BluetoothHIDManager::getInstance();
+    if (btMgr.isEnabled()) {
+      btMgr.updateActivity();
+      btMgr.checkAutoReconnect(gpio.wasAnyPressed());
+      bleRecentActivity = btMgr.hasRecentActivity();
+    }
+  }
+#endif
+
   renderer.setFadingFix(SETTINGS.fadingFix);
   renderer.setTextDarkness(SETTINGS.textDarkness);
   {
@@ -516,7 +560,11 @@ void loop() {
 
   // Check for any user activity (button press or release) or active background work
   static unsigned long lastActivityTime = millis();
-  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep()) {
+  bool bleActive = false;
+#ifdef ENABLE_BLE
+  bleActive = bleRecentActivity;
+#endif
+  if (gpio.wasAnyPressed() || gpio.wasAnyReleased() || activityManager.preventAutoSleep() || bleActive) {
     lastActivityTime = millis();         // Reset inactivity timer
     powerManager.setPowerSaving(false);  // Restore normal CPU frequency on user activity
   }
