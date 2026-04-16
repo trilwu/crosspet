@@ -18,12 +18,20 @@ CrossPet is a Vietnamese fork of [CrossPoint Reader](https://github.com/crosspoi
 
 ## Features
 
-### Reading
-- EPUB 2/3, XTC (>2GB), TXT/Markdown
-- 3 built-in fonts + custom fonts from SD card
-- 4 sizes, anti-aliased grayscale, font cache
-- Auto page turn, bookmarks, reading stats & streaks
-- KOReader Sync, 4 orientations, hyphenation
+### Reading Experience
+- **EPUB 2/3** with images, CSS styling, and multi-language hyphenation
+- **XTC** pre-rendered format (>2GB support) and **TXT/Markdown**
+- **3 built-in fonts** (Bookerly, Lexend, Bokerlam) + **custom fonts from SD card**
+- **4 font sizes** with anti-aliased grayscale rendering
+- **Font cache** for faster page turns + silent next-chapter pre-indexing
+- **Auto page turn** — 1-20 pages/min, configurable as power button action
+- **Bookmarks** via long-press, reading stats & streaks
+- **Dark mode**, 5 UI themes, fully customizable status bar
+- **9 sleep screen modes** — Clock, Reading Stats, Page Overlay, custom images, and more
+- **Focus mode** — hides all extras, just you and your books
+- **KOReader Sync** for cross-device progress
+- **4 screen orientations** with remappable buttons
+- **9 power button actions** per single/double/triple click
 
 ### Apps
 | App | Description |
