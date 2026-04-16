@@ -81,11 +81,11 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
     return false;
   }
 
-  // GATT discovery + service enumeration needs ~35KB.
+  // GATT discovery + service enumeration needs ~25KB with reduced MTU/MSYS.
   const int freeHeap = ESP.getFreeHeap();
-  if (freeHeap < 35000) {
+  if (freeHeap < 25000) {
     char buf[48];
-    snprintf(buf, sizeof(buf), "Not enough RAM (%dKB free, need 35KB)", freeHeap / 1024);
+    snprintf(buf, sizeof(buf), "Not enough RAM (%dKB free, need 25KB)", freeHeap / 1024);
     lastError = buf;
     LOG_ERR("BT", "%s", buf);
     return false;
@@ -138,15 +138,9 @@ bool BluetoothHIDManager::connectToDevice(std::string address) {
     pScan->clearResults();
   }
 
-  // CRITICAL: Deinit+reinit NimBLE to reclaim all internal allocations
-  // from scan. This frees ~10-15KB needed for GATT discovery.
-  NimBLEDevice::deinit(false);  // false = keep bonding data
-  delay(200);
-  NimBLEDevice::init("CrossPoint");
-  NimBLEDevice::setPower(ESP_PWR_LVL_P9);
-  NimBLEDevice::setSecurityAuth(false, false, false);
-
-  LOG_INF("BT", "Heap after reinit: %d bytes free", ESP.getFreeHeap());
+  // Reclaim scan memory — clearResults frees NimBLE's internal scan buffer.
+  // Avoid deinit/reinit cycle: it leaks ~8KB per call on ESP32-C3.
+  LOG_INF("BT", "Heap after scan cleanup: %d bytes free", ESP.getFreeHeap());
 
   // Reuse existing disconnected client or create new
   NimBLEClient* pClient = NimBLEDevice::getDisconnectedClient();
