@@ -28,6 +28,14 @@ static bool isReaderFont(const int fontId) {
   return true;
 }
 
+// External font eligibility: always true for reader fonts; true for UI fonts
+// only when the beta "Custom Font in UI" toggle is on (flag mirrored on
+// FontManager so lib/ code doesn't need to include src/ headers).
+static bool shouldUseExternalFont(const int fontId) {
+  if (isReaderFont(fontId)) return true;
+  return FontManager::getInstance().isUiExternalAllowed();
+}
+
 const uint8_t* GfxRenderer::getGlyphBitmap(const EpdFontData* fontData, const EpdGlyph* glyph) const {
   if (fontData->groups != nullptr) {
     auto* fd = fontCacheManager_ ? fontCacheManager_->getDecompressor() : nullptr;
@@ -267,12 +275,13 @@ static void renderExternalGlyph(const GfxRenderer& renderer, const uint8_t* bitm
 // Try rendering a glyph via ExternalFont (primary+supplement dual font model).
 // Primary mode: external tried first for every codepoint; built-in is fallback.
 // Supplement mode: external tried only when built-in has no native glyph.
-// Only applies to reader fonts — UI fonts always use built-in glyphs.
+// Applies to reader fonts always, and to UI fonts when the beta
+// "Custom Font in UI" toggle is on (see shouldUseExternalFont).
 static bool tryRenderExternalGlyph(const GfxRenderer& renderer, int fontId,
                                    const EpdFontFamily& builtinFont, uint32_t cp,
                                    int* x, int y, bool pixelState,
                                    EpdFontFamily::Style style) {
-  if (!isReaderFont(fontId)) return false;
+  if (!shouldUseExternalFont(fontId)) return false;
 
   FontManager& fm = FontManager::getInstance();
   if (!fm.isExternalFontEnabled()) return false;
@@ -1142,7 +1151,7 @@ int GfxRenderer::getTextAdvanceX(const int fontId, const char* text, EpdFontFami
   int32_t prevAdvanceFP = 0;  // 12.4 fixed-point: prev glyph's advance + next kern for snap
   const auto& font = fontIt->second;
   FontManager& fm = FontManager::getInstance();
-  const bool extEnabled = isReaderFont(fontId) && fm.isExternalFontEnabled();
+  const bool extEnabled = shouldUseExternalFont(fontId) && fm.isExternalFontEnabled();
   const bool extPrimary = extEnabled && fm.isExternalPrimary();
   while ((cp = utf8NextCodepoint(reinterpret_cast<const uint8_t**>(&text)))) {
     if (utf8IsCombiningMark(cp)) {

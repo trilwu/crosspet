@@ -355,6 +355,7 @@ void setup() {
   I18N.loadSettings();
   FontMgr.scanFonts();
   FontMgr.loadSettings();
+  FontMgr.setUiExternalAllowed(PET_SETTINGS.systemWideCustomFont != 0);
   KOREADER_STORE.loadFromFile();
   READ_STATS.loadFromFile();   // loaded early so abort-to-sleep paths show correct stats
   GAME_SCORES.loadFromFile();

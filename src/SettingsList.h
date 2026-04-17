@@ -1,5 +1,6 @@
 #pragma once
 
+#include <FontManager.h>
 #include <I18n.h>
 
 #include <vector>
@@ -51,6 +52,16 @@ inline const std::vector<SettingInfo>& getSettingsList() {
           [] { return PET_SETTINGS.homeFocusMode; },
           [](uint8_t v) { PET_SETTINGS.homeFocusMode = v; PET_SETTINGS.saveToFile(); },
           "homeFocusMode", StrId::STR_CAT_DISPLAY),
+      // Beta: route custom SD-card font to UI text (filenames, menus) as well as reader.
+      SettingInfo::DynamicToggle(
+          StrId::STR_SYSTEM_WIDE_CUSTOM_FONT,
+          [] { return PET_SETTINGS.systemWideCustomFont; },
+          [](uint8_t v) {
+            PET_SETTINGS.systemWideCustomFont = v;
+            PET_SETTINGS.saveToFile();
+            FontManager::getInstance().setUiExternalAllowed(v != 0);
+          },
+          "systemWideCustomFont", StrId::STR_CAT_DISPLAY),
       // Per-app visibility toggles are added dynamically in SettingsActivity::onEnter()
       // to avoid stack overflow from too many std::function allocations in static init.
 

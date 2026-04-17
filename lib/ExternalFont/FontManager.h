@@ -96,6 +96,15 @@ class FontManager {
   void setExternalPrimary(bool enabled);
 
   /**
+   * Beta flag: allow external font to render UI text (filenames, menus).
+   * Mirrored from CrossPetSettings.systemWideCustomFont by app code so the
+   * GfxRenderer (lib/) doesn't need to include src/ headers. Runtime-only
+   * — persistence lives in CrossPetSettings.
+   */
+  bool isUiExternalAllowed() const { return _uiExternalAllowed; }
+  void setUiExternalAllowed(bool v) { _uiExternalAllowed = v; }
+
+  /**
    * Check if external UI font is enabled
    */
   bool isUiFontEnabled() const {
@@ -139,6 +148,7 @@ class FontManager {
   int _selectedIndex = -1;    // -1 = built-in font (reader)
   int _selectedUiIndex = -1;  // -1 = fallback to reader font
   bool _externalIsPrimary = false; // true = external first, false = supplement (built-in first)
+  bool _uiExternalAllowed = false; // beta: route external font to UI text too
 
   ExternalFont _activeFont;    // Reader font
   ExternalFont _activeUiFont;  // UI font

@@ -20,6 +20,10 @@ class CrossPetSettings {
   // Home screen layout
   uint8_t homeFocusMode = 0;  // 1=show only current book (no recent covers/stats)
 
+  // Beta: apply custom SD-card font to UI text (filenames, menus) as well.
+  // Off by default — enabling may slow UI rendering for scripts not in glyph cache.
+  uint8_t systemWideCustomFont = 0;
+
   // Per-app visibility — controls both Tools menu and home screen widgets (1=show, 0=hide)
   uint8_t appClock = 1;
   uint8_t appWeather = 1;
