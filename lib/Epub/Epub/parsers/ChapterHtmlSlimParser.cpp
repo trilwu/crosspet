@@ -4,6 +4,7 @@
 #include <GfxRenderer.h>
 #include <HalStorage.h>
 #include <Logging.h>
+#include <Utf8.h>
 #include <XmlParserUtils.h>
 #include <expat.h>
 
