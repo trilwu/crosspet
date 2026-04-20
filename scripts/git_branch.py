@@ -57,7 +57,7 @@ def get_base_version(project_dir):
 def inject_version(env):
     # Only applies to the dev (default) environment; release envs set the
     # version via build_flags in platformio.ini and are unaffected.
-    if env['PIOENV'] not in ('default', 'ble'):
+    if env['PIOENV'] not in ('default', 'ble', 'esp32-s3-murphy'):
         return
 
     project_dir = env['PROJECT_DIR']

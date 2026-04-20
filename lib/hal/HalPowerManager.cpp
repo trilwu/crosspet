@@ -80,7 +80,11 @@ void HalPowerManager::startDeepSleep(HalGPIO& gpio, const bool keepClockAlive, c
   // Note: when keepClockAlive=false (GPIO13 LOW), on battery the MCU is completely powered off,
   // so the power button physically re-powers it regardless of this wakeup configuration.
   // When keepClockAlive=true (GPIO13 HIGH), this GPIO wakeup actually works.
+#ifdef BOARD_MURPHY
+  esp_sleep_enable_ext1_wakeup(1ULL << InputManager::POWER_BUTTON_PIN, ESP_EXT1_WAKEUP_ANY_LOW);
+#else
   esp_deep_sleep_enable_gpio_wakeup(1ULL << InputManager::POWER_BUTTON_PIN, ESP_GPIO_WAKEUP_GPIO_LOW);
+#endif
   // Enable periodic timer wakeup for sleep screen refresh (only when MCU stays powered)
   if (keepClockAlive && timerWakeMinutes > 0) {
     esp_sleep_enable_timer_wakeup(static_cast<uint64_t>(timerWakeMinutes) * 60ULL * 1000000ULL);

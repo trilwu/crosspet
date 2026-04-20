@@ -43,8 +43,14 @@ void IRAM_ATTR __wrap_panic_print_backtrace(const void* frame, int core) {
     panicStack[i].sp = 0;
   }
 
-  // Copied from components/esp_system/port/arch/riscv/panic_arch.c
+  // Extract stack pointer from the arch-specific exception frame.
+  // ESP32-C3 is RISC-V (RvExcFrame); ESP32-S3 is Xtensa (XtExcFrame).
+#if CONFIG_IDF_TARGET_ESP32C3
   uint32_t sp = (uint32_t)((RvExcFrame*)frame)->sp;
+#else
+  // Xtensa: SP is register a1 in XtExcFrame.
+  uint32_t sp = (uint32_t)((XtExcFrame*)frame)->a1;
+#endif
   const int per_line = 8;
   int depth = 0;
   for (int x = 0; x < 1024; x += per_line * sizeof(uint32_t)) {
@@ -116,7 +122,13 @@ std::string getPanicInfo(bool full) {
   } else {
     std::string info;
 
+    // CROSSPOINT_VERSION is injected by scripts/git_branch.py; may be absent in
+    // development builds that haven't run the pre-build script yet.
+#ifdef CROSSPOINT_VERSION
     info += "CrossPoint version: " CROSSPOINT_VERSION;
+#else
+    info += "CrossPoint version: (dev-build, version unknown)";
+#endif
     info += "\n\nPanic reason: " + std::string(panicMessage);
     info += "\n\nLast logs:\n" + getLastLogs();
     info += "\n\nStack memory:\n";
