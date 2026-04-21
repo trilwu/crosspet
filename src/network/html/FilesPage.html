@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CrossPoint Reader - Files</title>
+  <title>Files - CrossPoint Reader</title>
   <style>
     :root {
       --font-color: #333;
@@ -786,8 +786,12 @@
 
 <script>
   // get current path from query parameter
-  const currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
   const showHidden = decodeURIComponent(new URLSearchParams(window.location.search).get('showHidden') || "false") == 'true';
+
+  if (currentPath !== '/') {
+    const leaf = currentPath.split('/').filter(Boolean).pop();
+    if (leaf) document.title = leaf + ' - Files - CrossPoint Reader';
+  }
 
   function escapeHtml(unsafe) {
     return unsafe
