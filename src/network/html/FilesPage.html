@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Files - CrossPoint Reader</title>
+  <script src="/js/jszip.min.js"></script>
   <style>
     :root {
       --font-color: #333;
@@ -792,6 +793,25 @@
     const leaf = currentPath.split('/').filter(Boolean).pop();
     if (leaf) document.title = leaf + ' - Files - CrossPoint Reader';
   }
+
+  // Network status monitoring
+  let isNetworkOnline = navigator.onLine;
+
+  // Add network status listeners
+  window.addEventListener('online', () => {
+    console.log('[Network] Online event fired');
+    isNetworkOnline = true;
+    showNotification('Network connection restored', 'success');
+  });
+
+  window.addEventListener('offline', () => {
+    console.log('[Network] Offline event fired');
+    isNetworkOnline = false;
+    showNotification('Network connection lost', 'warning');
+  });
+
+  // Initialize network status
+  console.log('[Network] Initial status:', isNetworkOnline ? 'online' : 'offline');
 
   function escapeHtml(unsafe) {
     return unsafe
