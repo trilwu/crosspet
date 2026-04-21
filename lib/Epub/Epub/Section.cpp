@@ -10,11 +10,7 @@
 #include "parsers/ChapterHtmlSlimParser.h"
 
 namespace {
-<<<<<<< HEAD
 constexpr uint8_t SECTION_FILE_VERSION = 21;
-=======
-constexpr uint8_t SECTION_FILE_VERSION = 20;
->>>>>>> 302dea1 (fix: Switch to xpath map for paragraph level syncing in KOSync (#1686))
 constexpr uint32_t HEADER_SIZE = sizeof(uint8_t) + sizeof(int) + sizeof(float) + sizeof(bool) + sizeof(uint8_t) +
                                  sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(bool) + sizeof(bool) +
                                  sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
@@ -328,7 +324,6 @@ std::unique_ptr<Page> Section::loadPageFromSectionFile() {
     return nullptr;
   }
 
-<<<<<<< HEAD
   if (!file) {
     // Safety fallback: file was closed unexpectedly; reopen
     LOG_ERR("SCT", "loadPageFromSectionFile: file not open, reopening");
@@ -336,15 +331,6 @@ std::unique_ptr<Page> Section::loadPageFromSectionFile() {
       return nullptr;
     }
   }
-=======
-  file.seek(HEADER_SIZE - sizeof(uint32_t) * 3);
-  uint32_t lutOffset;
-  serialization::readPod(file, lutOffset);
-  file.seek(lutOffset + sizeof(uint32_t) * currentPage);
-  uint32_t pagePos;
-  serialization::readPod(file, pagePos);
-  file.seek(pagePos);
->>>>>>> 302dea1 (fix: Switch to xpath map for paragraph level syncing in KOSync (#1686))
 
   if (!file.seek(lut[currentPage])) {
     LOG_ERR("SCT", "loadPageFromSectionFile: seek to page %d offset %u failed", currentPage, lut[currentPage]);
