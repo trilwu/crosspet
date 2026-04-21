@@ -28,6 +28,7 @@
 #include "ReadingStats.h"
 #include "CrossPetSettings.h"
 #include "MappedInputManager.h"
+#include "OpdsServerStore.h"
 #include "RecentBooksStore.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
@@ -358,6 +359,7 @@ void setup() {
   KOREADER_STORE.loadFromFile();
   READ_STATS.loadFromFile();   // loaded early so abort-to-sleep paths show correct stats
   GAME_SCORES.loadFromFile();
+  OPDS_STORE.loadFromFile();
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
 
