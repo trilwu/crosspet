@@ -3,15 +3,21 @@
 #include <Arduino.h>
 #include <InputManager.h>
 
-// Select board-specific GPIO pin assignments.
-// Murphy (-DBOARD_MURPHY) uses ESP32-S3; default is Xteink X4 (ESP32-C3).
-#ifdef BOARD_MURPHY
-#  include "hal-pinmap-murphy.h"
-#else
-#  include "hal-pinmap-x4.h"
-#endif
+// Display SPI pins (custom pins for XteinkX4, not hardware SPI defaults)
+#define EPD_SCLK 8   // SPI Clock
+#define EPD_MOSI 10  // SPI MOSI (Master Out Slave In)
+#define EPD_CS 21    // Chip Select
+#define EPD_DC 4     // Data/Command
+#define EPD_RST 5    // Reset
+#define EPD_BUSY 6   // Busy
 
-// Xteink X3 Hardware (I2C — only used on X4/X3 path)
+#define SPI_MISO 7  // SPI MISO, shared between SD card and display (Master In Slave Out)
+
+#define BAT_GPIO0 0  // Battery voltage
+
+#define UART0_RXD 20  // Used for USB connection detection
+
+// Xteink X3 Hardware
 #define X3_I2C_SDA 20
 #define X3_I2C_SCL 0
 #define X3_I2C_FREQ 400000

@@ -1,133 +1,91 @@
-// HalDisplay.cpp — selects the correct display driver at compile time and
-// forwards all public calls through the HalDisplayDriver interface.
-// X4 (default): SSD1677 via EInkDisplay symlink wrapped in HalDisplaySSD1677Adapter.
-// Murphy (-DBOARD_MURPHY): UC8253 native driver.
+#include <HalDisplay.h>
+#include <HalGPIO.h>
 
-#include "HalDisplay.h"
-
-#include "HalGPIO.h"
-
-#ifdef BOARD_MURPHY
-#  include "hal-display-uc8253.h"
-#else
-#  include "hal-display-ssd1677-adapter.h"
-#endif
-
-// Global singleton
+// Global HalDisplay instance
 HalDisplay display;
 
-// ── construction ─────────────────────────────────────────────────────────────
+#define SD_SPI_MISO 7
 
-HalDisplay::HalDisplay() {
-#ifdef BOARD_MURPHY
-  driver_ = std::make_unique<HalDisplayUC8253>();
-#else
-  driver_ = std::make_unique<HalDisplaySSD1677Adapter>(
-      EPD_SCLK, EPD_MOSI, EPD_CS, EPD_DC, EPD_RST, EPD_BUSY);
-#endif
-}
+HalDisplay::HalDisplay() : einkDisplay(EPD_SCLK, EPD_MOSI, EPD_CS, EPD_DC, EPD_RST, EPD_BUSY) {}
 
-HalDisplay::~HalDisplay() = default;
-
-// ── mode conversion ───────────────────────────────────────────────────────────
-
-HalDisplayDriver::RefreshMode HalDisplay::toDriverMode(RefreshMode mode) {
-  switch (mode) {
-    case FULL_REFRESH: return HalDisplayDriver::RefreshMode::FULL_REFRESH;
-    case HALF_REFRESH: return HalDisplayDriver::RefreshMode::HALF_REFRESH;
-    case FAST_REFRESH: return HalDisplayDriver::RefreshMode::FAST_REFRESH;
-    default:           return HalDisplayDriver::RefreshMode::FAST_REFRESH;
-  }
-}
-
-// ── lifecycle ─────────────────────────────────────────────────────────────────
+HalDisplay::~HalDisplay() {}
 
 void HalDisplay::begin() {
-#ifndef BOARD_MURPHY
-  // X4/X3 variant: handle device-specific init before driver begin().
-  auto* ssd = static_cast<HalDisplaySSD1677Adapter*>(driver_.get());
+  // Set X3-specific panel mode before initializing.
   if (gpio.deviceIsX3()) {
-    ssd->setDisplayX3();
+    einkDisplay.setDisplayX3();
   }
-  driver_->begin();
-  // Request resync after events that may leave display in unknown state.
+
+  einkDisplay.begin();
+
+  // Request resync after specific wakeup events to ensure clean display state
   const auto wakeupReason = gpio.getWakeupReason();
-  if (wakeupReason == HalGPIO::WakeupReason::PowerButton ||
-      wakeupReason == HalGPIO::WakeupReason::AfterFlash  ||
+  if (wakeupReason == HalGPIO::WakeupReason::PowerButton || wakeupReason == HalGPIO::WakeupReason::AfterFlash ||
       wakeupReason == HalGPIO::WakeupReason::Other) {
-    ssd->requestResync();
+    einkDisplay.requestResync();
   }
-#else
-  driver_->begin();
-#endif
 }
 
-// ── frame buffer ops ──────────────────────────────────────────────────────────
+void HalDisplay::clearScreen(uint8_t color) const { einkDisplay.clearScreen(color); }
 
-void HalDisplay::clearScreen(uint8_t color) const {
-  driver_->clearScreen(color);
+void HalDisplay::drawImage(const uint8_t* imageData, uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+                           bool fromProgmem) const {
+  einkDisplay.drawImage(imageData, x, y, w, h, fromProgmem);
 }
 
-void HalDisplay::drawImage(const uint8_t* imageData, uint16_t x, uint16_t y,
-                           uint16_t w, uint16_t h, bool fromProgmem) const {
-  driver_->drawImage(imageData, x, y, w, h, fromProgmem);
+void HalDisplay::drawImageTransparent(const uint8_t* imageData, uint16_t x, uint16_t y, uint16_t w, uint16_t h,
+                                      bool fromProgmem) const {
+  einkDisplay.drawImageTransparent(imageData, x, y, w, h, fromProgmem);
 }
 
-void HalDisplay::drawImageTransparent(const uint8_t* imageData, uint16_t x, uint16_t y,
-                                      uint16_t w, uint16_t h, bool fromProgmem) const {
-  driver_->drawImageTransparent(imageData, x, y, w, h, fromProgmem);
-}
-
-void HalDisplay::displayBuffer(RefreshMode mode, bool turnOffScreen) {
-#ifndef BOARD_MURPHY
-  // X3 half-refresh needs a resync signal before the update.
-  if (gpio.deviceIsX3() && mode == HALF_REFRESH) {
-    static_cast<HalDisplaySSD1677Adapter*>(driver_.get())->requestResync(1);
+EInkDisplay::RefreshMode convertRefreshMode(HalDisplay::RefreshMode mode) {
+  switch (mode) {
+    case HalDisplay::FULL_REFRESH:
+      return EInkDisplay::FULL_REFRESH;
+    case HalDisplay::HALF_REFRESH:
+      return EInkDisplay::HALF_REFRESH;
+    case HalDisplay::FAST_REFRESH:
+    default:
+      return EInkDisplay::FAST_REFRESH;
   }
-#endif
-  driver_->displayBuffer(toDriverMode(mode), turnOffScreen);
 }
 
-void HalDisplay::refreshDisplay(RefreshMode mode, bool turnOffScreen) {
-#ifndef BOARD_MURPHY
-  if (gpio.deviceIsX3() && mode == HALF_REFRESH) {
-    static_cast<HalDisplaySSD1677Adapter*>(driver_.get())->requestResync(1);
+void HalDisplay::displayBuffer(HalDisplay::RefreshMode mode, bool turnOffScreen) {
+  if (gpio.deviceIsX3() && mode == RefreshMode::HALF_REFRESH) {
+    einkDisplay.requestResync(1);
   }
-#endif
-  driver_->refreshDisplay(toDriverMode(mode), turnOffScreen);
+
+  einkDisplay.displayBuffer(convertRefreshMode(mode), turnOffScreen);
 }
 
-void HalDisplay::deepSleep() { driver_->deepSleep(); }
+void HalDisplay::refreshDisplay(HalDisplay::RefreshMode mode, bool turnOffScreen) {
+  if (gpio.deviceIsX3() && mode == RefreshMode::HALF_REFRESH) {
+    einkDisplay.requestResync(1);
+  }
 
-uint8_t* HalDisplay::getFrameBuffer() const { return driver_->getFrameBuffer(); }
-
-// ── 4-gray ────────────────────────────────────────────────────────────────────
-
-void HalDisplay::copyGrayscaleBuffers(const uint8_t* lsb, const uint8_t* msb) {
-  driver_->copyGrayscaleBuffers(lsb, msb);
+  einkDisplay.refreshDisplay(convertRefreshMode(mode), turnOffScreen);
 }
 
-void HalDisplay::copyGrayscaleLsbBuffers(const uint8_t* lsb) {
-  driver_->copyGrayscaleLsbBuffers(lsb);
+void HalDisplay::deepSleep() { einkDisplay.deepSleep(); }
+
+uint8_t* HalDisplay::getFrameBuffer() const { return einkDisplay.getFrameBuffer(); }
+
+void HalDisplay::copyGrayscaleBuffers(const uint8_t* lsbBuffer, const uint8_t* msbBuffer) {
+  einkDisplay.copyGrayscaleBuffers(lsbBuffer, msbBuffer);
 }
 
-void HalDisplay::copyGrayscaleMsbBuffers(const uint8_t* msb) {
-  driver_->copyGrayscaleMsbBuffers(msb);
-}
+void HalDisplay::copyGrayscaleLsbBuffers(const uint8_t* lsbBuffer) { einkDisplay.copyGrayscaleLsbBuffers(lsbBuffer); }
 
-void HalDisplay::cleanupGrayscaleBuffers(const uint8_t* bw) {
-  driver_->cleanupGrayscaleBuffers(bw);
-}
+void HalDisplay::copyGrayscaleMsbBuffers(const uint8_t* msbBuffer) { einkDisplay.copyGrayscaleMsbBuffers(msbBuffer); }
 
-void HalDisplay::displayGrayBuffer(bool turnOffScreen) {
-  driver_->displayGrayBuffer(turnOffScreen);
-}
+void HalDisplay::cleanupGrayscaleBuffers(const uint8_t* bwBuffer) { einkDisplay.cleanupGrayscaleBuffers(bwBuffer); }
 
-// ── geometry passthrough ──────────────────────────────────────────────────────
+void HalDisplay::displayGrayBuffer(bool turnOffScreen) { einkDisplay.displayGrayBuffer(turnOffScreen); }
 
-uint16_t HalDisplay::getDisplayWidth()      const { return driver_->getWidth(); }
-uint16_t HalDisplay::getDisplayHeight()     const { return driver_->getHeight(); }
-uint16_t HalDisplay::getDisplayWidthBytes() const { return driver_->getWidth() / 8; }
-uint32_t HalDisplay::getBufferSize()        const {
-  return static_cast<uint32_t>(driver_->getWidth() / 8) * driver_->getHeight();
-}
+uint16_t HalDisplay::getDisplayWidth() const { return einkDisplay.getDisplayWidth(); }
+
+uint16_t HalDisplay::getDisplayHeight() const { return einkDisplay.getDisplayHeight(); }
+
+uint16_t HalDisplay::getDisplayWidthBytes() const { return einkDisplay.getDisplayWidthBytes(); }
+
+uint32_t HalDisplay::getBufferSize() const { return einkDisplay.getBufferSize(); }

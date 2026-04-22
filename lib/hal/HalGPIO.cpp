@@ -192,13 +192,7 @@ HalGPIO::DeviceType detectDeviceTypeWithFingerprint() {
 
 void HalGPIO::begin() {
   inputMgr.begin();
-  // Murphy: SPI bus for EPD uses EPD_MISO (unused MISO pin); SD_MISO is separate.
-  // X4: SPI_MISO is shared between EPD and SD card.
-#ifdef BOARD_MURPHY
-  SPI.begin(EPD_SCLK, EPD_MISO, EPD_MOSI, EPD_CS);
-#else
   SPI.begin(EPD_SCLK, SPI_MISO, EPD_MOSI, EPD_CS);
-#endif
 
   _deviceType = detectDeviceTypeWithFingerprint();
 
@@ -259,12 +253,7 @@ void HalGPIO::startDeepSleep() {
     inputMgr.update();
   }
   // Arm the wakeup trigger *after* the button is released
-  // esp_deep_sleep_enable_gpio_wakeup is C3-only; S3 uses ext1 wakeup.
-#ifdef BOARD_MURPHY
-  esp_sleep_enable_ext1_wakeup(1ULL << InputManager::POWER_BUTTON_PIN, ESP_EXT1_WAKEUP_ANY_LOW);
-#else
   esp_deep_sleep_enable_gpio_wakeup(1ULL << InputManager::POWER_BUTTON_PIN, ESP_GPIO_WAKEUP_GPIO_LOW);
-#endif
   // Enter Deep Sleep
   esp_deep_sleep_start();
 }
