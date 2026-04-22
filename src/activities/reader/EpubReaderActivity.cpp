@@ -492,11 +492,16 @@ void EpubReaderActivity::onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction 
             if (SETTINGS.fontFamily != prevFamily || FontMgr.getSelectedIndex() != prevExternal
                 || FontMgr.isExternalPrimary() != prevPrimary) {
               RenderLock lock(*this);
-              if (section) {
-                cachedSpineIndex = currentSpineIndex;
-                cachedChapterTotalPageCount = section->pageCount;
-                nextPageNumber = section->currentPage;
-              }
+              // Font change invalidates every cached section: page breaks and word
+              // x-positions are baked with the old glyph advance widths. The section
+              // file header doesn't encode external-font state, so a stale file will
+              // load silently and render corrupted, freeze on out-of-range seeks, or
+              // misreport pageCount (breaks chapter nav, KOReader sync, resume).
+              // Nuke the whole sections dir so every chapter rebuilds on demand.
+              Storage.removeDir((epub->getCachePath() + "/sections").c_str());
+              cachedSpineIndex = -1;
+              cachedChapterTotalPageCount = 0;
+              nextPageNumber = 0;  // current chapter restarts at page 0 with new font
               section.reset();
             }
           });
