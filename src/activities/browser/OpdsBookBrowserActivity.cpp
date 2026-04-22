@@ -276,7 +276,10 @@ void OpdsBookBrowserActivity::fetchFeed(const std::string& path) {
 void OpdsBookBrowserActivity::navigateToEntry(const OpdsEntry& entry) {
   // Push current path to history before navigating
   navigationHistory.push_back(currentPath);
-  currentPath = entry.href;
+  // Resolve href against current feed URL so relative paths (e.g. copyparty)
+  // retain the parent path context instead of collapsing to the server root.
+  const std::string feedUrl = UrlUtils::buildUrl(SETTINGS.opdsServerUrl, currentPath);
+  currentPath = UrlUtils::buildUrl(feedUrl, entry.href);
 
   state = BrowserState::LOADING;
   statusMessage = tr(STR_LOADING);
@@ -313,8 +316,9 @@ void OpdsBookBrowserActivity::downloadBook(const OpdsEntry& book) {
   downloadTotal = 0;
   requestUpdate(true);
 
-  // Build full download URL
-  std::string downloadUrl = UrlUtils::buildUrl(SETTINGS.opdsServerUrl, book.href);
+  // Build full download URL relative to the current feed, not the root server URL
+  const std::string feedUrl = UrlUtils::buildUrl(SETTINGS.opdsServerUrl, currentPath);
+  std::string downloadUrl = UrlUtils::buildUrl(feedUrl, book.href);
 
   // Create sanitized filename: "Title - Author.epub" or just "Title.epub" if no author
   std::string baseName = book.title;

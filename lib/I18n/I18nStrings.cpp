@@ -131,7 +131,7 @@ const char* const LANGUAGE_NAMES[] = {
 
 // Character sets for each language
 const char* const CHARACTER_SETS[] = {
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -139,7 +139,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // English
-    " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xA1"
     "\xC2"
     "\xAB"
@@ -165,7 +165,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Español
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -198,7 +198,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Français
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -223,7 +223,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Deutsch
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -284,7 +284,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Čeština
-    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -313,7 +313,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Português (Brasil)
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -437,7 +437,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Русский
-    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -463,7 +463,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Svenska
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -491,7 +491,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Română
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -521,7 +521,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Català
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -647,7 +647,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Українська
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -773,7 +773,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Беларуская
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -797,7 +797,7 @@ const char* const CHARACTER_SETS[] = {
     "\x86"
     "\xBB"
     "",  // Italiano
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -827,7 +827,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Polski
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -841,7 +841,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Suomi
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -861,7 +861,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Dansk
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -875,7 +875,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Nederlands
-    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -907,7 +907,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Türkçe
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1041,7 +1041,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Қазақша
-    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1282,7 +1282,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Tiếng Việt
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1316,7 +1316,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Magyar
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -1354,7 +1354,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x9E"
     "",  // Lietuvių
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -2112,6 +2112,25 @@ const char* const STRINGS_EN[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_ES[] = {
@@ -3124,6 +3143,25 @@ const char* const STRINGS_ES[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_FR[] = {
@@ -4285,6 +4323,25 @@ const char* const STRINGS_FR[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_DE[] = {
@@ -5199,6 +5256,25 @@ const char* const STRINGS_DE[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_CS[] = {
@@ -7223,6 +7299,25 @@ const char* const STRINGS_CS[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_PO[] = {
@@ -8266,6 +8361,25 @@ const char* const STRINGS_PO[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_RU[] = {
@@ -17694,6 +17808,25 @@ const char* const STRINGS_RU[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18952,6 +19085,25 @@ const char* const STRINGS_SV[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_RO[] = {
@@ -20376,6 +20528,25 @@ const char* const STRINGS_RO[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_CA[] = {
@@ -21432,6 +21603,25 @@ const char* const STRINGS_CA[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_UK[] = {
@@ -31828,6 +32018,25 @@ const char* const STRINGS_UK[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_BE[] = {
@@ -41378,6 +41587,25 @@ const char* const STRINGS_BE[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_IT[] = {
@@ -42153,6 +42381,25 @@ const char* const STRINGS_IT[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_PL[] = {
@@ -43601,6 +43848,25 @@ const char* const STRINGS_PL[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44819,6 +45085,25 @@ const char* const STRINGS_FI[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45793,6 +46078,25 @@ const char* const STRINGS_DA[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46535,6 +46839,25 @@ const char* const STRINGS_NL[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_TR[] = {
@@ -48339,6 +48662,25 @@ const char* const STRINGS_TR[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_KK[] = {
@@ -56489,6 +56831,25 @@ const char* const STRINGS_KK[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_VI[] = {
@@ -61736,6 +62097,25 @@ const char* const STRINGS_VI[] = {
     " review h\xC3"
     "\xB4"
     "m nay:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_HU[] = {
@@ -63530,6 +63910,25 @@ const char* const STRINGS_HU[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_LT[] = {
@@ -64640,6 +65039,25 @@ const char* const STRINGS_LT[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 const char* const STRINGS_SI[] = {
@@ -65560,6 +65978,25 @@ const char* const STRINGS_SI[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
 };
 
 }  // namespace i18n_strings

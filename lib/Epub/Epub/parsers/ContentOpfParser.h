@@ -39,6 +39,7 @@ class ContentOpfParser final : public Print {
     uint32_t fileOffset;  // offset in .items.bin
   };
   std::deque<ItemIndexEntry> itemIndex;
+  size_t maxItemIndexEntries = 0;
   bool useItemIndex = false;
 
   static constexpr uint16_t LARGE_SPINE_THRESHOLD = 400;

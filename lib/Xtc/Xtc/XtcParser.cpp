@@ -521,6 +521,60 @@ XtcError XtcParser::loadPageStreaming(uint32_t pageIndex,
   return XtcError::OK;
 }
 
+bool XtcParser::loadPagePlaneStrip(uint32_t pageIndex, uint8_t plane, size_t colStart, size_t colCount,
+                                   size_t colBytes, uint8_t* buffer) {
+  if (!m_isOpen) {
+    m_lastError = XtcError::FILE_NOT_FOUND;
+    return false;
+  }
+  if (pageIndex >= m_header.pageCount) {
+    m_lastError = XtcError::PAGE_OUT_OF_RANGE;
+    return false;
+  }
+  if (m_bitDepth != 2 || plane > 1 || colCount == 0 || colBytes == 0 || buffer == nullptr) {
+    m_lastError = XtcError::READ_ERROR;
+    return false;
+  }
+  if (colStart + colCount > m_defaultWidth) {
+    m_lastError = XtcError::PAGE_OUT_OF_RANGE;
+    return false;
+  }
+
+  PageInfo page;
+  if (!readPageTableEntry(pageIndex, page)) {
+    m_lastError = XtcError::READ_ERROR;
+    return false;
+  }
+
+  if (!ensureFileOpen()) {
+    m_lastError = XtcError::FILE_NOT_FOUND;
+    return false;
+  }
+
+  // XTH bitmap: two column-major bit planes laid out consecutively after the page header.
+  // Each plane is (colBytes * width) bytes; strip = colCount consecutive columns from one plane.
+  const size_t bitmapStart = static_cast<size_t>(page.offset) + sizeof(XtgPageHeader);
+  const size_t planeSize = colBytes * static_cast<size_t>(m_defaultWidth);
+  const size_t stripOffset = bitmapStart + static_cast<size_t>(plane) * planeSize + colStart * colBytes;
+  const size_t stripBytes = colCount * colBytes;
+
+  if (!m_file.seek(stripOffset)) {
+    LOG_DBG("XTC", "Failed to seek to strip for page %u plane %u", pageIndex, plane);
+    m_lastError = XtcError::READ_ERROR;
+    return false;
+  }
+
+  const size_t bytesRead = m_file.read(buffer, stripBytes);
+  if (bytesRead != stripBytes) {
+    LOG_DBG("XTC", "Strip read error: expected %u, got %u", stripBytes, bytesRead);
+    m_lastError = XtcError::READ_ERROR;
+    return false;
+  }
+
+  m_lastError = XtcError::OK;
+  return true;
+}
+
 bool XtcParser::isValidXtcFile(const char* filepath) {
   FsFile file;
   if (!Storage.openFileForRead("XTC", filepath, file)) {
