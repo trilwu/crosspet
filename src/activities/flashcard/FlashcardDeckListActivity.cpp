@@ -135,7 +135,7 @@ void FlashcardDeckListActivity::render(RenderLock&&) {
     // Deck cards
     for (int i = 0; i < deckCount; i++) {
         const auto& d = decks[i];
-        constexpr int cardHeight = 65;
+        constexpr int cardHeight = 94;
         const int cardX = sidePad;
 
         // Selected highlight: filled background
@@ -172,20 +172,21 @@ void FlashcardDeckListActivity::render(RenderLock&&) {
     }
 
     // Import item
+    constexpr int actionRowHeight = 40;
     int importIdx = deckCount;
     if (selectedIndex == importIdx) {
-        renderer.fillRect(sidePad, y, cardWidth, 30, true);
+        renderer.fillRect(sidePad, y, cardWidth, actionRowHeight, true);
     }
-    renderer.drawText(UI_10_FONT_ID, sidePad + 8, y + 5, tr(STR_FLASHCARD_IMPORT),
+    renderer.drawText(UI_10_FONT_ID, sidePad + 8, y + 12, tr(STR_FLASHCARD_IMPORT),
                       selectedIndex != importIdx);
-    y += 30 + 4;
+    y += actionRowHeight + 4;
 
     // Settings item
     int settingsIdx = deckCount + 1;
     if (selectedIndex == settingsIdx) {
-        renderer.fillRect(sidePad, y, cardWidth, 30, true);
+        renderer.fillRect(sidePad, y, cardWidth, actionRowHeight, true);
     }
-    renderer.drawText(UI_10_FONT_ID, sidePad + 8, y + 5, tr(STR_FLASHCARD_SETTINGS),
+    renderer.drawText(UI_10_FONT_ID, sidePad + 8, y + 12, tr(STR_FLASHCARD_SETTINGS),
                       selectedIndex != settingsIdx);
 
     const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT),
