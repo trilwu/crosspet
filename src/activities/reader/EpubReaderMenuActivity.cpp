@@ -10,7 +10,7 @@
 #include "fontIds.h"
 
 // Font family/size label arrays for rendering current values
-static const StrId fontFamilyLabels[] = {StrId::STR_BOOKERLY, StrId::STR_LEXEND, StrId::STR_BOKERLAM};
+static const StrId fontFamilyLabels[] = {StrId::STR_NOTO_SERIF, StrId::STR_LEXEND, StrId::STR_BOKERLAM};
 static const StrId fontSizeLabels[] = {StrId::STR_SMALL, StrId::STR_MEDIUM, StrId::STR_LARGE, StrId::STR_X_LARGE};
 
 EpubReaderMenuActivity::EpubReaderMenuActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,

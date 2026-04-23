@@ -1,7 +1,9 @@
 #include "ExternalFont.h"
 
+#include <Arduino.h>
 #include <HalStorage.h>
 #include <Logging.h>
+#include <esp_task_wdt.h>
 
 #include <algorithm>
 #include <cstring>
@@ -214,6 +216,16 @@ bool ExternalFont::readGlyphFromSD(uint32_t codepoint, uint8_t* buffer) {
 
   _lastReadOffset = offset;
   _hasLastReadOffset = true;
+
+  // Feed task WDT and yield briefly to other tasks: long text runs trigger
+  // many SD reads and can starve the watchdog during cache-thrash scenarios
+  // (e.g. flashcard definition with many unique CJK/Vietnamese codepoints).
+  ++_readsSinceYield;
+  if (_readsSinceYield >= 8) {
+    _readsSinceYield = 0;
+    esp_task_wdt_reset();
+    yield();
+  }
   return true;
 }
 

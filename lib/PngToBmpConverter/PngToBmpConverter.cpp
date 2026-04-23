@@ -1,5 +1,6 @@
 #include "PngToBmpConverter.h"
 
+#include <Arduino.h>
 #include <HalDisplay.h>
 #include <HalStorage.h>
 #include <InflateReader.h>
@@ -7,8 +8,14 @@
 
 #include <cstdio>
 #include <cstring>
+#include <new>
 
 #include "BitmapHelpers.h"
+
+// Pre-flight heap guard. PNG needs more than JPG because InflateReader holds a 32KB ring
+// buffer (see pngFileToBmpStreamInternal comment before `reader.init(true)`) plus scanline
+// buffers and the ditherer. 56KB covers worst-case under BLE resident heap.
+constexpr size_t MIN_FREE_HEAP_FOR_PNG_THUMB = 56 * 1024;
 
 // ============================================================================
 // IMAGE PROCESSING OPTIONS - Same as JpegToBmpConverter for consistency
@@ -399,6 +406,14 @@ bool PngToBmpConverter::pngFileToBmpStreamInternal(FsFile& pngFile, Print& bmpOu
                                                    bool oneBit, bool crop) {
   LOG_DBG("PNG", "Converting PNG to %s BMP (target: %dx%d)", oneBit ? "1-bit" : "2-bit", targetWidth, targetHeight);
 
+  // Heap pre-flight: PNG path peaks above JPG because of the 32KB inflate ring buffer.
+  // With BLE resident + active connection, unchecked `new` hits abort() and resets the device.
+  const size_t freeHeap = ESP.getFreeHeap();
+  if (freeHeap < MIN_FREE_HEAP_FOR_PNG_THUMB) {
+    LOG_ERR("PNG", "Not enough heap for thumbnail decode (%u free, need %u)", freeHeap, MIN_FREE_HEAP_FOR_PNG_THUMB);
+    return false;
+  }
+
   // Verify PNG signature
   uint8_t sig[8];
   if (pngFile.read(sig, 8) != 8 || memcmp(sig, PNG_SIGNATURE, 8) != 0) {
@@ -619,18 +634,19 @@ bool PngToBmpConverter::pngFileToBmpStreamInternal(FsFile& pngFile, Print& bmpOu
     return false;
   }
 
-  // Create ditherers (same as JpegToBmpConverter)
+  // Create ditherers (same as JpegToBmpConverter). Use std::nothrow so failed allocs return
+  // null instead of calling abort() under -fno-exceptions.
   AtkinsonDitherer* atkinsonDitherer = nullptr;
   FloydSteinbergDitherer* fsDitherer = nullptr;
   Atkinson1BitDitherer* atkinson1BitDitherer = nullptr;
 
   if (oneBit) {
-    atkinson1BitDitherer = new Atkinson1BitDitherer(outWidth);
+    atkinson1BitDitherer = new (std::nothrow) Atkinson1BitDitherer(outWidth);
   } else if (!USE_8BIT_OUTPUT) {
     if (USE_ATKINSON) {
-      atkinsonDitherer = new AtkinsonDitherer(outWidth);
+      atkinsonDitherer = new (std::nothrow) AtkinsonDitherer(outWidth);
     } else if (USE_FLOYD_STEINBERG) {
-      fsDitherer = new FloydSteinbergDitherer(outWidth);
+      fsDitherer = new (std::nothrow) FloydSteinbergDitherer(outWidth);
     }
   }
 
@@ -641,9 +657,29 @@ bool PngToBmpConverter::pngFileToBmpStreamInternal(FsFile& pngFile, Print& bmpOu
   uint32_t nextOutY_srcStart = 0;
 
   if (needsScaling) {
-    rowAccum = new uint32_t[outWidth]();
-    rowCount = new uint16_t[outWidth]();
+    rowAccum = new (std::nothrow) uint32_t[outWidth]();
+    rowCount = new (std::nothrow) uint16_t[outWidth]();
     nextOutY_srcStart = scaleY_fp;
+  }
+
+  // Check setup allocations in one place. `delete nullptr` is safe; any partial success
+  // still leaks nothing because all pointers default to null.
+  const bool setupOk =
+      (!oneBit || atkinson1BitDitherer != nullptr) &&
+      (oneBit || USE_8BIT_OUTPUT || (!USE_ATKINSON && !USE_FLOYD_STEINBERG) ||
+       (USE_ATKINSON ? atkinsonDitherer != nullptr : fsDitherer != nullptr)) &&
+      (!needsScaling || (rowAccum != nullptr && rowCount != nullptr));
+  if (!setupOk) {
+    LOG_ERR("PNG", "Allocation failure in thumb setup");
+    delete[] rowAccum;
+    delete[] rowCount;
+    delete atkinsonDitherer;
+    delete fsDitherer;
+    delete atkinson1BitDitherer;
+    free(rowBuffer);
+    free(ctx.currentRow);
+    free(ctx.previousRow);
+    return false;
   }
 
   // Allocate grayscale row buffer - batch-convert each scanline to avoid

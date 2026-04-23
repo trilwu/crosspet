@@ -455,17 +455,51 @@ void CrossPetTheme::drawConfirmDialog(const GfxRenderer& renderer, const char* t
 
 // ── Keyboard key — LightGray selection ───────────────────────────────────────
 
-void CrossPetTheme::drawKeyboardKey(const GfxRenderer& renderer, Rect rect, const char* label,
-                                    const bool isSelected) const {
+void CrossPetTheme::drawKeyboardKey(const GfxRenderer& renderer, Rect rect, const char* label, const bool isSelected,
+                                    const char* secondaryLabel, const KeyboardKeyType keyType,
+                                    const bool inactiveSelection) const {
+  // Selection background: LightGray fill + 1px border; text always black
+  // (unlike Lyra/base which invert text on select).
   if (isSelected) {
-    // LightGray fill + 1px border; text stays black
     renderer.fillRoundedRect(rect.x, rect.y, rect.width, rect.height, kSelectionRadius, Color::LightGray);
     renderer.drawRoundedRect(rect.x, rect.y, rect.width, rect.height, 1, kSelectionRadius, true);
+  } else if (keyType == KeyboardKeyType::Shift || keyType == KeyboardKeyType::Mode ||
+             keyType == KeyboardKeyType::Del || keyType == KeyboardKeyType::Space ||
+             keyType == KeyboardKeyType::Ok || keyType == KeyboardKeyType::Disabled) {
+    renderer.drawRoundedRect(rect.x, rect.y, rect.width, rect.height, 1, kSelectionRadius, true);
+  }
+
+  // Space glyph: centred underscore
+  if (keyType == KeyboardKeyType::Space) {
+    const int lineHalfWidth = rect.width * 3 / 10;
+    const int centerX = rect.x + rect.width / 2;
+    const int lineY = rect.y + rect.height / 2 + 3;
+    renderer.drawLine(centerX - lineHalfWidth, lineY, centerX + lineHalfWidth, lineY, 3, true);
+    return;
+  }
+
+  // Del glyph: left-pointing arrow
+  if (keyType == KeyboardKeyType::Del) {
+    const int centerX = rect.x + rect.width / 2;
+    const int centerY = rect.y + rect.height / 2;
+    const int arrowLen = rect.width / 4;
+    const int arrowHead = arrowLen / 2;
+    renderer.drawLine(centerX - arrowLen / 2, centerY, centerX + arrowLen / 2, centerY, 3, true);
+    renderer.drawLine(centerX - arrowLen / 2, centerY, centerX - arrowLen / 2 + arrowHead, centerY - arrowHead, 3,
+                      true);
+    renderer.drawLine(centerX - arrowLen / 2, centerY, centerX - arrowLen / 2 + arrowHead, centerY + arrowHead, 3,
+                      true);
+    return;
   }
 
   const int textW = renderer.getTextWidth(UI_12_FONT_ID, label);
   const int textX = rect.x + (rect.width - textW) / 2;
   const int textY = rect.y + (rect.height - renderer.getLineHeight(UI_12_FONT_ID)) / 2;
-  // Text always black (not inverted like Lyra)
   renderer.drawText(UI_12_FONT_ID, textX, textY, label, true);
+
+  // Secondary label (e.g. shift-layer hint) — small, top-right.
+  if (secondaryLabel != nullptr && secondaryLabel[0] != '\0') {
+    const int secWidth = renderer.getTextWidth(SMALL_FONT_ID, secondaryLabel);
+    renderer.drawText(SMALL_FONT_ID, rect.x + rect.width - secWidth - 1, rect.y, secondaryLabel, true);
+  }
 }

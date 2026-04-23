@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CrossPoint Reader - Files</title>
+  <title>Files - CrossPoint Reader</title>
+  <script src="/js/jszip.min.js"></script>
   <style>
     :root {
       --font-color: #333;
@@ -40,7 +41,8 @@
     }
     h1 {
       color: var(--title-color);
-      margin-bottom: 5px;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
     }
     h2 {
       color: var(--title-color);
@@ -63,8 +65,6 @@
       flex-wrap: wrap;
       gap: 15px;
       margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--accent-color);
     }
     .page-header-left {
       display: flex;
@@ -658,6 +658,8 @@
   </style>
 </head>
 <body>
+<h1>📚 CrossPoint Reader</h1>
+
 <div class="nav-links">
   <a href="/">Home</a>
   <a href="/files" class="active">File Manager</a>
@@ -666,7 +668,7 @@
 
 <div class="page-header">
   <div class="page-header-left">
-    <h1>📁 File Manager</h1>
+    <h2>📁 File Manager</h2>
     <div class="breadcrumb-inline" id="directory-breadcrumbs"></div>
   </div>
 
@@ -785,8 +787,31 @@
 
 <script>
   // get current path from query parameter
-  const currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
   const showHidden = decodeURIComponent(new URLSearchParams(window.location.search).get('showHidden') || "false") == 'true';
+
+  if (currentPath !== '/') {
+    const leaf = currentPath.split('/').filter(Boolean).pop();
+    if (leaf) document.title = leaf + ' - Files - CrossPoint Reader';
+  }
+
+  // Network status monitoring
+  let isNetworkOnline = navigator.onLine;
+
+  // Add network status listeners
+  window.addEventListener('online', () => {
+    console.log('[Network] Online event fired');
+    isNetworkOnline = true;
+    showNotification('Network connection restored', 'success');
+  });
+
+  window.addEventListener('offline', () => {
+    console.log('[Network] Offline event fired');
+    isNetworkOnline = false;
+    showNotification('Network connection lost', 'warning');
+  });
+
+  // Initialize network status
+  console.log('[Network] Initial status:', isNetworkOnline ? 'online' : 'offline');
 
   function escapeHtml(unsafe) {
     return unsafe
@@ -855,7 +880,10 @@
       totalSize += file.size;
     });
 
-    document.getElementById('folder-summary').innerHTML = `${folderCount} folders, ${files.length - folderCount} files, ${formatFileSize(totalSize)}`;
+    const fileCount = files.length - folderCount;
+    const folderLabel = folderCount === 1 ? 'folder' : 'folders';
+    const fileLabel = fileCount === 1 ? 'file' : 'files';
+    document.getElementById('folder-summary').innerHTML = `${folderCount} ${folderLabel}, ${fileCount} ${fileLabel}, ${formatFileSize(totalSize)}`;
 
     if (files.length === 0) {
       fileTable.innerHTML = '<div class="no-files">This folder is empty</div>';

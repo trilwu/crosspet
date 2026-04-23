@@ -2,6 +2,7 @@
 
 #include <FsHelpers.h>
 #include <HalStorage.h>
+#include <I18n.h>
 
 #include "CrossPointSettings.h"
 #include "Epub.h"
@@ -12,6 +13,10 @@
 #include "XtcReaderActivity.h"
 #include "activities/util/BmpViewerActivity.h"
 #include "activities/util/FullScreenMessageActivity.h"
+#include "components/UITheme.h"
+#ifdef ENABLE_BLE
+#include <BluetoothHIDManager.h>
+#endif
 
 bool ReaderActivity::isXtcFile(const std::string& path) { return FsHelpers::hasXtcExtension(path); }
 
@@ -33,7 +38,17 @@ std::unique_ptr<Epub> ReaderActivity::loadEpub(const std::string& path) {
     return epub;
   }
 
-  // Retry once with fresh cache (stale cache from different firmware can cause load failure)
+  // Only clear cache and retry if heap looks healthy. Under low-heap conditions
+  // (e.g. NimBLE resident in ble builds) load() returns false for OOM, which is
+  // indistinguishable from stale-cache corruption at this layer. Wiping the cache
+  // on OOM is catastrophic: next boot rebuilds index + cover from scratch and the
+  // user loses their reading position.
+  constexpr size_t CACHE_CLEAR_MIN_HEAP = 80 * 1024;
+  if (ESP.getFreeHeap() < CACHE_CLEAR_MIN_HEAP) {
+    LOG_ERR("READER", "Failed to load epub (heap low: %u bytes free) — skipping cache clear", (unsigned)ESP.getFreeHeap());
+    return nullptr;
+  }
+
   LOG_ERR("READER", "Failed to load epub, clearing cache and retrying");
   epub->clearCache();
   epub = std::unique_ptr<Epub>(new Epub(path, "/.crosspoint"));
@@ -56,7 +71,13 @@ std::unique_ptr<Xtc> ReaderActivity::loadXtc(const std::string& path) {
     return xtc;
   }
 
-  // Retry once with fresh cache (stale cache from different firmware can cause load failure)
+  // Skip cache-clear retry when heap is low (OOM != corruption — see loadEpub).
+  constexpr size_t CACHE_CLEAR_MIN_HEAP = 80 * 1024;
+  if (ESP.getFreeHeap() < CACHE_CLEAR_MIN_HEAP) {
+    LOG_ERR("READER", "Failed to load XTC (heap low: %u bytes free) — skipping cache clear", (unsigned)ESP.getFreeHeap());
+    return nullptr;
+  }
+
   LOG_ERR("READER", "Failed to load XTC, clearing cache and retrying");
   xtc->clearCache();
   xtc = std::unique_ptr<Xtc>(new Xtc(path, "/.crosspoint"));
@@ -125,6 +146,7 @@ void ReaderActivity::onEnter() {
   } else if (isXtcFile(initialBookPath)) {
     auto xtc = loadXtc(initialBookPath);
     if (!xtc) {
+      showMemoryErrorIfBleActive();
       onGoBack();
       return;
     }
@@ -132,6 +154,7 @@ void ReaderActivity::onEnter() {
   } else if (isTxtFile(initialBookPath)) {
     auto txt = loadTxt(initialBookPath);
     if (!txt) {
+      showMemoryErrorIfBleActive();
       onGoBack();
       return;
     }
@@ -139,6 +162,7 @@ void ReaderActivity::onEnter() {
   } else {
     auto epub = loadEpub(initialBookPath);
     if (!epub) {
+      showMemoryErrorIfBleActive();
       onGoBack();
       return;
     }
@@ -147,3 +171,16 @@ void ReaderActivity::onEnter() {
 }
 
 void ReaderActivity::onGoBack() { finish(); }
+
+// Surface a memory-failure popup when BLE is eating heap, so user understands
+// why the book didn't open and knows what to do. Silent fall-back (finish())
+// looked like a freeze to the user.
+void ReaderActivity::showMemoryErrorIfBleActive() {
+#ifdef ENABLE_BLE
+  if (!BluetoothHIDManager::getInstance().isEnabled()) return;
+  const char* msg = "Bộ nhớ thấp do Bluetooth đang bật.\nTắt Bluetooth để mở sách.";
+  GUI.drawPopup(renderer, msg);
+  requestUpdateAndWait();
+  delay(2500);
+#endif
+}

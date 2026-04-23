@@ -113,6 +113,9 @@ class ExternalFont {
   // Sequential read fast path - skip seek if reading consecutive glyphs
   uint32_t _lastReadOffset = 0;
   bool _hasLastReadOffset = false;
+  // WDT feed throttle: yield every N SD reads to prevent watchdog starvation
+  // during long text runs with many unique codepoints (e.g. Vietnamese defs)
+  uint8_t _readsSinceYield = 0;
 
   // Hash table for O(1) cache lookup (codepoint -> cache index)
   // HASH_EMPTY = never used, HASH_TOMB = deleted (probe continues through it)

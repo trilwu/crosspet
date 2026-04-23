@@ -25,6 +25,7 @@ class ReaderActivity final : public Activity {
   void onGoToBmpViewer(const std::string& path);
 
   void onGoBack();
+  void showMemoryErrorIfBleActive();
 
  public:
   explicit ReaderActivity(GfxRenderer& renderer, MappedInputManager& mappedInput, std::string initialBookPath)

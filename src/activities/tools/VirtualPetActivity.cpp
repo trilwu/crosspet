@@ -131,7 +131,7 @@ void VirtualPetActivity::startHatchFlow() {
   const char* currentName = PET_MANAGER.exists() ? PET_MANAGER.getState().petName : "";
   startActivityForResult(
       std::make_unique<KeyboardEntryActivity>(renderer, mappedInput,
-                                              tr(STR_PET_ENTER_NAME), currentName, 19, false),
+                                              tr(STR_PET_ENTER_NAME), currentName, 19, InputType::Text),
       [this](const ActivityResult& result) {
         if (!result.isCancelled) {
           auto text = std::get<KeyboardResult>(result.data).text;
@@ -149,7 +149,7 @@ void VirtualPetActivity::startRenameFlow() {
   const char* currentName = PET_MANAGER.getState().petName;
   startActivityForResult(
       std::make_unique<KeyboardEntryActivity>(renderer, mappedInput,
-                                              tr(STR_PET_ENTER_NAME), currentName, 19, false),
+                                              tr(STR_PET_ENTER_NAME), currentName, 19, InputType::Text),
       [this](const ActivityResult& result) {
         if (!result.isCancelled) {
           auto text = std::get<KeyboardResult>(result.data).text;

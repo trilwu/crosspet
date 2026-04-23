@@ -10,12 +10,23 @@ FontDecompressor::~FontDecompressor() { deinit(); }
 
 bool FontDecompressor::init() {
   clearCache();
+  if (!scratchBuffer) {
+    scratchBuffer = static_cast<uint8_t*>(malloc(SCRATCH_BUFFER_SIZE));
+    if (!scratchBuffer) {
+      LOG_ERR("FDC", "Failed to allocate %u B scratch buffer; prewarm will use per-group malloc",
+              SCRATCH_BUFFER_SIZE);
+    }
+  }
   return true;
 }
 
 void FontDecompressor::deinit() {
   freePageBuffer();
   freeCacheEntries();
+  if (scratchBuffer) {
+    free(scratchBuffer);
+    scratchBuffer = nullptr;
+  }
 }
 
 void FontDecompressor::clearCache() {
@@ -328,18 +339,27 @@ int FontDecompressor::prewarmCache(const EpdFontData* fontData, const char* utf8
     uint16_t groupIdx = neededGroups[g];
     const EpdFontGroup& group = fontData->groups[groupIdx];
 
-    auto* tempBuf = static_cast<uint8_t*>(malloc(group.uncompressedSize));
-    if (!tempBuf) {
-      LOG_ERR("FDC", "Failed to allocate temp buffer (%u bytes) for group %u", group.uncompressedSize, groupIdx);
-      missed++;
-      continue;
+    // Prefer shared scratch buffer (allocated once at init) to avoid per-group
+    // malloc fragmentation. Fall back to malloc only if scratch wasn't allocated
+    // or the group is larger than scratch.
+    uint8_t* tempBuf = nullptr;
+    const bool canUseScratch = scratchBuffer && group.uncompressedSize <= SCRATCH_BUFFER_SIZE;
+    if (canUseScratch) {
+      tempBuf = scratchBuffer;
+    } else {
+      tempBuf = static_cast<uint8_t*>(malloc(group.uncompressedSize));
+      if (!tempBuf) {
+        LOG_ERR("FDC", "Failed to allocate temp buffer (%u bytes) for group %u", group.uncompressedSize, groupIdx);
+        missed++;
+        continue;
+      }
     }
     if (group.uncompressedSize > stats.peakTempBytes) {
       stats.peakTempBytes = group.uncompressedSize;
     }
 
     if (!decompressGroup(fontData, groupIdx, tempBuf, group.uncompressedSize)) {
-      free(tempBuf);
+      if (!canUseScratch) free(tempBuf);
       missed++;
       continue;
     }
@@ -357,7 +377,7 @@ int FontDecompressor::prewarmCache(const EpdFontData* fontData, const char* utf8
       writeOffset += glyph.dataLength;
     }
 
-    free(tempBuf);
+    if (!canUseScratch) free(tempBuf);
   }
 
   LOG_DBG("FDC", "Prewarm: %u glyphs in %u bytes from %u groups (%d missed)", glyphCount, writeOffset, groupCount,

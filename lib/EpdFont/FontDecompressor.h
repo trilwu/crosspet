@@ -62,8 +62,11 @@ class FontDecompressor {
   PageSlot pageSlots[MAX_PAGE_SLOTS] = {};
   uint8_t pageSlotCount = 0;
 
-  // LRU cache of decompressed groups (fallback when prewarm not used)
-  static constexpr uint8_t CACHE_SLOTS = 4;
+  // LRU cache of decompressed groups (fallback when prewarm not used).
+  // Reduced from 4 → 2 slots: each slot holds a full decompressed group
+  // (~18KB typical). Under BLE heap pressure (~40KB free), 4 slots cannot
+  // fit; prewarm already covers the hot path, so 2 slots suffice as fallback.
+  static constexpr uint8_t CACHE_SLOTS = 2;
   struct CacheEntry {
     const EpdFontData* font = nullptr;
     uint16_t groupIndex = UINT16_MAX;
@@ -74,6 +77,14 @@ class FontDecompressor {
   };
   CacheEntry cache[CACHE_SLOTS] = {};
   uint32_t accessCounter = 0;
+
+  // Reusable decompression scratch buffer. Allocated once at init() and shared
+  // across all prewarm group decompressions. Eliminates per-group malloc which
+  // fragments heavily under BLE heap pressure → missing glyphs on page render.
+  // Sized for the largest group observed in fonts (~20KB). If malloc fails at
+  // boot, prewarm falls back to per-group malloc (legacy path).
+  static constexpr uint32_t SCRATCH_BUFFER_SIZE = 20 * 1024;
+  uint8_t* scratchBuffer = nullptr;
 
   void freePageBuffer();
   void freeCacheEntries();

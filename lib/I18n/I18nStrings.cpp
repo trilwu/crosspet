@@ -131,20 +131,24 @@ const char* const LANGUAGE_NAMES[] = {
 
 // Character sets for each language
 const char* const CHARACTER_SETS[] = {
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xE2"
     "\x80"
     "\x94"
     "",  // English
-    " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xA1"
     "\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC2"
     "\xBF"
     "\xC3"
@@ -165,10 +169,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Español
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x89"
     "\xC3"
@@ -198,10 +204,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Français
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x84"
     "\xC3"
@@ -223,10 +231,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Deutsch
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x81"
     "\xC3"
@@ -284,12 +294,14 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Čeština
-    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
     "\xC2"
     "\xBA"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\xA1"
     "\xC3"
@@ -313,7 +325,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Português (Brasil)
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -437,10 +449,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Русский
-    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x84"
     "\xC3"
@@ -463,10 +477,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\xA6"
     "",  // Svenska
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x82"
     "\xC3"
@@ -491,12 +507,14 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Română
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
     "\xC2"
     "\xB7"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x92"
     "\xC3"
@@ -521,10 +539,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Català
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xD0"
     "\x86"
     "\xD0"
@@ -647,7 +667,7 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Українська
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
@@ -773,10 +793,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Беларуская
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x80"
     "\xC3"
@@ -797,10 +819,12 @@ const char* const CHARACTER_SETS[] = {
     "\x86"
     "\xBB"
     "",  // Italiano
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\xB3"
     "\xC4"
@@ -827,10 +851,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Polski
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x84"
     "\xC3"
@@ -841,10 +867,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Suomi
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x85"
     "\xC3"
@@ -861,10 +889,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Dansk
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\xAB"
     "\xC3"
@@ -875,10 +905,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Nederlands
-    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    "\n !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x87"
     "\xC3"
@@ -907,10 +939,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Türkçe
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xD0"
     "\x86"
     "\xD0"
@@ -1041,10 +1075,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Қазақша
-    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghiklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./0123456789:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghiklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x80"
     "\xC3"
@@ -1282,10 +1318,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Tiếng Việt
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x81"
     "\xC3"
@@ -1316,10 +1354,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x94"
     "",  // Magyar
-    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC4"
     "\x85"
     "\xC4"
@@ -1354,10 +1394,12 @@ const char* const CHARACTER_SETS[] = {
     "\x80"
     "\x9E"
     "",  // Lietuvių
-    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]abcdefghijklmnopqrstuvwxyz|~\xC2"
+    " !\"%&'()*+,-./012345689:<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_abcdefghijklmnopqrstuvwxyz|~\xC2"
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC4"
     "\x8C"
     "\xC4"
@@ -1557,7 +1599,7 @@ const char* const STRINGS_EN[] = {
     "Lft, Bck, Cnfrm, Rght",
     "Prev/Next",
     "Next/Prev",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -1602,6 +1644,12 @@ const char* const STRINGS_EN[] = {
     "No server URL configured",
     "Failed to fetch feed",
     "Failed to parse feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Network: ",
     "IP Address: ",
     "or scan QR code with your phone to connect to Wifi.",
@@ -1679,6 +1727,7 @@ const char* const STRINGS_EN[] = {
     "60 min",
     "Remap Front Buttons",
     "OPDS Browser",
+    "Search",
     "Cover + Custom",
     "Page overlay",
     "Keep Screen",
@@ -2116,6 +2165,31 @@ const char* const STRINGS_EN[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2443,7 +2517,7 @@ const char* const STRINGS_ES[] = {
     "s, Confirmar, Der.",
     "Ant./Sig.",
     "Sig./Ant.",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -2518,6 +2592,12 @@ const char* const STRINGS_ES[] = {
     " URL de servidor",
     "Fallo al obtener el feed",
     "Fallo al procesar el feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Red: ",
     "IP: ",
     "o lea el QR con su tfno. para conectarse al Wi-Fi.",
@@ -2625,6 +2705,7 @@ const char* const STRINGS_ES[] = {
     "60 min",
     "Reconfigurar botones frontales",
     "Navegador OPDS",
+    "Search",
     "Portada + Pers.",
     "Page overlay",
     "Keep Screen",
@@ -3132,6 +3213,31 @@ const char* const STRINGS_ES[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3558,7 +3664,7 @@ const char* const STRINGS_FR[] = {
     "Suiv/Pr\xC3"
     "\xA9"
     "c",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -3666,6 +3772,12 @@ const char* const STRINGS_FR[] = {
     "\xC3"
     "\x89"
     "chec analyse flux",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "R\xC3"
     "\xA9"
     "seau : ",
@@ -3787,6 +3899,7 @@ const char* const STRINGS_FR[] = {
     "\xA7"
     "ade",
     "Navigateur OPDS",
+    "Search",
     "Couverture + Perso",
     "Page overlay",
     "Keep Screen",
@@ -4297,6 +4410,31 @@ const char* const STRINGS_FR[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4577,7 +4715,7 @@ const char* const STRINGS_DE[] = {
     "Weiter/Zur\xC3"
     "\xBC"
     "ck",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -4645,6 +4783,12 @@ const char* const STRINGS_DE[] = {
     "Feed-Format ung\xC3"
     "\xBC"
     "ltig",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Netzwerk:",
     "IP-Adresse:",
     "oder QR-Code mit dem Handy scannen f\xC3"
@@ -4740,6 +4884,7 @@ const char* const STRINGS_DE[] = {
     "60 min",
     "Vordere Tasten belegen",
     "OPDS-Browser",
+    "Search",
     "Umschlag + Eigenes",
     "Seiten-Overlay",
     "Keep Screen",
@@ -5215,6 +5360,31 @@ const char* const STRINGS_DE[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6209,7 +6379,7 @@ const char* const STRINGS_CS[] = {
     "edchoz\xC3"
     "\xAD"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -6379,6 +6549,12 @@ const char* const STRINGS_CS[] = {
     "lu se nezda\xC5"
     "\x99"
     "ilo",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "S\xC3"
     "\xAD"
     "\xC5"
@@ -6530,6 +6706,7 @@ const char* const STRINGS_CS[] = {
     "e\xC4"
     "\x8D"
     " OPDS",
+    "Search",
     "Ob\xC3"
     "\xA1"
     "lka + Vlastn\xC3"
@@ -7243,6 +7420,31 @@ const char* const STRINGS_CS[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7594,7 +7796,7 @@ const char* const STRINGS_PO[] = {
     "Pr\xC3"
     "\xB3"
     "x/Ant",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -7683,6 +7885,12 @@ const char* const STRINGS_PO[] = {
     "Nenhum URL servidor configurado",
     "Falha ao buscar o feed",
     "Falha ao interpretar o feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Rede:",
     "Endere\xC3"
     "\xA7"
@@ -7781,6 +7989,7 @@ const char* const STRINGS_PO[] = {
     "\xB5"
     "es frontais",
     "Navegador OPDS",
+    "Search",
     "Capa + personalizado",
     "Page overlay",
     "Keep Screen",
@@ -8290,6 +8499,31 @@ const char* const STRINGS_PO[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_RU[] = {
@@ -13243,7 +13477,7 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB4"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -14182,6 +14416,12 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x83"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -15315,6 +15555,7 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x80"
     "",
+    "Search",
     "\xD0"
     "\x9E"
     "\xD0"
@@ -17722,6 +17963,31 @@ const char* const STRINGS_RU[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18238,7 +18504,7 @@ const char* const STRINGS_SV[] = {
     "sta/F\xC3"
     "\xB6"
     "rra",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "\xC3"
     "\x96"
@@ -18324,6 +18590,12 @@ const char* const STRINGS_SV[] = {
     "Misslyckades att analysera fl\xC3"
     "\xB6"
     "de",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "N\xC3"
     "\xA4"
     "tverk:",
@@ -18449,6 +18721,7 @@ const char* const STRINGS_SV[] = {
     "OPDS-webbl\xC3"
     "\xA4"
     "sare",
+    "Search",
     "Omslag + Valfri",
     "Page overlay",
     "Keep Screen",
@@ -18984,6 +19257,31 @@ const char* const STRINGS_SV[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19597,7 +19895,7 @@ const char* const STRINGS_RO[] = {
     "napoi/\xC3"
     "\x8E"
     "nainte",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -19704,6 +20002,12 @@ const char* const STRINGS_RO[] = {
     "E\xC5"
     "\x9F"
     "ec la analizarea feed-ului",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Re\xC5"
     "\xA3"
     "ea: ",
@@ -19845,6 +20149,7 @@ const char* const STRINGS_RO[] = {
     "60 min",
     "Remapare butoane frontale",
     "Browser OPDS",
+    "Search",
     "Copert\xC4"
     "\x83"
     " + Personalizat",
@@ -20412,6 +20717,31 @@ const char* const STRINGS_RO[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20763,7 +21093,7 @@ const char* const STRINGS_CA[] = {
     "Seg\xC3"
     "\xBC"
     "ent/Anterior",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -20840,6 +21170,12 @@ const char* const STRINGS_CA[] = {
     "Ha fallat l'an\xC3"
     "\xA0"
     "lisi del feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Xarxa: ",
     "Adre\xC3"
     "\xA7"
@@ -20957,6 +21293,7 @@ const char* const STRINGS_CA[] = {
     "60 min",
     "Reassigna els botons frontals",
     "Navegador OPDS",
+    "Search",
     "Portada + Personalitzat",
     "Page overlay",
     "Keep Screen",
@@ -21472,6 +21809,31 @@ const char* const STRINGS_CA[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_UK[] = {
@@ -27101,7 +27463,7 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x80"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -28096,6 +28458,12 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x83"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\x9C"
     "\xD0"
@@ -29315,6 +29683,7 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x80"
     " OPDS",
+    "Search",
     "\xD0"
     "\x9E"
     "\xD0"
@@ -31872,6 +32241,31 @@ const char* const STRINGS_UK[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_BE[] = {
@@ -36901,7 +37295,7 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB4"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -37858,6 +38252,12 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x83"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -39007,6 +39407,7 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x80"
     "",
+    "Search",
     "\xD0"
     "\x92"
     "\xD0"
@@ -41426,6 +41827,31 @@ const char* const STRINGS_BE[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_IT[] = {
@@ -41626,7 +42052,7 @@ const char* const STRINGS_IT[] = {
     "Sin, Indtr, Conf, Des",
     "Prec/Succ",
     "Succ/Prec",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -41671,6 +42097,12 @@ const char* const STRINGS_IT[] = {
     "Nessun URL del server configurato",
     "Recupero feed fallito",
     "Parsing feed fallito",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Rete: ",
     "Indirizzo IP: ",
     "o scansiona il codice QR con lo smartphone per connetterti al WiFi.",
@@ -41754,6 +42186,7 @@ const char* const STRINGS_IT[] = {
     "60 min",
     "Rimappa Pulsanti Frontali",
     "Browser OPDS",
+    "Search",
     "Copertina + Personalizzato",
     "Page overlay",
     "Keep Screen",
@@ -42205,6 +42638,31 @@ const char* const STRINGS_IT[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_PL[] = {
@@ -42792,7 +43250,7 @@ const char* const STRINGS_PL[] = {
     ", Prawo",
     "Poprz./Nast.",
     "Nast./Poprz.",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -42903,6 +43361,12 @@ const char* const STRINGS_PL[] = {
     " kana\xC5"
     "\x82"
     "u",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Sie\xC4"
     "\x87"
     ": ",
@@ -43082,6 +43546,7 @@ const char* const STRINGS_PL[] = {
     "60 min",
     "Skonfiguruj przednie przyciski",
     "OPDS Browser",
+    "Search",
     "Ok\xC5"
     "\x82"
     "adka + W\xC5"
@@ -43657,6 +44122,31 @@ const char* const STRINGS_PL[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44104,7 +44594,7 @@ const char* const STRINGS_FI[] = {
     "Vas, Tak, Vah, Oik",
     "Edell/Seur",
     "Seur/Edell",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -44221,6 +44711,12 @@ const char* const STRINGS_FI[] = {
     "sittely ep\xC3"
     "\xA4"
     "onnistui",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Verkko: ",
     "IP-osoite: ",
     "tai skannaa QR-koodi puhelimellasi yhdist\xC3"
@@ -44334,6 +44830,7 @@ const char* const STRINGS_FI[] = {
     "\xA4"
     " etupainikkeet",
     "OPDS-selain",
+    "Search",
     "Kansi + mukautettu",
     "Page overlay",
     "Keep Screen",
@@ -44879,6 +45376,31 @@ const char* const STRINGS_FI[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45226,7 +45748,7 @@ const char* const STRINGS_DA[] = {
     "N\xC3"
     "\xA6"
     "ste/Forrige",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -45289,6 +45811,12 @@ const char* const STRINGS_DA[] = {
     "Ingen server-URL konfigureret",
     "Kunne ikke hente feed",
     "Kunne ikke fortolke feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Netv\xC3"
     "\xA6"
     "rk: ",
@@ -45386,6 +45914,7 @@ const char* const STRINGS_DA[] = {
     "60 min",
     "Omtildel frontknapper",
     "OPDS Browser",
+    "Search",
     "Omslag + Brugerdefineret",
     "Page overlay",
     "Keep Screen",
@@ -45857,6 +46386,31 @@ const char* const STRINGS_DA[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46042,7 +46596,7 @@ const char* const STRINGS_NL[] = {
     "Links, Terug, Bev., Rechts",
     "Vorige/Volgende",
     "Volgende/Vorige",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -46087,6 +46641,12 @@ const char* const STRINGS_NL[] = {
     "Geen server-URL ingesteld",
     "Ophalen feed mislukt",
     "Verwerken feed mislukt",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Netwerk: ",
     "IP-adres: ",
     "of scan de QR-code met je telefoon voor wifi-verbinding.",
@@ -46164,6 +46724,7 @@ const char* const STRINGS_NL[] = {
     "60 min",
     "Knoppen voorzijde wijzigen",
     "OPDS-browser",
+    "Search",
     "Omslag + Aangepast",
     "Page overlay",
     "Keep Screen",
@@ -46603,6 +47164,31 @@ const char* const STRINGS_NL[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_TR[] = {
@@ -47392,7 +47978,7 @@ const char* const STRINGS_TR[] = {
     "Sonraki/\xC3"
     "\x96"
     "nceki",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -47553,6 +48139,12 @@ const char* const STRINGS_TR[] = {
     "lamad\xC4"
     "\xB1"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "A\xC4"
     "\x9F"
     ": ",
@@ -47804,6 +48396,7 @@ const char* const STRINGS_TR[] = {
     "c\xC4"
     "\xB1"
     "",
+    "Search",
     "Kapak + \xC3"
     "\x96"
     "zel",
@@ -48411,6 +49004,31 @@ const char* const STRINGS_TR[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_KK[] = {
@@ -49632,7 +50250,7 @@ const char* const STRINGS_KK[] = {
     "\xD0"
     "\xB7"
     "",
-    "Calibre Web URL",
+    "OPDS URL",
     "Connect as Wireless Device",
     "* = \xD0"
     "\xA8"
@@ -52226,7 +52844,7 @@ const char* const STRINGS_KK[] = {
     "\xD1"
     "\x8B"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -52983,6 +53601,12 @@ const char* const STRINGS_KK[] = {
     "\xD0"
     "\xB7"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\x96"
     "\xD0"
@@ -54048,6 +54672,7 @@ const char* const STRINGS_KK[] = {
     "\xD1"
     "\x8B"
     "",
+    "Search",
     "\xD0"
     "\x9C"
     "\xD2"
@@ -56565,6 +57190,31 @@ const char* const STRINGS_KK[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_VI[] = {
@@ -58276,7 +58926,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9B"
     "c",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -58585,6 +59235,12 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA5"
     "p",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "M\xE1"
     "\xBA"
     "\xA1"
@@ -58989,6 +59645,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x87"
     "t OPDS",
+    "Search",
     "B\xC3"
     "\xAC"
     "a + T\xC3"
@@ -61816,6 +62473,31 @@ const char* const STRINGS_VI[] = {
     " review h\xC3"
     "\xB4"
     "m nay:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_HU[] = {
@@ -62045,7 +62727,7 @@ const char* const STRINGS_HU[] = {
     "\xB3"
     "dot a telefonoddal:",
     "Calibre Wireless",
-    "Calibre Web URL",
+    "OPDS URL",
     "Connect as Wireless Device",
     "* = Titkos\xC3"
     "\xAD"
@@ -62533,7 +63215,7 @@ const char* const STRINGS_HU[] = {
     "z\xC5"
     "\x91"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -62672,6 +63354,12 @@ const char* const STRINGS_HU[] = {
     "rcsatorna feldolgoz\xC3"
     "\xA1"
     "sa sikertelen",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "H\xC3"
     "\xA1"
     "l\xC3"
@@ -62915,6 +63603,7 @@ const char* const STRINGS_HU[] = {
     "sz\xC5"
     "\x91"
     "",
+    "Search",
     "Bor\xC3"
     "\xAD"
     "t\xC3"
@@ -63614,6 +64303,31 @@ const char* const STRINGS_HU[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_LT[] = {
@@ -63747,7 +64461,7 @@ const char* const STRINGS_LT[] = {
     "\x85"
     ":",
     "Calibre belaidis",
-    "Calibre Web URL",
+    "OPDS URL",
     "Connect as Wireless Device",
     "* = U\xC5"
     "\xBE"
@@ -63993,7 +64707,7 @@ const char* const STRINGS_LT[] = {
     "Lft, Bck, Cnfrm, Rght",
     "Atgal/Pirmyn",
     "Pirmyn/Atgal",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "O. Dyslexic",
     "Bokerlam",
@@ -64070,6 +64784,12 @@ const char* const STRINGS_LT[] = {
     "\xB3"
     "",
     "Apdorojimo klaida",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Tinklas: ",
     "IP: ",
     "or scan QR code with your phone to connect to Wifi.",
@@ -64195,6 +64915,7 @@ const char* const STRINGS_LT[] = {
     "ykl\xC4"
     "\x97"
     "",
+    "Search",
     "Vir\xC5"
     "\xA1"
     "elis + Kita",
@@ -64728,6 +65449,31 @@ const char* const STRINGS_LT[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_SI[] = {
@@ -65013,7 +65759,7 @@ const char* const STRINGS_SI[] = {
     "Lft, Bck, Cnfrm, Rght",
     "Nazaj/Naprej",
     "Naprej/Nazaj",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -65076,6 +65822,12 @@ const char* const STRINGS_SI[] = {
     "Raz\xC4"
     "\x8D"
     "lenjevanje vira ni uspelo",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Omre\xC5"
     "\xBE"
     "je: ",
@@ -65175,6 +65927,7 @@ const char* const STRINGS_SI[] = {
     "60 min",
     "Prenastavi sprednje gumbe",
     "OPDS brskalnik",
+    "Search",
     "Naslovnica + po meri",
     "Page overlay",
     "Keep Screen",
@@ -65652,6 +66405,31 @@ const char* const STRINGS_SI[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "System Crash",
+    "A detailed report was saved to crash_report.txt. Please include this file in your bug report.",
+    "Crash reason:",
+    "(No reason was recorded)",
+    "Press LEFT or RIGHT to move cursor",
+    "Press LEFT to return to cursor position",
+    "Hold RIGHT then press [***] to hide password",
+    "Hold RIGHT then press [abc] to show password",
+    "Press [***] to hide password",
+    "Press [abc] to show password",
+    "Hold UP to edit entry",
+    "Tips:",
+    "Press DOWN to return to keyboard",
+    "Press ABC to exit URL mode",
+    "Hold DEL to clear all text",
+    "Hold SELECT for secondary char",
+    "Hold SELECT for UPPERCASE or secondary char",
+    "Hold SELECT for lowercase or secondary char",
+    "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 }  // namespace i18n_strings

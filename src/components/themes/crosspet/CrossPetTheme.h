@@ -62,6 +62,8 @@ class CrossPetTheme : public LyraTheme {
   virtual void drawConfirmDialog(const GfxRenderer& renderer, const char* title,
                                  const char* body, const char* cancelLabel,
                                  const char* confirmLabel, bool confirmSelected) const;
-  void drawKeyboardKey(const GfxRenderer& renderer, Rect rect, const char* label,
-                       const bool isSelected) const override;
+  void drawKeyboardKey(const GfxRenderer& renderer, Rect rect, const char* label, const bool isSelected,
+                       const char* secondaryLabel = nullptr,
+                       KeyboardKeyType keyType = KeyboardKeyType::Normal,
+                       bool inactiveSelection = false) const override;
 };

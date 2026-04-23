@@ -5,6 +5,7 @@
 #include <FsHelpers.h>
 #include <Logging.h>
 #include <Serialization.h>
+#include <XmlParserUtils.h>
 
 #include "../BookMetadataCache.h"
 
@@ -28,13 +29,7 @@ bool ContentOpfParser::setup() {
 }
 
 ContentOpfParser::~ContentOpfParser() {
-  if (parser) {
-    XML_StopParser(parser, XML_FALSE);                // Stop any pending processing
-    XML_SetElementHandler(parser, nullptr, nullptr);  // Clear callbacks
-    XML_SetCharacterDataHandler(parser, nullptr);
-    XML_ParserFree(parser);
-    parser = nullptr;
-  }
+  destroyXmlParser(parser);
   if (tempItemStore) {
     tempItemStore.close();
   }
@@ -57,11 +52,7 @@ size_t ContentOpfParser::write(const uint8_t* buffer, const size_t size) {
 
     if (!buf) {
       LOG_ERR("COF", "Couldn't allocate memory for buffer");
-      XML_StopParser(parser, XML_FALSE);                // Stop any pending processing
-      XML_SetElementHandler(parser, nullptr, nullptr);  // Clear callbacks
-      XML_SetCharacterDataHandler(parser, nullptr);
-      XML_ParserFree(parser);
-      parser = nullptr;
+      destroyXmlParser(parser);
       return 0;
     }
 
@@ -71,11 +62,7 @@ size_t ContentOpfParser::write(const uint8_t* buffer, const size_t size) {
     if (XML_ParseBuffer(parser, static_cast<int>(toRead), remainingSize == toRead) == XML_STATUS_ERROR) {
       LOG_DBG("COF", "Parse error at line %lu: %s", XML_GetCurrentLineNumber(parser),
               XML_ErrorString(XML_GetErrorCode(parser)));
-      XML_StopParser(parser, XML_FALSE);                // Stop any pending processing
-      XML_SetElementHandler(parser, nullptr, nullptr);  // Clear callbacks
-      XML_SetCharacterDataHandler(parser, nullptr);
-      XML_ParserFree(parser);
-      parser = nullptr;
+      destroyXmlParser(parser);
       return 0;
     }
 
@@ -124,16 +111,12 @@ void XMLCALL ContentOpfParser::startElement(void* userData, const XML_Char* name
     if (!Storage.openFileForWrite("COF", self->cachePath + itemCacheFile, self->tempItemStore)) {
       LOG_ERR("COF", "Couldn't open temp items file for writing. This is probably going to be a fatal error.");
     }
-    // Pre-reserve item index to avoid vector reallocation OOM.
-    // Without reserve, vector doubles at capacity boundaries — at 2048 entries (20KB)
-    // the realloc to 4096 temporarily needs 60KB (40KB new + 20KB old), crashing on ESP32-C3.
-    // Use at most 1/3 of largest free block so other allocations still succeed.
+    // Cap item index size to avoid unbounded heap growth on malformed/huge EPUBs.
+    // deque grows in chunks without big reallocs, so no pre-reserve needed.
     const size_t maxBlock = ESP.getMaxAllocHeap();
-    const size_t maxEntries = maxBlock / (3 * sizeof(ItemIndexEntry));
-    if (maxEntries >= 64) {
-      self->itemIndex.reserve(std::min(maxEntries, static_cast<size_t>(8192)));
-      LOG_DBG("COF", "Reserved item index for %zu entries (heap: %zu)", self->itemIndex.capacity(), maxBlock);
-    }
+    const size_t heapBound = maxBlock / (3 * sizeof(ItemIndexEntry));
+    self->maxItemIndexEntries = std::min(heapBound, static_cast<size_t>(8192));
+    LOG_DBG("COF", "Item index cap: %zu entries (heap: %zu)", self->maxItemIndexEntries, maxBlock);
     return;
   }
 
@@ -200,8 +183,8 @@ void XMLCALL ContentOpfParser::startElement(void* userData, const XML_Char* name
       }
     }
 
-    // Record index entry for fast lookup later (within pre-reserved capacity to avoid realloc OOM)
-    if (self->tempItemStore && self->itemIndex.size() < self->itemIndex.capacity()) {
+    // Record index entry for fast lookup later (capped to bound heap growth)
+    if (self->tempItemStore && self->itemIndex.size() < self->maxItemIndexEntries) {
       ItemIndexEntry entry;
       entry.idHash = fnvHash(itemId);
       entry.idLen = static_cast<uint16_t>(itemId.size());

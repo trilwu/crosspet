@@ -278,6 +278,7 @@ bool ZipFile::open() {
 
 bool ZipFile::close() {
   if (file) {
+    // Explicit close() required: member variable persists beyond function scope
     file.close();
   }
   lastCentralDirPos = 0;
@@ -295,7 +296,7 @@ bool ZipFile::getInflatedFileSize(const char* filename, size_t* size) {
   return true;
 }
 
-int ZipFile::fillUncompressedSizes(std::vector<SizeTarget>& targets, std::vector<uint32_t>& sizes) {
+int ZipFile::fillUncompressedSizes(std::deque<SizeTarget>& targets, std::deque<uint32_t>& sizes) {
   if (targets.empty()) {
     return 0;
   }
@@ -400,6 +401,7 @@ uint8_t* ZipFile::readFileToMemory(const char* filename, size_t* size, const boo
     const auto deflatedData = static_cast<uint8_t*>(malloc(deflatedDataSize));
     if (deflatedData == nullptr) {
       LOG_ERR("ZIP", "Failed to allocate memory for decompression buffer");
+      free(data);
       return nullptr;
     }
 
@@ -430,6 +432,7 @@ uint8_t* ZipFile::readFileToMemory(const char* filename, size_t* size, const boo
     // Continue out of block with data set
   } else {
     LOG_ERR("ZIP", "Unsupported compression method");
+    free(data);
     return nullptr;
   }
 
@@ -469,7 +472,11 @@ bool ZipFile::readFileToStream(const char* filename, Print& out, const size_t ch
         return false;
       }
 
-      out.write(buffer, dataRead);
+      if (out.write(buffer, dataRead) != dataRead) {
+        LOG_ERR("ZIP", "Failed to write all output bytes to stream");
+        free(buffer);
+        return false;
+      }
       remaining -= dataRead;
     }
 

@@ -6,6 +6,12 @@
 #include <algorithm>
 #include <cstring>
 #include <cstdio>
+#include <memory>
+
+// Storage.readFile() caps at 50KB inside SDCardManager, which silently truncated
+// 500-card decks. Flashcards use this larger cap when loading/importing so real
+// decks don't lose their tail. Allocation is one-shot and freed before render.
+static constexpr size_t FLASHCARD_MAX_FILE_BYTES = 256 * 1024;
 
 static constexpr const char* TAG = "FlashcardDeck";
 
@@ -129,13 +135,34 @@ bool FlashcardDeck::loadFromCsv(const char* path) {
     cards.clear();
     filePath = path;
 
-    String content = Storage.readFile(path);
-    if (content.isEmpty()) {
-        LOG_ERR(TAG, "Failed to read CSV: %s", path);
+    // Use size-aware read — SDCardManager::readFile caps at 50KB and would
+    // silently drop the tail of any real 500-card deck.
+    HalFile probe;
+    if (!Storage.openFileForRead(TAG, path, probe)) {
+        LOG_ERR(TAG, "Failed to open CSV: %s", path);
+        return false;
+    }
+    const size_t fsize = probe.size();
+    probe.close();
+    if (fsize == 0 || fsize > FLASHCARD_MAX_FILE_BYTES) {
+        LOG_ERR(TAG, "CSV size out of range: %u (max %u): %s",
+                (unsigned)fsize, (unsigned)FLASHCARD_MAX_FILE_BYTES, path);
         return false;
     }
 
-    const char* ptr = content.c_str();
+    std::unique_ptr<char[]> buffer(new (std::nothrow) char[fsize + 1]);
+    if (!buffer) {
+        LOG_ERR(TAG, "Out of heap for deck buffer (%u bytes)", (unsigned)(fsize + 1));
+        return false;
+    }
+    const size_t bytesRead = Storage.readFileToBuffer(path, buffer.get(), fsize + 1);
+    if (bytesRead == 0) {
+        LOG_ERR(TAG, "Failed to read CSV: %s", path);
+        return false;
+    }
+    buffer[bytesRead] = '\0';
+
+    const char* ptr = buffer.get();
 
     // Skip header line
     while (*ptr != '\0' && *ptr != '\n') ++ptr;
@@ -198,37 +225,64 @@ bool FlashcardDeck::loadFromCsv(const char* path) {
 }
 
 bool FlashcardDeck::saveToCsv(const char* path) const {
-    // Build CSV in memory
-    std::string csv;
-    csv.reserve(cards.size() * 60);
-    csv += "card_id,front_content,back_content,sr_due,sr_interval,sr_ease\n";
+    // Stream the CSV directly to the SD card one line at a time. The previous
+    // implementation built the whole file in a std::string and then copied it
+    // into an Arduino String before writing — under -fno-exceptions this
+    // aborted (→ reboot) on larger decks when free heap was already consumed
+    // by two font caches. ~200 bytes of stack + a 2KB line buffer is enough.
+    std::string tmpPath = std::string(path) + ".tmp";
 
+    HalFile out;
+    if (!Storage.openFileForWrite(TAG, tmpPath, out)) {
+        LOG_ERR(TAG, "Failed to open tmp file: %s", tmpPath.c_str());
+        return false;
+    }
+
+    auto writeAll = [&](const char* data, size_t len) -> bool {
+        return out.write(reinterpret_cast<const uint8_t*>(data), len) == len;
+    };
+    auto writeStr = [&](const std::string& s) -> bool {
+        return writeAll(s.data(), s.size());
+    };
+
+    bool ok = writeAll("card_id,front_content,back_content,sr_due,sr_interval,sr_ease\n", 63);
+
+    std::string lineField;
     char dateBuf[12];
+    char numBuf[16];
     for (const auto& card : cards) {
-        csv += std::to_string(card.id);
-        csv += ',';
-        writeCsvField(csv, card.frontContent);
-        csv += ',';
-        writeCsvField(csv, card.backContent);
-        csv += ',';
+        if (!ok) break;
+        int n = snprintf(numBuf, sizeof(numBuf), "%u,", (unsigned)card.id);
+        ok = ok && writeAll(numBuf, (size_t)n);
+
+        lineField.clear();
+        writeCsvField(lineField, card.frontContent);
+        ok = ok && writeStr(lineField);
+        ok = ok && writeAll(",", 1);
+
+        lineField.clear();
+        writeCsvField(lineField, card.backContent);
+        ok = ok && writeStr(lineField);
+        ok = ok && writeAll(",", 1);
 
         if (card.srs.dueDate != 0) {
             FlashcardSrs::formatDateStr(card.srs.dueDate, dateBuf, sizeof(dateBuf));
-            csv += dateBuf;
-            csv += ',';
-            csv += std::to_string(card.srs.interval);
-            csv += ',';
-            csv += std::to_string(card.srs.ease);
+            n = snprintf(numBuf, sizeof(numBuf), "%s,", dateBuf);
+            ok = ok && writeAll(numBuf, (size_t)n);
+            n = snprintf(numBuf, sizeof(numBuf), "%u,", (unsigned)card.srs.interval);
+            ok = ok && writeAll(numBuf, (size_t)n);
+            n = snprintf(numBuf, sizeof(numBuf), "%u", (unsigned)card.srs.ease);
+            ok = ok && writeAll(numBuf, (size_t)n);
         } else {
-            csv += ",,";  // new card — empty SRS fields
+            ok = ok && writeAll(",,", 2);
         }
-        csv += '\n';
+        ok = ok && writeAll("\n", 1);
     }
 
-    // Atomic write: .tmp → rename
-    std::string tmpPath = std::string(path) + ".tmp";
-    if (!Storage.writeFile(tmpPath.c_str(), String(csv.c_str()))) {
-        LOG_ERR(TAG, "Failed to write tmp file: %s", tmpPath.c_str());
+    out.close();
+    if (!ok) {
+        Storage.remove(tmpPath.c_str());
+        LOG_ERR(TAG, "Failed streaming write: %s", tmpPath.c_str());
         return false;
     }
 
@@ -258,17 +312,39 @@ bool FlashcardDeck::importCsv(const char* srcPath) {
 
     std::string destPath = std::string(FLASHCARD_DIR) + "/" + filename;
 
-    // Read source file content and write to destination
-    // Use a chunked read to avoid large heap allocations where possible,
-    // but for CSV files within deck size limits String is acceptable.
-    String content = Storage.readFile(srcPath);
-    if (content.isEmpty()) {
-        LOG_ERR(TAG, "importCsv: cannot read source: %s", srcPath);
+    // Chunked file-to-file copy. Previously this used Storage.readFile()+writeFile()
+    // which allocates the whole file as String AND caps at 50KB, so a real 500-card
+    // deck was truncated at import time.
+    HalFile src;
+    if (!Storage.openFileForRead(TAG, srcPath, src)) {
+        LOG_ERR(TAG, "importCsv: cannot open source: %s", srcPath);
         return false;
     }
 
-    if (!Storage.writeFile(destPath.c_str(), content)) {
-        LOG_ERR(TAG, "importCsv: failed to write: %s", destPath.c_str());
+    HalFile dst;
+    if (!Storage.openFileForWrite(TAG, destPath, dst)) {
+        LOG_ERR(TAG, "importCsv: cannot open destination: %s", destPath.c_str());
+        src.close();
+        return false;
+    }
+
+    char buf[512];
+    bool ok = true;
+    while (src.available()) {
+        int n = src.read(buf, sizeof(buf));
+        if (n <= 0) break;
+        if (dst.write(buf, (size_t)n) != (size_t)n) {
+            LOG_ERR(TAG, "importCsv: write failed: %s", destPath.c_str());
+            ok = false;
+            break;
+        }
+    }
+    dst.flush();
+    dst.close();
+    src.close();
+
+    if (!ok) {
+        Storage.remove(destPath.c_str());
         return false;
     }
 
@@ -341,6 +417,14 @@ bool FlashcardDeck::updateCard(size_t index, const SrsState& newState) {
 // FlashcardDeck — static helpers
 // ---------------------------------------------------------------------------
 
+// Case-insensitive ".csv" suffix test — SdFat can surface either case.
+static bool hasCsvSuffix(const std::string& fname) {
+    if (fname.size() <= 4) return false;
+    const std::string tail = fname.substr(fname.size() - 4);
+    return (tail == ".csv" || tail == ".CSV" || tail == ".Csv" || tail == ".cSv" ||
+            tail == ".csV" || tail == ".CSv" || tail == ".cSV" || tail == ".CsV");
+}
+
 std::vector<std::string> FlashcardDeck::listDecks() {
     std::vector<std::string> result;
 
@@ -350,20 +434,27 @@ std::vector<std::string> FlashcardDeck::listDecks() {
         return result;
     }
 
+    // CRITICAL: SdFatConfig.h has DESTRUCTOR_CLOSES_FILE=0 so the HalFile dtor
+    // does NOT release the underlying FsFile slot. Every call to listDecks()
+    // used to leak 1 dir handle + N entry handles; after a few enter/exit
+    // cycles the open-slot pool was exhausted, silently breaking every further
+    // sd.open() — both flashcard deck scans (decks "disappear") and the
+    // WebDAV/HTTP server (crosspoint.local hangs). Must close explicitly.
     dir.rewindDirectory();
-    HalFile entry = dir.openNextFile();
-    while (entry) {
+    while (true) {
+        HalFile entry = dir.openNextFile();
+        if (!entry) break;
         if (!entry.isDirectory()) {
             char nameBuf[128];
             entry.getName(nameBuf, sizeof(nameBuf));
             std::string fname(nameBuf);
-            if (fname.size() > 4 &&
-                fname.substr(fname.size() - 4) == ".csv") {
+            if (hasCsvSuffix(fname)) {
                 result.push_back(std::string(FLASHCARD_DIR) + "/" + fname);
             }
         }
-        entry = dir.openNextFile();
+        entry.close();
     }
+    dir.close();
 
     // Sort alphabetically for consistent ordering
     std::sort(result.begin(), result.end());

@@ -1,6 +1,7 @@
 #include "Epub.h"
 
 #include <Arduino.h>  // yield()
+#include <new>        // std::nothrow (abort guard under -fno-exceptions)
 #include <FsHelpers.h>
 #include <HalStorage.h>
 #include <JpegToBmpConverter.h>
@@ -156,6 +157,7 @@ bool Epub::parseTocNcxFile() const {
     return false;
   }
   readItemContentsToStream(tocNcxItem, tempNcxFile, 1024);
+  // Explicitly close() file before reopening for reading
   tempNcxFile.close();
   if (!Storage.openFileForRead("EBP", tmpNcxPath, tempNcxFile)) {
     return false;
@@ -166,14 +168,12 @@ bool Epub::parseTocNcxFile() const {
 
   if (!ncxParser.setup()) {
     LOG_ERR("EBP", "Could not setup toc ncx parser");
-    tempNcxFile.close();
     return false;
   }
 
   const auto ncxBuffer = static_cast<uint8_t*>(malloc(1024));
   if (!ncxBuffer) {
     LOG_ERR("EBP", "Could not allocate memory for toc ncx parser");
-    tempNcxFile.close();
     return false;
   }
 
@@ -186,7 +186,6 @@ bool Epub::parseTocNcxFile() const {
     if (processedSize != readSize) {
       LOG_ERR("EBP", "Could not process all toc ncx data");
       free(ncxBuffer);
-      tempNcxFile.close();
       return false;
     }
     // Feed watchdog on large TOC files (2000+ chapters)
@@ -194,6 +193,7 @@ bool Epub::parseTocNcxFile() const {
   }
 
   free(ncxBuffer);
+  // Explicitly close() file before calling Storage.remove()
   tempNcxFile.close();
   Storage.remove(tmpNcxPath.c_str());
 
@@ -216,6 +216,7 @@ bool Epub::parseTocNavFile() const {
     return false;
   }
   readItemContentsToStream(tocNavItem, tempNavFile, 1024);
+  // Explicitly close() file before reopening for reading
   tempNavFile.close();
   if (!Storage.openFileForRead("EBP", tmpNavPath, tempNavFile)) {
     return false;
@@ -246,7 +247,6 @@ bool Epub::parseTocNavFile() const {
     if (processedSize != readSize) {
       LOG_ERR("EBP", "Could not process all toc nav data");
       free(navBuffer);
-      tempNavFile.close();
       return false;
     }
     // Feed watchdog on large nav files (211KB+ with 2000+ TOC entries)
@@ -254,6 +254,7 @@ bool Epub::parseTocNavFile() const {
   }
 
   free(navBuffer);
+  // Explicitly close() file before calling Storage.remove()
   tempNavFile.close();
   Storage.remove(tmpNavPath.c_str());
 
@@ -311,10 +312,12 @@ void Epub::parseCssFiles() const {
     }
     if (!readItemContentsToStream(cssPath, tempCssFile, 1024)) {
       LOG_ERR("EBP", "Could not read CSS file: %s", cssPath.c_str());
+      // Explicitly close() file before calling Storage.remove()
       tempCssFile.close();
       Storage.remove(tmpCssPath.c_str());
       continue;
     }
+    // Explicitly close() file before reopening for reading
     tempCssFile.close();
 
     // Parse the CSS file
@@ -324,6 +327,7 @@ void Epub::parseCssFiles() const {
       continue;
     }
     cssParser->loadFromStream(tempCssFile);
+    // Explicitly close() file before calling Storage.remove()
     tempCssFile.close();
     Storage.remove(tmpCssPath.c_str());
   }
@@ -348,11 +352,31 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
   // Guard: check heap before loading — large EPUBs (2000+ chapters, 250KB+ OPF)
   // require ~80KB of working memory for parsing, indexing, and cache building.
   // When cache exists, loading from cache + skipping CSS only needs ~40KB.
+  // BLE builds: NimBLE keeps ~40–50KB resident once initialized, so the 80KB
+  // guard can pass with actual free heap that still aborts mid-parse when a
+  // malloc fails (exceptions disabled → abort() → WDT reset). Raise the
+  // build-path threshold to compensate.
+#ifdef ENABLE_BLE
+  constexpr size_t MIN_HEAP_FOR_EPUB_BUILD = 100 * 1024;
+  // BLE resident cost leaves ~35-45KB free. Cached load peaks at ~28KB
+  // (metadata hash + section index). Relax from 40KB → 30KB to let books
+  // open while remote is connected. std::nothrow in converters + null
+  // checks downstream prevent abort on the edge case.
+  constexpr size_t MIN_HEAP_FOR_CACHED_LOAD = 30 * 1024;
+#else
   constexpr size_t MIN_HEAP_FOR_EPUB_BUILD = 80 * 1024;
   constexpr size_t MIN_HEAP_FOR_CACHED_LOAD = 40 * 1024;
+#endif
 
-  // Initialize spine/TOC cache
-  bookMetadataCache.reset(new BookMetadataCache(cachePath));
+  // Initialize spine/TOC cache (std::nothrow: -fno-exceptions → abort() on fail)
+  {
+    auto* cache = new (std::nothrow) BookMetadataCache(cachePath);
+    if (!cache) {
+      LOG_ERR("EBP", "Failed to allocate BookMetadataCache (heap=%zu)", ESP.getFreeHeap());
+      return false;
+    }
+    bookMetadataCache.reset(cache);
+  }
 
   // Try to load existing cache first — cheap path, needs less heap
   if (bookMetadataCache->load()) {
@@ -366,7 +390,13 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
       return false;
     }
     // CssParser needed for inline style parsing even without CSS files
-    cssParser.reset(new CssParser(cachePath));
+    auto* parser = new (std::nothrow) CssParser(cachePath);
+    if (!parser) {
+      LOG_ERR("EBP", "Failed to allocate CssParser (heap=%zu)", ESP.getFreeHeap());
+      bookMetadataCache.reset();
+      return false;
+    }
+    cssParser.reset(parser);
     if (!skipLoadingCss) {
       // Rebuild CSS cache when missing or when cache version changed (loadFromCache removes stale file)
       if (!cssParser->hasCache() || !cssParser->loadFromCache()) {
@@ -483,14 +513,26 @@ bool Epub::load(const bool buildIfMissing, const bool skipLoadingCss) {
   }
 
   // Reload the cache from disk so it's in the correct state
-  bookMetadataCache.reset(new BookMetadataCache(cachePath));
+  {
+    auto* cache = new (std::nothrow) BookMetadataCache(cachePath);
+    if (!cache) {
+      LOG_ERR("EBP", "Failed to reallocate BookMetadataCache post-build (heap=%zu)", ESP.getFreeHeap());
+      return false;
+    }
+    bookMetadataCache.reset(cache);
+  }
   if (!bookMetadataCache->load()) {
     LOG_ERR("EBP", "Failed to reload cache after writing");
     return false;
   }
 
   // Create CssParser after cache build to reduce peak heap during indexing
-  cssParser.reset(new CssParser(cachePath));
+  auto* parser = new (std::nothrow) CssParser(cachePath);
+  if (!parser) {
+    LOG_ERR("EBP", "Failed to allocate CssParser post-build (heap=%zu)", ESP.getFreeHeap());
+    return false;
+  }
+  cssParser.reset(parser);
   if (!skipLoadingCss) {
     // Parse CSS files after cache reload
     parseCssFiles();
@@ -586,6 +628,7 @@ bool Epub::generateCoverBmp(bool cropped) const {
       return false;
     }
     readItemContentsToStream(coverImageHref, coverJpg, 1024);
+    // Explicitly close() file before reopening for reading
     coverJpg.close();
 
     if (!Storage.openFileForRead("EBP", coverJpgTempPath, coverJpg)) {
@@ -594,10 +637,10 @@ bool Epub::generateCoverBmp(bool cropped) const {
 
     FsFile coverBmp;
     if (!Storage.openFileForWrite("EBP", getCoverBmpPath(cropped), coverBmp)) {
-      coverJpg.close();
       return false;
     }
     const bool success = JpegToBmpConverter::jpegFileToBmpStream(coverJpg, coverBmp, cropped);
+    // Explicitly close() files before calling Storage.remove()
     coverJpg.close();
     coverBmp.close();
     Storage.remove(coverJpgTempPath.c_str());
@@ -619,6 +662,7 @@ bool Epub::generateCoverBmp(bool cropped) const {
       return false;
     }
     readItemContentsToStream(coverImageHref, coverPng, 1024);
+    // Explicitly close() file before reopening for reading
     coverPng.close();
 
     if (!Storage.openFileForRead("EBP", coverPngTempPath, coverPng)) {
@@ -627,10 +671,10 @@ bool Epub::generateCoverBmp(bool cropped) const {
 
     FsFile coverBmp;
     if (!Storage.openFileForWrite("EBP", getCoverBmpPath(cropped), coverBmp)) {
-      coverPng.close();
       return false;
     }
     const bool success = PngToBmpConverter::pngFileToBmpStream(coverPng, coverBmp, cropped);
+    // Explicitly close() files before calling Storage.remove()
     coverPng.close();
     coverBmp.close();
     Storage.remove(coverPngTempPath.c_str());
@@ -674,6 +718,7 @@ bool Epub::generateThumbBmp(int height) const {
       return false;
     }
     readItemContentsToStream(coverImageHref, coverJpg, 1024);
+    // Explicitly close() file before reopening for reading
     coverJpg.close();
 
     if (!Storage.openFileForRead("EBP", coverJpgTempPath, coverJpg)) {
@@ -682,7 +727,6 @@ bool Epub::generateThumbBmp(int height) const {
 
     FsFile thumbBmp;
     if (!Storage.openFileForWrite("EBP", getThumbBmpPath(height), thumbBmp)) {
-      coverJpg.close();
       return false;
     }
     // Use smaller target size for Continue Reading card (half of screen: 240x400)
@@ -691,6 +735,7 @@ bool Epub::generateThumbBmp(int height) const {
     int THUMB_TARGET_HEIGHT = height;
     const bool success = JpegToBmpConverter::jpegFileTo1BitBmpStreamWithSize(coverJpg, thumbBmp, THUMB_TARGET_WIDTH,
                                                                              THUMB_TARGET_HEIGHT);
+    // Explicitly close() files before calling Storage.remove()
     coverJpg.close();
     thumbBmp.close();
     Storage.remove(coverJpgTempPath.c_str());
@@ -710,6 +755,7 @@ bool Epub::generateThumbBmp(int height) const {
       return false;
     }
     readItemContentsToStream(coverImageHref, coverPng, 1024);
+    // Explicitly close() file before reopening for reading
     coverPng.close();
 
     if (!Storage.openFileForRead("EBP", coverPngTempPath, coverPng)) {
@@ -718,13 +764,13 @@ bool Epub::generateThumbBmp(int height) const {
 
     FsFile thumbBmp;
     if (!Storage.openFileForWrite("EBP", getThumbBmpPath(height), thumbBmp)) {
-      coverPng.close();
       return false;
     }
     int THUMB_TARGET_WIDTH = height * 0.6;
     int THUMB_TARGET_HEIGHT = height;
     const bool success =
         PngToBmpConverter::pngFileTo1BitBmpStreamWithSize(coverPng, thumbBmp, THUMB_TARGET_WIDTH, THUMB_TARGET_HEIGHT);
+    // Explicitly close() files before calling Storage.remove()
     coverPng.close();
     thumbBmp.close();
     Storage.remove(coverPngTempPath.c_str());
@@ -742,7 +788,6 @@ bool Epub::generateThumbBmp(int height) const {
   // Write an empty bmp file to avoid generation attempts in the future
   FsFile thumbBmp;
   Storage.openFileForWrite("EBP", getThumbBmpPath(height), thumbBmp);
-  thumbBmp.close();
   return false;
 }
 

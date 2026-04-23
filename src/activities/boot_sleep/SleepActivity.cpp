@@ -21,6 +21,7 @@
 #include "CrossPointState.h"
 #include "BookStats.h"
 #include "ReadingStats.h"
+#include "activities/reader/ReaderUtils.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/Logo120.h"
@@ -171,11 +172,18 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
 
 void SleepActivity::onEnter() {
   Activity::onEnter();
-  // Persist current time to SD so it survives power cycles
-  // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact
+
+  // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact.
+  // Show popup with reader orientation only when going to sleep from reader.
   if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY &&
       SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::KEEP_SCREEN) {
-    GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+    if (APP_STATE.lastSleepFromReader) {
+      ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
+      GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+      renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+    } else {
+      GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+    }
   }
 
   switch (SETTINGS.sleepScreen) {
@@ -247,7 +255,6 @@ void SleepActivity::renderCustomSleepScreen() const {
   if (dir && dir.isDirectory()) {
     sleepDir = "/.sleep";
   } else {
-    if (dir) dir.close();
     dir = Storage.open("/sleep");
     if (dir && dir.isDirectory()) {
       sleepDir = "/sleep";
@@ -260,33 +267,32 @@ void SleepActivity::renderCustomSleepScreen() const {
     // Collect BMP files by extension only (skip parseHeaders during scan)
     for (auto file = dir.openNextFile(); file; file = dir.openNextFile()) {
       if (file.isDirectory()) {
-        file.close();
         continue;
       }
       file.getName(name, sizeof(name));
       auto filename = std::string(name);
       if (filename[0] == '.') {
-        file.close();
         continue;
       }
 
       if (!FsHelpers::hasBmpExtension(filename)) {
         LOG_DBG("SLP", "Skipping non-.bmp file name: %s", name);
-        file.close();
         continue;
       }
       files.emplace_back(filename);
-      file.close();
     }
     const auto numFiles = files.size();
     if (numFiles > 0) {
-      // Generate a random number between 1 and numFiles
-      auto randomFileIndex = random(numFiles);
-      // If we picked the same image as last time, reroll
-      while (numFiles > 1 && APP_STATE.lastSleepImage != UINT8_MAX && randomFileIndex == APP_STATE.lastSleepImage) {
-        randomFileIndex = random(numFiles);
+      // Pick a random wallpaper, excluding recently shown ones.
+      // Window: up to SLEEP_RECENT_COUNT entries, capped at numFiles-1.
+      const uint16_t fileCount = static_cast<uint16_t>(std::min(numFiles, static_cast<size_t>(UINT16_MAX)));
+      const uint8_t window =
+          static_cast<uint8_t>(std::min(static_cast<size_t>(APP_STATE.recentSleepFill), numFiles - 1));
+      auto randomFileIndex = static_cast<uint16_t>(random(fileCount));
+      for (uint8_t attempt = 0; attempt < 20 && APP_STATE.isRecentSleep(randomFileIndex, window); attempt++) {
+        randomFileIndex = static_cast<uint16_t>(random(fileCount));
       }
-      APP_STATE.lastSleepImage = randomFileIndex;
+      APP_STATE.pushRecentSleep(randomFileIndex);
       APP_STATE.saveToFile();
       const auto sourcePath = std::string(sleepDir) + "/" + files[randomFileIndex];
       // Try cache first
@@ -305,12 +311,9 @@ void SleepActivity::renderCustomSleepScreen() const {
           dir.close();
           return;
         }
-        file.close();
       }
     }
   }
-  if (dir) dir.close();
-
   // Look for sleep.bmp on the root of the sd card to determine if we should
   // render a custom sleep screen instead of the default.
   {
@@ -552,7 +555,6 @@ void SleepActivity::renderCoverSleepScreen() const {
       file.close();
       return;
     }
-    file.close();
   }
 
   return (this->*renderNoCoverSleepScreen)();
@@ -1265,11 +1267,15 @@ void SleepActivity::renderOverlaySleepScreen() const {
     }
     const auto numFiles = files.size();
     if (numFiles > 0) {
-      auto randomFileIndex = random(numFiles);
-      while (numFiles > 1 && randomFileIndex == APP_STATE.lastSleepImage) {
-        randomFileIndex = random(numFiles);
+      // Same recency-buffer pick as renderSleep() — avoids short-session repeats.
+      const uint16_t fileCount = static_cast<uint16_t>(std::min(numFiles, static_cast<size_t>(UINT16_MAX)));
+      const uint8_t window =
+          static_cast<uint8_t>(std::min(static_cast<size_t>(APP_STATE.recentSleepFill), numFiles - 1));
+      auto randomFileIndex = static_cast<uint16_t>(random(fileCount));
+      for (uint8_t attempt = 0; attempt < 20 && APP_STATE.isRecentSleep(randomFileIndex, window); attempt++) {
+        randomFileIndex = static_cast<uint16_t>(random(fileCount));
       }
-      APP_STATE.lastSleepImage = randomFileIndex;
+      APP_STATE.pushRecentSleep(randomFileIndex);
       APP_STATE.saveToFile();
       const std::string selected = "/sleep/" + files[randomFileIndex];
       if (FsHelpers::checkFileExtension(selected, ".png")) {

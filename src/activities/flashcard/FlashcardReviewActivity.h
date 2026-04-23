@@ -29,4 +29,6 @@ private:
     uint32_t today = 0;
     uint8_t saveCounter = 0;  // batch save every 5 cards
     size_t maxQueueSize = 0;  // cap for re-queue growth (2x initial)
+    bool pendingSave = false; // deferred save flushed from loop() to avoid
+                              // SD contention with the render task
 };

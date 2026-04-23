@@ -121,7 +121,7 @@ void ConferenceBadgeActivity::openFieldEditor(const int field) {
   }
 
   startActivityForResult(
-      std::make_unique<KeyboardEntryActivity>(renderer, mappedInput, title, *target, maxLen, false),
+      std::make_unique<KeyboardEntryActivity>(renderer, mappedInput, title, *target, maxLen, InputType::Text),
       [this, target](const ActivityResult& result) {
         if (!result.isCancelled) {
           *target = std::get<KeyboardResult>(result.data).text;
