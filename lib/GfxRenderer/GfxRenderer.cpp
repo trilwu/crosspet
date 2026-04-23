@@ -365,7 +365,6 @@ void GfxRenderer::drawText(const int fontId, const int x, const int y, const cha
     // External font rendering — bypass built-in glyph if external font handles it
     if (tryRenderExternalGlyph(*this, fontId, font, cp, &lastBaseX, yPos, black, style)) {
       // tryRenderExternalGlyph already advanced lastBaseX by the glyph advance
-      lastBaseAdvanceFP = 0;  // advance already applied to lastBaseX
       prevAdvanceFP = 0;
       lastBaseTop = 0;
       prevCp = cp;

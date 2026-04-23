@@ -313,7 +313,9 @@ bool Section::createSectionFile(const int fontId, const float lineCompression, c
     LOG_ERR("SCT", "Failed to open section file for reading after creation");
     return false;
   }
-  this->lut = std::move(lut);
+  this->lut.clear();
+  this->lut.reserve(lut.size());
+  for (const auto& entry : lut) this->lut.push_back(entry.fileOffset);
   return true;
 }
 

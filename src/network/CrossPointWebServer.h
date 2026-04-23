@@ -83,6 +83,7 @@ class CrossPointWebServer {
   // WebSocket upload state
   void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length);
   static void wsEventCallback(uint8_t num, WStype_t type, uint8_t* payload, size_t length);
+  void abortWsUpload(const char* tag);
 
   // File scanning
   void scanFiles(const char* path, bool showHidden, const std::function<void(FileInfo)>& callback) const;

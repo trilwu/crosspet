@@ -6,7 +6,6 @@
 #include <WiFi.h>
 
 #include "ButtonRemapActivity.h"
-#include "CalibreSettingsActivity.h"
 #include <FontManager.h>
 
 #include "FontSelectActivity.h"

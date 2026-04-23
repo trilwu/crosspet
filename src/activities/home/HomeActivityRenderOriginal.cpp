@@ -15,14 +15,6 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 
-// ── Menu item count ───────────────────────────────────────────────────────────
-
-int HomeActivity::getMenuItemCount() const {
-  int count = 4;  // File Browser, Recents, File Transfer, Settings
-  if (!recentBooks.empty()) count += recentBooks.size();
-  return count;
-}
-
 // ── Original loop ─────────────────────────────────────────────────────────────
 
 void HomeActivity::loopOriginal() {

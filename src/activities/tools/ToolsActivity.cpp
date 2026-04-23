@@ -15,6 +15,8 @@
 #include "ReadingStatsActivity.h"
 #include "SleepImagePickerActivity.h"
 #include "activities/browser/OpdsBookBrowserActivity.h"
+#include "activities/settings/OpdsServerListActivity.h"
+#include "OpdsServerStore.h"
 #include "../flashcard/FlashcardDeckListActivity.h"
 #include "components/UITheme.h"
 #include "CrossPetSettings.h"
@@ -58,10 +60,15 @@ void ToolsActivity::buildMenu() {
       activityManager.pushActivity(std::make_unique<FlashcardDeckListActivity>(renderer, mappedInput));
     }});
 
-  // OPDS browser (if configured)
-  if (SETTINGS.opdsServerUrl[0])
+  // OPDS browser (if any servers configured)
+  if (OPDS_STORE.hasServers())
     menuEntries.push_back({StrId::STR_OPDS_BROWSER, [this] {
-      activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput));
+      const auto& servers = OPDS_STORE.getServers();
+      if (servers.size() == 1) {
+        activityManager.pushActivity(std::make_unique<OpdsBookBrowserActivity>(renderer, mappedInput, servers[0]));
+      } else {
+        activityManager.pushActivity(std::make_unique<OpdsServerListActivity>(renderer, mappedInput, true));
+      }
     }});
 
   // Games — single master toggle for all games
