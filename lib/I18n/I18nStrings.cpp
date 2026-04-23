@@ -135,6 +135,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xE2"
     "\x80"
     "\x94"
@@ -145,6 +147,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC2"
     "\xBF"
     "\xC3"
@@ -169,6 +173,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x89"
     "\xC3"
@@ -202,6 +208,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x84"
     "\xC3"
@@ -227,6 +235,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x81"
     "\xC3"
@@ -290,6 +300,8 @@ const char* const CHARACTER_SETS[] = {
     "\xB0"
     "\xC2"
     "\xBA"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\xA1"
     "\xC3"
@@ -441,6 +453,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x84"
     "\xC3"
@@ -467,6 +481,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x82"
     "\xC3"
@@ -497,6 +513,8 @@ const char* const CHARACTER_SETS[] = {
     "\xB0"
     "\xC2"
     "\xB7"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x92"
     "\xC3"
@@ -525,6 +543,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xD0"
     "\x86"
     "\xD0"
@@ -777,6 +797,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x80"
     "\xC3"
@@ -801,6 +823,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\xB3"
     "\xC4"
@@ -831,6 +855,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x84"
     "\xC3"
@@ -845,6 +871,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x85"
     "\xC3"
@@ -865,6 +893,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\xAB"
     "\xC3"
@@ -879,6 +909,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x87"
     "\xC3"
@@ -911,6 +943,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xD0"
     "\x86"
     "\xD0"
@@ -1045,6 +1079,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x80"
     "\xC3"
@@ -1286,6 +1322,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC3"
     "\x81"
     "\xC3"
@@ -1320,6 +1358,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC4"
     "\x85"
     "\xC4"
@@ -1358,6 +1398,8 @@ const char* const CHARACTER_SETS[] = {
     "\xAB"
     "\xC2"
     "\xB0"
+    "\xC2"
+    "\xBB"
     "\xC4"
     "\x8C"
     "\xC4"
@@ -1557,7 +1599,7 @@ const char* const STRINGS_EN[] = {
     "Lft, Bck, Cnfrm, Rght",
     "Prev/Next",
     "Next/Prev",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -1602,6 +1644,12 @@ const char* const STRINGS_EN[] = {
     "No server URL configured",
     "Failed to fetch feed",
     "Failed to parse feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Network: ",
     "IP Address: ",
     "or scan QR code with your phone to connect to Wifi.",
@@ -1679,6 +1727,7 @@ const char* const STRINGS_EN[] = {
     "60 min",
     "Remap Front Buttons",
     "OPDS Browser",
+    "Search",
     "Cover + Custom",
     "Page overlay",
     "Keep Screen",
@@ -2131,6 +2180,12 @@ const char* const STRINGS_EN[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_ES[] = {
@@ -2458,7 +2513,7 @@ const char* const STRINGS_ES[] = {
     "s, Confirmar, Der.",
     "Ant./Sig.",
     "Sig./Ant.",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -2533,6 +2588,12 @@ const char* const STRINGS_ES[] = {
     " URL de servidor",
     "Fallo al obtener el feed",
     "Fallo al procesar el feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Red: ",
     "IP: ",
     "o lea el QR con su tfno. para conectarse al Wi-Fi.",
@@ -2640,6 +2701,7 @@ const char* const STRINGS_ES[] = {
     "60 min",
     "Reconfigurar botones frontales",
     "Navegador OPDS",
+    "Search",
     "Portada + Pers.",
     "Page overlay",
     "Keep Screen",
@@ -3162,6 +3224,12 @@ const char* const STRINGS_ES[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_FR[] = {
@@ -3588,7 +3656,7 @@ const char* const STRINGS_FR[] = {
     "Suiv/Pr\xC3"
     "\xA9"
     "c",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -3696,6 +3764,12 @@ const char* const STRINGS_FR[] = {
     "\xC3"
     "\x89"
     "chec analyse flux",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "R\xC3"
     "\xA9"
     "seau : ",
@@ -3817,6 +3891,7 @@ const char* const STRINGS_FR[] = {
     "\xA7"
     "ade",
     "Navigateur OPDS",
+    "Search",
     "Couverture + Perso",
     "Page overlay",
     "Keep Screen",
@@ -4342,6 +4417,12 @@ const char* const STRINGS_FR[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_DE[] = {
@@ -4622,7 +4703,7 @@ const char* const STRINGS_DE[] = {
     "Weiter/Zur\xC3"
     "\xBC"
     "ck",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -4690,6 +4771,12 @@ const char* const STRINGS_DE[] = {
     "Feed-Format ung\xC3"
     "\xBC"
     "ltig",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Netzwerk:",
     "IP-Adresse:",
     "oder QR-Code mit dem Handy scannen f\xC3"
@@ -4785,6 +4872,7 @@ const char* const STRINGS_DE[] = {
     "60 min",
     "Vordere Tasten belegen",
     "OPDS-Browser",
+    "Search",
     "Umschlag + Eigenes",
     "Seiten-Overlay",
     "Keep Screen",
@@ -5275,6 +5363,12 @@ const char* const STRINGS_DE[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_CS[] = {
@@ -6269,7 +6363,7 @@ const char* const STRINGS_CS[] = {
     "edchoz\xC3"
     "\xAD"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -6439,6 +6533,12 @@ const char* const STRINGS_CS[] = {
     "lu se nezda\xC5"
     "\x99"
     "ilo",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "S\xC3"
     "\xAD"
     "\xC5"
@@ -6590,6 +6690,7 @@ const char* const STRINGS_CS[] = {
     "e\xC4"
     "\x8D"
     " OPDS",
+    "Search",
     "Ob\xC3"
     "\xA1"
     "lka + Vlastn\xC3"
@@ -7318,6 +7419,12 @@ const char* const STRINGS_CS[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_PO[] = {
@@ -7669,7 +7776,7 @@ const char* const STRINGS_PO[] = {
     "Pr\xC3"
     "\xB3"
     "x/Ant",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -7758,6 +7865,12 @@ const char* const STRINGS_PO[] = {
     "Nenhum URL servidor configurado",
     "Falha ao buscar o feed",
     "Falha ao interpretar o feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Rede:",
     "Endere\xC3"
     "\xA7"
@@ -7856,6 +7969,7 @@ const char* const STRINGS_PO[] = {
     "\xB5"
     "es frontais",
     "Navegador OPDS",
+    "Search",
     "Capa + personalizado",
     "Page overlay",
     "Keep Screen",
@@ -8380,6 +8494,12 @@ const char* const STRINGS_PO[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_RU[] = {
@@ -13333,7 +13453,7 @@ const char* const STRINGS_RU[] = {
     "\xD0"
     "\xB4"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -14272,6 +14392,12 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x83"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -15405,6 +15531,7 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x80"
     "",
+    "Search",
     "\xD0"
     "\x9E"
     "\xD0"
@@ -17827,6 +17954,12 @@ const char* const STRINGS_RU[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_SV[] = {
@@ -18343,7 +18476,7 @@ const char* const STRINGS_SV[] = {
     "sta/F\xC3"
     "\xB6"
     "rra",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "\xC3"
     "\x96"
@@ -18429,6 +18562,12 @@ const char* const STRINGS_SV[] = {
     "Misslyckades att analysera fl\xC3"
     "\xB6"
     "de",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "N\xC3"
     "\xA4"
     "tverk:",
@@ -18554,6 +18693,7 @@ const char* const STRINGS_SV[] = {
     "OPDS-webbl\xC3"
     "\xA4"
     "sare",
+    "Search",
     "Omslag + Valfri",
     "Page overlay",
     "Keep Screen",
@@ -19104,6 +19244,12 @@ const char* const STRINGS_SV[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_RO[] = {
@@ -19717,7 +19863,7 @@ const char* const STRINGS_RO[] = {
     "napoi/\xC3"
     "\x8E"
     "nainte",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -19824,6 +19970,12 @@ const char* const STRINGS_RO[] = {
     "E\xC5"
     "\x9F"
     "ec la analizarea feed-ului",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Re\xC5"
     "\xA3"
     "ea: ",
@@ -19965,6 +20117,7 @@ const char* const STRINGS_RO[] = {
     "60 min",
     "Remapare butoane frontale",
     "Browser OPDS",
+    "Search",
     "Copert\xC4"
     "\x83"
     " + Personalizat",
@@ -20547,6 +20700,12 @@ const char* const STRINGS_RO[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_CA[] = {
@@ -20898,7 +21057,7 @@ const char* const STRINGS_CA[] = {
     "Seg\xC3"
     "\xBC"
     "ent/Anterior",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -20975,6 +21134,12 @@ const char* const STRINGS_CA[] = {
     "Ha fallat l'an\xC3"
     "\xA0"
     "lisi del feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Xarxa: ",
     "Adre\xC3"
     "\xA7"
@@ -21092,6 +21257,7 @@ const char* const STRINGS_CA[] = {
     "60 min",
     "Reassigna els botons frontals",
     "Navegador OPDS",
+    "Search",
     "Portada + Personalitzat",
     "Page overlay",
     "Keep Screen",
@@ -21622,6 +21788,12 @@ const char* const STRINGS_CA[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_UK[] = {
@@ -27251,7 +27423,7 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x80"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -28246,6 +28418,12 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x83"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\x9C"
     "\xD0"
@@ -29465,6 +29643,7 @@ const char* const STRINGS_UK[] = {
     "\xD1"
     "\x80"
     " OPDS",
+    "Search",
     "\xD0"
     "\x9E"
     "\xD0"
@@ -32037,6 +32216,12 @@ const char* const STRINGS_UK[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_BE[] = {
@@ -37066,7 +37251,7 @@ const char* const STRINGS_BE[] = {
     "\xD0"
     "\xB4"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -38023,6 +38208,12 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x83"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\xA1"
     "\xD0"
@@ -39172,6 +39363,7 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x80"
     "",
+    "Search",
     "\xD0"
     "\x92"
     "\xD0"
@@ -41606,6 +41798,12 @@ const char* const STRINGS_BE[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_IT[] = {
@@ -41806,7 +42004,7 @@ const char* const STRINGS_IT[] = {
     "Sin, Indtr, Conf, Des",
     "Prec/Succ",
     "Succ/Prec",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -41851,6 +42049,12 @@ const char* const STRINGS_IT[] = {
     "Nessun URL del server configurato",
     "Recupero feed fallito",
     "Parsing feed fallito",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Rete: ",
     "Indirizzo IP: ",
     "o scansiona il codice QR con lo smartphone per connetterti al WiFi.",
@@ -41934,6 +42138,7 @@ const char* const STRINGS_IT[] = {
     "60 min",
     "Rimappa Pulsanti Frontali",
     "Browser OPDS",
+    "Search",
     "Copertina + Personalizzato",
     "Page overlay",
     "Keep Screen",
@@ -42400,6 +42605,12 @@ const char* const STRINGS_IT[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_PL[] = {
@@ -42987,7 +43198,7 @@ const char* const STRINGS_PL[] = {
     ", Prawo",
     "Poprz./Nast.",
     "Nast./Poprz.",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -43098,6 +43309,12 @@ const char* const STRINGS_PL[] = {
     " kana\xC5"
     "\x82"
     "u",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Sie\xC4"
     "\x87"
     ": ",
@@ -43277,6 +43494,7 @@ const char* const STRINGS_PL[] = {
     "60 min",
     "Skonfiguruj przednie przyciski",
     "OPDS Browser",
+    "Search",
     "Ok\xC5"
     "\x82"
     "adka + W\xC5"
@@ -43867,6 +44085,12 @@ const char* const STRINGS_PL[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44314,7 +44538,7 @@ const char* const STRINGS_FI[] = {
     "Vas, Tak, Vah, Oik",
     "Edell/Seur",
     "Seur/Edell",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -44431,6 +44655,12 @@ const char* const STRINGS_FI[] = {
     "sittely ep\xC3"
     "\xA4"
     "onnistui",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Verkko: ",
     "IP-osoite: ",
     "tai skannaa QR-koodi puhelimellasi yhdist\xC3"
@@ -44544,6 +44774,7 @@ const char* const STRINGS_FI[] = {
     "\xA4"
     " etupainikkeet",
     "OPDS-selain",
+    "Search",
     "Kansi + mukautettu",
     "Page overlay",
     "Keep Screen",
@@ -45104,6 +45335,12 @@ const char* const STRINGS_FI[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45451,7 +45688,7 @@ const char* const STRINGS_DA[] = {
     "N\xC3"
     "\xA6"
     "ste/Forrige",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -45514,6 +45751,12 @@ const char* const STRINGS_DA[] = {
     "Ingen server-URL konfigureret",
     "Kunne ikke hente feed",
     "Kunne ikke fortolke feed",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Netv\xC3"
     "\xA6"
     "rk: ",
@@ -45611,6 +45854,7 @@ const char* const STRINGS_DA[] = {
     "60 min",
     "Omtildel frontknapper",
     "OPDS Browser",
+    "Search",
     "Omslag + Brugerdefineret",
     "Page overlay",
     "Keep Screen",
@@ -46097,6 +46341,12 @@ const char* const STRINGS_DA[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46282,7 +46532,7 @@ const char* const STRINGS_NL[] = {
     "Links, Terug, Bev., Rechts",
     "Vorige/Volgende",
     "Volgende/Vorige",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -46327,6 +46577,12 @@ const char* const STRINGS_NL[] = {
     "Geen server-URL ingesteld",
     "Ophalen feed mislukt",
     "Verwerken feed mislukt",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Netwerk: ",
     "IP-adres: ",
     "of scan de QR-code met je telefoon voor wifi-verbinding.",
@@ -46404,6 +46660,7 @@ const char* const STRINGS_NL[] = {
     "60 min",
     "Knoppen voorzijde wijzigen",
     "OPDS-browser",
+    "Search",
     "Omslag + Aangepast",
     "Page overlay",
     "Keep Screen",
@@ -46858,6 +47115,12 @@ const char* const STRINGS_NL[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_TR[] = {
@@ -47647,7 +47910,7 @@ const char* const STRINGS_TR[] = {
     "Sonraki/\xC3"
     "\x96"
     "nceki",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -47808,6 +48071,12 @@ const char* const STRINGS_TR[] = {
     "lamad\xC4"
     "\xB1"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "A\xC4"
     "\x9F"
     ": ",
@@ -48059,6 +48328,7 @@ const char* const STRINGS_TR[] = {
     "c\xC4"
     "\xB1"
     "",
+    "Search",
     "Kapak + \xC3"
     "\x96"
     "zel",
@@ -48681,6 +48951,12 @@ const char* const STRINGS_TR[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_KK[] = {
@@ -49902,7 +50178,7 @@ const char* const STRINGS_KK[] = {
     "\xD0"
     "\xB7"
     "",
-    "Calibre Web URL",
+    "OPDS URL",
     "Connect as Wireless Device",
     "* = \xD0"
     "\xA8"
@@ -52496,7 +52772,7 @@ const char* const STRINGS_KK[] = {
     "\xD1"
     "\x8B"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -53253,6 +53529,12 @@ const char* const STRINGS_KK[] = {
     "\xD0"
     "\xB7"
     "",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "\xD0"
     "\x96"
     "\xD0"
@@ -54318,6 +54600,7 @@ const char* const STRINGS_KK[] = {
     "\xD1"
     "\x8B"
     "",
+    "Search",
     "\xD0"
     "\x9C"
     "\xD2"
@@ -56850,6 +57133,12 @@ const char* const STRINGS_KK[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_VI[] = {
@@ -58561,7 +58850,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x9B"
     "c",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -58870,6 +59159,12 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA5"
     "p",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "M\xE1"
     "\xBA"
     "\xA1"
@@ -59274,6 +59569,7 @@ const char* const STRINGS_VI[] = {
     "\xBB"
     "\x87"
     "t OPDS",
+    "Search",
     "B\xC3"
     "\xAC"
     "a + T\xC3"
@@ -62116,6 +62412,12 @@ const char* const STRINGS_VI[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_HU[] = {
@@ -62345,7 +62647,7 @@ const char* const STRINGS_HU[] = {
     "\xB3"
     "dot a telefonoddal:",
     "Calibre Wireless",
-    "Calibre Web URL",
+    "OPDS URL",
     "Connect as Wireless Device",
     "* = Titkos\xC3"
     "\xAD"
@@ -62833,7 +63135,7 @@ const char* const STRINGS_HU[] = {
     "z\xC5"
     "\x91"
     "",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -62972,6 +63274,12 @@ const char* const STRINGS_HU[] = {
     "rcsatorna feldolgoz\xC3"
     "\xA1"
     "sa sikertelen",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "H\xC3"
     "\xA1"
     "l\xC3"
@@ -63215,6 +63523,7 @@ const char* const STRINGS_HU[] = {
     "sz\xC5"
     "\x91"
     "",
+    "Search",
     "Bor\xC3"
     "\xAD"
     "t\xC3"
@@ -63929,6 +64238,12 @@ const char* const STRINGS_HU[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_LT[] = {
@@ -64062,7 +64377,7 @@ const char* const STRINGS_LT[] = {
     "\x85"
     ":",
     "Calibre belaidis",
-    "Calibre Web URL",
+    "OPDS URL",
     "Connect as Wireless Device",
     "* = U\xC5"
     "\xBE"
@@ -64308,7 +64623,7 @@ const char* const STRINGS_LT[] = {
     "Lft, Bck, Cnfrm, Rght",
     "Atgal/Pirmyn",
     "Pirmyn/Atgal",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "O. Dyslexic",
     "Bokerlam",
@@ -64385,6 +64700,12 @@ const char* const STRINGS_LT[] = {
     "\xB3"
     "",
     "Apdorojimo klaida",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Tinklas: ",
     "IP: ",
     "or scan QR code with your phone to connect to Wifi.",
@@ -64510,6 +64831,7 @@ const char* const STRINGS_LT[] = {
     "ykl\xC4"
     "\x97"
     "",
+    "Search",
     "Vir\xC5"
     "\xA1"
     "elis + Kita",
@@ -65058,6 +65380,12 @@ const char* const STRINGS_LT[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 const char* const STRINGS_SI[] = {
@@ -65343,7 +65671,7 @@ const char* const STRINGS_SI[] = {
     "Lft, Bck, Cnfrm, Rght",
     "Nazaj/Naprej",
     "Naprej/Nazaj",
-    "Bookerly",
+    "Noto Serif",
     "Lexend",
     "Open Dyslexic",
     "Bokerlam",
@@ -65406,6 +65734,12 @@ const char* const STRINGS_SI[] = {
     "Raz\xC4"
     "\x8D"
     "lenjevanje vira ni uspelo",
+    "Next Page \xC2"
+    "\xBB"
+    "",
+    "\xC2"
+    "\xAB"
+    " Previous Page",
     "Omre\xC5"
     "\xBE"
     "je: ",
@@ -65505,6 +65839,7 @@ const char* const STRINGS_SI[] = {
     "60 min",
     "Prenastavi sprednje gumbe",
     "OPDS brskalnik",
+    "Search",
     "Naslovnica + po meri",
     "Page overlay",
     "Keep Screen",
@@ -65997,6 +66332,12 @@ const char* const STRINGS_SI[] = {
     "Hold SELECT for UPPERCASE or secondary char",
     "Hold SELECT for lowercase or secondary char",
     "Press URL for snippets",
+    "Add Server",
+    "Server Name",
+    "No OPDS servers configured",
+    "Delete Server",
+    "Delete this server?",
+    "OPDS Servers",
 };
 
 }  // namespace i18n_strings

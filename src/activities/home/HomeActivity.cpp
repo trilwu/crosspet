@@ -19,6 +19,7 @@
 #include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "MappedInputManager.h"
+#include "OpdsServerStore.h"
 #include "RecentBooksStore.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
@@ -41,6 +42,17 @@ bool HomeActivity::storeCoverBuffer() {
   if (!coverBuffer) return false;
   memcpy(coverBuffer, fb, bufSize);
   return true;
+}
+
+int HomeActivity::getMenuItemCount() const {
+  int count = 4;  // File Browser, Recents, File transfer, Settings
+  if (!recentBooks.empty()) {
+    count += recentBooks.size();
+  }
+  if (hasOpdsServers) {
+    count++;
+  }
+  return count;
 }
 
 bool HomeActivity::restoreCoverBuffer() {
@@ -136,6 +148,9 @@ void HomeActivity::loadRecentCovers(int coverHeight) {
 
 void HomeActivity::onEnter() {
   Activity::onEnter();
+
+  hasOpdsServers = OPDS_STORE.hasServers();
+
   selectorIndex = 0;
   coverRendered = false;
   firstRenderDone = false;

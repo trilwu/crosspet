@@ -34,6 +34,7 @@ bool BookMetadataCache::beginContentOpfPass() {
 }
 
 bool BookMetadataCache::endContentOpfPass() {
+  // Explicit close() required: member variable persists beyond function scope
   spineFile.close();
   return true;
 }
@@ -45,6 +46,7 @@ bool BookMetadataCache::beginTocPass() {
     return false;
   }
   if (!Storage.openFileForWrite("BMC", cachePath + tmpTocBinFile, tocFile)) {
+    // Explicit close() required: member variable persists beyond function scope
     spineFile.close();
     return false;
   }
@@ -78,6 +80,7 @@ bool BookMetadataCache::beginTocPass() {
 }
 
 bool BookMetadataCache::endTocPass() {
+  // Explicit close() required: member variables persist beyond function scope
   tocFile.close();
   spineFile.close();
 
@@ -106,11 +109,13 @@ bool BookMetadataCache::buildBookBin(const std::string& epubPath, const BookMeta
   }
 
   if (!Storage.openFileForRead("BMC", cachePath + tmpSpineBinFile, spineFile)) {
+    // Explicit close() required: member variable persists beyond function scope
     bookFile.close();
     return false;
   }
 
   if (!Storage.openFileForRead("BMC", cachePath + tmpTocBinFile, tocFile)) {
+    // Explicit close() required: member variables persist beyond function scope
     bookFile.close();
     spineFile.close();
     return false;
@@ -171,6 +176,7 @@ bool BookMetadataCache::buildBookBin(const std::string& epubPath, const BookMeta
   // Pre-open zip file to speed up size calculations
   if (!zip.open()) {
     LOG_ERR("BMC", "Could not open EPUB zip for size calculations");
+    // Explicit close() required: member variables persist beyond function scope
     bookFile.close();
     spineFile.close();
     tocFile.close();
@@ -273,6 +279,7 @@ bool BookMetadataCache::buildBookBin(const std::string& epubPath, const BookMeta
     if (i % 50 == 0) yield();
   }
 
+  // Explicit close() required: member variables persist beyond function scope
   bookFile.close();
   spineFile.close();
   tocFile.close();
@@ -381,6 +388,7 @@ bool BookMetadataCache::load() {
   serialization::readPod(bookFile, version);
   if (version != BOOK_CACHE_VERSION) {
     LOG_DBG("BMC", "Cache version mismatch: expected %d, got %d", BOOK_CACHE_VERSION, version);
+    // Explicit close() required: member variable persists beyond function scope
     bookFile.close();
     return false;
   }

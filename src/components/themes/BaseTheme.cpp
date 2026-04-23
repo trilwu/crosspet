@@ -33,12 +33,16 @@ void drawBatteryIcon(const GfxRenderer& renderer, int x, int y, int battWidth, i
 
   const bool charging = gpio.isUsbConnected();
 
+  // The +1 is to round up, so that we always fill at least one pixel
   const int maxFillWidth = battWidth - 5;
   const int fillHeight = rectHeight - 4;
-  if (maxFillWidth <= 0 || fillHeight <= 0) return;
-
+  if (maxFillWidth <= 0 || fillHeight <= 0) {
+    return;
+  }
   int filledWidth = percentage * maxFillWidth / 100 + 1;
-  if (filledWidth > maxFillWidth) filledWidth = maxFillWidth;
+  if (filledWidth > maxFillWidth) {
+    filledWidth = maxFillWidth;
+  }
 
   // When charging, ensure minimum fill so lightning bolt is fully visible
   constexpr int minFillForBolt = 8;
@@ -48,7 +52,7 @@ void drawBatteryIcon(const GfxRenderer& renderer, int x, int y, int battWidth, i
 
   renderer.fillRect(x + 2, y + 2, filledWidth, fillHeight);
 
-  // Draw lightning bolt when charging (white/inverted on black fill)
+  // Draw lightning bolt when charging (white/inverted on black fill for visibility)
   if (charging) {
     BaseTheme::drawBatteryLightningBolt(renderer, x + 4, y + 2);
   }
@@ -456,7 +460,6 @@ void BaseTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, const std:
           bookWidth = rect.width / 2;  // Fallback
         }
       }
-      file.close();
     }
   }
 
@@ -510,7 +513,6 @@ void BaseTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, const std:
             renderer.drawRect(bookX + 2, bookY + 2, bookWidth - 4, bookHeight - 4);
           }
         }
-        file.close();
       }
     }
 
@@ -676,7 +678,8 @@ void BaseTheme::drawButtonMenu(GfxRenderer& renderer, Rect rect, int buttonCount
 
 Rect BaseTheme::drawPopup(const GfxRenderer& renderer, const char* message) const {
   constexpr int margin = 15;
-  constexpr int y = 60;
+  // Scale y position proportionally to screen height (7.5% from top)
+  const int y = static_cast<int>(renderer.getScreenHeight() * 0.075f);
   const int textWidth = renderer.getTextWidth(UI_12_FONT_ID, message, EpdFontFamily::BOLD);
   const int textHeight = renderer.getLineHeight(UI_12_FONT_ID);
   const int w = textWidth + margin * 2;

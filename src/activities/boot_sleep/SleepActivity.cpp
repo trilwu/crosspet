@@ -21,6 +21,7 @@
 #include "CrossPointState.h"
 #include "BookStats.h"
 #include "ReadingStats.h"
+#include "activities/reader/ReaderUtils.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/Logo120.h"
@@ -171,11 +172,18 @@ int pngOverlayDraw(PNGDRAW* pDraw) {
 
 void SleepActivity::onEnter() {
   Activity::onEnter();
-  // Persist current time to SD so it survives power cycles
-  // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact
+
+  // For OVERLAY/KEEP_SCREEN modes the popup is suppressed so the frame buffer stays intact.
+  // Show popup with reader orientation only when going to sleep from reader.
   if (SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::OVERLAY &&
       SETTINGS.sleepScreen != CrossPointSettings::SLEEP_SCREEN_MODE::KEEP_SCREEN) {
-    GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+    if (APP_STATE.lastSleepFromReader) {
+      ReaderUtils::applyOrientation(renderer, SETTINGS.orientation);
+      GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+      renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+    } else {
+      GUI.drawPopup(renderer, tr(STR_ENTERING_SLEEP));
+    }
   }
 
   switch (SETTINGS.sleepScreen) {
@@ -247,7 +255,6 @@ void SleepActivity::renderCustomSleepScreen() const {
   if (dir && dir.isDirectory()) {
     sleepDir = "/.sleep";
   } else {
-    if (dir) dir.close();
     dir = Storage.open("/sleep");
     if (dir && dir.isDirectory()) {
       sleepDir = "/sleep";
@@ -260,23 +267,19 @@ void SleepActivity::renderCustomSleepScreen() const {
     // Collect BMP files by extension only (skip parseHeaders during scan)
     for (auto file = dir.openNextFile(); file; file = dir.openNextFile()) {
       if (file.isDirectory()) {
-        file.close();
         continue;
       }
       file.getName(name, sizeof(name));
       auto filename = std::string(name);
       if (filename[0] == '.') {
-        file.close();
         continue;
       }
 
       if (!FsHelpers::hasBmpExtension(filename)) {
         LOG_DBG("SLP", "Skipping non-.bmp file name: %s", name);
-        file.close();
         continue;
       }
       files.emplace_back(filename);
-      file.close();
     }
     const auto numFiles = files.size();
     if (numFiles > 0) {
@@ -308,12 +311,9 @@ void SleepActivity::renderCustomSleepScreen() const {
           dir.close();
           return;
         }
-        file.close();
       }
     }
   }
-  if (dir) dir.close();
-
   // Look for sleep.bmp on the root of the sd card to determine if we should
   // render a custom sleep screen instead of the default.
   {
@@ -555,7 +555,6 @@ void SleepActivity::renderCoverSleepScreen() const {
       file.close();
       return;
     }
-    file.close();
   }
 
   return (this->*renderNoCoverSleepScreen)();

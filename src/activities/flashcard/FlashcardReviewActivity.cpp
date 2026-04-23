@@ -117,14 +117,14 @@ static std::vector<std::string> wrapText(GfxRenderer& r, int fontId,
 static int pickMainFont(GfxRenderer& r, const std::string& text,
                             int maxWidth, int availH,
                             std::vector<std::string>& outLines) {
-    const int candidates[] = {BOOKERLY_18_FONT_ID, BOOKERLY_16_FONT_ID, BOOKERLY_14_FONT_ID};
+    const int candidates[] = {NOTOSERIF_18_FONT_ID, NOTOSERIF_16_FONT_ID, NOTOSERIF_14_FONT_ID};
     for (int f : candidates) {
         auto lines = wrapText(r, f, text, maxWidth);
         int needed = r.getLineHeight(f) * (int)lines.size();
         if (needed <= availH) { outLines = std::move(lines); return f; }
     }
-    outLines = wrapText(r, BOOKERLY_14_FONT_ID, text, maxWidth);
-    return BOOKERLY_14_FONT_ID;
+    outLines = wrapText(r, NOTOSERIF_14_FONT_ID, text, maxWidth);
+    return NOTOSERIF_14_FONT_ID;
 }
 
 // ─── Constructor ─────────────────────────────────────────────────────────────

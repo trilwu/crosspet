@@ -13,8 +13,8 @@
 namespace {
 constexpr int kBuiltinReaderFontCount = 3;
 constexpr CrossPointSettings::FONT_FAMILY kBuiltinReaderFonts[kBuiltinReaderFontCount] = {
-    CrossPointSettings::BOOKERLY, CrossPointSettings::LEXEND, CrossPointSettings::BOKERLAM};
-constexpr StrId kBuiltinReaderFontLabels[kBuiltinReaderFontCount] = {StrId::STR_BOOKERLY, StrId::STR_LEXEND, StrId::STR_BOKERLAM};
+    CrossPointSettings::NOTOSERIF, CrossPointSettings::LEXEND, CrossPointSettings::BOKERLAM};
+constexpr StrId kBuiltinReaderFontLabels[kBuiltinReaderFontCount] = {StrId::STR_NOTO_SERIF, StrId::STR_LEXEND, StrId::STR_BOKERLAM};
 }  // namespace
 
 void FontSelectActivity::onEnter() {

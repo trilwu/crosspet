@@ -263,6 +263,9 @@ void HalGPIO::verifyPowerButtonWakeup(uint16_t requiredDurationMs, bool shortPre
     // Fast path - no duration check needed
     return;
   }
+  // TODO: Intermittent edge case remains: a single tap followed by another single tap
+  // can still power on the device. Tighten wake debounce/state handling here.
+
   // Calibrate: subtract boot time already elapsed, assuming button held since boot
   const unsigned long calibration = millis();
   const unsigned long calibratedDuration = (calibration < requiredDurationMs) ? (requiredDurationMs - calibration) : 1;
