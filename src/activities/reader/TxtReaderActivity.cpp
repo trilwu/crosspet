@@ -345,7 +345,7 @@ void TxtReaderActivity::render(RenderLock&&) {
 
   renderer.clearScreen();
   renderPage();
-  if (auto* fcm = renderer.getFontCacheManager()) fcm->clearCache();
+  // Don't clear font cache between page turns — let LRU manage it across pages.
 
   // Save progress
   saveProgress();

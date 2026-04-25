@@ -181,6 +181,25 @@ void FontManager::setExternalPrimary(bool enabled) {
   saveSettings();
 }
 
+void FontManager::unloadActiveFonts() {
+  // Order: unload UI font first; if it shares the reader font, this just
+  // resets the alias. Then unload reader font frees the underlying cache.
+  _activeUiFont.unload();
+  _activeFont.unload();
+}
+
+void FontManager::reloadActiveFonts() {
+  // Restore reader font; if UI font shared the reader font, this also
+  // implicitly restores it via getActiveUiFont() aliasing.
+  if (_selectedIndex >= 0) {
+    loadSelectedFont();
+  }
+  // Restore UI font separately if it has its own slot.
+  if (_selectedUiIndex >= 0 && !isUiSharingReaderFont()) {
+    loadSelectedUiFont();
+  }
+}
+
 ExternalFont* FontManager::getActiveFont() {
   if (_selectedIndex >= 0 && _activeFont.isLoaded()) {
     return &_activeFont;

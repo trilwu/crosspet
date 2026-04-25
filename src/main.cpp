@@ -270,6 +270,11 @@ void enterDeepSleep() {
 
   activityManager.goToSleep();
 
+  // Settle delay: the sleep screen's final refresh polls BUSY low, but the
+  // SSD1677 panel needs a small additional window to finish settling its
+  // waveform internally. Powering down the charge pump too early can leave
+  // the panel blank/white (intermittent reports of "no image on sleep").
+  delay(100);
 
   display.deepSleep();
   LOG_DBG("MAIN", "Entering deep sleep");

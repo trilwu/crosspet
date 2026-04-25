@@ -127,6 +127,21 @@ class FontManager {
    */
   void loadSettings();
 
+  /**
+   * Free the active reader/UI font glyph caches (~34KB each) without changing
+   * the user's font selection. Use to reclaim heap for transient large
+   * allocations (e.g. TLS handshake during KOReader sync).
+   * Pair with reloadActiveFonts() to restore. Safe to call when no external
+   * font is loaded — becomes a no-op.
+   */
+  void unloadActiveFonts();
+
+  /**
+   * Reload the currently-selected fonts after unloadActiveFonts().
+   * No-op if no external font was selected.
+   */
+  void reloadActiveFonts();
+
  private:
   FontManager() {
     for (int i = 0; i < MAX_FONTS; i++) {

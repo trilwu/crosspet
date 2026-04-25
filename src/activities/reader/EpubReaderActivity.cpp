@@ -232,6 +232,14 @@ void EpubReaderActivity::loop() {
     toggleAutoPageTurn(SETTINGS.autoPageTurnEnabled ? SETTINGS.autoPageTurnSpeed : 0);
   }
 
+  // Power button multi-click: launch KOReader sync (skips menu)
+  if (getPowerClickAction() == CrossPointSettings::SHORT_PWRBTN::KOREADER_SYNC) {
+    if (epub && KOREADER_STORE.hasCredentials()) {
+      onReaderMenuConfirm(EpubReaderMenuActivity::MenuAction::SYNC);
+      return;
+    }
+  }
+
   // Long-press Confirm = star/unstar current page
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm) &&
       mappedInput.getHeldTime() >= 700 && !ignoreFrontButtons) {
@@ -1010,7 +1018,9 @@ void EpubReaderActivity::render(RenderLock&& lock) {
     const auto start = millis();
     renderContents(std::move(p), orientedMarginTop, orientedMarginRight, orientedMarginBottom, orientedMarginLeft);
     LOG_DBG("ERS", "Rendered page in %dms", millis() - start);
-    if (auto* fcm = renderer.getFontCacheManager()) fcm->clearCache();
+    // Don't clear font cache here — let LRU manage it across page turns.
+    // Same characters recur on consecutive pages; clearing forces full
+    // re-decompression each turn. Cache is bounded (4 group slots).
   }
   silentIndexNextChapterIfNeeded(viewportWidth, viewportHeight);
   saveProgress(currentSpineIndex, section->currentPage, section->pageCount);

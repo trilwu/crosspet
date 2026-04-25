@@ -69,6 +69,9 @@ bool SleepScreenCache::load(GfxRenderer& renderer, const std::string& sourcePath
 
   if (bytesRead != static_cast<int>(HalDisplay::BUFFER_SIZE)) {
     LOG_ERR("SLC", "Cache read incomplete: %d / %u", bytesRead, (unsigned)HalDisplay::BUFFER_SIZE);
+    // Reset framebuffer to a clean state so the caller's fallback path doesn't
+    // render garbage from a partially-overwritten buffer if its own render also fails.
+    renderer.clearScreen();
     return false;
   }
 

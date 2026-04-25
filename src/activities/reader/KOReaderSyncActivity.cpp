@@ -7,6 +7,7 @@
 #include <esp_sntp.h>
 
 #include <FontDecompressor.h>
+#include <FontManager.h>
 
 #include "Epub/Section.h"
 #include "KOReaderCredentialStore.h"
@@ -122,14 +123,21 @@ void KOReaderSyncActivity::performSync() {
   }
   requestUpdateAndWait();
 
-  // Free font cache to reclaim heap for TLS handshake (~12-48KB)
-  // ESP32-C3 has ~46KB free after WiFi; TLS needs ~50KB for 16KB buffers + handshake state.
-  // Font cache refills lazily on next render.
+  // Free font caches to reclaim heap for TLS handshake (~12-48KB built-in +
+  // up to ~68KB from external reader/UI fonts when active). ESP32-C3 has ~46KB
+  // free after WiFi; with an external CJK font loaded, the residual heap is
+  // far too small for the TLS buffers + handshake state, so sync fails.
+  // Both caches are reloaded as soon as the network call returns.
   fontDecompressor.clearCache();
+  FontMgr.unloadActiveFonts();
   LOG_DBG("KOSync", "Cleared font cache, heap: %u", (unsigned)ESP.getFreeHeap());
 
   // Fetch remote progress
   const auto result = KOReaderSyncClient::getProgress(documentHash, remoteProgress);
+
+  // Reload external fonts now that TLS heap is no longer needed; subsequent
+  // renders (this screen and the reader on return) need them.
+  FontMgr.reloadActiveFonts();
 
   if (result == KOReaderSyncClient::NOT_FOUND) {
     // No remote progress - offer to upload
@@ -207,10 +215,14 @@ void KOReaderSyncActivity::performUpload() {
   progress.progress = koPos.xpath;
   progress.percentage = koPos.percentage;
 
-  // Free font cache for TLS heap (same as performSync)
+  // Free font caches for TLS heap (same as performSync — built-in + external).
   fontDecompressor.clearCache();
+  FontMgr.unloadActiveFonts();
 
   const auto result = KOReaderSyncClient::updateProgress(progress);
+
+  // Reload external fonts so the result screen and the reader render properly.
+  FontMgr.reloadActiveFonts();
 
   if (result != KOReaderSyncClient::OK) {
     wifiOff();
@@ -257,7 +269,11 @@ void KOReaderSyncActivity::onEnter() {
 void KOReaderSyncActivity::onExit() {
   Activity::onExit();
 
-  wifiOff();
+  // NOTE: wifiOff() is intentionally NOT called here.
+  // onExit() runs while ActivityManager holds RenderLock; WiFi.disconnect()
+  // and WiFi.mode(WIFI_OFF) can block long enough to make the device appear
+  // frozen on return to the reader. WiFi cleanup is performed explicitly in
+  // each finish() callsite in loop(), where no render lock is held.
 }
 
 void KOReaderSyncActivity::render(RenderLock&&) {
@@ -407,7 +423,9 @@ void KOReaderSyncActivity::loop() {
 
     if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
       if (selectedOption == 0) {
-        // Wifi will be turned off in onExit()
+        // Tear down WiFi BEFORE finish() so blocking driver calls run outside
+        // ActivityManager's RenderLock (avoids freeze on exit to reader).
+        wifiOff();
         setResult(SyncResult{remotePosition.spineIndex, remotePosition.pageNumber});
         finish();
       } else if (selectedOption == 1) {
@@ -417,6 +435,7 @@ void KOReaderSyncActivity::loop() {
     }
 
     if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
+      wifiOff();
       ActivityResult result;
       result.isCancelled = true;
       setResult(std::move(result));
@@ -439,6 +458,7 @@ void KOReaderSyncActivity::loop() {
     }
 
     if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
+      wifiOff();
       ActivityResult result;
       result.isCancelled = true;
       setResult(std::move(result));

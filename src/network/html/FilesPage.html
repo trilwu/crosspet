@@ -787,6 +787,7 @@
 
 <script>
   // get current path from query parameter
+  const currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
   const showHidden = decodeURIComponent(new URLSearchParams(window.location.search).get('showHidden') || "false") == 'true';
 
   if (currentPath !== '/') {
