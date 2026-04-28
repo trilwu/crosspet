@@ -9,6 +9,7 @@
 #include "MinesweeperActivity.h"
 #include "SudokuActivity.h"
 #include "CaroActivity.h"
+#include "SnakeActivity.h"
 #include "ChessActivity.h"
 #include "VirtualPetActivity.h"
 #include "WeatherActivity.h"
@@ -87,6 +88,9 @@ void ToolsActivity::buildMenu() {
     }});
     menuEntries.push_back({StrId::STR_2048, [this] {
       activityManager.pushActivity(std::make_unique<TwentyFortyEightActivity>(renderer, mappedInput));
+    }});
+    menuEntries.push_back({StrId::STR_SNAKE, [this] {
+      activityManager.pushActivity(std::make_unique<SnakeActivity>(renderer, mappedInput));
     }});
   }
 }
