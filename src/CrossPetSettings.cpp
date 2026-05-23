@@ -28,6 +28,7 @@ bool CrossPetSettings::saveToFile() const {
   doc["appFlashcard"] = appFlashcard;
   doc["flashcardNewPerDay"] = flashcardNewPerDay;
   doc["flashcardMaxReviewPerDay"] = flashcardMaxReviewPerDay;
+  doc["appTasks"] = appTasks;
 
   String json;
   serializeJson(doc, json);
@@ -82,6 +83,7 @@ bool CrossPetSettings::loadFromFile() {
       appFlashcard = doc["appFlashcard"] | (uint8_t)1;
       flashcardNewPerDay = doc["flashcardNewPerDay"] | (uint8_t)10;
       flashcardMaxReviewPerDay = doc["flashcardMaxReviewPerDay"] | (uint8_t)250;
+      appTasks = doc["appTasks"] | (uint8_t)1;
       LOG_DBG("CPS", "CrossPet settings loaded from file");
       return true;
     }

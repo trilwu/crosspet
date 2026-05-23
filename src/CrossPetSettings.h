@@ -31,6 +31,7 @@ class CrossPetSettings {
   uint8_t appFlashcard = 1;  // Per-app visibility toggle (1=show, 0=hide)
   uint8_t flashcardNewPerDay = 10;      // New cards per day limit
   uint8_t flashcardMaxReviewPerDay = 250; // Max reviews per day (capped at 255 for uint8_t)
+  uint8_t appTasks = 1;  // To-Do List app visibility (1=show, 0=hide)
 
   // Ghost Mode — ctOS-style security toolkit home screen
   uint8_t ghostMode = 0;

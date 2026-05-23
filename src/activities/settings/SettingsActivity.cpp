@@ -102,6 +102,7 @@ void SettingsActivity::onEnter() {
     {StrId::STR_SLEEP_IMAGE_PICKER, &CrossPetSettings::appSleepImagePicker, "appSleepImagePicker"},
     {StrId::STR_GAMES,              &CrossPetSettings::appGames,            "appGames"},
     {StrId::STR_FLASHCARD,          &CrossPetSettings::appFlashcard,        "appFlashcard"},
+    {StrId::STR_TASKS,              &CrossPetSettings::appTasks,            "appTasks"},
   };
   for (const auto& t : appToggles) {
     auto field = t.field;

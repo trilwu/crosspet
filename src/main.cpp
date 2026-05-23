@@ -29,6 +29,7 @@
 #include "CrossPetSettings.h"
 #include "MappedInputManager.h"
 #include "RecentBooksStore.h"
+#include "tasks/TasksConfig.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
 #include "components/UITheme.h"
@@ -339,6 +340,7 @@ void setup() {
 
   SETTINGS.loadFromFile();
   PET_SETTINGS.loadFromFile();
+  TASKS_CONFIG.load();
   I18N.loadSettings();
   FontMgr.scanFonts();
   FontMgr.loadSettings();
