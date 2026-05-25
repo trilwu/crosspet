@@ -314,8 +314,13 @@ void SleepImagePickerActivity::loop() {
   }
 
   const int items = totalItems();
-  buttonNavigator.onNext([this, items] { selectorIndex = ButtonNavigator::nextIndex(selectorIndex, items); requestUpdate(); });
-  buttonNavigator.onPrevious([this, items] { selectorIndex = ButtonNavigator::previousIndex(selectorIndex, items); requestUpdate(); });
+  // Bind Up/Down explicitly (not via onNext/onPrevious) so Left/Right stay free
+  // for the Pin/Unpin handler below — otherwise Left's button-down would move
+  // the cursor before wasReleased(Left) reads selectorIndex.
+  buttonNavigator.onPressAndContinuous({MappedInputManager::Button::Down},
+    [this, items] { selectorIndex = ButtonNavigator::nextIndex(selectorIndex, items); requestUpdate(); });
+  buttonNavigator.onPressAndContinuous({MappedInputManager::Button::Up},
+    [this, items] { selectorIndex = ButtonNavigator::previousIndex(selectorIndex, items); requestUpdate(); });
 
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     if (selectorIndex == MODE_ITEM) {
