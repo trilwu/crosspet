@@ -18,6 +18,7 @@
 #include "MappedInputManager.h"
 #include "OpdsServerListActivity.h"
 #include "OtaUpdateActivity.h"
+#include "SdFirmwareUpdateActivity.h"
 #include "SettingsList.h"
 #include "StatusBarSettingsActivity.h"
 #include "activities/tools/SleepImagePickerActivity.h"
@@ -364,6 +365,9 @@ void SettingsActivity::toggleCurrentSetting() {
         renderer.displayBuffer();
         delay(500);
         ESP.restart();
+        break;
+      case SettingAction::SdFirmwareUpdate:
+        startActivityForResult(std::make_unique<SdFirmwareUpdateActivity>(renderer, mappedInput), resultHandler);
         break;
       case SettingAction::None:
         // Do nothing
