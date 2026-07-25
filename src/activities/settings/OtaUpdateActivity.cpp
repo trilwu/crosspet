@@ -1,5 +1,7 @@
 #include "OtaUpdateActivity.h"
 
+#include <FontDecompressor.h>
+#include <FontManager.h>
 #include <GfxRenderer.h>
 #include <I18n.h>
 #include <WiFi.h>
@@ -9,6 +11,18 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "network/OtaUpdater.h"
+
+// Global built-in-font decompression cache (defined in main); clearing it frees
+// the decompressed glyph buffers back to the heap for the TLS handshake.
+extern FontDecompressor fontDecompressor;
+
+void OtaUpdateActivity::freeHeapForTls() {
+  fontDecompressor.clearCache();
+  FontMgr.unloadActiveFonts();
+  LOG_DBG("OTA", "Freed font caches for TLS, free heap: %u bytes", static_cast<unsigned>(ESP.getFreeHeap()));
+}
+
+void OtaUpdateActivity::restoreFonts() { FontMgr.reloadActiveFonts(); }
 
 void OtaUpdateActivity::onWifiSelectionComplete(const bool success) {
   if (!success) {
@@ -25,9 +39,13 @@ void OtaUpdateActivity::onWifiSelectionComplete(const bool success) {
   }
   requestUpdateAndWait();
 
+  // Free font caches so the update-check TLS handshake has enough heap.
+  freeHeapForTls();
+
   const auto res = updater.checkForUpdate();
   if (res != OtaUpdater::OK) {
     LOG_DBG("OTA", "Update check failed: %d", res);
+    restoreFonts();
     {
       RenderLock lock(*this);
       state = FAILED;
@@ -37,6 +55,7 @@ void OtaUpdateActivity::onWifiSelectionComplete(const bool success) {
 
   if (!updater.isUpdateNewer()) {
     LOG_DBG("OTA", "No new update available");
+    restoreFonts();
     {
       RenderLock lock(*this);
       state = NO_UPDATE;
@@ -44,6 +63,9 @@ void OtaUpdateActivity::onWifiSelectionComplete(const bool success) {
     return;
   }
 
+  // Update available — restore fonts so the confirmation screen renders with the
+  // user's selected font. They are freed again before the download begins.
+  restoreFonts();
   {
     RenderLock lock(*this);
     state = WAITING_CONFIRMATION;
@@ -152,7 +174,12 @@ void OtaUpdateActivity::loop() {
         state = UPDATE_IN_PROGRESS;
       }
       requestUpdateAndWait();
+      // Free font caches again for the (larger) firmware-download TLS session.
+      // They stay freed for the whole blocking download; the progress screen
+      // falls back to the built-in font, and they are restored when it ends.
+      freeHeapForTls();
       const auto res = updater.installUpdate();
+      restoreFonts();
 
       if (res != OtaUpdater::OK) {
         LOG_DBG("OTA", "Update failed: %d", res);

@@ -83,6 +83,21 @@ class FontManager {
   ExternalFont* getActiveUiFont();
 
   /**
+   * Free the active reader/UI font glyph caches (~34KB each) without changing
+   * the user's font selection. Use to reclaim heap for transient large
+   * allocations (e.g. the TLS handshake during OTA / KOReader sync).
+   * Pair with reloadActiveFonts() to restore. Safe to call when no external
+   * font is loaded — becomes a no-op.
+   */
+  void unloadActiveFonts();
+
+  /**
+   * Reload the currently-selected fonts after unloadActiveFonts().
+   * No-op if no external font was selected.
+   */
+  void reloadActiveFonts();
+
+  /**
    * Check if external reader font is enabled
    */
   bool isExternalFontEnabled() const { return _selectedIndex >= 0 && _activeFont.isLoaded(); }

@@ -1592,6 +1592,18 @@ const char* const STRINGS_EN[] = {
     "Update failed",
     "Update complete",
     "Press and hold power button to turn back on",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "External Font",
     "Built-in (Disabled)",
     "No entries found",
@@ -2501,6 +2513,18 @@ const char* const STRINGS_ES[] = {
     "Reinicie manteniendo pulsado bot\xC3"
     "\xB3"
     "n de encendido",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Fuente externa",
     "Incorporado (desactivado)",
     "No se encontraron elementos",
@@ -3617,6 +3641,18 @@ const char* const STRINGS_FR[] = {
     "Maintenir Power pour red\xC3"
     "\xA9"
     "marrer",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Police externe",
     "Interne (D\xC3"
     "\xA9"
@@ -4613,6 +4649,18 @@ const char* const STRINGS_DE[] = {
     "An-Knopf lang dr\xC3"
     "\xBC"
     "cken, um neuzustarten",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Externe Schrift",
     "Vorinstalliert (aus)",
     "Keine Eintr\xC3"
@@ -6299,6 +6347,18 @@ const char* const STRINGS_CS[] = {
     " zapnut\xC3"
     "\xAD"
     "",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Extern\xC3"
     "\xAD"
     " p\xC3"
@@ -7648,6 +7708,18 @@ const char* const STRINGS_PO[] = {
     "Pressione e segure o bot\xC3"
     "\xA3"
     "o energia ligar novamente",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Fonte externa",
     "Integrada (desativada)",
     "Nenhum entries encontrado",
@@ -13836,6 +13908,18 @@ const char* const STRINGS_RU[] = {
     "\xD1"
     "\x8F"
     "",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "\xD0"
     "\x9F"
     "\xD0"
@@ -18268,6 +18352,18 @@ const char* const STRINGS_SV[] = {
     "tta p\xC3"
     "\xA5"
     " igen",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Externt typsnitt",
     "Inbyggd (Avst\xC3"
     "\xA4"
@@ -19634,6 +19730,18 @@ const char* const STRINGS_RO[] = {
     "ntrerup\xC4"
     "\x83"
     "torul pentru a porni din nou",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Font extern",
     "\xC3"
     "\x8E"
@@ -20779,6 +20887,18 @@ const char* const STRINGS_CA[] = {
     "Premeu i manteniu premut el bot\xC3"
     "\xB3"
     " d'encesa per tornar a engegar",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Tipus de lletra extern",
     "Integrat (desactivat)",
     "No s'ha trobat cap entrada",
@@ -27702,6 +27822,18 @@ const char* const STRINGS_UK[] = {
     "\xD0"
     "\xB8"
     "",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "\xD0"
     "\x97"
     "\xD0"
@@ -37477,6 +37609,18 @@ const char* const STRINGS_BE[] = {
     "\xD1"
     "\x8F"
     "",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "\xD0"
     "\x9A"
     "\xD0"
@@ -41601,6 +41745,18 @@ const char* const STRINGS_IT[] = {
     "Aggiornamento fallito",
     "Aggiornamento completato",
     "Tenere premuto il pulsante d'accensione per riaccendere",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Font esterno",
     "Integrato (Disabilitato)",
     "Nessuna voce trovata",
@@ -42796,6 +42952,18 @@ const char* const STRINGS_PL[] = {
     "czy\xC4"
     "\x87"
     " ponownie",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Czcionka zewn\xC4"
     "\x99"
     "trzna",
@@ -44107,6 +44275,18 @@ const char* const STRINGS_FI[] = {
     "\xC3"
     "\xA4"
     "ksesi",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Ulkoinen fontti",
     "Sis\xC3"
     "\xA4"
@@ -45204,6 +45384,18 @@ const char* const STRINGS_DA[] = {
     "nd/sluk-knappen nede for at t\xC3"
     "\xA6"
     "nde igen",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Ekstern skrifttype",
     "Indbygget (deaktiveret)",
     "Ingen poster fundet",
@@ -45997,6 +46189,18 @@ const char* const STRINGS_NL[] = {
     "Update mislukt",
     "Update voltooid",
     "Houd de aan/uit-knop ingedrukt om in te schakelen",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Extern lettertype",
     "Ingebouwd (Uitgeschakeld)",
     "Geen items gevonden",
@@ -47408,6 +47612,18 @@ const char* const STRINGS_TR[] = {
     "l\xC4"
     "\xB1"
     " tutun",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Harici Yaz\xC4"
     "\xB1"
     " Tipi",
@@ -52653,6 +52869,18 @@ const char* const STRINGS_KK[] = {
     "\xD0"
     "\xB7"
     "",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "External Font",
     "Built-in (Disabled)",
     "\xD0"
@@ -58377,6 +58605,18 @@ const char* const STRINGS_VI[] = {
     "\xBA"
     "\xA1"
     "i",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "Ph\xC3"
     "\xB4"
     "ng ch\xE1"
@@ -62526,6 +62766,18 @@ const char* const STRINGS_HU[] = {
     "gombot a bekapcsol\xC3"
     "\xA1"
     "shoz",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "External Font",
     "Built-in (Disabled)",
     "Nem tal\xC3"
@@ -63933,6 +64185,18 @@ const char* const STRINGS_LT[] = {
     " \xC4"
     "\xAF"
     "jungimui",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "External Font",
     "Built-in (Disabled)",
     "\xC4"
@@ -64942,6 +65206,18 @@ const char* const STRINGS_SI[] = {
     "i gumb za vklop, da napravo znova vklopi\xC5"
     "\xA1"
     "",
+    "SD Card Firmware Update",
+    "Select firmware (.bin)",
+    "No .bin files found",
+    "Validating firmware...",
+    "Update firmware?",
+    "Do not power off",
+    "Restarting...",
+    "Invalid firmware file",
+    "Firmware too large",
+    "Firmware too small",
+    "Cannot open firmware file",
+    "Firmware write failed",
     "External Font",
     "Built-in (Disabled)",
     "Ni najdenih vnosov",

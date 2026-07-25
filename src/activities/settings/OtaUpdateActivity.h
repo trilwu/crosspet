@@ -24,6 +24,14 @@ class OtaUpdateActivity : public Activity {
 
   void onWifiSelectionComplete(bool success);
 
+  // Reclaim heap before a TLS session and restore afterwards. On the ESP32-C3
+  // (~46KB free after WiFi) a loaded external font — especially a CJK UI/reader
+  // font — leaves too little heap for the mbedTLS handshake, so the connection
+  // aborts before the ClientHello and OTA "fails" before any HTTP request.
+  // Mirrors the reclaim done in KOReaderSyncActivity.
+  void freeHeapForTls();
+  void restoreFonts();
+
  public:
   explicit OtaUpdateActivity(GfxRenderer& renderer, MappedInputManager& mappedInput)
       : Activity("OtaUpdate", renderer, mappedInput), updater() {}
