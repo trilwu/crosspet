@@ -51,7 +51,12 @@ void SettingsActivity::onEnter() {
   controlsSettings.clear();
   systemSettings.clear();
 
-  for (const auto& setting : getSettingsList()) {
+  // Rescan /dictionaries on every rebuild: cheap (one directory listing) and
+  // picks up dictionaries copied to the SD card since the last visit.
+  std::vector<DictionaryEntry> dictionaries;
+  DictionaryRegistry::discover(dictionaries);
+
+  for (const auto& setting : getSettingsListWithDictionaries(dictionaries)) {
     if (setting.category == StrId::STR_NONE_OPT) continue;
     if (setting.category == StrId::STR_CAT_DISPLAY) {
       // Redirect CrossPet-specific settings to CrossPet tab
@@ -292,9 +297,14 @@ void SettingsActivity::toggleCurrentSetting() {
     const uint8_t currentValue = SETTINGS.*(setting.valuePtr);
     SETTINGS.*(setting.valuePtr) = (currentValue + 1) % static_cast<uint8_t>(setting.enumValues.size());
   } else if (setting.type == SettingType::ENUM && setting.valueGetter && setting.valueSetter) {
-    // DynamicEnum: backed by external getter/setter
+    // DynamicEnum: backed by external getter/setter. Option count comes from
+    // enumStringValues when the labels are runtime strings (dictionary list).
+    const uint8_t optionCount = setting.enumStringValues.empty()
+                                    ? static_cast<uint8_t>(setting.enumValues.size())
+                                    : static_cast<uint8_t>(setting.enumStringValues.size());
+    if (optionCount == 0) return;
     const uint8_t currentValue = setting.valueGetter();
-    setting.valueSetter((currentValue + 1) % static_cast<uint8_t>(setting.enumValues.size()));
+    setting.valueSetter((currentValue + 1) % optionCount);
     return;  // setter is responsible for saving
   } else if (setting.type == SettingType::VALUE && setting.valuePtr != nullptr) {
     const int8_t currentValue = SETTINGS.*(setting.valuePtr);
@@ -432,7 +442,15 @@ void SettingsActivity::render(RenderLock&&) {
           const uint8_t value = SETTINGS.*(setting.valuePtr);
           valueText = I18N.get(setting.enumValues[value]);
         } else if (setting.type == SettingType::ENUM && setting.valueGetter) {
-          valueText = I18N.get(setting.enumValues[setting.valueGetter()]);
+          const uint8_t value = setting.valueGetter();
+          if (!setting.enumStringValues.empty()) {
+            // Runtime labels (dictionary folder names). Guard the index: the
+            // stored selection can outlive the folder it pointed at.
+            valueText = value < setting.enumStringValues.size() ? setting.enumStringValues[value]
+                                                                : setting.enumStringValues[0];
+          } else {
+            valueText = I18N.get(setting.enumValues[value]);
+          }
         } else if (setting.type == SettingType::VALUE && setting.valuePtr != nullptr) {
           valueText = std::to_string(SETTINGS.*(setting.valuePtr));
         } else if (setting.type == SettingType::ACTION && setting.action == SettingAction::SleepScreen) {

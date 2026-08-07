@@ -145,6 +145,7 @@ bool JsonSettingsIO::saveSettings(const CrossPointSettings& s, const char* path)
   doc["statusBarProgressBarThickness"] = s.statusBarProgressBarThickness;
   doc["weatherCity"] = s.weatherCity;
   doc["sleepImagePath"] = s.sleepImagePath;
+  doc["dictionaryName"] = s.dictionaryName;
   doc["autoPageTurnSpeed"] = s.autoPageTurnSpeed;
   doc["autoPageTurnEnabled"] = s.autoPageTurnEnabled;
 #ifdef ENABLE_BLE
@@ -254,6 +255,10 @@ bool JsonSettingsIO::loadSettings(CrossPointSettings& s, const char* json, bool*
   const char* sip = doc["sleepImagePath"] | "";
   strncpy(s.sleepImagePath, sip, sizeof(s.sleepImagePath) - 1);
   s.sleepImagePath[sizeof(s.sleepImagePath) - 1] = '\0';
+
+  const char* dictName = doc["dictionaryName"] | "";
+  strncpy(s.dictionaryName, dictName, sizeof(s.dictionaryName) - 1);
+  s.dictionaryName[sizeof(s.dictionaryName) - 1] = '\0';
 
   s.autoPageTurnSpeed = doc["autoPageTurnSpeed"] | (uint8_t)0;
   if (s.autoPageTurnSpeed > 20) s.autoPageTurnSpeed = 0;

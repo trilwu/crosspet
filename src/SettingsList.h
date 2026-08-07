@@ -2,12 +2,17 @@
 
 #include <I18n.h>
 
+#include <algorithm>
+#include <cstring>
+#include <iterator>
+#include <string>
 #include <vector>
 
 #include "CrossPetSettings.h"
 #include "CrossPointSettings.h"
 #include "KOReaderCredentialStore.h"
 #include "activities/settings/SettingsActivity.h"
+#include "util/DictionaryRegistry.h"
 
 // Shared settings list used by both the device settings UI and the web settings API.
 // Each entry has a key (for JSON API) and category (for grouping).
@@ -175,4 +180,63 @@ inline const std::vector<SettingInfo>& getSettingsList() {
                           StrId::STR_CUSTOMISE_STATUS_BAR),
   };
   return list;
+}
+
+// Build the dictionary selection setting dynamically from the folders discovered
+// under /dictionaries. "None" plus one option per dictionary; the selected folder
+// name persists in SETTINGS.dictionaryName (saved/loaded explicitly in
+// JsonSettingsIO — the generic loop skips entries with no valuePtr/key).
+// Ported from CrossPoint 1.5.0.
+inline SettingInfo buildDictionarySetting(const std::vector<DictionaryEntry>& dictionaries) {
+  std::vector<std::string> folderNames;
+  folderNames.reserve(dictionaries.size());
+  std::transform(dictionaries.begin(), dictionaries.end(), std::back_inserter(folderNames),
+                 [](const DictionaryEntry& d) { return d.name; });
+
+  SettingInfo s;
+  s.nameId = StrId::STR_DICTIONARY;
+  s.type = SettingType::ENUM;
+  s.enumStringValues.reserve(folderNames.size() + 1);
+  s.enumStringValues.push_back(I18N.get(StrId::STR_NONE_OPT));
+  s.enumStringValues.insert(s.enumStringValues.end(), folderNames.begin(), folderNames.end());
+  s.category = StrId::STR_CAT_READER;
+
+  s.valueGetter = [folderNames]() -> uint8_t {
+    for (size_t i = 0; i < folderNames.size(); i++) {
+      // Compare within the settings field capacity: an over-long folder name is
+      // stored truncated, and must still match its list entry.
+      if (strncmp(folderNames[i].c_str(), SETTINGS.dictionaryName, sizeof(SETTINGS.dictionaryName) - 1) == 0) {
+        return static_cast<uint8_t>(i + 1);
+      }
+    }
+    return 0;  // "None", also when the stored folder no longer exists
+  };
+
+  s.valueSetter = [folderNames](uint8_t v) {
+    if (v == 0 || v > folderNames.size()) {
+      SETTINGS.dictionaryName[0] = '\0';
+    } else {
+      strncpy(SETTINGS.dictionaryName, folderNames[v - 1].c_str(), sizeof(SETTINGS.dictionaryName) - 1);
+      SETTINGS.dictionaryName[sizeof(SETTINGS.dictionaryName) - 1] = '\0';
+    }
+    SETTINGS.saveToFile();  // DynamicEnum setters own their persistence
+  };
+
+  return s;
+}
+
+// Copy of the static list with the dictionary entry spliced into the Reader
+// category, for the on-device settings UI. Returns by value (unlike
+// getSettingsList()) because the entry is built from a runtime SD card scan.
+// When no dictionaries are installed the entry is omitted entirely, matching
+// upstream: the option only appears once at least one usable folder exists.
+inline std::vector<SettingInfo> getSettingsListWithDictionaries(const std::vector<DictionaryEntry>& dictionaries) {
+  std::vector<SettingInfo> v = getSettingsList();
+  if (!dictionaries.empty()) {
+    // Insert at the end of the Reader category (just before the first Controls entry).
+    auto it =
+        std::find_if(v.begin(), v.end(), [](const SettingInfo& s) { return s.category == StrId::STR_CAT_CONTROLS; });
+    v.insert(it, buildDictionarySetting(dictionaries));
+  }
+  return v;
 }

@@ -36,6 +36,11 @@ struct SettingInfo {
   SettingType type;
   uint8_t CrossPointSettings::* valuePtr = nullptr;
   std::vector<StrId> enumValues;
+  // Runtime alternative to the StrId enumValues above, for enums whose options
+  // are only known at runtime (dictionary folder names discovered on the SD
+  // card). When non-empty it takes precedence over enumValues. Ported from
+  // CrossPoint 1.5.0.
+  std::vector<std::string> enumStringValues;
   SettingAction action = SettingAction::None;
 
   struct ValueRange {

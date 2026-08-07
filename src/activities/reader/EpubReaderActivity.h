@@ -42,6 +42,11 @@ class EpubReaderActivity final : public Activity {
   unsigned long milestoneToastTime = 0;
   char milestoneText[48] = {};
 
+  // Dictionary (ported from CrossPoint 1.5.0). The message flags a lookup
+  // attempted with no dictionary selected in Settings.
+  bool showDictionaryMessage = false;
+  unsigned long dictionaryMessageTime = 0;
+
   // Bookmarks (starred pages)
   BookmarkStore bookmarkStore;
 
@@ -67,6 +72,7 @@ class EpubReaderActivity final : public Activity {
   void toggleAutoPageTurn(uint8_t selectedPageTurnOption);
   void pageTurn(bool isForwardTurn);
   void openStarredPages();
+  void openDictionaryWordSelect();
 
   // Footnote navigation
   void navigateToHref(const std::string& href, bool savePosition = false);

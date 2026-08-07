@@ -176,4 +176,17 @@ class GfxRenderer {
   uint16_t getDisplayWidth() const { return panelWidth; }
   uint16_t getDisplayHeight() const { return panelHeight; }
   uint16_t getDisplayWidthBytes() const { return panelWidthBytes; }
+
+  // Ported from CrossPoint 1.5.0. Save/restore a rectangular slice of the
+  // framebuffer so the dictionary word selector can move its highlight by
+  // repainting only the two affected word boxes, instead of re-running the
+  // full two-pass page render on every cursor step.
+  //
+  // The region is snapped outward to 8-pixel boundaries in panel memory, so
+  // the number of bytes actually touched can exceed w*h/8. readFramebufferRegion
+  // returns the byte count written to dst, or 0 if dst is null, the rect is
+  // empty/off-panel, or dstCapacity is too small. Pass the same x/y/w/h to
+  // writeFramebufferRegion to restore.
+  size_t readFramebufferRegion(int x, int y, int w, int h, uint8_t* dst, size_t dstCapacity) const;
+  void writeFramebufferRegion(int x, int y, int w, int h, const uint8_t* src);
 };

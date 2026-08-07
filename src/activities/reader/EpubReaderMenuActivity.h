@@ -26,6 +26,7 @@ class EpubReaderMenuActivity final : public Activity {
     SYNC,
     STARRED_PAGES,
     STAR_PAGE,
+    DICTIONARY,
     DELETE_CACHE,
 #ifdef ENABLE_BLE
     BLE_REMOTE

@@ -215,6 +215,11 @@ class CrossPointSettings {
   uint8_t darkMode = 0;
   // Sleep image path — selected via SleepImagePickerActivity
   char sleepImagePath[64] = "";
+
+  // Dictionary folder name under /dictionaries (empty = no dictionary).
+  // Ported from CrossPoint 1.5.0. Stores only the folder name, not a full path,
+  // so the same settings.json survives moving the SD card between devices.
+  char dictionaryName[32] = "";
   // Use book's embedded CSS styles for EPUB rendering (1 = enabled, 0 = disabled)
   uint8_t embeddedStyle = 1;
   // Show hidden files/directories (starting with '.') in the file browser (0 = hidden, 1 = show)

@@ -1097,6 +1097,8 @@ const char* const CHARACTER_SETS[] = {
     "\x90"
     "\xC4"
     "\x91"
+    "\xC4"
+    "\xA9"
     "\xC6"
     "\xA1"
     "\xC6"
@@ -2123,6 +2125,16 @@ const char* const STRINGS_EN[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_ES[] = {
@@ -3146,6 +3158,22 @@ const char* const STRINGS_ES[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Buscar",
+    "Buscando...",
+    "Indexando el diccionario...",
+    "No se ha encontrado",
+    "No hay ning\xC3"
+    "\xBA"
+    "n diccionario configurado",
+    "Error del diccionario",
+    "No se pudo leer la definici\xC3"
+    "\xB3"
+    "n",
+    "No se pudo descomprimir la definici\xC3"
+    "\xB3"
+    "n",
+    "No hay suficiente memoria",
+    "Diccionario",
 };
 
 const char* const STRINGS_FR[] = {
@@ -4318,6 +4346,16 @@ const char* const STRINGS_FR[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_DE[] = {
@@ -5243,6 +5281,16 @@ const char* const STRINGS_DE[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_CS[] = {
@@ -7278,6 +7326,16 @@ const char* const STRINGS_CS[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_PO[] = {
@@ -8332,6 +8390,16 @@ const char* const STRINGS_PO[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_RU[] = {
@@ -17771,6 +17839,16 @@ const char* const STRINGS_RU[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_SV[] = {
@@ -19040,6 +19118,16 @@ const char* const STRINGS_SV[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_RO[] = {
@@ -20475,6 +20563,16 @@ const char* const STRINGS_RO[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_CA[] = {
@@ -21542,6 +21640,16 @@ const char* const STRINGS_CA[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_UK[] = {
@@ -31949,6 +32057,16 @@ const char* const STRINGS_UK[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_BE[] = {
@@ -41510,6 +41628,16 @@ const char* const STRINGS_BE[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_IT[] = {
@@ -42296,6 +42424,16 @@ const char* const STRINGS_IT[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_PL[] = {
@@ -43755,6 +43893,16 @@ const char* const STRINGS_PL[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_FI[] = {
@@ -44984,6 +45132,16 @@ const char* const STRINGS_FI[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_DA[] = {
@@ -45969,6 +46127,16 @@ const char* const STRINGS_DA[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_NL[] = {
@@ -46722,6 +46890,16 @@ const char* const STRINGS_NL[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_TR[] = {
@@ -48537,6 +48715,16 @@ const char* const STRINGS_TR[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_KK[] = {
@@ -56698,6 +56886,16 @@ const char* const STRINGS_KK[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_VI[] = {
@@ -61948,6 +62146,137 @@ const char* const STRINGS_VI[] = {
     " review h\xC3"
     "\xB4"
     "m nay:",
+    "Tra t\xE1"
+    "\xBB"
+    "\xAB"
+    "",
+    "\xC4"
+    "\x90"
+    "ang tra t\xE1"
+    "\xBB"
+    "\xAB"
+    "...",
+    "\xC4"
+    "\x90"
+    "ang l\xE1"
+    "\xBA"
+    "\xAD"
+    "p ch\xE1"
+    "\xBB"
+    "\x89"
+    " m\xE1"
+    "\xBB"
+    "\xA5"
+    "c t\xE1"
+    "\xBB"
+    "\xAB"
+    " \xC4"
+    "\x91"
+    "i\xE1"
+    "\xBB"
+    "\x83"
+    "n...",
+    "Kh\xC3"
+    "\xB4"
+    "ng t\xC3"
+    "\xAC"
+    "m th\xE1"
+    "\xBA"
+    "\xA5"
+    "y",
+    "Ch\xC6"
+    "\xB0"
+    "a ch\xE1"
+    "\xBB"
+    "\x8D"
+    "n t\xE1"
+    "\xBB"
+    "\xAB"
+    " \xC4"
+    "\x91"
+    "i\xE1"
+    "\xBB"
+    "\x83"
+    "n",
+    "L\xE1"
+    "\xBB"
+    "\x97"
+    "i t\xE1"
+    "\xBB"
+    "\xAB"
+    " \xC4"
+    "\x91"
+    "i\xE1"
+    "\xBB"
+    "\x83"
+    "n",
+    "Kh\xC3"
+    "\xB4"
+    "ng \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\x8D"
+    "c \xC4"
+    "\x91"
+    "\xC6"
+    "\xB0"
+    "\xE1"
+    "\xBB"
+    "\xA3"
+    "c \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\x8B"
+    "nh ngh\xC4"
+    "\xA9"
+    "a",
+    "Kh\xC3"
+    "\xB4"
+    "ng gi\xE1"
+    "\xBA"
+    "\xA3"
+    "i n\xC3"
+    "\xA9"
+    "n \xC4"
+    "\x91"
+    "\xC6"
+    "\xB0"
+    "\xE1"
+    "\xBB"
+    "\xA3"
+    "c \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\x8B"
+    "nh ngh\xC4"
+    "\xA9"
+    "a",
+    "Kh\xC3"
+    "\xB4"
+    "ng \xC4"
+    "\x91"
+    "\xE1"
+    "\xBB"
+    "\xA7"
+    " b\xE1"
+    "\xBB"
+    "\x99"
+    " nh\xE1"
+    "\xBB"
+    "\x9B"
+    "",
+    "T\xE1"
+    "\xBB"
+    "\xAB"
+    " \xC4"
+    "\x91"
+    "i\xE1"
+    "\xBB"
+    "\x83"
+    "n",
 };
 
 const char* const STRINGS_HU[] = {
@@ -63753,6 +64082,16 @@ const char* const STRINGS_HU[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_LT[] = {
@@ -64874,6 +65213,16 @@ const char* const STRINGS_LT[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 const char* const STRINGS_SI[] = {
@@ -65805,6 +66154,16 @@ const char* const STRINGS_SI[] = {
     "No decks found",
     "Place .csv files in /flashcard/",
     "Reviews today:",
+    "Look Up",
+    "Looking up...",
+    "Indexing dictionary...",
+    "Not found",
+    "No dictionary set",
+    "Dictionary error",
+    "Couldn't read definition",
+    "Couldn't decompress definition",
+    "Not enough memory",
+    "Dictionary",
 };
 
 }  // namespace i18n_strings

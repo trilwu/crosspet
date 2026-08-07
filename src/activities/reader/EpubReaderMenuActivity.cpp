@@ -48,6 +48,11 @@ std::vector<EpubReaderMenuActivity::MenuItem> EpubReaderMenuActivity::buildMenuI
   items.push_back({MenuAction::AUTO_PAGE_TURN_SPEED, StrId::STR_AUTO_TURN_PAGES_PER_MIN});
 
   // FEATURES section
+  // Dictionary lookup — only offered when a dictionary is selected in Settings,
+  // matching upstream: no point entering word selection with nothing to look up.
+  if (SETTINGS.dictionaryName[0] != '\0') {
+    items.push_back({MenuAction::DICTIONARY, StrId::STR_LOOKUP});
+  }
   items.push_back({MenuAction::SCREENSHOT, StrId::STR_SCREENSHOT_BUTTON});
   items.push_back({MenuAction::DISPLAY_QR, StrId::STR_DISPLAY_QR});
   items.push_back({MenuAction::SYNC, StrId::STR_SYNC_PROGRESS});
