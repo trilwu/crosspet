@@ -466,7 +466,7 @@ void EpubReaderActivity::openDictionaryWordSelect() {
     return;
   }
   if (!section) return;
-  auto page = section->loadPage(section->currentPage);
+  auto page = section->loadPageFromSectionFile();
   if (!page) return;
 
   // Word geometry must match render(): viewable-area margins plus screen margin.

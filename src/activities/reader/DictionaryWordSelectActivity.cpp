@@ -287,15 +287,15 @@ void DictionaryWordSelectActivity::loop() {
 #endif
 
   const bool hasNextWord = selected + 1 < static_cast<int>(words.size());
-  if (mappedInput.wasPressed(MappedInputManager::Button::ScreenLeft) && selected > 0) {
+  if (mappedInput.wasPressed(MappedInputManager::Button::Left) && selected > 0) {
     selected--;
     requestUpdate();
-  } else if (mappedInput.wasPressed(MappedInputManager::Button::ScreenRight) && hasNextWord) {
+  } else if (mappedInput.wasPressed(MappedInputManager::Button::Right) && hasNextWord) {
     selected++;
     requestUpdate();
-  } else if (mappedInput.wasPressed(MappedInputManager::Button::ScreenUp)) {
+  } else if (mappedInput.wasPressed(MappedInputManager::Button::Up)) {
     moveVertical(-1);
-  } else if (mappedInput.wasPressed(MappedInputManager::Button::ScreenDown)) {
+  } else if (mappedInput.wasPressed(MappedInputManager::Button::Down)) {
     moveVertical(1);
   }
 }
